@@ -225,7 +225,7 @@ Transform:
   m_GameObject: {fileID: 154134838}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.8, z: 8.48}
+  m_LocalPosition: {x: 0, y: -4.3, z: 8.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1328,8 +1328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotion
   inAirTimer: 0
   leapingVelocity: 3
-  fallingVelocity: 33
-  rayCastHeightOffset: 0.5
+  fallingVelocity: 1000
+  rayCastHeightOffset: 0.9
   groundLayer:
     serializedVersion: 2
     m_Bits: 1

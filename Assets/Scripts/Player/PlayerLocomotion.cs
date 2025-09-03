@@ -105,7 +105,7 @@ public class PlayerLocomotion : MonoBehaviour
         {
             if(!playerManager.isInteracting)
             {
-                animatorManager.PlayTargetAnimation("Falling", true);   
+                animatorManager.PlayTargetAnimation("Falling", false);   
             }
 
             inAirTimer = inAirTimer + Time.deltaTime;
@@ -113,7 +113,7 @@ public class PlayerLocomotion : MonoBehaviour
             playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
         }
 
-        if(Physics.SphereCast(rayCastOrigin, 0.2f, -Vector3.up, out hit, groundLayer))
+        if (Physics.SphereCast(rayCastOrigin, 0.2f, -Vector3.up, out hit, 4f, groundLayer))
         {
             if(!isGrounded && !playerManager.isInteracting)
             {
@@ -128,7 +128,25 @@ public class PlayerLocomotion : MonoBehaviour
             isGrounded = false;
         }
     }
+    private void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+            Vector3 rayCastOrigin = transform.position;
+            rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffset;
 
+            // The direction and max distance of your spherecast
+            float sphereRadius = 0.2f;
+            float maxDistance = 0.8f; // tweak this to match the one used in SphereCast
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(rayCastOrigin, sphereRadius);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(rayCastOrigin, rayCastOrigin + Vector3.down * maxDistance);
+            Gizmos.DrawWireSphere(rayCastOrigin + Vector3.down * maxDistance, sphereRadius);
+        }
+    }
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
