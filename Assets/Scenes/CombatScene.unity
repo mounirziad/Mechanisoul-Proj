@@ -1198,8 +1198,10 @@ MonoBehaviour:
   cameraInput: {x: 0, y: 0}
   cameraInputX: 0
   cameraInputY: 0
+  moveAmount: 0
   verticalInput: 0
   horizontalInput: 0
+  b_Input: 0
 --- !u!114 &8551793984105625930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,7 +1214,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ed95ddcb090b324e853665a45ff1e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotion
-  movementSpeed: 2
+  isSprinting: 0
+  walkingSpeed: 1.5
+  runningSpeed: 2
+  sprintingSpeed: 5
   rotationSpeed: 15
 --- !u!114 &8551793984105625931
 MonoBehaviour:
