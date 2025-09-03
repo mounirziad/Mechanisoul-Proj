@@ -16,6 +16,11 @@ public class PlayerLocomotion : MonoBehaviour
     public float rayCastHeightOffset = 0.5f;
     public LayerMask groundLayer;
 
+    public float detectionradius = 0.2f;
+    public float detectionheight = 4f;
+    public float capsuleHeight = 1.8f;
+
+
     public bool isSprinting;
     public bool isGrounded;
 
@@ -113,20 +118,26 @@ public class PlayerLocomotion : MonoBehaviour
             playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
         }
 
-        if (Physics.SphereCast(rayCastOrigin, 0.2f, -Vector3.up, out hit, 4f, groundLayer))
+        // Ground check using a CapsuleCast
+        Vector3 capsuleBottom = transform.position + Vector3.up * 0.2f; // just above the feet
+        Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight; // capsule "body"
+        float capsuleRadius = detectionradius; // how wide your player is
+
+        if (Physics.CapsuleCast(capsuleTop, capsuleBottom, capsuleRadius, Vector3.down, out hit, detectionheight, groundLayer))
         {
-            if(!isGrounded && !playerManager.isInteracting)
+            if (!isGrounded && !playerManager.isInteracting)
             {
                 animatorManager.PlayTargetAnimation("Land", true);
             }
 
             inAirTimer = 0;
             isGrounded = true;
-        } 
+        }
         else
         {
             isGrounded = false;
         }
+
     }
     private void OnDrawGizmos()
     {
