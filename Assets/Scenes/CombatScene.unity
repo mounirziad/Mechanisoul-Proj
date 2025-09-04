@@ -3678,7 +3678,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   detectionradius: 0.05
-  detectionheight: 2.04
+  detectionheight: 0.82
   capsuleHeight: 0.09
   isJumping: 0
   isSprinting: 0
@@ -3690,6 +3690,8 @@ MonoBehaviour:
   jumpHeight: 3
   gravityIntensity: -15
   groundCheck: {fileID: 2003615235}
+  stepHeight: 0.3
+  stepSmooth: 0.1
 --- !u!114 &8551793984105625931
 MonoBehaviour:
   m_ObjectHideFlags: 0
