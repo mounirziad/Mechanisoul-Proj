@@ -33,6 +33,8 @@ public class PlayerLocomotion : MonoBehaviour
     public float gravityIntensity = -15;
     public Transform groundCheck;
 
+    [SerializeField] private float stepHeight = 0.3f;  // max height you can step up
+    [SerializeField] private float stepSmooth = 0.1f;  // smooth movement up
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -52,37 +54,38 @@ public class PlayerLocomotion : MonoBehaviour
         }
         HandleMovement();
         HandleRotation();
+        HandleSteps();
     }
 
     private void HandleMovement()
     {
         if (isJumping) { return; }
 
-        moveDirection = cameraObject.forward * inputManager.verticalInput; 
-        moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
+        // Calculate input-based direction
+        moveDirection = cameraObject.forward * inputManager.verticalInput;
+        moveDirection += cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        if(isSprinting )
+        // Apply speed depending on state
+        if (isSprinting)
         {
-            moveDirection = moveDirection * sprintingSpeed;
+            moveDirection *= sprintingSpeed;
+        }
+        else if (inputManager.moveAmount >= 0.5f)
+        {
+            moveDirection *= runningSpeed;
         }
         else
         {
-            if (inputManager.moveAmount >= 0.5f)
-            {
-                moveDirection = moveDirection * runningSpeed;
-            }
-            else
-            {
-                moveDirection = moveDirection * walkingSpeed;
-            }
+            moveDirection *= walkingSpeed;
         }
 
-        
+        // Preserve current Y velocity (gravity, jumps, falls)
+        Vector3 currentVelocity = playerRigidbody.linearVelocity;
+        Vector3 targetVelocity = new Vector3(moveDirection.x, currentVelocity.y, moveDirection.z);
 
-            Vector3 movementVelocity = moveDirection;
-        playerRigidbody.linearVelocity = movementVelocity; 
+        playerRigidbody.linearVelocity = targetVelocity;
     }
 
     private void HandleRotation()
@@ -112,24 +115,22 @@ public class PlayerLocomotion : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 rayCastOrigin = transform.position;
-        rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffset;
+        rayCastOrigin.y += rayCastHeightOffset;
 
-        if(!isGrounded && !isJumping)
+        if (!isGrounded && !isJumping)
         {
-            if(!playerManager.isInteracting)
+            if (!playerManager.isInteracting)
             {
-                animatorManager.PlayTargetAnimation("Falling", false);   
+                animatorManager.PlayTargetAnimation("Falling", false);
             }
 
-            inAirTimer = inAirTimer + Time.deltaTime;
-            playerRigidbody.AddForce(transform.forward * leapingVelocity);
-            playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
+            // Let Unity gravity do the work � no AddForce needed
         }
 
         // Ground check using a CapsuleCast
-        Vector3 capsuleBottom = groundCheck.position; // exactly at feet
+        Vector3 capsuleBottom = groundCheck.position;
         Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
-        float capsuleRadius = detectionradius; // how wide your player is
+        float capsuleRadius = detectionradius;
 
         if (Physics.CapsuleCast(capsuleTop, capsuleBottom, capsuleRadius, Vector3.down, out hit, detectionheight, groundLayer))
         {
@@ -145,7 +146,6 @@ public class PlayerLocomotion : MonoBehaviour
         {
             isGrounded = false;
         }
-
     }
     private void OnDrawGizmos()
     {
@@ -222,9 +222,31 @@ public class PlayerLocomotion : MonoBehaviour
         }
     }
 
+    private void HandleSteps()
+    {
+        // Only try to climb steps if the player is moving
+        Vector3 horizontalVelocity = new Vector3(playerRigidbody.linearVelocity.x, 0, playerRigidbody.linearVelocity.z);
+        if (horizontalVelocity.magnitude < 0.1f)
+            return;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+        RaycastHit hitLower;
+        Vector3 originLower = transform.position + Vector3.up * 0.1f; // just above ground
+        if (Physics.Raycast(originLower, transform.forward, out hitLower, 0.5f, groundLayer))
+        {
+            // Now check above, at step height
+            RaycastHit hitUpper;
+            Vector3 originUpper = transform.position + Vector3.up * stepHeight;
+            if (!Physics.Raycast(originUpper, transform.forward, out hitUpper, 0.5f, groundLayer))
+            {
+                // Smoothly move up
+                playerRigidbody.position += new Vector3(0, stepSmooth, 0);
+            }
+        }
+    }
+
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
     {
         
     }
