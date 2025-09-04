@@ -31,6 +31,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     public float jumpHeight = 3;
     public float gravityIntensity = -15;
+    public Transform groundCheck;
 
     private void Awake()
     {
@@ -126,8 +127,8 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         // Ground check using a CapsuleCast
-        Vector3 capsuleBottom = transform.position + Vector3.up * 0.2f; // just above the feet
-        Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight; // capsule "body"
+        Vector3 capsuleBottom = groundCheck.position; // exactly at feet
+        Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
         float capsuleRadius = detectionradius; // how wide your player is
 
         if (Physics.CapsuleCast(capsuleTop, capsuleBottom, capsuleRadius, Vector3.down, out hit, detectionheight, groundLayer))
@@ -151,7 +152,7 @@ public class PlayerLocomotion : MonoBehaviour
         if (Application.isPlaying)
         {
             // Visualize the capsule used for ground detection
-            Vector3 capsuleBottom = transform.position + Vector3.up * 0.2f;
+            Vector3 capsuleBottom = groundCheck != null ? groundCheck.position : transform.position;
             Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
             float capsuleRadius = detectionradius;
 
