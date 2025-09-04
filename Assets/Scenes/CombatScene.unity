@@ -719,7 +719,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1510741824}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.03222703, y: 0.033689972, z: 0.0010869103, w: 0.99891204}
+  m_LocalRotation: {x: -0.03223317, y: 0.027487198, z: 0.00088679616, w: 0.999102}
   m_LocalPosition: {x: 1.0030264, y: 0.945, z: -1.4646984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -813,7 +813,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805450161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.03222703, y: 0.033689972, z: 0.0010869104, w: 0.99891204}
+  m_LocalRotation: {x: -0.03223317, y: 0.027487198, z: 0.00088679604, w: 0.99910194}
   m_LocalPosition: {x: 1.0030264, y: 0.945, z: -1.4646984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1247,6 +1247,14 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3481007908145223410, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.319
+      objectReference: {fileID: 0}
+    - target: {fileID: 3481007908145223410, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.067
+      objectReference: {fileID: 0}
     - target: {fileID: 3532540887815957714, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1537,6 +1545,7 @@ MonoBehaviour:
   moveAmount: 0
   verticalInput: 0
   horizontalInput: 0
+  jumpInput: 0
   b_Input: 0
 --- !u!114 &8551793984105625930
 MonoBehaviour:
@@ -1553,19 +1562,22 @@ MonoBehaviour:
   inAirTimer: 0
   leapingVelocity: 3
   fallingVelocity: 1000
-  rayCastHeightOffset: 1
+  rayCastHeightOffset: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
-  detectionradius: 1.43
-  detectionheight: 0.13
-  capsuleHeight: -0.08
+  detectionradius: 0.05
+  detectionheight: 2.69
+  capsuleHeight: 0.2
+  isJumping: 0
   isSprinting: 0
   isGrounded: 1
   walkingSpeed: 1.5
   runningSpeed: 2
   sprintingSpeed: 5
   rotationSpeed: 15
+  jumpHeight: 3
+  gravityIntensity: -15
 --- !u!114 &8551793984105625931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,6 +1653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ebf05bb7c260e46bd1f8b0bd6f2ef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimatorManager
+  animator: {fileID: 0}
 --- !u!4 &8551793984105625938 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
@@ -1656,5 +1669,5 @@ SceneRoots:
   - {fileID: 22917099}
   - {fileID: 2096674154}
   - {fileID: 154134842}
-  - {fileID: 8551793984105625927}
   - {fileID: 1510741830}
+  - {fileID: 8551793984105625927}

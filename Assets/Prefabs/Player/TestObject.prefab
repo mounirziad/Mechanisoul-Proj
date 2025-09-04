@@ -1,16 +1,48 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &9193726741158293960
+--- !u!1 &391500236350758191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5038876139963409147}
+  m_Layer: 0
+  m_Name: TestObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5038876139963409147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391500236350758191}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.95821, y: 0, z: 1.262}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 52059226185435821}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &518559277505178950
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 5038876139963409147}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.0030264
+      value: 0.07590997
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7453016
+      value: 1.0237399
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -48,20 +80,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7811546481615063722, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 3263931781923126087, guid: 6560ee056a656564e89681a445ead00c, type: 3}
-    - target: {fileID: -3469552933019998406, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.561
-      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_Name
-      value: PlayerCharacter
+      value: RobotCharacterRigged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+--- !u!4 &52059226185435821 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+  m_PrefabInstance: {fileID: 518559277505178950}
+  m_PrefabAsset: {fileID: 0}

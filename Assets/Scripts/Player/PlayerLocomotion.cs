@@ -20,7 +20,7 @@ public class PlayerLocomotion : MonoBehaviour
     public float detectionheight = 4f;
     public float capsuleHeight = 1.8f;
 
-
+    public bool isJumping;
     public bool isSprinting;
     public bool isGrounded;
 
@@ -28,6 +28,9 @@ public class PlayerLocomotion : MonoBehaviour
     public float runningSpeed = 5;
     public float sprintingSpeed = 7;
     public float rotationSpeed = 15;
+
+    public float jumpHeight = 3;
+    public float gravityIntensity = -15;
 
     private void Awake()
     {
@@ -52,6 +55,8 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (isJumping) { return; }
+
         moveDirection = cameraObject.forward * inputManager.verticalInput; 
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
@@ -81,6 +86,8 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleRotation()
     {
+        if(isJumping) { return; }
+
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = cameraObject.forward * inputManager.verticalInput;
@@ -106,7 +113,7 @@ public class PlayerLocomotion : MonoBehaviour
         Vector3 rayCastOrigin = transform.position;
         rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffset;
 
-        if(!isGrounded)
+        if(!isGrounded && !isJumping)
         {
             if(!playerManager.isInteracting)
             {
@@ -143,19 +150,74 @@ public class PlayerLocomotion : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            Vector3 rayCastOrigin = transform.position;
-            rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffset;
+            // Visualize the capsule used for ground detection
+            Vector3 capsuleBottom = transform.position + Vector3.up * 0.2f;
+            Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
+            float capsuleRadius = detectionradius;
 
-            // The direction and max distance of your spherecast
-            float sphereRadius = 0.2f;
-            float maxDistance = 0.8f; // tweak this to match the one used in SphereCast
+            Gizmos.color = isGrounded ? Color.green : Color.red;
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(rayCastOrigin, sphereRadius);
+            // Draw the capsule
+            DrawCapsule(capsuleBottom, capsuleTop, capsuleRadius);
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(rayCastOrigin, rayCastOrigin + Vector3.down * maxDistance);
-            Gizmos.DrawWireSphere(rayCastOrigin + Vector3.down * maxDistance, sphereRadius);
+            // Draw the detection distance
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(capsuleBottom, capsuleBottom + Vector3.down * detectionheight);
+            Gizmos.DrawLine(capsuleTop, capsuleTop + Vector3.down * detectionheight);
+        }
+    }
+
+    // Helper method to draw a capsule
+    private void DrawCapsule(Vector3 bottom, Vector3 top, float radius)
+    {
+        // Draw side lines
+        Gizmos.DrawLine(bottom + Vector3.right * radius, top + Vector3.right * radius);
+        Gizmos.DrawLine(bottom - Vector3.right * radius, top - Vector3.right * radius);
+        Gizmos.DrawLine(bottom + Vector3.forward * radius, top + Vector3.forward * radius);
+        Gizmos.DrawLine(bottom - Vector3.forward * radius, top - Vector3.forward * radius);
+
+        // Draw bottom hemisphere
+        DrawHemisphere(bottom, Vector3.up, radius);
+        DrawHemisphere(bottom, Vector3.down, radius);
+
+        // Draw top hemisphere
+        DrawHemisphere(top, Vector3.up, radius);
+        DrawHemisphere(top, Vector3.down, radius);
+    }
+
+    // Helper method to draw a hemisphere
+    private void DrawHemisphere(Vector3 center, Vector3 direction, float radius)
+    {
+        Vector3 perpendicular = Vector3.Cross(direction, Vector3.forward).normalized * radius;
+        if (perpendicular.magnitude == 0) perpendicular = Vector3.Cross(direction, Vector3.up).normalized * radius;
+
+        int segments = 12;
+        float angleIncrement = 360f / segments;
+
+        for (int i = 0; i < segments; i++)
+        {
+            Quaternion rotation = Quaternion.AngleAxis(i * angleIncrement, direction);
+            Vector3 start = center + rotation * perpendicular;
+
+            Quaternion nextRotation = Quaternion.AngleAxis((i + 1) * angleIncrement, direction);
+            Vector3 end = center + nextRotation * perpendicular;
+
+            Gizmos.DrawLine(start, end);
+            Gizmos.DrawLine(start, center + direction * radius);
+        }
+    }
+
+    public void HandleJumping()
+    {
+        if(isGrounded)
+        {
+            animatorManager.animator.SetBool("isJumping", true);
+            animatorManager.PlayTargetAnimation("Jump", false);
+
+            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            Vector3 playerVelocity = moveDirection;
+            playerVelocity.y = jumpingVelocity;
+            playerRigidbody.linearVelocity = playerVelocity;
         }
     }
 
