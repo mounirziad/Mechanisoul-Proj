@@ -35,6 +35,18 @@ public class PlayerLocomotion : MonoBehaviour
 
     [SerializeField] private float stepHeight = 0.3f;  // max height you can step up
     [SerializeField] private float stepSmooth = 0.1f;  // smooth movement up
+
+    [Header("Dodge Settings")]
+    public float dodgeSpeed = 10f;
+    public float dodgeDuration = 0.5f;
+    public float dodgeCooldown = 1f;
+    public bool isDodging;
+    public bool canDodge = true;
+    private float dodgeTimer;
+    private float dodgeCooldownTimer;
+    private Vector3 dodgeDirection;
+    private Vector3 lastMovementDirection;
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -47,11 +59,20 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleAllMovement()
     {
         HandleFallingAndLanding();
+        HandleDodgeCooldown(); 
 
-        if (playerManager.isInteracting)
+        if (playerManager.isInteracting && !isDodging) 
         {
             return;
         }
+
+        HandleDodgeMovement(); 
+
+        if (isDodging) // Skip normal movement during dodge
+        {
+            return;
+        }
+
         HandleMovement();
         HandleRotation();
         HandleSteps();
@@ -66,6 +87,12 @@ public class PlayerLocomotion : MonoBehaviour
         moveDirection += cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
+
+        // Store last movement direction for dodge - ADD THIS SECTION
+        if (moveDirection != Vector3.zero)
+        {
+            lastMovementDirection = moveDirection;
+        }
 
         // Apply speed depending on state
         if (isSprinting)
@@ -244,15 +271,80 @@ public class PlayerLocomotion : MonoBehaviour
     }
 
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+    public void HandleDodge()
     {
-        
+        if (isDodging || !canDodge || !isGrounded || playerManager.isInteracting)
+            return;
+
+        if (dodgeCooldownTimer > 0)
+            return;
+
+        // Determine dodge direction based on input
+        if (inputManager.moveAmount > 0.1f)
+        {
+            // Dodge in current movement direction
+            dodgeDirection = cameraObject.forward * inputManager.verticalInput;
+            dodgeDirection += cameraObject.right * inputManager.horizontalInput;
+            dodgeDirection.y = 0;
+            dodgeDirection.Normalize();
+        }
+        else
+        {
+            // Use last movement direction if available, otherwise dodge forward
+            dodgeDirection = (lastMovementDirection != Vector3.zero) ? lastMovementDirection : transform.forward;
+        }
+
+        StartDodge();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void StartDodge()
     {
-        
+        isDodging = true;
+        canDodge = false;
+        dodgeTimer = dodgeDuration;
+        dodgeCooldownTimer = dodgeCooldown;
+
+        // Play dodge animation
+        animatorManager.PlayTargetAnimation("DodgeRoll", true);
+
+        // Set interacting flag
+        playerManager.isInteracting = true;
+    }
+
+    private void HandleDodgeMovement()
+    {
+        if (!isDodging)
+            return;
+
+        dodgeTimer -= Time.deltaTime;
+
+        if (dodgeTimer <= 0)
+        {
+            EndDodge();
+            return;
+        }
+
+        // Apply dodge movement (preserve some Y velocity for gravity)
+        Vector3 dodgeVelocity = dodgeDirection * dodgeSpeed;
+        dodgeVelocity.y = playerRigidbody.linearVelocity.y;
+        playerRigidbody.linearVelocity = dodgeVelocity;
+    }
+
+    private void EndDodge()
+    {
+        isDodging = false;
+        playerManager.isInteracting = false;
+    }
+
+    private void HandleDodgeCooldown()
+    {
+        if (dodgeCooldownTimer > 0)
+        {
+            dodgeCooldownTimer -= Time.deltaTime;
+            if (dodgeCooldownTimer <= 0)
+            {
+                canDodge = true;
+            }
+        }
     }
 }
