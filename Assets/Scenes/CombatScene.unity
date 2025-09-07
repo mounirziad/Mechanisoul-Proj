@@ -5708,9 +5708,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8551793984105625936}
-    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8551793984105625940}
   m_SourcePrefab: {fileID: 100100000, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
 --- !u!1 &8551793984105625928 stripped
 GameObject:
@@ -5739,7 +5736,6 @@ MonoBehaviour:
   jumpInput: 0
   b_Input: 0
   dodgeInput: 0
-  attackInput: 0
 --- !u!114 &8551793984105625930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5860,23 +5856,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8551793984105625940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8551793984105625928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 290f9c36b4fd3e349b67256f83a45dbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
-  maxComboHits: 3
-  comboWindow: 1.5
-  attackCooldown: 0.1
-  attackForwardForce: 2
-  attackDuration: 0.3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
