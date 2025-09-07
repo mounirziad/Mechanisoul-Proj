@@ -6,12 +6,12 @@ public class PlayerManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     Animator animator;
     public bool isInteracting;
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+      
 
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created

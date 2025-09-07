@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
 
     public bool dodgeInput;
 
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -45,7 +46,6 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
 
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
-
         }
         playerControls.Enable();
     }
@@ -62,8 +62,9 @@ public class InputManager : MonoBehaviour
         HandleSprintingInput();
         HandleJumpingInput();
         HandleDodgeInput();
-        //HandleActionInput
     }
+
+   
 
     private void HandleDodgeInput()
     {
