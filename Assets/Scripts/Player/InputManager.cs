@@ -23,6 +23,10 @@ public class InputManager : MonoBehaviour
 
     public bool dodgeInput;
 
+    // Add these variables
+    private float jumpInputBuffer = 0f;
+    private const float jumpBufferTime = 0.2f; // Buffer for 0.2 seconds
+
 
     private void Awake()
     {
@@ -100,10 +104,24 @@ public class InputManager : MonoBehaviour
 
     private void HandleJumpingInput()
     {
-        if(jumpInput)
+        // Set buffer when jump is pressed
+        if (jumpInput)
         {
             jumpInput = false;
-            playerLocomotion.HandleJumping();
+            jumpInputBuffer = jumpBufferTime;
+        }
+
+        // Decrease buffer over time
+        if (jumpInputBuffer > 0)
+        {
+            jumpInputBuffer -= Time.deltaTime;
+
+            // Try to jump while buffer is active
+            if (playerLocomotion.isGrounded)
+            {
+                jumpInputBuffer = 0f; // Consume the buffer
+                playerLocomotion.HandleJumping();
+            }
         }
     }
 }
