@@ -5844,6 +5844,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8551793984105625940}
+    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8551793984105625942}
   m_SourcePrefab: {fileID: 100100000, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
 --- !u!1 &8551793984105625928 stripped
 GameObject:
@@ -6009,6 +6012,36 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 753fea4ac7ac0314aa49e9416429b28f, type: 2}
   - {fileID: 11400000, guid: ac8cf280bfb87934cb52627895344852, type: 2}
   weapon: {fileID: 1084669261}
+--- !u!114 &8551793984105625942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8551793984105625928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8bd4d1a267e844691191409b62d844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  currentHealth: 0
+  isInvulnerable: 0
+  autoRegen: 0
+  regenRate: 2
+  regenDelay: 3
+  onHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  onDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
