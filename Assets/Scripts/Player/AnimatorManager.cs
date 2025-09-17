@@ -7,12 +7,15 @@ public class AnimatorManager : MonoBehaviour
     public Animator animator;
     int horizontal;
     int vertical;
+    int isAimingHash;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         horizontal = Animator.StringToHash("Horizontal");
         vertical = Animator.StringToHash("Vertical");
+        isAimingHash = Animator.StringToHash("IsAiming"); // Add this
+
     }
 
     public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
@@ -78,8 +81,16 @@ public class AnimatorManager : MonoBehaviour
 
         animator.SetFloat(horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
         animator.SetFloat(vertical, snappedVertical, 0.1f, Time.deltaTime);
+
+        // ALWAYS update these parameters, even when aiming
+        animator.SetFloat(horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
+        animator.SetFloat(vertical, snappedVertical, 0.1f, Time.deltaTime);
     }
 
+    public void SetAiming(bool aiming)
+    {
+        animator.SetBool(isAimingHash, aiming);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

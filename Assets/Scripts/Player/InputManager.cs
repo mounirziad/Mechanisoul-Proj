@@ -23,7 +23,9 @@ public class InputManager : MonoBehaviour
 
     public bool dodgeInput;
 
-    // Add these variables
+    public bool aimInput; // Right click hold
+    public bool shootInput; // Left click while aiming
+
     private float jumpInputBuffer = 0f;
     private const float jumpBufferTime = 0.2f; // Buffer for 0.2 seconds
 
@@ -48,10 +50,17 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerActions.B.performed += i => b_Input = true;
             playerControls.PlayerActions.B.canceled += i => b_Input = false;
             playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
-
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
+            playerControls.PlayerActions.RangedAim.performed += i => aimInput = true;
+            playerControls.PlayerActions.RangedAim.canceled += i => aimInput = false;
+            playerControls.PlayerActions.Shoot.performed += i => shootInput = true;
         }
         playerControls.Enable();
+    }
+
+    private void LateUpdate()
+    {
+        shootInput = false; // Reset shoot input each frame
     }
 
     private void OnDisable()

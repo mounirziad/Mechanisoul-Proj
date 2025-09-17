@@ -11,15 +11,15 @@ public class PlayerCombat : MonoBehaviour
 
     // Add these new variables
     private bool isAttacking = false;
-    private float minAnimationPlayTime = 0.4f; // Minimum time an animation must play before next attack can be triggered
+    private float minAnimationPlayTime = 0.4f;
     private float attackStartTime;
     private bool attackQueued = false;
 
-    // Reference to the existing input system from InputManager
-    private PlayerControls playerControls;
+    // Aiming variables
+    public bool isAiming = false;
     private InputManager inputManager;
-
-    Animator anim;
+    private PlayerControls playerControls;
+    private Animator anim;
     [SerializeField] Weapon weapon;
 
     private void Awake()
@@ -30,7 +30,6 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-        // Use the existing input system instance
         if (inputManager != null && inputManager.playerControls != null)
         {
             playerControls = inputManager.playerControls;
@@ -51,9 +50,82 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        CheckAttackCompletion();
+        ProcessQueuedAttack();
+        HandleAiming(); // Handle aiming state
+    }
+
+    private void HandleAiming()
+    {
+        // Start aiming when right click is pressed and not attacking
+        if (inputManager.aimInput && !isAttacking && !isAiming)
+        {
+            StartAiming();
+        }
+        // Stop aiming when right click is released
+        else if (isAiming && !inputManager.aimInput)
+        {
+            StopAiming();
+        }
+
+        // Handle shoot input while aiming
+        if (isAiming && inputManager.shootInput)
+        {
+            HandleShoot();
+        }
+    }
+
+    private void StartAiming()
+    {
+        isAiming = true;
+        anim.SetBool("IsAiming", true);
+
+        // Optional: Reduce movement speed while aiming
+        PlayerLocomotion playerLocomotion = GetComponent<PlayerLocomotion>();
+        if (playerLocomotion != null)
+        {
+            playerLocomotion.walkingSpeed *= 0.7f;
+            playerLocomotion.runningSpeed *= 0.7f;
+        }
+
+        Debug.Log("Started Aiming");
+    }
+
+    private void StopAiming()
+    {
+        isAiming = false;
+        anim.SetBool("IsAiming", false);
+
+        // Restore movement speed
+        PlayerLocomotion playerLocomotion = GetComponent<PlayerLocomotion>();
+        if (playerLocomotion != null)
+        {
+            playerLocomotion.walkingSpeed /= 0.7f;
+            playerLocomotion.runningSpeed /= 0.7f;
+        }
+
+        Debug.Log("Stopped Aiming");
+    }
+
+    private void HandleShoot()
+    {
+        // Just visual/audio feedback for now - no projectile logic
+        Debug.Log("Shoot! (Animation only)");
+        // You can add particle effects, sounds, etc. here
+    }
+
     // Event-based approach instead of polling
     private void OnAttackPerformed(InputAction.CallbackContext context)
     {
+        // If aiming, handle as shoot input instead of melee attack
+        if (isAiming)
+        {
+            inputManager.shootInput = true;
+            return;
+        }
+
         if (CanAttack())
         {
             Attack();
@@ -65,16 +137,10 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        CheckAttackCompletion();
-        ProcessQueuedAttack();
-    }
-
     bool CanAttack()
     {
-        // Can attack if not currently attacking and enough time has passed since last combo ended
-        return !isAttacking && Time.time - lastComboEnd > 0.2f;
+        // Can't attack while aiming
+        return !isAttacking && !isAiming && Time.time - lastComboEnd > 0.2f;
     }
 
     void Attack()
