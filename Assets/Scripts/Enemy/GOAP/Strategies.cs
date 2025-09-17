@@ -1,16 +1,40 @@
 using UnityEngine;
 
-public class Strategies : MonoBehaviour
+public interface IActionStrategy
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    bool CanPerform { get; } //Can we execute the strategy
+    bool Complete { get; } //Is the strategy finished
+
+    void Start() //run everytime we want to execute a strategy
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    void Update(float deltaTime) //update frame using delta time
     {
-        
+
     }
+
+    void Stop() //stopping strategy
+    {
+
+    }
+}
+
+public class IdleStrategy : IActionStrategy
+{
+    public bool CanPerform => true; //Agent can always idle
+    public bool Complete { get; private set; } //set complete after timer
+
+    /*readonly CountdownTimer timer;
+
+    public IdleStrategy(float duration)
+    {
+        timer = new CountdownTimer(duration);
+        timer.OnTimerStart += () => Complete = false;
+        timer.OnTimerStop += () => Complete = true;
+    }
+
+    public void Start() => timer.Start();
+    public void Update(float deltaTime) => timer.Tick(deltaTime);*/
 }

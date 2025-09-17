@@ -5,8 +5,7 @@ using UnityEngine;
 public class BeliefFactory
 {
     readonly GoapAgent agent;
-    //private GameObject agent; //REMOVE THIS AFTER IMPLEMENTING GOAP AGENT JUST PLACEHOLDER TO NOT CAUSE ERRORS
-    readonly Dictionary<string, AgentBelief> beliefs;       //Adding GOAPAgent later!!
+    readonly Dictionary<string, AgentBelief> beliefs;
 
     public BeliefFactory(GoapAgent agent, Dictionary<string, AgentBelief> beliefs)
     {
