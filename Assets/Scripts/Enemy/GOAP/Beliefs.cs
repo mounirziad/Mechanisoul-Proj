@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BeliefFactory
 {
-    //readonly GoapAgent agent;
-    private GameObject agent; //REMOVE THIS AFTER IMPLEMENTING GOAP AGENT JUST PLACEHOLDER TO NOT CAUSE ERRORS
+    readonly GoapAgent agent;
+    //private GameObject agent; //REMOVE THIS AFTER IMPLEMENTING GOAP AGENT JUST PLACEHOLDER TO NOT CAUSE ERRORS
     readonly Dictionary<string, AgentBelief> beliefs;       //Adding GOAPAgent later!!
 
-    /*public BeliefFactory(GoapAgent agent, Dictionary<string, AgentBelief> beliefs)
+    public BeliefFactory(GoapAgent agent, Dictionary<string, AgentBelief> beliefs)
     {
         this.agent = agent;
         this.beliefs = beliefs;
-    }*/
+    }
 
     public void AddBelief(string key, Func<bool> condition)
     {
