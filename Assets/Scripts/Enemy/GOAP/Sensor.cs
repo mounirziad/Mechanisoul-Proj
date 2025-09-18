@@ -16,7 +16,7 @@ public class Sensor : MonoBehaviour
 
     GameObject target;
     Vector3 lastKnownPosition;
-    //CountdownTimer timer;
+    CountdownTimer timer;
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class Sensor : MonoBehaviour
         detectionRange.radius = detectionRadius;
     }
 
-    /*private void Start()
+    private void Start()
     {
         timer = new CountdownTimer(timerInterval);
         timer.OnTimerStop += () =>
@@ -39,7 +39,7 @@ public class Sensor : MonoBehaviour
     private void Update()
     {
         timer.Tick(Time.deltaTime);
-    }*/
+    }
 
     void UpdateTargetPosition(GameObject target = null)
     {

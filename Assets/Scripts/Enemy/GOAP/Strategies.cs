@@ -7,17 +7,17 @@ public interface IActionStrategy
 
     void Start() //run everytime we want to execute a strategy
     {
-
+        //interface needs them but not using at the moment
     }
 
-    void Update(float deltaTime) //update frame using delta time
+    void Update(float deltaTime) //update frame by frame using delta time
     {
-
+        //interface needs them but not using at the moment
     }
 
     void Stop() //stopping strategy
     {
-
+        //interface needs them but not using at the moment
     }
 }
 
@@ -26,7 +26,7 @@ public class IdleStrategy : IActionStrategy
     public bool CanPerform => true; //Agent can always idle
     public bool Complete { get; private set; } //set complete after timer
 
-    /*readonly CountdownTimer timer;
+    readonly CountdownTimer timer;
 
     public IdleStrategy(float duration)
     {
@@ -36,5 +36,5 @@ public class IdleStrategy : IActionStrategy
     }
 
     public void Start() => timer.Start();
-    public void Update(float deltaTime) => timer.Tick(deltaTime);*/
+    public void Update(float deltaTime) => timer.Tick(deltaTime);
 }
