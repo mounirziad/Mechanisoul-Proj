@@ -5180,6 +5180,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2374054933966430716, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1971551250
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1971551252}
+  - component: {fileID: 1971551251}
+  m_Layer: 0
+  m_Name: UpgradeHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1971551251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971551250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16ac80218e122ae48af297b0524eb61a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeHandler
+--- !u!4 &1971551252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971551250}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.41847, y: 0, z: 0.57495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2003615234
 GameObject:
   m_ObjectHideFlags: 0
@@ -5750,6 +5794,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8624673518823923128, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -5875,6 +5923,8 @@ MonoBehaviour:
   jumpInput: 0
   b_Input: 0
   dodgeInput: 0
+  aimInput: 0
+  shootInput: 0
 --- !u!114 &8551793984105625930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5927,6 +5977,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   isInteracting: 0
+  aoeAmount: 0
+  slowAmount: 0
+  slowLength: 0
+  lifeStealAmount: 0
+  stunLength: 0
 --- !u!54 &8551793984105625932
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6011,6 +6066,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e44634732f81e2748a55c502762cd93e, type: 2}
   - {fileID: 11400000, guid: 753fea4ac7ac0314aa49e9416429b28f, type: 2}
   - {fileID: 11400000, guid: ac8cf280bfb87934cb52627895344852, type: 2}
+  isAiming: 0
   weapon: {fileID: 1084669261}
 --- !u!114 &8551793984105625942
 MonoBehaviour:
@@ -6056,3 +6112,4 @@ SceneRoots:
   - {fileID: 8551793984105625927}
   - {fileID: 1386034641}
   - {fileID: 899639189}
+  - {fileID: 1971551252}

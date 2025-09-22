@@ -6,6 +6,14 @@ public class PlayerManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     Animator animator;
     public bool isInteracting;
+
+    [Header("Upgrade Values")]
+    [SerializeField] float aoeAmount;
+    [SerializeField] float slowAmount;
+    [SerializeField] float slowLength;
+    [SerializeField] float lifeStealAmount;
+    [SerializeField] float stunLength;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -36,5 +44,15 @@ public class PlayerManager : MonoBehaviour
         isInteracting = animator.GetBool("isInteracting");
         playerLocomotion.isJumping = animator.GetBool("isJumping");
         animator.SetBool("isGrounded", playerLocomotion.isGrounded);
+    }
+
+    //used to update the upgrade values when new upgrades are chosen
+    public void UpdateUpgrades(float aoeAmount, float slowAmount, float slowLength, float lifeStealAmount, float stunLength)
+    {
+        this.aoeAmount = aoeAmount;
+        this.slowAmount = slowAmount;
+        this.slowLength = slowLength;
+        this.lifeStealAmount = lifeStealAmount;
+        this.stunLength = stunLength;
     }
 }
