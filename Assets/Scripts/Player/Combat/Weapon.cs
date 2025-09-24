@@ -4,6 +4,7 @@ public class Weapon : MonoBehaviour
 {
     public float damage;
 
+    [SerializeField] private GameObject hitVFX;
     BoxCollider triggerBox;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,9 +15,17 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var enemy = other.gameObject.CompareTag("Enemy");
-        if(enemy != null)
+        Debug.Log("Hit something");
+        if (other.gameObject.CompareTag("Enemy"))
         {
+            Debug.Log("Hit enemy");
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
+
+            if (hitVFX != null)
+            {
+                Instantiate(hitVFX, contactPoint, Quaternion.identity);
+            }
+
             //subtract damage from enemy health
 
             //if enemy health is <= 0 
