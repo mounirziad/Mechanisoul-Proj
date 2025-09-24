@@ -1,4 +1,8 @@
+using System;
+using System.ComponentModel;
+using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.AI;
 
 public interface IActionStrategy
 {
@@ -37,4 +41,103 @@ public class IdleStrategy : IActionStrategy
 
     public void Start() => timer.Start();
     public void Update(float deltaTime) => timer.Tick(deltaTime);
+}
+
+public class WanderStrategy : IActionStrategy
+{
+    readonly NavMeshAgent agent;
+    readonly float wanderRadius;
+
+    public bool CanPerform => !Complete;
+    public bool Complete => agent.remainingDistance <= 2f && !agent.pathPending;
+
+    public WanderStrategy(NavMeshAgent agent, float wanderRadius)
+    {
+        this.agent = agent;
+        this.wanderRadius = wanderRadius;
+    }
+
+    public void Start()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 randomDirection = (UnityEngine.Random.insideUnitSphere * wanderRadius);//.With(y: 0);
+            NavMeshHit hit;
+
+            if (NavMesh.SamplePosition(agent.transform.position + randomDirection, out hit, wanderRadius, 1))
+            {
+                agent.SetDestination(hit.position);
+                return;
+            }
+        }
+    }
+}
+
+public class MoveStrategy : IActionStrategy
+{
+    readonly NavMeshAgent agent;
+    readonly Func<Vector3> destination;
+
+    public bool CanPerform => !Complete;
+    public bool Complete => agent.remainingDistance <= 2f && !agent.pathPending;
+
+    public MoveStrategy(NavMeshAgent agent, Func<Vector3> destination)
+    {
+        this.agent = agent;
+        this.destination = destination;
+    }
+
+    public void Start() => agent.SetDestination(destination());
+    public void Stop() => agent.ResetPath();
+}
+
+public class AttackStrategy : IActionStrategy
+{
+    public bool CanPerform => true; //agent can always attack
+    public bool Complete {  get; private set; }
+
+    public AttackStrategy()
+    {
+        
+    }
+}
+
+public class ResurrectStrategy : IActionStrategy
+{
+    public bool CanPerform => true;
+    public bool Complete { get; private set; }
+
+    readonly GoapAgent agent;
+    readonly float resurrectionTime = 5f;
+    CountdownTimer timer;
+
+    bool hasStarted = false;
+
+    public ResurrectStrategy(GameObject boss)
+    {
+        this.agent = boss.GetComponent<GoapAgent>();
+        timer = new CountdownTimer(resurrectionTime);
+        timer.OnTimerStart += () => Complete = false;
+        timer.OnTimerStop += () =>
+        {
+            Complete = true;
+            ResurrectRobots();
+        };
+    }
+
+    public void Start()
+    {
+        if (hasStarted) return; //prevent it happening multiple times
+        hasStarted = true;
+
+        timer.Start();
+        agent.MarkResurrected();
+    }
+
+    public void Update(float deltaTime) => timer.Tick(deltaTime);
+
+    void ResurrectRobots()
+    {
+        Debug.Log("Summoning minions");
+    }
 }
