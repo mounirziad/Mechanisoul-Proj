@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public interface IActionStrategy
 {
+
     bool CanPerform { get; } //Can we execute the strategy
     bool Complete { get; } //Is the strategy finished
 

@@ -17,6 +17,7 @@ public class GoapAgent : MonoBehaviour
 
     [Header("Stats")] //temporary implementation
     public float health = 75f;
+    public int damage = 10;
 
     [Header("Player Information")]
     [SerializeField] private GameObject player;
