@@ -96,42 +96,9 @@ public class AttackStrategy : IActionStrategy
     public bool CanPerform => true; //agent can always attack
     public bool Complete {  get; private set; }
 
-    readonly GoapAgent agent;
-    readonly float attackDuration = 1.5f;
-    readonly CountdownTimer timer;
-
-    public AttackStrategy(GoapAgent agent)
+    public AttackStrategy()
     {
-        this.agent = agent;
-        timer = new CountdownTimer(attackDuration);
-        timer.OnTimerStart += () => Complete = false;
-        timer.OnTimerStop += () =>
-        {
-            Complete = true;
-            DealDamage();
-        };
-    }
-
-    public void Start() => timer.Start();
-    public void Update(float deltaTime) => timer.Tick(deltaTime);
-
-    void DealDamage()
-    {
-        if (agent.Player == null)
-        {
-            Debug.LogWarning("AttackStrategy: No player reference found");
-            return;
-        }
-
-        PlayerHealth playerHealth = agent.Player.GetComponent<PlayerHealth>();
-        if (playerHealth == null)
-        {
-            Debug.LogWarning("AttackStrategy: Player does not have a PlayerHealth component");
-            return;
-        }
-
-        playerHealth.TakeDamage(agent.damage);
-        Debug.Log($"Boss dealt {agent.damage} damage to the player");
+        
     }
 }
 

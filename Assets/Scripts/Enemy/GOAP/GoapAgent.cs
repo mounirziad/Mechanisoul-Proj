@@ -18,10 +18,6 @@ public class GoapAgent : MonoBehaviour
     [Header("Stats")] //temporary implementation
     public float health = 75f;
 
-    [Header("Player Information")]
-    [SerializeField] private GameObject player;
-    public GameObject Player => player;
-
     NavMeshAgent navMesh;
     Rigidbody rb;
 
@@ -126,7 +122,7 @@ public class GoapAgent : MonoBehaviour
             .Build());
 
         actions.Add(new AgentAction.Builder("Attack Player")
-            .WithStrategy(new AttackStrategy(this))
+            .WithStrategy(new AttackStrategy())
             .AddPrecondition(beliefs["PlayerInAttackRange"])
             .AddEffect(beliefs["AttackingPlayer"])
             .Build());
