@@ -1,0 +1,46 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UIStyleSheet.uss?fileID=7433441132597879392&amp;guid=dae730963a6ef20439af387d8ba9f651&amp;type=3#UIStyleSheet" />
+    <ui:VisualElement name="root" style="flex-grow: 1; width: 100%; height: 100%; position: absolute;">
+        <ui:VisualElement name="SkillMenu" style="flex-grow: 1; position: absolute; width: 100%; height: 100%;">
+            <ui:VisualElement name="TabsEL" style="flex-grow: 1; flex-direction: row; width: auto; height: auto;">
+                <ui:Button text="Upgrades" name="UpgradeTab" class="tabs" />
+                <ui:Button text="Combos" name="ComboTab" class="tabs" />
+            </ui:VisualElement>
+            <ui:VisualElement name="SkillTreeEL" style="flex-grow: 1; width: auto; height: 90%; align-content: flex-start; align-self: stretch; align-items: stretch;">
+                <ui:VisualElement name="MeleeUpg" class="row-setup">
+                    <ui:Label text="Melee" name="MeleeIcon" style="background-color: rgb(255, 126, 126); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
+                    <ui:VisualElement name="ColumnLvl1" class="column-setup">
+                        <ui:Button text="Button" name="Melee1" class="upg-button-setup" />
+                        <ui:Button text="Anger lvl 1" name="AngerMelee1" class="upg-button-setup" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ColumnLvl2" class="column-setup">
+                        <ui:Button text="Button" name="Melee2" class="upg-button-setup" />
+                        <ui:Button text="Anger lvl 2" name="AngerMelee2" class="upg-button-setup" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="RangeUpg" class="row-setup">
+                    <ui:Label text="Range" name="RangeIcon" style="width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 30px; background-color: rgb(255, 251, 88); -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
+                    <ui:VisualElement name="ColumnLvl1" class="column-setup">
+                        <ui:Button text="Joy lvl 1" name="JoyRange1" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Range1" class="upg-button-setup" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ColumnLvl2" class="column-setup">
+                        <ui:Button text="Joy lvl 2" name="JoyRange2" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Range2" class="upg-button-setup" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="DashUpg" class="row-setup">
+                    <ui:Label text="Dash" name="DashIcon" double-click-selects-word="false" style="background-color: rgb(126, 145, 255); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
+                    <ui:VisualElement name="ColumnLvl1" class="column-setup">
+                        <ui:Button text="Sad lvl 1&#10;" name="SadDash1" class="upg-button-setup" />
+                        <ui:Button text="Anger lvl 1" name="AngerDash1" class="upg-button-setup" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ColumnLvl2" class="column-setup">
+                        <ui:Button text="Sad lvl 2" name="SadDash2" class="upg-button-setup" />
+                        <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
