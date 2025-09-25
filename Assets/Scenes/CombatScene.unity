@@ -5377,7 +5377,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1510741824}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.032222576, y: 0.037566476, z: 0.0012119747, w: 0.99877375}
+  m_LocalRotation: {x: -0.03223273, y: 0.02797364, z: 0.0009024895, w: 0.99908847}
   m_LocalPosition: {x: 1.0030264, y: 0.945, z: -1.4646984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5657,7 +5657,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805450161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.032222576, y: 0.037566476, z: 0.0012119749, w: 0.99877375}
+  m_LocalRotation: {x: -0.03223273, y: 0.02797364, z: 0.0009024896, w: 0.99908847}
   m_LocalPosition: {x: 1.0030264, y: 0.945, z: -1.4646984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5868,6 +5868,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -714963510296184842, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -714963510296184842, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 877c971a2d918924bb4a3cc3a47e17f3, type: 2}
+    - target: {fileID: -714963510296184842, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 919132149155446097, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
       propertyPath: m_Name
       value: robot
