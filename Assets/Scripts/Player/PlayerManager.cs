@@ -7,6 +7,9 @@ public class PlayerManager : MonoBehaviour
     Animator animator;
     public bool isInteracting;
 
+    [Header("Dash / Abilities")]
+    [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
+
     [Header("Upgrade Values")]
     [SerializeField] float aoeAmount;
     [SerializeField] float slowAmount;
@@ -19,16 +22,9 @@ public class PlayerManager : MonoBehaviour
         animator = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
-      
-
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+        if (!dash) dash = GetComponent<DashAbility>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         inputManager.HandleAllInputs();
@@ -38,7 +34,7 @@ public class PlayerManager : MonoBehaviour
     {
         playerLocomotion.HandleAllMovement();
     }
-     
+
     private void LateUpdate()
     {
         isInteracting = animator.GetBool("isInteracting");
@@ -46,7 +42,6 @@ public class PlayerManager : MonoBehaviour
         animator.SetBool("isGrounded", playerLocomotion.isGrounded);
     }
 
-    //used to update the upgrade values when new upgrades are chosen
     public void UpdateUpgrades(float aoeAmount, float slowAmount, float slowLength, float lifeStealAmount, float stunLength)
     {
         this.aoeAmount = aoeAmount;
@@ -54,5 +49,9 @@ public class PlayerManager : MonoBehaviour
         this.slowLength = slowLength;
         this.lifeStealAmount = lifeStealAmount;
         this.stunLength = stunLength;
+
+        // Forward to dash module
+        if (dash) dash.SetUpgrades(aoeAmount, slowAmount, slowLength, lifeStealAmount, stunLength);
     }
+
 }

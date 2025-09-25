@@ -3121,6 +3121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   damage: 5
+  hitVFX: {fileID: 0}
 --- !u!1 &1386034635
 GameObject:
   m_ObjectHideFlags: 0
@@ -5253,7 +5254,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1510741824}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.032222565, y: 0.037580587, z: 0.0012124305, w: 0.9987733}
+  m_LocalRotation: {x: -0.032230336, y: 0.030483648, z: 0.0009834667, w: 0.99901503}
   m_LocalPosition: {x: 1.0030264, y: 0.945, z: -1.4646984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5275,7 +5276,8 @@ GameObject:
   - component: {fileID: 1741580713}
   - component: {fileID: 1741580712}
   - component: {fileID: 1741580711}
-  m_Layer: 0
+  - component: {fileID: 1741580718}
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5444,6 +5446,18 @@ Transform:
   - {fileID: 1900904625}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1741580718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741580710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 916489295679b3340a6977507d34dffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySlowExample
 --- !u!1 &1805450161
 GameObject:
   m_ObjectHideFlags: 0
@@ -5531,7 +5545,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805450161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.03222257, y: 0.03758059, z: 0.0012124304, w: 0.9987732}
+  m_LocalRotation: {x: -0.032230344, y: 0.03048365, z: 0.0009834671, w: 0.99901503}
   m_LocalPosition: {x: 1.0030264, y: 0.945, z: -1.4646984}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5625,7 +5639,7 @@ GameObject:
   - component: {fileID: 1900904625}
   - component: {fileID: 1900904627}
   - component: {fileID: 1900904626}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AttackSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5773,7 +5787,7 @@ GameObject:
   - component: {fileID: 2049069455}
   - component: {fileID: 2049069457}
   - component: {fileID: 2049069456}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ChaseSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6482,6 +6496,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8551793984105625942}
+    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8551793984105625943}
   m_SourcePrefab: {fileID: 100100000, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
 --- !u!1 &8551793984105625928 stripped
 GameObject:
@@ -6564,6 +6581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   isInteracting: 0
+  dash: {fileID: 0}
   aoeAmount: 0
   slowAmount: 0
   slowLength: 0
@@ -6595,7 +6613,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &8551793984105625933
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6684,6 +6702,71 @@ MonoBehaviour:
   onHealed:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8551793984105625943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8551793984105625928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3af1f28e691cc44c85e1a3854ffc2ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DashAbility
+  rb: {fileID: 8551793984105625932}
+  directionSource: {fileID: 0}
+  dashAction: {fileID: 0}
+  dashDistanceInBodyLengths: 10
+  dashDuration: 0.28
+  dashCooldown: 0.25
+  dashEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.15
+      value: 0.25
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.85
+      value: 0.75
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fallbackBodyLength: 2
+  fireDoTPrefab: {fileID: 6345824777378919738, guid: e5f5342b64caa60479ff4e56688f1126, type: 3}
+  slowZonePrefab: {fileID: 1398006098761536543, guid: 2ca0e4b767183484b9a6b43d2e29b2d4, type: 3}
+  trailStepMeters: 0.65
+  angerAOENodes: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
