@@ -514,6 +514,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""6d8b9a49-9077-4d9a-bf11-1eed90540129"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UI Activate"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a0c35d0-ce4a-4a77-b11f-df320a163d5c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -549,6 +567,39 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Warehouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""526e22bb-49b8-45ee-8828-76ebbf073fca"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80783744-8d66-4282-8188-a219b9dafcc0"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Activate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dfea4eb8-8fc7-4f5a-9700-2b4079dd20c2"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UI Activate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -572,6 +623,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Temp_CombatScene = m_Temp.FindAction("Combat Scene", throwIfNotFound: true);
         m_Temp_ArtScene = m_Temp.FindAction("Art Scene", throwIfNotFound: true);
         m_Temp_Warehouse = m_Temp.FindAction("Warehouse", throwIfNotFound: true);
+        m_Temp_Exit = m_Temp.FindAction("Exit", throwIfNotFound: true);
+        m_Temp_UIActivate = m_Temp.FindAction("UI Activate", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -915,6 +968,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Temp_CombatScene;
     private readonly InputAction m_Temp_ArtScene;
     private readonly InputAction m_Temp_Warehouse;
+    private readonly InputAction m_Temp_Exit;
+    private readonly InputAction m_Temp_UIActivate;
     /// <summary>
     /// Provides access to input actions defined in input action map "Temp".
     /// </summary>
@@ -938,6 +993,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Temp/Warehouse".
         /// </summary>
         public InputAction @Warehouse => m_Wrapper.m_Temp_Warehouse;
+        /// <summary>
+        /// Provides access to the underlying input action "Temp/Exit".
+        /// </summary>
+        public InputAction @Exit => m_Wrapper.m_Temp_Exit;
+        /// <summary>
+        /// Provides access to the underlying input action "Temp/UIActivate".
+        /// </summary>
+        public InputAction @UIActivate => m_Wrapper.m_Temp_UIActivate;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -973,6 +1036,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Warehouse.started += instance.OnWarehouse;
             @Warehouse.performed += instance.OnWarehouse;
             @Warehouse.canceled += instance.OnWarehouse;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+            @UIActivate.started += instance.OnUIActivate;
+            @UIActivate.performed += instance.OnUIActivate;
+            @UIActivate.canceled += instance.OnUIActivate;
         }
 
         /// <summary>
@@ -993,6 +1062,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Warehouse.started -= instance.OnWarehouse;
             @Warehouse.performed -= instance.OnWarehouse;
             @Warehouse.canceled -= instance.OnWarehouse;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+            @UIActivate.started -= instance.OnUIActivate;
+            @UIActivate.performed -= instance.OnUIActivate;
+            @UIActivate.canceled -= instance.OnUIActivate;
         }
 
         /// <summary>
@@ -1126,5 +1201,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnWarehouse(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnExit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UI Activate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUIActivate(InputAction.CallbackContext context);
     }
 }
