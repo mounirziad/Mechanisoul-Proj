@@ -483,6 +483,74 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Temp"",
+            ""id"": ""a2698494-8f9d-4a9d-8683-d6d71adcf17d"",
+            ""actions"": [
+                {
+                    ""name"": ""Combat Scene"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8f5336f-bece-4b01-87b9-c2dd468765cc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Art Scene"",
+                    ""type"": ""Button"",
+                    ""id"": ""a17b5e0a-7c3c-4921-80db-c4509cbd3431"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Warehouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""3440fd6b-091a-45ad-8d52-8e74b00e61e3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c2162766-4a8b-4d53-b861-1ffd91938480"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combat Scene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d33a62e-9a06-40e8-8d14-6f42a0a51e23"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Art Scene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7f0c7e4-954b-4b82-b086-1b4e8a01c381"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Warehouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -499,12 +567,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_Attack = m_PlayerActions.FindAction("Attack", throwIfNotFound: true);
         m_PlayerActions_RangedAim = m_PlayerActions.FindAction("RangedAim", throwIfNotFound: true);
         m_PlayerActions_Shoot = m_PlayerActions.FindAction("Shoot", throwIfNotFound: true);
+        // Temp
+        m_Temp = asset.FindActionMap("Temp", throwIfNotFound: true);
+        m_Temp_CombatScene = m_Temp.FindAction("Combat Scene", throwIfNotFound: true);
+        m_Temp_ArtScene = m_Temp.FindAction("Art Scene", throwIfNotFound: true);
+        m_Temp_Warehouse = m_Temp.FindAction("Warehouse", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_PlayerMovement.enabled, "This will cause a leak and performance issues, PlayerControls.PlayerMovement.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PlayerActions.enabled, "This will cause a leak and performance issues, PlayerControls.PlayerActions.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Temp.enabled, "This will cause a leak and performance issues, PlayerControls.Temp.Disable() has not been called.");
     }
 
     /// <summary>
@@ -834,6 +908,124 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActionsActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActionsActions @PlayerActions => new PlayerActionsActions(this);
+
+    // Temp
+    private readonly InputActionMap m_Temp;
+    private List<ITempActions> m_TempActionsCallbackInterfaces = new List<ITempActions>();
+    private readonly InputAction m_Temp_CombatScene;
+    private readonly InputAction m_Temp_ArtScene;
+    private readonly InputAction m_Temp_Warehouse;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Temp".
+    /// </summary>
+    public struct TempActions
+    {
+        private @PlayerControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public TempActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Temp/CombatScene".
+        /// </summary>
+        public InputAction @CombatScene => m_Wrapper.m_Temp_CombatScene;
+        /// <summary>
+        /// Provides access to the underlying input action "Temp/ArtScene".
+        /// </summary>
+        public InputAction @ArtScene => m_Wrapper.m_Temp_ArtScene;
+        /// <summary>
+        /// Provides access to the underlying input action "Temp/Warehouse".
+        /// </summary>
+        public InputAction @Warehouse => m_Wrapper.m_Temp_Warehouse;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Temp; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="TempActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(TempActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="TempActions" />
+        public void AddCallbacks(ITempActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TempActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TempActionsCallbackInterfaces.Add(instance);
+            @CombatScene.started += instance.OnCombatScene;
+            @CombatScene.performed += instance.OnCombatScene;
+            @CombatScene.canceled += instance.OnCombatScene;
+            @ArtScene.started += instance.OnArtScene;
+            @ArtScene.performed += instance.OnArtScene;
+            @ArtScene.canceled += instance.OnArtScene;
+            @Warehouse.started += instance.OnWarehouse;
+            @Warehouse.performed += instance.OnWarehouse;
+            @Warehouse.canceled += instance.OnWarehouse;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="TempActions" />
+        private void UnregisterCallbacks(ITempActions instance)
+        {
+            @CombatScene.started -= instance.OnCombatScene;
+            @CombatScene.performed -= instance.OnCombatScene;
+            @CombatScene.canceled -= instance.OnCombatScene;
+            @ArtScene.started -= instance.OnArtScene;
+            @ArtScene.performed -= instance.OnArtScene;
+            @ArtScene.canceled -= instance.OnArtScene;
+            @Warehouse.started -= instance.OnWarehouse;
+            @Warehouse.performed -= instance.OnWarehouse;
+            @Warehouse.canceled -= instance.OnWarehouse;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TempActions.UnregisterCallbacks(ITempActions)" />.
+        /// </summary>
+        /// <seealso cref="TempActions.UnregisterCallbacks(ITempActions)" />
+        public void RemoveCallbacks(ITempActions instance)
+        {
+            if (m_Wrapper.m_TempActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="TempActions.AddCallbacks(ITempActions)" />
+        /// <seealso cref="TempActions.RemoveCallbacks(ITempActions)" />
+        /// <seealso cref="TempActions.UnregisterCallbacks(ITempActions)" />
+        public void SetCallbacks(ITempActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TempActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TempActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="TempActions" /> instance referencing this action map.
+    /// </summary>
+    public TempActions @Temp => new TempActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player Movement" which allows adding and removing callbacks.
     /// </summary>
@@ -905,5 +1097,34 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShoot(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Temp" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="TempActions.AddCallbacks(ITempActions)" />
+    /// <seealso cref="TempActions.RemoveCallbacks(ITempActions)" />
+    public interface ITempActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Combat Scene" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCombatScene(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Art Scene" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnArtScene(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Warehouse" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWarehouse(InputAction.CallbackContext context);
     }
 }
