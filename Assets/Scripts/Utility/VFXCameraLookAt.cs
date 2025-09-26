@@ -3,21 +3,38 @@ using UnityEngine;
 
 public class VFXCameraLookAt : MonoBehaviour
 {
-    bool flip;
-
-    // Update is called once per frame
+    public float distanceFromCamera;
+    private Camera mainCamera;
+    
+    void Start()
+    {
+        mainCamera = Camera.main;
+        PositionInScreenSpace();
+    }
+    
     void Update()
     {
-        if (Application.isPlaying)
+        PositionInScreenSpace();
+    }
+    
+    void PositionInScreenSpace()
+    {
+        if (mainCamera != null)
         {
-            transform.LookAt(Camera.main.transform.position, Vector3.up);
+            // Convert world position to screen point
+            Vector3 screenPos = mainCamera.WorldToScreenPoint(transform.position);
+            
+            // Create a position a fixed distance from camera in the viewing direction
+            Vector3 worldPos = mainCamera.ScreenToWorldPoint(
+                new Vector3(screenPos.x, screenPos.y, distanceFromCamera));
+            
+            transform.position = worldPos;
+            
+            // Always face camera
+            transform.rotation = Quaternion.LookRotation(
+                mainCamera.transform.forward, 
+                Vector3.up
+            );
         }
-
-#if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            transform.LookAt(SceneView.GetAllSceneCameras()[0].transform.position, Vector3.up);
-        }
-        #endif
     }
 }

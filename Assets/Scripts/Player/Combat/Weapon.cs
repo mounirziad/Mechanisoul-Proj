@@ -23,9 +23,10 @@ public class Weapon : MonoBehaviour
 
             if (hitVFX != null)
             {
-                Instantiate(hitVFX, contactPoint, Quaternion.identity);
-            }
+                GameObject vfxInstance = Instantiate(hitVFX, contactPoint, Quaternion.identity);
 
+                vfxInstance.GetComponent<VFXCameraLookAt>().distanceFromCamera = Vector3.Distance(contactPoint, Camera.main.transform.position) - 0.1f;
+            }
             //subtract damage from enemy health
 
             //if enemy health is <= 0 
