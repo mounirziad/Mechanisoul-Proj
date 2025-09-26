@@ -31,6 +31,8 @@ public class PlayerCombat : MonoBehaviour
     private Animator anim;
     [SerializeField] Weapon weapon;
 
+  
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -183,6 +185,8 @@ public class PlayerCombat : MonoBehaviour
             anim.runtimeAnimatorController = combo[comboCounter].animatorOV;
             anim.Play("Attack", 0, 0);
             weapon.damage = combo[comboCounter].damage;
+
+            
 
             // Update state
             isAttacking = true;
