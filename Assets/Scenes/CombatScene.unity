@@ -1716,11 +1716,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1f1b335bb19a845ac6efa8262f06fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyHealth
-  maxHealth: 100
+  maxHealth: 30
   currentHealth: 0
   dieForce: 10
   blinkIntesnity: 10
   blinkDuration: 0.1
+  knockbackForce: 5
+  knockbackDuration: 0.2
+  hitCooldownTime: 0.2
 --- !u!114 &2005209236
 MonoBehaviour:
   m_ObjectHideFlags: 0

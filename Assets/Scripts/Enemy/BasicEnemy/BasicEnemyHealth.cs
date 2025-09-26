@@ -15,6 +15,8 @@ public class BasicEnemyHealth : MonoBehaviour
     public float knockbackDuration = 0.2f;
     public float hitCooldownTime = 0.2f;
     private bool hitCooldown = false;
+    public bool isDead = false;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,6 +43,8 @@ public class BasicEnemyHealth : MonoBehaviour
 
     public void TakeDamage(float amount, Vector3 direction)
     {
+        if (hitCooldown || isDead) return; // Prevent damage if dead
+
         if (hitCooldown) return; // skip repeated hits
         hitCooldown = true;
         Invoke(nameof(ResetHitCooldown), hitCooldownTime);
@@ -77,6 +81,15 @@ public class BasicEnemyHealth : MonoBehaviour
 
     private void Die(Vector3 direction)
     {
+        isDead = true;
+
+        // Stop NavMeshAgent movement
+        BasicEnemyLocomotion locomotion = GetComponent<BasicEnemyLocomotion>();
+        if (locomotion != null)
+        {
+            locomotion.DisableNavMeshAgent();
+        }
+
         ragdoll.ActivateRagdoll();
         direction.y = 1;
         ragdoll.ApplyForce(direction * dieForce);

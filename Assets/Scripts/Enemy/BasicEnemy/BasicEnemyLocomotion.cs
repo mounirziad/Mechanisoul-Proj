@@ -24,6 +24,9 @@ public class BasicEnemyLocomotion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        BasicEnemyHealth health = GetComponent<BasicEnemyHealth>();
+        if (health != null && health.isDead) return; // Skip updates when dead
+
         timer -= Time.deltaTime;
         if (timer < 0.0f)
         {
@@ -48,5 +51,14 @@ public class BasicEnemyLocomotion : MonoBehaviour
     {
         knockbackVelocity = direction.normalized * force;
         knockbackTime = duration;
+    }
+
+    public void DisableNavMeshAgent()
+    {
+        if (agent != null && agent.isActiveAndEnabled)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
     }
 }
