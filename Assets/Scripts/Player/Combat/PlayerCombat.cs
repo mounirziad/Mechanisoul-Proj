@@ -1,9 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class PlayerCombat : MonoBehaviour
 {
+     //camera zoom variables
+    [SerializeField] private CinemachineCamera cinemachineCam;
+    [SerializeField] private float zoomedFOV = 30f;
+    [SerializeField] private float zoomSpeed = 5f;
+
+    private float defaultFOV;
+
+
     public List<AttackSO> combo;
     float lastClickedTime;
     float lastComboEnd;
@@ -30,6 +39,11 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
+        if (cinemachineCam != null)
+        {
+            defaultFOV = cinemachineCam.Lens.FieldOfView;
+        }
+
         if (inputManager != null && inputManager.playerControls != null)
         {
             playerControls = inputManager.playerControls;
@@ -40,6 +54,9 @@ public class PlayerCombat : MonoBehaviour
         {
             weapon.DisableTriggerBox();
         }
+
+       
+
     }
 
     private void OnDisable()
@@ -55,6 +72,19 @@ public class PlayerCombat : MonoBehaviour
         CheckAttackCompletion();
         ProcessQueuedAttack();
         HandleAiming(); // Handle aiming state
+        HandleCameraZoom();
+    }
+
+    private void HandleCameraZoom()
+    {
+        if (cinemachineCam == null) return;
+
+        float targetFOV = isAiming ? zoomedFOV : defaultFOV;
+
+        // Read lens, modify, write back
+        var lens = cinemachineCam.Lens;
+        lens.FieldOfView = Mathf.Lerp(lens.FieldOfView, targetFOV, Time.deltaTime * zoomSpeed);
+        cinemachineCam.Lens = lens;
     }
 
     private void HandleAiming()
