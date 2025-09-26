@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.314, y: 0.899, z: 1.36}
-  m_LocalScale: {x: 5.5078, y: 5.5078, z: 5.5078}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,7 +43,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 627569255849376440}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 91a0b60c2640c6c48a7f0ee161018f4c, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 81d10e8ed63fcfc4f8eddc66422634fc, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78623ac46ab81974fb81ad0dbabdd762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VFXCameraLookAt
+  distanceFromCamera: 2
 --- !u!114 &-3592640220108889014
 MonoBehaviour:
   m_ObjectHideFlags: 0
