@@ -3,11 +3,8 @@ using UnityEngine.AI;
 public class BasicEnemyLocomotion : MonoBehaviour
 {
     NavMeshAgent agent;
-    public Transform playertransform;
-    public float maxTime = 1.0f;
-    public float maxDistance = 1.0f;
+
     Animator animator;
-    float timer = 0.0f;
 
 
     // Knockback settings
@@ -26,17 +23,7 @@ public class BasicEnemyLocomotion : MonoBehaviour
     {
         BasicEnemyHealth health = GetComponent<BasicEnemyHealth>();
         if (health != null && health.isDead) return; // Skip updates when dead
-
-        timer -= Time.deltaTime;
-        if (timer < 0.0f)
-        {
-            float sqdistance = (playertransform.position - agent.destination).sqrMagnitude;
-            if(sqdistance > maxDistance * maxDistance)
-            {
-                agent.destination = playertransform.position;
-            }
-            timer = maxTime;
-        }
+       
         animator.SetFloat("Speed", agent.velocity.magnitude);
 
         // Apply knockback velocity if active
