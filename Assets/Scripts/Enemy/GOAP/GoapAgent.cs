@@ -22,6 +22,8 @@ public class GoapAgent : MonoBehaviour
     [SerializeField] private GameObject player;
     public GameObject Player => player;
 
+    private Mechromancer mechromancer;
+
     NavMeshAgent navMesh;
     Rigidbody rb;
 
@@ -51,6 +53,7 @@ public class GoapAgent : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
+        mechromancer = GetComponent<Mechromancer>();
         gPlanner = new GoapPlanner();
     }
 

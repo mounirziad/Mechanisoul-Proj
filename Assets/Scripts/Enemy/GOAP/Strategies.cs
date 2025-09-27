@@ -96,12 +96,18 @@ public class AttackStrategy : IActionStrategy
     public bool Complete {  get; private set; }
 
     readonly GoapAgent agent;
+    private Mechromancer mechromancer;
+    readonly NavMeshAgent navMesh;
     readonly float attackDuration = 1.5f;
     readonly CountdownTimer timer;
 
     public AttackStrategy(GoapAgent agent)
     {
         this.agent = agent;
+        this.navMesh = agent.GetComponent<NavMeshAgent>();
+
+        this.mechromancer = agent.GetComponent<Mechromancer>();
+
         timer = new CountdownTimer(attackDuration);
         timer.OnTimerStart += () => Complete = false;
         timer.OnTimerStop += () =>
@@ -111,8 +117,38 @@ public class AttackStrategy : IActionStrategy
         };
     }
 
-    public void Start() => timer.Start();
-    public void Update(float deltaTime) => timer.Tick(deltaTime);
+    public void Start()
+    {
+        Debug.Log("Starting attack strategy");
+
+        navMesh.isStopped = true;
+        navMesh.updateRotation = false;
+
+        timer.Start();
+    }
+
+    public void Update(float deltaTime)
+    {
+        timer.Tick(deltaTime);
+
+        if (agent.Player != null)
+        {
+            Vector3 direction = (agent.Player.transform.position - agent.transform.position).normalized;
+            direction.y = 0f;
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, targetRotation, deltaTime * 5f);
+            }
+        }
+    }
+
+    public void Stop()
+    {
+        navMesh.isStopped = false;
+        navMesh.updateRotation = true;
+    }
 
     void DealDamage()
     {
@@ -129,8 +165,11 @@ public class AttackStrategy : IActionStrategy
             return;
         }
 
-        playerHealth.TakeDamage(agent.damage);
-        Debug.Log($"Boss dealt {agent.damage} damage to the player");
+        if (playerHealth != null)
+        {
+            playerHealth.TakeDamage(agent.damage);
+            Debug.Log($"Boss dealt {agent.damage} damage to the player");
+        }
     }
 }
 
