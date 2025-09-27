@@ -23,7 +23,13 @@ public class AiFindWeaponState : AiState
         return AiStateId.FindWeapon;
     }
 
-    public void Update(AiAgent agent) { }
+    public void Update(AiAgent agent) 
+    {
+        if (agent.weapons.HasWeapon()) 
+        {
+            agent.weapons.ActivateWeapon();
+        }
+    }
 
     private WeaponPickup FindClosestWeapon(AiAgent agent)
     {

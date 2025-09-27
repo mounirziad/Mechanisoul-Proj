@@ -6,21 +6,12 @@ public class WeaponPickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        HitBox hitBox = other.gameObject.GetComponent<HitBox>();
-        if (hitBox)
+        AiWeapons aiWeapons = other.GetComponentInParent<AiWeapons>();
+        if (aiWeapons && !aiWeapons.HasWeapon())
         {
-            AiWeapons weapons = hitBox.health.GetComponent<AiWeapons>();
-            if (weapons != null)
-            {
-                // Spawn a weapon instance
-                RaycastWeapon newWeapon = Instantiate(weaponFab);
-
-                // Equip it on the AI
-                weapons.Equip(newWeapon);
-
-                // Destroy the pickup
-                Destroy(gameObject);
-            }
+            RaycastWeapon newWeapon = Instantiate(weaponFab);
+            aiWeapons.Equip(newWeapon);
+            Destroy(gameObject);
         }
     }
 }

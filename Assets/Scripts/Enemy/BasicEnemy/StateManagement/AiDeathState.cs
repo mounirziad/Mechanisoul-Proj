@@ -17,6 +17,7 @@ public class AiDeathState : AiState
         agent.ragdoll.ActivateRagdoll();
         direction.y = 1;
         agent.ragdoll.ApplyForce(direction * agent.config.dieForce);
+        agent.weapons.DropWeapon();
     }
 
     public void Exit(AiAgent agent)

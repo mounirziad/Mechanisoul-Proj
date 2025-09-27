@@ -15,6 +15,7 @@ public class AiAgent : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public AiAgentConfig config;
     public Transform playertransform;
+    public AiWeapons weapons;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +23,7 @@ public class AiAgent : MonoBehaviour
         ragdoll = GetComponent<Ragdoll>();
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        weapons = GetComponent<AiWeapons>();
         stateMachine = new AiStateMachine(this);
         stateMachine.RegisterState(new AiChasePlayerState());
         stateMachine.RegisterState(new AiDeathState());
