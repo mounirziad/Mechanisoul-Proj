@@ -1,12 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/UIStyleSheet.uss?fileID=7433441132597879392&amp;guid=dae730963a6ef20439af387d8ba9f651&amp;type=3#UIStyleSheet" />
     <ui:VisualElement name="root" style="flex-grow: 1; width: 100%; height: 100%; position: absolute;">
-        <ui:VisualElement name="SkillMenu" style="flex-grow: 1; position: absolute; width: 100%; height: 100%;">
+        <ui:VisualElement name="SkillMenu" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex;">
             <ui:VisualElement name="TabsEL" style="flex-grow: 1; flex-direction: row; width: auto; height: auto;">
                 <ui:Button text="Upgrades" name="UpgradeTab" class="tabs" />
                 <ui:Button text="Combos" name="ComboTab" class="tabs" />
             </ui:VisualElement>
-            <ui:VisualElement name="SkillTreeEL" style="flex-grow: 1; width: auto; height: 90%; align-content: flex-start; align-self: stretch; align-items: stretch;">
+            <ui:VisualElement name="SkillTreeEL" style="flex-grow: 1; width: auto; height: 90%; align-content: flex-start; align-self: stretch; align-items: stretch; display: flex;">
                 <ui:VisualElement name="MeleeUpg" class="row-setup">
                     <ui:Label text="Melee" name="MeleeIcon" style="background-color: rgb(255, 126, 126); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
@@ -40,6 +40,26 @@
                         <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" />
                     </ui:VisualElement>
                 </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="CombosEL" style="flex-grow: 1; position: relative; height: 90%; flex-direction: row; align-items: flex-start; justify-content: flex-start; overflow: visible; flex-wrap: wrap; display: none;">
+                <ui:VisualElement name="Combo1" class="combo-base">
+                    <ui:Label text=" Combo Skill" name="ComboName" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 30px;">
+                        <ui:VisualElement name="ComboIconEL" style="flex-grow: 1; width: 80px; height: 40px; margin-left: 293px; padding-left: 0; flex-direction: row;">
+                            <ui:VisualElement name="ComboIcon1" style="flex-grow: 1; width: 50%; background-color: rgb(54, 94, 255); height: 100%;" />
+                            <ui:VisualElement name="ComboIcon2" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgb(208, 212, 77);" />
+                        </ui:VisualElement>
+                    </ui:Label>
+                    <ui:VisualElement name="ComboPic" style="flex-grow: 1; width: 100%; height: 40%; min-height: 10%; max-height: 40%; background-color: rgb(190, 190, 190);" />
+                    <ui:Label text="Combo Ablity:&#10;description text&#10;number go up&#10;very epic" name="ComboDesc" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 30px; flex-wrap: wrap;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="PauseMenu" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.38); display: none;">
+            <ui:VisualElement name="PauseBG" style="flex-grow: 1; justify-content: space-between; align-items: center; align-content: center; width: 450px; height: 600px; align-self: center; flex-basis: auto; position: absolute; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(164, 164, 164); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(87, 87, 87); border-right-color: rgb(87, 87, 87); border-top-color: rgb(87, 87, 87); border-bottom-color: rgb(87, 87, 87); padding-bottom: 90px; padding-top: 0;">
+                <ui:Label text="Paused" name="PausedTxt" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 88px; padding-bottom: 0; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-right: 0; padding-top: 0; padding-left: 0;" />
+                <ui:Button text="Resume" name="ResumeButton" class="pause-menu-button" />
+                <ui:Button text="Options" name="OptionsButton" class="pause-menu-button" />
+                <ui:Button text="Quit" name="QuitButton" class="pause-menu-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
