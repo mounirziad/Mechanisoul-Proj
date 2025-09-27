@@ -32,5 +32,14 @@ public class AiIdleState : AiState
         {
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
         }
+
+        if (agent.weapons.HasWeapon())
+        {
+            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
+            if (distanceToPlayer < 15f) // arbitrary attack range
+            {
+                agent.stateMachine.ChangeState(AiStateId.Attack);
+            }
+        }
     }
 }

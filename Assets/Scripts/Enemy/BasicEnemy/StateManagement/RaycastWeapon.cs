@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 public class RaycastWeapon : MonoBehaviour
 {
@@ -6,6 +7,10 @@ public class RaycastWeapon : MonoBehaviour
     public float fireRate = 0.25f;       // shots per second
     public float damage = 10f;           // damage per hit
     public float range = 100f;           // raycast range
+
+    [Header("Projectile")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 50f;
 
     private float lastFireTime;
 
@@ -28,32 +33,22 @@ public class RaycastWeapon : MonoBehaviour
         // Play muzzle flash if set
         if (muzzleFlash != null) muzzleFlash.Play();
 
-        // Shoot a ray forward
-        Ray ray = new Ray(firePoint.position, firePoint.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, range))
+        // Spawn projectile
+        if (projectilePrefab != null && firePoint != null)
         {
-            Debug.Log($"{name} hit {hit.collider.name}");
-
-            // Check if the hit object has a Health component
-            PlayerHealth health = hit.collider.GetComponent<PlayerHealth>();
-            if (health != null)
+            GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            EnemyProjectile projScript = proj.GetComponent<EnemyProjectile>();
+            if (projScript != null)
             {
-                health.TakeDamage(damage);
-            }
-
-            // Draw line if LineRenderer is set
-            if (bulletLine != null)
-            {
-                StartCoroutine(DrawBulletLine(firePoint.position, hit.point));
+                projScript.damage = damage;
+                projScript.speed = projectileSpeed;
             }
         }
-        else
+
+        // Still keep bullet line for optional visual
+        if (bulletLine != null)
         {
-            // No hit, draw line to max range
-            if (bulletLine != null)
-            {
-                StartCoroutine(DrawBulletLine(firePoint.position, firePoint.position + firePoint.forward * range));
-            }
+            StartCoroutine(DrawBulletLine(firePoint.position, firePoint.position + firePoint.forward * range));
         }
     }
 

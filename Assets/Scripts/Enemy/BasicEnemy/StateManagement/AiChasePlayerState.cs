@@ -31,6 +31,15 @@ public class AiChasePlayerState : AiState
             }
             timer = agent.config.maxTime;
         }
+
+        if (agent.weapons.HasWeapon())
+        {
+            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
+            if (distanceToPlayer < 15f) // arbitrary attack range
+            {
+                agent.stateMachine.ChangeState(AiStateId.Attack);
+            }
+        }
     }
 
     public void Exit(AiAgent agent)

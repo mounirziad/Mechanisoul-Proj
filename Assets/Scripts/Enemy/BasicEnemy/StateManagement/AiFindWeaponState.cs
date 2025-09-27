@@ -29,6 +29,15 @@ public class AiFindWeaponState : AiState
         {
             agent.weapons.ActivateWeapon();
         }
+
+        if (agent.weapons.HasWeapon())
+        {
+            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
+            if (distanceToPlayer < 15f) // arbitrary attack range
+            {
+                agent.stateMachine.ChangeState(AiStateId.Attack);
+            }
+        }
     }
 
     private WeaponPickup FindClosestWeapon(AiAgent agent)

@@ -10,17 +10,20 @@ public class AiWeapons : MonoBehaviour
         animator = GetComponent<Animator>();
         sockets = GetComponent<MeshSockets>();
     }
+
+    public RaycastWeapon CurrentWeapon => currentWeapon;
+
+
     // Assign the weapon and parent it to the AI
     public void Equip(RaycastWeapon weapon)
     {
         currentWeapon = weapon;
-
         sockets.Attach(weapon.transform, MeshSockets.SocketId.Spine);
     }
 
     public void ActivateWeapon()
     {
-        animator.SetBool("Equip", true);
+        animator.SetTrigger("Equip");
     }
 
     public bool HasWeapon()
