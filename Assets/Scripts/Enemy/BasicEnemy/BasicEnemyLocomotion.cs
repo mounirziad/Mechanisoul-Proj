@@ -21,8 +21,9 @@ public class BasicEnemyLocomotion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        AiAgent aiAgent = GetComponent<AiAgent>();
         BasicEnemyHealth health = GetComponent<BasicEnemyHealth>();
-        if (health != null && health.isDead) return; // Skip updates when dead
+        if (health != null && aiAgent.isDead) return; // Skip updates when dead
        
         animator.SetFloat("Speed", agent.velocity.magnitude);
 

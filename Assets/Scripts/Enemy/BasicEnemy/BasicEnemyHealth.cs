@@ -4,25 +4,22 @@ public class BasicEnemyHealth : MonoBehaviour
 {
     public float maxHealth;
     public float currentHealth;
-    Ragdoll ragdoll;
-    SkinnedMeshRenderer skinnedMeshRenderer;
-    public float dieForce;
+   
     public float blinkIntesnity;
     public float blinkDuration;
     float blinkTimer;
-
+    AiAgent agent;
     public float knockbackForce = 5f;
     public float knockbackDuration = 0.2f;
     public float hitCooldownTime = 0.2f;
     private bool hitCooldown = false;
-    public bool isDead = false;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ragdoll = GetComponent<Ragdoll>();
-        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        agent = GetComponent<AiAgent>();
+        agent.skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         currentHealth = maxHealth;
         var rigidBodies = GetComponentsInChildren<Rigidbody>();
         foreach(var rigidBody in rigidBodies)
@@ -38,12 +35,12 @@ public class BasicEnemyHealth : MonoBehaviour
         blinkTimer -= Time.deltaTime;
         float lerp = Mathf.Clamp01(blinkTimer / blinkDuration);
         float intensity = (lerp * blinkIntesnity) + 1.0f;
-        skinnedMeshRenderer.material.color = Color.white * intensity;
+        agent.skinnedMeshRenderer.material.color = Color.white * intensity;
     }
 
     public void TakeDamage(float amount, Vector3 direction)
     {
-        if (hitCooldown || isDead) return; // Prevent damage if dead
+        if (hitCooldown || agent.isDead) return; // Prevent damage if dead
 
         if (hitCooldown) return; // skip repeated hits
         hitCooldown = true;
@@ -81,18 +78,9 @@ public class BasicEnemyHealth : MonoBehaviour
 
     private void Die(Vector3 direction)
     {
-        isDead = true;
-
-        // Stop NavMeshAgent movement
-        BasicEnemyLocomotion locomotion = GetComponent<BasicEnemyLocomotion>();
-        if (locomotion != null)
-        {
-            locomotion.DisableNavMeshAgent();
-        }
-
-        ragdoll.ActivateRagdoll();
-        direction.y = 1;
-        ragdoll.ApplyForce(direction * dieForce);
+        AiDeathState deathState = agent.stateMachine.GetState(AiStateId.Death) as AiDeathState;
+        deathState.direction = direction;
+        agent.stateMachine.ChangeState(AiStateId.Death);
        
     }
 

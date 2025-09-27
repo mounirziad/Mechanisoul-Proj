@@ -1718,13 +1718,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyHealth
   maxHealth: 30
   currentHealth: 0
-  dieForce: 10
   blinkIntesnity: 10
   blinkDuration: 0.1
   knockbackForce: 5
   knockbackDuration: 0.2
   hitCooldownTime: 0.2
-  isDead: 0
 --- !u!114 &2005209236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1749,10 +1747,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c40d2cb61c332934f8e85faff8bbbe36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AiAgent
+  ragdoll: {fileID: 0}
+  skinnedMeshRenderer: {fileID: 0}
+  isDead: 0
   stateMachine: {fileID: 0}
-  initialState: 0
+  initialState: 2
   navMeshAgent: {fileID: 0}
   config: {fileID: 11400000, guid: a12fd3254225f9244a409aa1c0cc9461, type: 2}
+  playertransform: {fileID: 0}
 --- !u!1 &2053403696
 GameObject:
   m_ObjectHideFlags: 0
@@ -2207,7 +2209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.6646981
+      value: -6.7699995
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2271,7 +2273,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.6646981
+      value: -6.7699995
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2388,7 +2390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7453016
+      value: -2.36
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalRotation.w

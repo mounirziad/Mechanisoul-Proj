@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public enum AiStateId
 {
-    ChasePlayer
+    ChasePlayer,
+    Death,
+    Idle
 }
 
 public interface AiState
