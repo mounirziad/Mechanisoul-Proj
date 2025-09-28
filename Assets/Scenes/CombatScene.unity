@@ -1019,6 +1019,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.RigTransform
+--- !u!1 &836329699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 836329700}
+  m_Layer: 6
+  m_Name: DodgeMeshPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &836329700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836329699}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8551793984105625928}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &856509841
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,6 +3014,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 888794536}
+    - target: {fileID: 1370667352295827453, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: hitVFX
+      value: 
+      objectReference: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
     - target: {fileID: 1735667703248446145, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: dashCooldown
       value: 0.82
@@ -3118,6 +3153,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 836329700}
     - targetCorrespondingSourceObject: {fileID: 877223022926990304, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: 0
       addedObject: {fileID: 62738307}
@@ -3125,6 +3163,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1804909529}
+    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8551793984105625939}
     - targetCorrespondingSourceObject: {fileID: 463506979082311740, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1406759758}
@@ -3134,6 +3175,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8551793984105625939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804909517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1515fc50657c8141afe1172f4543346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeshTrail
+  activeTime: 0.28
+  meshRefreshRate: 0.02
+  positionToSpawn: {fileID: 836329700}
+  mat: {fileID: 2100000, guid: 011e35138c076134eaae1a1506520dc4, type: 2}
+  meshDestroyDelay: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
