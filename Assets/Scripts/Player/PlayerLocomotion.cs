@@ -46,6 +46,15 @@ public class PlayerLocomotion : MonoBehaviour
     private float dodgeCooldownTimer;
     private Vector3 dodgeDirection;
     private Vector3 lastMovementDirection;
+    PlayerCombat playerCombat;
+
+
+    [Header("Attack Movement Settings")]
+    public float attackMoveDistance = 0.5f; // How far the attack pushes forward
+    public float attackMoveSpeed = 5f;      // How fast the lunge is
+    private bool isAttackingWithLunge = false;
+    private float attackMoveTimer = 0f;
+    private Vector3 attackMoveDirection;
 
     private void Awake()
     {
@@ -54,6 +63,7 @@ public class PlayerLocomotion : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         playerRigidbody = GetComponent<Rigidbody>();
         cameraObject = Camera.main.transform;
+        playerCombat = GetComponent<PlayerCombat>();
     }
 
     public void HandleAllMovement()
@@ -64,6 +74,12 @@ public class PlayerLocomotion : MonoBehaviour
         if (playerManager.isInteracting && !isDodging) 
         {
             return;
+        }
+
+        if (playerCombat != null && playerCombat.IsAttacking())
+        {
+            HandleAttackMovementLock();
+            return; // Skip normal movement and rotation
         }
 
         HandleDodgeMovement(); 
@@ -77,6 +93,26 @@ public class PlayerLocomotion : MonoBehaviour
         HandleRotation();
         HandleSteps();
     }
+
+    private void HandleAttackMovementLock()
+    {
+        // Only apply the attack lunge if desired
+        if (isAttackingWithLunge)
+        {
+            attackMoveTimer -= Time.deltaTime;
+            if (attackMoveTimer > 0)
+            {
+                playerRigidbody.MovePosition(transform.position + attackMoveDirection * attackMoveSpeed * Time.deltaTime);
+            }
+            else
+            {
+                isAttackingWithLunge = false;
+            }
+        }
+    }
+
+
+
 
     private void HandleMovement()
     {

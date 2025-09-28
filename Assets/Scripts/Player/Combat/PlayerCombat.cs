@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine;
+using UnityEngine.ProBuilder;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private CinemachineCamera cinemachineCam;
     [SerializeField] private float zoomedFOV = 30f;
     [SerializeField] private float zoomSpeed = 5f;
+
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform shootPoint; // Where projectiles spawn (e.g., barrel of gun)
+    [SerializeField] private float projectileDamage = 10f;
+
 
     private float defaultFOV;
 
@@ -19,7 +25,7 @@ public class PlayerCombat : MonoBehaviour
     int comboCounter;
 
     // Add these new variables
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private float minAnimationPlayTime = 0.4f;
     private float attackStartTime;
     private bool attackQueued = false;
@@ -31,7 +37,11 @@ public class PlayerCombat : MonoBehaviour
     private Animator anim;
     [SerializeField] Weapon weapon;
 
-  
+    [SerializeField] private float aimAssistRange = 20f;
+    [SerializeField] private float aimAssistAngle = 30f; // Degrees cone of assist
+    [SerializeField] private LayerMask enemyLayer;
+
+    [HideInInspector] public Transform currentTarget;
 
     private void Awake()
     {
@@ -143,9 +153,20 @@ public class PlayerCombat : MonoBehaviour
 
     private void HandleShoot()
     {
-        // Just visual/audio feedback for now - no projectile logic
-        Debug.Log("Shoot! (Animation only)");
-        // You can add particle effects, sounds, etc. here
+        if (projectilePrefab != null && shootPoint != null)
+        {
+            GameObject proj = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+            PlayerProjectile projectileScript = proj.GetComponent<PlayerProjectile>();
+
+            if (projectileScript != null)
+            {
+                projectileScript.Initialize(shootPoint.forward, projectileDamage);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Projectile Prefab or Shoot Point not assigned.");
+        }
     }
 
     // Event-based approach instead of polling
@@ -175,6 +196,36 @@ public class PlayerCombat : MonoBehaviour
         return !isAttacking && !isAiming && Time.time - lastComboEnd > 0.2f;
     }
 
+    private void SetAttackTarget()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, aimAssistRange);
+
+        float closestDist = Mathf.Infinity;
+        Transform nearestEnemy = null;
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Enemy")) 
+            {
+                Vector3 dirToEnemy = hit.transform.position - transform.position;
+                float angle = Vector3.Angle(transform.forward, dirToEnemy);
+
+                if (angle < aimAssistAngle)
+                {
+                    float dist = dirToEnemy.sqrMagnitude;
+                    if (dist < closestDist)
+                    {
+                        closestDist = dist;
+                        nearestEnemy = hit.transform;
+                    }
+                }
+            }
+        }
+
+        currentTarget = nearestEnemy;
+    }
+
+
     void Attack()
     {
         if (comboCounter < combo.Count && combo[comboCounter] != null)
@@ -186,9 +237,10 @@ public class PlayerCombat : MonoBehaviour
             anim.Play("Attack", 0, 0);
             weapon.damage = combo[comboCounter].damage;
 
-            
+
 
             // Update state
+            SetAttackTarget();
             isAttacking = true;
             attackStartTime = Time.time;
             comboCounter++;
@@ -244,6 +296,12 @@ public class PlayerCombat : MonoBehaviour
         {
             Invoke("EndCombo", 0.5f); // Give a small buffer before combo ends
         }
+        currentTarget = null;
+    }
+
+    public bool IsAttacking()
+    {
+        return isAttacking;
     }
 
     void EndCombo()
@@ -272,4 +330,13 @@ public class PlayerCombat : MonoBehaviour
             weapon.DisableTriggerBox();
         }
     }
+
+    public void CancelAttack()
+    {
+        isAttacking = false;
+        attackQueued = false;
+        anim.Play("Idle"); // fallback animation
+        currentTarget = null;
+    }
+
 }

@@ -223,6 +223,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6958259334117318310, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
   m_PrefabInstance: {fileID: 2103464576}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &62738306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 62738307}
+  m_Layer: 0
+  m_Name: PlayerFirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &62738307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62738306}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.4975119, y: -0.5253001, z: -0.45118004, w: 0.5224734}
+  m_LocalPosition: {x: -0.20084189, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1321617849}
+  m_LocalEulerAnglesHint: {x: -82, y: -105.1, z: 20}
 --- !u!1 &134010721 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 706612217909055274, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
@@ -1316,6 +1347,11 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.18850988
   m_Center: {x: 0, y: 0, z: 0.034776073}
+--- !u!4 &1321617849 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 877223022926990304, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+  m_PrefabInstance: {fileID: 8551793984105625927}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1334168926
 GameObject:
   m_ObjectHideFlags: 0
@@ -3008,6 +3044,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: shootPoint
+      value: 
+      objectReference: {fileID: 62738307}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: impulseSource
       value: 
       objectReference: {fileID: 1804909529}
@@ -3018,6 +3058,14 @@ PrefabInstance:
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: impulseStrength
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 4129360533268054458, guid: 5a22d81b38f8eb44982c483451848141, type: 3}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: enemyLayer.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 3385643053220842585, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_ApplyRootMotion
@@ -3034,6 +3082,14 @@ PrefabInstance:
     - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: sprintingSpeed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: attackMoveSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: attackMoveDistance
+      value: 0.19
       objectReference: {fileID: 0}
     - target: {fileID: 5477467667633348399, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Size.x
@@ -3105,7 +3161,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 877223022926990304, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 62738307}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
