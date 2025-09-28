@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -129,6 +130,16 @@ public class AttackStrategy : IActionStrategy
 
     public void Update(float deltaTime)
     {
+        float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.Player.transform.position);
+        float attackRange = agent.attackSensor.detectionRadius;
+
+        if (distanceToPlayer < attackRange)
+        {
+            Debug.Log("Player moved out of attack range. Aborting attack");
+            AbortAttack();
+            return;
+        }
+
         timer.Tick(deltaTime);
 
         if (agent.Player != null)
@@ -142,12 +153,30 @@ public class AttackStrategy : IActionStrategy
                 agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, targetRotation, deltaTime * 5f);
             }
         }
+
+        if (agent.Player == null)
+        {
+            Debug.LogWarning("No player assigned, aborting attack");
+            AbortAttack();
+            return;
+        }
     }
 
     public void Stop()
     {
         navMesh.isStopped = false;
         navMesh.updateRotation = true;
+    }
+
+    void AbortAttack()
+    {
+        timer.Stop();
+        Complete = true;
+
+        navMesh.isStopped = false;
+        navMesh.updateRotation = true;
+
+        agent.ClearCurrentAction();
     }
 
     void DealDamage()

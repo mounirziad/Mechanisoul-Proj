@@ -9,7 +9,7 @@ public class GoapAgent : MonoBehaviour
 {
     [Header("Sensors")]
     [SerializeField] Sensor chaseSensor; //bigger radius
-    [SerializeField] Sensor attackSensor;
+    [SerializeField] public Sensor attackSensor;
 
     [Header("Locations")]
     [SerializeField] Transform restingPosition;
@@ -18,6 +18,7 @@ public class GoapAgent : MonoBehaviour
     [Header("Stats")] //temporary implementation
     public float health = 75f;
     public float damage = 10f;
+
     [Header("Player Information")]
     [SerializeField] private GameObject player;
     public GameObject Player => player;
@@ -52,6 +53,8 @@ public class GoapAgent : MonoBehaviour
         navMesh = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         mechromancer = GetComponent<Mechromancer>();
         gPlanner = new GoapPlanner();
@@ -197,6 +200,20 @@ public class GoapAgent : MonoBehaviour
     void HandleTargetChanged() //force planner to change if things aren't going to plan
     {
         Debug.Log("Target changed, clearing action and goal");
+
+        currentAction?.Stop();
+        currentAction = null;
+        currentGoal = null;
+        actionPlan = null;
+        lastGoal = null;
+        CalculatePlan();
+    }
+
+    public void ClearCurrentAction()
+    {
+        Debug.Log("Aborting current action and resetting goal");
+
+        currentAction?.Stop();
         currentAction = null;
         currentGoal = null;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class Sensor : MonoBehaviour
 {
-    [SerializeField] float detectionRadius = 5f;
+    [SerializeField] public float detectionRadius = 5f;
     [SerializeField] float timerInterval = 1f;
 
     SphereCollider detectionRange;
@@ -44,6 +44,14 @@ public class Sensor : MonoBehaviour
     void UpdateTargetPosition(GameObject target = null)
     {
         this.target = target;
+
+        if (target != null)
+        {
+            lastKnownPosition = Vector3.zero;
+            OnTargetChanged.Invoke();
+            return;
+        }
+
         if (IsTargetInRange && (lastKnownPosition != TargetPosition || lastKnownPosition != Vector3.zero))
         {
             lastKnownPosition = TargetPosition;
@@ -60,7 +68,7 @@ public class Sensor : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return; //if not player then ignore
-        UpdateTargetPosition(other.gameObject); 
+        UpdateTargetPosition(null); 
     }
 
     private void OnDrawGizmos()
