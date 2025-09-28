@@ -43,9 +43,9 @@ public class AiAttackState : AiState
         Transform player = agent.playertransform;
         if (player == null) return;
 
-        // If player out of range, go back to Idle
+        // If player out of range, go back to Chase
         float distanceToPlayer = Vector3.Distance(agent.transform.position, player.position);
-        if (distanceToPlayer > 20f) 
+        if (distanceToPlayer > 15f) 
         {
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
             return;
