@@ -2,33 +2,68 @@ using UnityEngine;
 
 public class AiWeapons : MonoBehaviour
 {
-    RaycastWeapon currentWeapon;
-    Animator animator;
-    MeshSockets sockets; 
+    [Header("Weapon Offsets")]
+    public Vector3 handOffsetPosition;
+    public Vector3 handOffsetRotation;
+    public Vector3 backOffsetPosition;
+    public Vector3 backOffsetRotation;
+
+    private RaycastWeapon currentWeapon;
+    private Animator animator;
+
+    private Transform rightHand;
+    private Transform spine;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
-        sockets = GetComponent<MeshSockets>();
+
+        // Cache important bones from Humanoid rig
+        rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
+        spine = animator.GetBoneTransform(HumanBodyBones.Spine);
     }
 
     public RaycastWeapon CurrentWeapon => currentWeapon;
 
+    public bool HasWeapon()
+    {
+        return currentWeapon != null;
+    }
 
-    // Assign the weapon and parent it to the AI
+    /// <summary>
+    /// Assign existing weapon instance and holster it on back.
+    /// </summary>
     public void Equip(RaycastWeapon weapon)
     {
         currentWeapon = weapon;
-        sockets.Attach(weapon.transform, MeshSockets.SocketId.Spine);
+
+        // Parent to back by default (holstered)
+        currentWeapon.transform.SetParent(spine, false);
+        currentWeapon.transform.localPosition = backOffsetPosition;
+        currentWeapon.transform.localRotation = Quaternion.Euler(backOffsetRotation);
     }
 
     public void ActivateWeapon()
     {
-        animator.SetTrigger("Equip");
+        if (animator) animator.SetTrigger("Equip");
     }
 
-    public bool HasWeapon()
+    public void OnAnimationEvent(string eventName)
     {
-        return currentWeapon != null;
+        if (currentWeapon == null) return;
+
+        if (eventName == "equipWeapon")
+        {
+            currentWeapon.transform.SetParent(rightHand, false);
+            currentWeapon.transform.localPosition = handOffsetPosition;
+            currentWeapon.transform.localRotation = Quaternion.Euler(handOffsetRotation);
+        }
+        else if (eventName == "holsterWeapon")
+        {
+            currentWeapon.transform.SetParent(spine, false);
+            currentWeapon.transform.localPosition = backOffsetPosition;
+            currentWeapon.transform.localRotation = Quaternion.Euler(backOffsetRotation);
+        }
     }
 
     public void DropWeapon()
@@ -36,17 +71,9 @@ public class AiWeapons : MonoBehaviour
         if (currentWeapon)
         {
             currentWeapon.transform.SetParent(null);
-            currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
-            currentWeapon.gameObject.AddComponent<Rigidbody>();
+            var rb = currentWeapon.gameObject.AddComponent<Rigidbody>();
+            currentWeapon.gameObject.GetComponent<Collider>().enabled = true;
             currentWeapon = null;
-        }
-    }
-
-    public void OnAnimationEvent(string eventName)
-    {
-        if(eventName == "equipWeapon")
-        {
-            sockets.Attach(currentWeapon.transform, MeshSockets.SocketId.RightHand);
         }
     }
 }

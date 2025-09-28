@@ -20,6 +20,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public Transform firePoint;
 
+   
     private void Awake()
     {
         
