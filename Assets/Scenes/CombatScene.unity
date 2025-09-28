@@ -1862,9 +1862,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.13649778
-  m_Height: 0.5459911
+  m_Height: 0.5861435
   m_Direction: 0
-  m_Center: {x: 0.27299556, y: 0, z: 0}
+  m_Center: {x: 0.2930729, y: 0.000000009287858, z: 0.000000009907996}
 --- !u!1 &1947999413 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4234624695278666128, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
@@ -2529,9 +2529,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.13573058
-  m_Height: 0.5429223
+  m_Height: 0.5728677
   m_Direction: 0
-  m_Center: {x: -0.27146116, y: 0, z: 0}
+  m_Center: {x: -0.28643352, y: -0.0000000030267795, z: 0.0000000056950094}
 --- !u!1001 &2103464576
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2595,6 +2595,10 @@ PrefabInstance:
     - target: {fileID: 3181447448182853584, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
       propertyPath: m_Speed
       value: 5.867959
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181447448182853584, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
+      propertyPath: m_BaseOffset
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3181447448182853584, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
       propertyPath: m_Acceleration

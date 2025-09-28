@@ -72,7 +72,15 @@ public class AiAttackState : AiState
             float dot = Vector3.Dot(weapon.firePoint.forward, aimDir.normalized);
             if (dot > 0.95f) // alignment threshold
             {
-                weapon.Fire(); 
+                // Play firing animation
+                Animator anim = agent.weapons.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.SetTrigger("Fire");
+                }
+
+                // Shoot weapon
+                weapon.Fire();
             }
         }
     }
