@@ -208,14 +208,20 @@ public class ResurrectStrategy : IActionStrategy
     public bool Complete { get; private set; }
 
     readonly GoapAgent agent;
+    readonly GameObject enemyPrefab;
+    readonly Transform[] spawnPoints;
     readonly float resurrectionTime = 5f;
     CountdownTimer timer;
 
     bool hasStarted = false;
 
-    public ResurrectStrategy(GameObject boss)
+    public ResurrectStrategy(GoapAgent agent, GameObject enemyPrefab, Transform[] spawnPoints)
     {
-        this.agent = boss.GetComponent<GoapAgent>();
+        this.agent = agent;
+        this.enemyPrefab = enemyPrefab;
+        this.spawnPoints = spawnPoints;
+        //this.agent = boss.GetComponent<GoapAgent>();
+
         timer = new CountdownTimer(resurrectionTime);
         timer.OnTimerStart += () => Complete = false;
         timer.OnTimerStop += () =>
@@ -239,6 +245,12 @@ public class ResurrectStrategy : IActionStrategy
     void ResurrectRobots()
     {
         Debug.Log("Summoning minions");
+
+        foreach (Transform spawnPoint in spawnPoints)
+        {
+            GameObject minion = UnityEngine.Object.Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
+            Debug.Log($"Spawned enemy at {spawnPoint.name}");
+        }
     }
 }
 

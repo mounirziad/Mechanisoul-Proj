@@ -23,6 +23,10 @@ public class GoapAgent : MonoBehaviour
     [SerializeField] private GameObject player;
     public GameObject Player => player;
 
+    [Header("Minion Spawning")]
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Transform[] spawnPoints;
+
     private Mechromancer mechromancer;
 
     NavMeshAgent navMesh;
@@ -145,7 +149,7 @@ public class GoapAgent : MonoBehaviour
             .Build());
 
         actions.Add(new AgentAction.Builder("Resurrect Robots")
-            .WithStrategy(new ResurrectStrategy(this.gameObject))
+            .WithStrategy(new ResurrectStrategy(this, enemyPrefab, spawnPoints))
             .AddPrecondition(beliefs["AgentAtHidingPosition"])
             .AddPrecondition(beliefs["CanResurrect"])
             .AddEffect(beliefs["HasResurrectedThisPhase"])

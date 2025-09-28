@@ -7,11 +7,40 @@ public class Mechromancer : MonoBehaviour
     [SerializeField] public float maxHealth = 75f;
     [SerializeField] private float currentHealth;
 
+    public float rotationSpeed;
+    public GameObject blade;
+    private bool attacking;
+
     private bool isDead = false;
 
     private void Start()
     {
         currentHealth = maxHealth;
+        attacking = false;
+    }
+
+    private void Update()
+    {
+        if (attacking)
+        {
+            blade.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            attacking = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            attacking = false;
+        }
     }
 
     public void TakeDamage(float damage)
