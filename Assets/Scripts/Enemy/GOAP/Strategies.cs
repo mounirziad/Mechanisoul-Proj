@@ -241,3 +241,34 @@ public class ResurrectStrategy : IActionStrategy
         Debug.Log("Summoning minions");
     }
 }
+
+public class DropDownStrategy : IActionStrategy
+{
+    public bool CanPerform => true;
+    public bool Complete { get; private set; }
+
+    readonly Transform boss;
+    readonly Vector3 groundPosition;
+    readonly float dropSpeed = 7f;
+
+    public DropDownStrategy(Transform boss, Vector3 dropPosition)
+    {
+        this.boss = boss;
+        this.groundPosition = dropPosition;
+    }
+
+    public void Start()
+    {
+        Complete = false;
+    }
+
+    public void Update(float deltaTime)
+    {
+        boss.position = Vector3.MoveTowards(boss.position, groundPosition, dropSpeed * deltaTime);
+        if (Vector3.Distance(boss.position, groundPosition) < 0.2f)
+        {
+            Complete = true;
+            Debug.Log("Boss landed for attack");
+        }
+    }
+}

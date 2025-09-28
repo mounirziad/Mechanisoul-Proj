@@ -137,6 +137,13 @@ public class GoapAgent : MonoBehaviour
             .AddEffect(beliefs["AttackingPlayer"])
             .Build());
 
+        actions.Add(new AgentAction.Builder("Drop Down")
+            .WithStrategy(new DropDownStrategy(transform, restingPosition.position))
+            .AddPrecondition(beliefs["AgentAtHidingPosition"])
+            .AddPrecondition(beliefs["PlayerInChaseRange"])
+            .AddEffect(beliefs["PlayerInAttackRange"])
+            .Build());
+
         actions.Add(new AgentAction.Builder("Resurrect Robots")
             .WithStrategy(new ResurrectStrategy(this.gameObject))
             .AddPrecondition(beliefs["AgentAtHidingPosition"])
@@ -162,6 +169,11 @@ public class GoapAgent : MonoBehaviour
         goals.Add(new AgentGoal.Builder("Hide")
             .WithPriority(2)
             .WithDesiredEffect(beliefs["AgentAtHidingPosition"])
+            .Build());
+
+        goals.Add(new AgentGoal.Builder("Ambush Player")
+            .WithPriority(4)
+            .WithDesiredEffect(beliefs["PlayerInAttackRange"])
             .Build());
 
         goals.Add(new AgentGoal.Builder("SeekAndKill")
