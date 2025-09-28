@@ -79,7 +79,7 @@ public class PlayerLocomotion : MonoBehaviour
         if (playerCombat != null && playerCombat.IsAttacking())
         {
             HandleAttackMovementLock();
-            return; // Skip normal movement and rotation
+            // don't return early — allow HandleRotation() below
         }
 
         HandleDodgeMovement(); 
@@ -118,13 +118,19 @@ public class PlayerLocomotion : MonoBehaviour
     {
         if (isJumping) { return; }
 
+        if (playerCombat != null && playerCombat.IsAttacking())
+        {
+            // Freeze movement during attack
+            playerRigidbody.linearVelocity = new Vector3(0, playerRigidbody.linearVelocity.y, 0);
+            return;
+        }
+
         // Calculate input-based direction
         moveDirection = cameraObject.forward * inputManager.verticalInput;
         moveDirection += cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        // Store last movement direction for dodge - ADD THIS SECTION
         if (moveDirection != Vector3.zero)
         {
             lastMovementDirection = moveDirection;
@@ -144,12 +150,12 @@ public class PlayerLocomotion : MonoBehaviour
             moveDirection *= walkingSpeed;
         }
 
-        // Preserve current Y velocity (gravity, jumps, falls)
         Vector3 currentVelocity = playerRigidbody.linearVelocity;
         Vector3 targetVelocity = new Vector3(moveDirection.x, currentVelocity.y, moveDirection.z);
 
         playerRigidbody.linearVelocity = targetVelocity;
     }
+
 
     private void HandleRotation()
     {
