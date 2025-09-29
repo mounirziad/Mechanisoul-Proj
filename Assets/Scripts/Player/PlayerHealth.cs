@@ -85,4 +85,14 @@ public class PlayerHealth : MonoBehaviour
     }
 
     public float GetHealthPercent() => currentHealth / maxHealth; // Quick helper: returns health ratio (0–1)
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
 }
