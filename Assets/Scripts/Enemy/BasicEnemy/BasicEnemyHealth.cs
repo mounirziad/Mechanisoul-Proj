@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BasicEnemyHealth : MonoBehaviour
 {
@@ -14,10 +14,30 @@ public class BasicEnemyHealth : MonoBehaviour
     public float hitCooldownTime = 0.2f;
     private bool hitCooldown = false;
 
+    
+    private bool isSlowed = false;
+    private float slowTimer = 0f;
+    private float slowAmount = 0f;
+
+    private bool isStunned = false;
+    private float stunTimer = 0f;
+
+    private float baseSpeed;
+    public UnityEngine.AI.NavMeshAgent navAgent;
+
+    public bool IsStunned() => isStunned;
+    public bool IsSlowed() => isSlowed;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (navAgent != null)
+        {
+            baseSpeed = navAgent.speed; // save original speed
+        }
+
         agent = GetComponent<AiAgent>();
         agent.skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         currentHealth = maxHealth;
@@ -29,6 +49,28 @@ public class BasicEnemyHealth : MonoBehaviour
         }
     }
 
+    public void ApplyModifiers(float slowAmount, float slowLength, float stunLength)
+    {
+
+        Debug.Log("We Out here applying effects n shit");
+        // Apply slow if applicable
+        if (slowLength > 0 && slowAmount > 0)
+        {
+            this.slowAmount = slowAmount;
+            this.slowTimer = slowLength;
+            isSlowed = true;
+        }
+
+        // Apply stun if applicable
+        if (stunLength > 0)
+        {
+            baseSpeed = 0;
+            this.stunTimer = stunLength;
+            isStunned = true;
+        }
+    }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -36,10 +78,31 @@ public class BasicEnemyHealth : MonoBehaviour
         float lerp = Mathf.Clamp01(blinkTimer / blinkDuration);
         float intensity = (lerp * blinkIntesnity) + 1.0f;
         agent.skinnedMeshRenderer.material.color = Color.white * intensity;
+
+        if (navAgent != null)
+        {
+            if (isStunned)
+            {
+                Debug.Log("STUNNED: Setting speed to 0. Timer: " + stunTimer); // <-- ADD THIS
+                navAgent.speed = 0f;
+            }
+            else if (isSlowed)
+            {
+                Debug.Log("SLOWED: Base Speed: " + baseSpeed + " Slow Amount: " + slowAmount); // <-- ADD THIS
+                navAgent.speed = baseSpeed * (1f - slowAmount);
+            }
+            else
+            {
+                // Debug.Log("NORMAL SPEED: " + baseSpeed); // Optional: if you want to see it reset
+                navAgent.speed = baseSpeed;
+            }
+        }
     }
+
 
     public void TakeDamage(float amount, Vector3 direction)
     {
+        
         if (hitCooldown || agent.isDead) return; // Prevent damage if dead
 
         if (hitCooldown) return; // skip repeated hits
