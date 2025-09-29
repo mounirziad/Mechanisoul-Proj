@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
                 // Still keep Mechromancer (if that’s another type of enemy)
-                Mechromancer enemy = GetComponent<Mechromancer>();
+                Mechromancer enemy = other.GetComponent<Mechromancer>();
                 if (enemy != null)
                 {
                     Debug.Log("Hit mechromancer");
