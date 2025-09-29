@@ -7,11 +7,15 @@ public class PlayerProjectile : MonoBehaviour
     public float damage = 10f;
 
     private Vector3 direction;
+    private RangedModifiers mods;
+    private PlayerCombat owner;
 
-    public void Initialize(Vector3 shootDirection, float projectileDamage)
+    public void Initialize(Vector3 shootDirection, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null)
     {
         direction = shootDirection.normalized;
-        damage = projectileDamage;
+        damage = projectileDamage; // Joy damage already applied by PlayerCombat
+        mods = rangedMods;
+        owner = owningCombat;
         Destroy(gameObject, lifetime);
     }
 
@@ -20,15 +24,25 @@ public class PlayerProjectile : MonoBehaviour
         transform.position += direction * speed * Time.deltaTime;
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        // Try to get the enemy health component
-        BasicEnemyHealth enemyHealth = other.GetComponentInParent<BasicEnemyHealth>();
-        if (enemyHealth != null)
+        Vector3 hitPos = transform.position;
+
+        var enemyHealth = other.GetComponentInParent<BasicEnemyHealth>();
+        if (enemyHealth)
         {
             enemyHealth.TakeDamage(damage, direction);
+            hitPos = enemyHealth.transform.position;
         }
 
-        Destroy(gameObject); // Destroy projectile on impact
+        // ANGER: explosion/DoT on impact
+        if (mods.angerExplosionOnHit && owner != null && owner.angerExplosionPrefab != null)
+        {
+            var aoe = Instantiate(owner.angerExplosionPrefab, hitPos, Quaternion.identity);
+            var dot = aoe.GetComponent<FireDoTZone>(); // expected component
+            if (dot != null) dot.Configure(Mathf.Max(0f, mods.angerAOEPercent));
+        }
+
+        Destroy(gameObject);
     }
 }

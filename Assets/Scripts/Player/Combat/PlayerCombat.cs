@@ -2,35 +2,37 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder;
 
 public class PlayerCombat : MonoBehaviour
 {
-     //camera zoom variables
+    // Camera zoom while aiming
     [SerializeField] private CinemachineCamera cinemachineCam;
     [SerializeField] private float zoomedFOV = 30f;
     [SerializeField] private float zoomSpeed = 5f;
-
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private Transform shootPoint; // Where projectiles spawn (e.g., barrel of gun)
-    [SerializeField] private float projectileDamage = 10f;
-
-
     private float defaultFOV;
 
+    // Ranged
+    [Header("Ranged")]
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private float projectileDamage = 10f;
+    [Tooltip("Baseline shots per second (Joy multiplies this).")]
+    public float baseFireRate = 2f;
+    public bool rangedEnabled = true;
+    public GameObject angerExplosionPrefab; // FireDoTZone-like prefab (optional)
 
+    private float lastShotTime = -999f;
+    private RangedModifiers rangedMods;    // set by UpgradeHandler
+
+    // Melee & input
     public List<AttackSO> combo;
-    float lastClickedTime;
-    float lastComboEnd;
+    float lastClickedTime, lastComboEnd;
     int comboCounter;
-
-    // Add these new variables
     public bool isAttacking = false;
     private float minAnimationPlayTime = 0.4f;
     private float attackStartTime;
     private bool attackQueued = false;
 
-    // Aiming variables
     public bool isAiming = false;
     private InputManager inputManager;
     private PlayerControls playerControls;
@@ -38,12 +40,11 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] Weapon weapon;
 
     [SerializeField] private float aimAssistRange = 20f;
-    [SerializeField] private float aimAssistAngle = 30f; // Degrees cone of assist
+    [SerializeField] private float aimAssistAngle = 30f;
     [SerializeField] private LayerMask enemyLayer;
-
     [HideInInspector] public Transform currentTarget;
 
-    private void Awake()
+    void Awake()
     {
         anim = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
@@ -51,262 +52,174 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-        if (cinemachineCam != null)
-        {
-            defaultFOV = cinemachineCam.Lens.FieldOfView;
-        }
-
+        if (cinemachineCam != null) defaultFOV = cinemachineCam.Lens.FieldOfView;
         if (inputManager != null && inputManager.playerControls != null)
         {
             playerControls = inputManager.playerControls;
             playerControls.PlayerActions.Attack.performed += OnAttackPerformed;
         }
-
-        if (weapon != null)
-        {
-            weapon.DisableTriggerBox();
-        }
-
-       
-
+        if (weapon != null) weapon.DisableTriggerBox();
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         if (playerControls != null)
-        {
             playerControls.PlayerActions.Attack.performed -= OnAttackPerformed;
-        }
     }
 
     void Update()
     {
         CheckAttackCompletion();
         ProcessQueuedAttack();
-        HandleAiming(); // Handle aiming state
+        HandleAiming();
         HandleCameraZoom();
     }
 
-    private void HandleCameraZoom()
+    void HandleCameraZoom()
     {
         if (cinemachineCam == null) return;
-
         float targetFOV = isAiming ? zoomedFOV : defaultFOV;
-
-        // Read lens, modify, write back
         var lens = cinemachineCam.Lens;
         lens.FieldOfView = Mathf.Lerp(lens.FieldOfView, targetFOV, Time.deltaTime * zoomSpeed);
         cinemachineCam.Lens = lens;
     }
 
-    private void HandleAiming()
+    void HandleAiming()
     {
-        // Start aiming when right click is pressed and not attacking
-        if (inputManager.aimInput && !isAttacking && !isAiming)
-        {
-            StartAiming();
-        }
-        // Stop aiming when right click is released
-        else if (isAiming && !inputManager.aimInput)
-        {
-            StopAiming();
-        }
+        if (inputManager.aimInput && !isAttacking && !isAiming) StartAiming();
+        else if (isAiming && !inputManager.aimInput) StopAiming();
 
-        // Handle shoot input while aiming
-        if (isAiming && inputManager.shootInput)
-        {
-            HandleShoot();
-        }
+        if (isAiming && inputManager.shootInput) HandleShoot();
     }
 
-    private void StartAiming()
+    void StartAiming()
     {
         isAiming = true;
         anim.SetBool("IsAiming", true);
-
-        // Optional: Reduce movement speed while aiming
-        PlayerLocomotion playerLocomotion = GetComponent<PlayerLocomotion>();
-        if (playerLocomotion != null)
-        {
-            playerLocomotion.walkingSpeed *= 0.7f;
-            playerLocomotion.runningSpeed *= 0.7f;
-        }
-
-        Debug.Log("Started Aiming");
+        var loco = GetComponent<PlayerLocomotion>();
+        if (loco) { loco.walkingSpeed *= 0.7f; loco.runningSpeed *= 0.7f; }
     }
 
-    private void StopAiming()
+    void StopAiming()
     {
         isAiming = false;
         anim.SetBool("IsAiming", false);
-
-        // Restore movement speed
-        PlayerLocomotion playerLocomotion = GetComponent<PlayerLocomotion>();
-        if (playerLocomotion != null)
-        {
-            playerLocomotion.walkingSpeed /= 0.7f;
-            playerLocomotion.runningSpeed /= 0.7f;
-        }
-
-        Debug.Log("Stopped Aiming");
+        var loco = GetComponent<PlayerLocomotion>();
+        if (loco) { loco.walkingSpeed /= 0.7f; loco.runningSpeed /= 0.7f; }
     }
 
-    private void HandleShoot()
+    // Ranged API 
+    public void SetRangedUpgrades(RangedModifiers mods)
     {
-        if (projectilePrefab != null && shootPoint != null)
-        {
-            GameObject proj = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
-            PlayerProjectile projectileScript = proj.GetComponent<PlayerProjectile>();
+        rangedMods = mods;
+        if (rangedMods.joyFireRateMultiplier <= 0f) rangedMods.joyFireRateMultiplier = 1f;
+        if (rangedMods.joyDamageMultiplier <= 0f) rangedMods.joyDamageMultiplier = 1f;
+    }
 
-            if (projectileScript != null)
+    public void ToggleRanged(bool on)
+    {
+        rangedEnabled = on;
+        if (!on) { isAiming = false; anim.SetBool("IsAiming", false); }
+    }
+
+    void HandleShoot()
+    {
+        if (!rangedEnabled) { inputManager.shootInput = false; return; }
+
+        float effectiveRate = baseFireRate * rangedMods.joyFireRateMultiplier;
+        float cooldown = 1f / Mathf.Max(0.0001f, effectiveRate);
+        if (Time.time - lastShotTime < cooldown) { inputManager.shootInput = false; return; }
+
+        if (projectilePrefab && shootPoint)
+        {
+            var go = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+            var proj = go.GetComponent<PlayerProjectile>();
+            if (proj != null)
             {
-                projectileScript.Initialize(shootPoint.forward, projectileDamage);
+                float finalDamage = projectileDamage * rangedMods.joyDamageMultiplier;
+                proj.Initialize(shootPoint.forward, finalDamage, rangedMods, this);
             }
+            lastShotTime = Time.time;
         }
-        else
-        {
-            Debug.LogWarning("Projectile Prefab or Shoot Point not assigned.");
-        }
+        else Debug.LogWarning("Projectile Prefab or Shoot Point not assigned.");
+
+        inputManager.shootInput = false;
     }
 
-    // Event-based approach instead of polling
-    private void OnAttackPerformed(InputAction.CallbackContext context)
+    // Melee (unchanged) 
+    private void OnAttackPerformed(InputAction.CallbackContext ctx)
     {
-        // If aiming, handle as shoot input instead of melee attack
-        if (isAiming)
-        {
-            inputManager.shootInput = true;
-            return;
-        }
-
-        if (CanAttack())
-        {
-            Attack();
-        }
-        else if (isAttacking)
-        {
-            // Queue the attack for later
-            attackQueued = true;
-        }
+        if (isAiming) { inputManager.shootInput = true; return; }
+        if (CanAttack()) Attack();
+        else if (isAttacking) attackQueued = true;
     }
 
-    bool CanAttack()
-    {
-        // Can't attack while aiming
-        return !isAttacking && !isAiming && Time.time - lastComboEnd > 0.2f;
-    }
+    bool CanAttack() => !isAttacking && !isAiming && Time.time - lastComboEnd > 0.2f;
 
     private void SetAttackTarget()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, aimAssistRange);
-
-        float closestDist = Mathf.Infinity;
-        Transform nearestEnemy = null;
-
-        foreach (Collider hit in hits)
+        float closest = Mathf.Infinity; Transform nearest = null;
+        foreach (var h in hits)
         {
-            if (hit.CompareTag("Enemy")) 
+            if (!h.CompareTag("Enemy")) continue;
+            Vector3 d = h.transform.position - transform.position;
+            float ang = Vector3.Angle(transform.forward, d);
+            if (ang < aimAssistAngle)
             {
-                Vector3 dirToEnemy = hit.transform.position - transform.position;
-                float angle = Vector3.Angle(transform.forward, dirToEnemy);
-
-                if (angle < aimAssistAngle)
-                {
-                    float dist = dirToEnemy.sqrMagnitude;
-                    if (dist < closestDist)
-                    {
-                        closestDist = dist;
-                        nearestEnemy = hit.transform;
-                    }
-                }
+                float dist = d.sqrMagnitude;
+                if (dist < closest) { closest = dist; nearest = h.transform; }
             }
         }
-
-        currentTarget = nearestEnemy;
+        currentTarget = nearest;
     }
-
 
     void Attack()
     {
         if (comboCounter < combo.Count && combo[comboCounter] != null)
         {
-            CancelInvoke("EndCombo");
-
-            // Set up the attack
+            CancelInvoke(nameof(EndCombo));
             anim.runtimeAnimatorController = combo[comboCounter].animatorOV;
             anim.Play("Attack", 0, 0);
             weapon.damage = combo[comboCounter].damage;
 
-
-
-            // Update state
             SetAttackTarget();
             isAttacking = true;
             attackStartTime = Time.time;
             comboCounter++;
             lastClickedTime = Time.time;
             attackQueued = false;
-
-            if (comboCounter >= combo.Count)
-            {
-                comboCounter = 0;
-            }
+            if (comboCounter >= combo.Count) comboCounter = 0;
         }
     }
 
     void CheckAttackCompletion()
     {
-        if (isAttacking)
-        {
-            // Check if the current animation has played enough
-            float normalizedTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        if (!isAttacking) return;
+        float norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        if (Time.time - attackStartTime >= minAnimationPlayTime && norm > 0.7f)
+            if (attackQueued) isAttacking = false;
 
-            // Allow next attack only after minimum play time has passed
-            if (Time.time - attackStartTime >= minAnimationPlayTime && normalizedTime > 0.7f)
-            {
-                // Ready for next attack if one is queued
-                if (attackQueued)
-                {
-                    isAttacking = false;
-                }
-            }
-
-            // Check if animation is completely finished
-            if (normalizedTime > 0.95f && anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
-            {
-                CompleteAttack();
-            }
-        }
+        if (norm > 0.95f && anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+            CompleteAttack();
     }
 
     void ProcessQueuedAttack()
     {
-        if (attackQueued && !isAttacking && Time.time - attackStartTime >= minAnimationPlayTime)
-        {
-            Attack();
-        }
+        if (attackQueued && !isAttacking && Time.time - attackStartTime >= minAnimationPlayTime) Attack();
     }
 
     void CompleteAttack()
     {
         isAttacking = false;
-
-        // If no attack is queued and we're at the end of combo, start ending the combo
-        if (!attackQueued)
-        {
-            Invoke("EndCombo", 0.5f); // Give a small buffer before combo ends
-        }
+        if (!attackQueued) Invoke(nameof(EndCombo), 0.5f);
         currentTarget = null;
     }
 
-    public bool IsAttacking()
-    {
-        return isAttacking;
-    }
+    public bool IsAttacking() => isAttacking;
 
     void EndCombo()
     {
-        // Only end combo if no new attack has started
         if (!isAttacking)
         {
             comboCounter = 0;
@@ -315,28 +228,8 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    public void OnAnimationEnableWeapon()
-    {
-        if (weapon != null)
-        {
-            weapon.EnableTriggerBox();
-        }
-    }
-
-    public void OnAnimationDisableWeapon()
-    {
-        if (weapon != null)
-        {
-            weapon.DisableTriggerBox();
-        }
-    }
-
-    public void CancelAttack()
-    {
-        isAttacking = false;
-        attackQueued = false;
-        anim.Play("Idle"); // fallback animation
-        currentTarget = null;
-    }
-
+    // Animation events
+    public void OnAnimationEnableWeapon() { if (weapon != null) weapon.EnableTriggerBox(); }
+    public void OnAnimationDisableWeapon() { if (weapon != null) weapon.DisableTriggerBox(); }
+    public void CancelAttack() { isAttacking = false; attackQueued = false; anim.Play("Idle"); currentTarget = null; }
 }

@@ -1,160 +1,169 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // New Input System (for Keyboard.current)
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class UpgradeHandler : MonoBehaviour
 {
-    [Header("Current Levels (0..maxLvl)")]
-    [SerializeField] int meleeAngerLvl, meleeSadnessLvl, meleeLoveLvl, meleeFearLvl;
+    [Header("MELEE LEVELS (0->maxLvl)")]
+    [SerializeField] int meleeAngerLvl = 0;
+    [SerializeField] int meleeSadnessLvl = 0;
+    [SerializeField] int meleeLoveLvl = 0;
+    [SerializeField] int meleeFearLvl = 0;
 
-    [Header("Lookup Tables (index by level)")]
+    [Header("DASH LEVELS (0->maxLvl)")]
+    [SerializeField] int dashAngerLvl = 0;
+    [SerializeField] int dashSadnessLvl = 0;
+
+    [Header("RANGED LEVELS (0->maxLvl)")]
+    [SerializeField] int rangedJoyLvl = 0;
+    [SerializeField] int rangedAngerLvl = 0;
+
+    [Header("Tables (index by level)")]
+    // Melee
     float[] meleeAOE, meleeSlow, meleeSlowLength, meleeLifeSteal, meleeStun;
+    // Dash
+    float[] dashAngerAOE, dashSadSlow, dashSadSlowLen;
+    // Ranged
+    float[] joyFireRateMult, joyDamageMult, angerAOEPercent;
 
     [Header("Config")]
-    [SerializeField] int maxLvl = 5;               // highest level for upgrades
-    [SerializeField] bool enableHotkeys = true;    // 1/2 anger, 3/4 sadness
-    [SerializeField] bool allowNumpad = true;      // also read numpad 1-4
+    [SerializeField] int maxLvl = 5;
+    [SerializeField] bool enableHotkeys = false; // default off to avoid conflicts
+    [SerializeField] bool allowNumpad = true;
 
-    PlayerManager playerManager;
+    // Targets
+    PlayerManager playerManager;  // melee sink (unchanged in your project)
+    DashAbility dashAbility;
+    PlayerCombat playerCombat;
 
     void Awake()
     {
-        Respec();                     // set all upgrade levels to 0
-        InitializeUpgradeArrays();    // allocate arrays
-        SetUpgradeValues();           // fill arrays with values
+        AllocateTables();
+        FillTables();
 
-        // get player manager script
-        var playerGO = GameObject.FindGameObjectWithTag("Player");
-        if (playerGO) playerManager = playerGO.GetComponent<PlayerManager>();
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            playerManager = player.GetComponent<PlayerManager>();
+            dashAbility = player.GetComponent<DashAbility>();
+            playerCombat = player.GetComponent<PlayerCombat>();
+        }
 
-        // push initial values to player (level 0)
-        SendChanges();
+        PushAll();
     }
 
     void Update()
     {
         if (!enableHotkeys) return;
-        var kb = Keyboard.current;
-        if (kb == null) return;
+        var kb = Keyboard.current; if (kb == null) return;
 
-        // 1 = Anger -
-        if ((kb.digit1Key?.wasPressedThisFrame ?? false) || (allowNumpad && (kb.numpad1Key?.wasPressedThisFrame ?? false)))
-            MeleeAngerDown();
+        //  MELEE 
+        if (Pressed(kb.digit1Key)) MeleeAngerDown();
+        if (Pressed(kb.digit2Key)) MeleeAngerUp();
+        if (Pressed(kb.digit3Key)) MeleeSadDown();
+        if (Pressed(kb.digit4Key)) MeleeSadUp();
+        if (Pressed(kb.digit5Key)) MeleeLoveDown();
+        if (Pressed(kb.digit6Key)) MeleeLoveUp();
+        if (Pressed(kb.digit7Key)) MeleeFearDown();
+        if (Pressed(kb.digit8Key)) MeleeFearUp();
 
-        // 2 = Anger +
-        if ((kb.digit2Key?.wasPressedThisFrame ?? false) || (allowNumpad && (kb.numpad2Key?.wasPressedThisFrame ?? false)))
-            MeleeAngerUp();
+        //  RANGED 
+        if (Pressed(kb.jKey)) RangedJoyDown();
+        if (Pressed(kb.kKey)) RangedJoyUp();
+        if (Pressed(kb.uKey)) RangedAngerDown();
+        if (Pressed(kb.iKey)) RangedAngerUp();
 
-        // 3 = Sadness -
-        if ((kb.digit3Key?.wasPressedThisFrame ?? false) || (allowNumpad && (kb.numpad3Key?.wasPressedThisFrame ?? false)))
-            MeleeSadnessDown();
-
-        // 4 = Sadness +
-        if ((kb.digit4Key?.wasPressedThisFrame ?? false) || (allowNumpad && (kb.numpad4Key?.wasPressedThisFrame ?? false)))
-            MeleeSadnessUp();
+        //  DASH 
+        if (Pressed(kb.nKey)) DashAngerDown();
+        if (Pressed(kb.mKey)) DashAngerUp();
+        if (Pressed(kb.hKey)) DashSadDown();
+        if (Pressed(kb.semicolonKey)) DashSadUp();
     }
 
-    // ---------- Tables ----------
+    bool Pressed(KeyControl key) => key != null && key.wasPressedThisFrame;
 
-    void InitializeUpgradeArrays()
+    // Tables
+    void AllocateTables()
     {
         meleeAOE = new float[maxLvl + 1];
         meleeSlow = new float[maxLvl + 1];
         meleeSlowLength = new float[maxLvl + 1];
         meleeLifeSteal = new float[maxLvl + 1];
         meleeStun = new float[maxLvl + 1];
+
+        dashAngerAOE = new float[maxLvl + 1];
+        dashSadSlow = new float[maxLvl + 1];
+        dashSadSlowLen = new float[maxLvl + 1];
+
+        joyFireRateMult = new float[maxLvl + 1];
+        joyDamageMult = new float[maxLvl + 1];
+        angerAOEPercent = new float[maxLvl + 1];
     }
 
-    void SetUpgradeValues()
+    void FillTables()
     {
-        // set the upgrade values for all types
-        SetAOE();
-        SetSlow();
-        SetLifeSteal();
-        SetStun();
-    }
+        // MELEE 
+        FillLinear(meleeAOE, 0f, 0.05f); // +5%/lvl
+        FillLinear(meleeSlow, 0f, 0.10f); // +10%/lvl
+        FillLinear(meleeSlowLength, 0f, 2.00f); // +2s/lvl
+        FillLinear(meleeLifeSteal, 0f, 0.10f); // +10%/lvl
+        FillLinear(meleeStun, 0f, 0.50f); // +0.5s/lvl
 
-    void SetAOE()
-    {
-        float baseAmt = 0.05f; // level one amount (% of dmg dealt)
-        float amt = 0f;
-        meleeAOE[0] = 0f;
-        for (int i = 1; i < meleeAOE.Length; i++)
+        // DASH 
+        FillLinear(dashAngerAOE, 0f, 0.05f); // +5%/lvl
+        FillLinear(dashSadSlow, 0f, 0.08f); // +8%/lvl
+        FillLinear(dashSadSlowLen, 0f, 1.20f); // +1.2s/lvl
+
+        // RANGED 
+        // JOY: +15% fire rate / +10% damage per level
+        float fr = 1f, dmg = 1f;
+        for (int i = 0; i <= maxLvl; i++)
         {
-            amt += baseAmt;
-            meleeAOE[i] = amt;
+            joyFireRateMult[i] = fr; fr += 0.15f;
+            joyDamageMult[i] = dmg; dmg += 0.10f;
         }
+        // ANGER: +5% AoE per level
+        FillLinear(angerAOEPercent, 0f, 0.05f);
     }
 
-    void SetSlow()
+    void FillLinear(float[] arr, float start, float step)
     {
-        float baseAmt = 0.10f;      // level one slow (% of base speed)
-        float baseAmtLength = 2f;   // level one slow length (seconds)
-        float amt = 0f;
-        float amtLength = 0f;
-        meleeSlow[0] = 0f;
-        meleeSlowLength[0] = 0f;
-        for (int i = 1; i < meleeSlow.Length; i++)
-        {
-            amt += baseAmt;
-            meleeSlow[i] = amt;
-            amtLength += baseAmtLength;
-            meleeSlowLength[i] = amtLength;
-        }
+        float cur = start;
+        for (int i = 0; i < arr.Length; i++) { arr[i] = cur; cur += step; }
     }
 
-    void SetLifeSteal()
-    {
-        float baseAmt = 0.10f; // level one amount (% of dmg dealt)
-        float amt = 0f;
-        meleeLifeSteal[0] = 0f;
-        for (int i = 1; i < meleeLifeSteal.Length; i++)
-        {
-            amt += baseAmt;
-            meleeLifeSteal[i] = amt;
-        }
-    }
+    // Public (UI) API
+    // Melee
+    public void MeleeAngerUp() { meleeAngerLvl = ClampUp(meleeAngerLvl); PushMelee(); }
+    public void MeleeAngerDown() { meleeAngerLvl = ClampDown(meleeAngerLvl); PushMelee(); }
+    public void MeleeSadUp() { meleeSadnessLvl = ClampUp(meleeSadnessLvl); PushMelee(); }
+    public void MeleeSadDown() { meleeSadnessLvl = ClampDown(meleeSadnessLvl); PushMelee(); }
+    public void MeleeLoveUp() { meleeLoveLvl = ClampUp(meleeLoveLvl); PushMelee(); }
+    public void MeleeLoveDown() { meleeLoveLvl = ClampDown(meleeLoveLvl); PushMelee(); }
+    public void MeleeFearUp() { meleeFearLvl = ClampUp(meleeFearLvl); PushMelee(); }
+    public void MeleeFearDown() { meleeFearLvl = ClampDown(meleeFearLvl); PushMelee(); }
 
-    void SetStun()
-    {
-        float baseAmt = 0.5f; // level one amount (seconds)
-        float amt = 0f;
-        meleeStun[0] = 0f;
-        for (int i = 1; i < meleeStun.Length; i++)
-        {
-            amt += baseAmt;
-            meleeStun[i] = amt;
-        }
-    }
+    // Dash
+    public void DashAngerUp() { dashAngerLvl = ClampUp(dashAngerLvl); PushDash(); }
+    public void DashAngerDown() { dashAngerLvl = ClampDown(dashAngerLvl); PushDash(); }
+    public void DashSadUp() { dashSadnessLvl = ClampUp(dashSadnessLvl); PushDash(); }
+    public void DashSadDown() { dashSadnessLvl = ClampDown(dashSadnessLvl); PushDash(); }
 
-    // ---------- Public API ----------
+    // Ranged
+    public void RangedJoyUp() { rangedJoyLvl = ClampUp(rangedJoyLvl); PushRanged(); }
+    public void RangedJoyDown() { rangedJoyLvl = ClampDown(rangedJoyLvl); PushRanged(); }
+    public void RangedAngerUp() { rangedAngerLvl = ClampUp(rangedAngerLvl); PushRanged(); }
+    public void RangedAngerDown() { rangedAngerLvl = ClampDown(rangedAngerLvl); PushRanged(); }
 
-    public void Respec()
-    {
-        meleeAngerLvl = 0;
-        meleeSadnessLvl = 0;
-        meleeLoveLvl = 0;
-        meleeFearLvl = 0;
-    }
+    int ClampUp(int v) => Mathf.Clamp(v + 1, 0, maxLvl);
+    int ClampDown(int v) => Mathf.Clamp(v - 1, 0, maxLvl);
 
-    public void MeleeAngerUp() { meleeAngerLvl = Mathf.Clamp(meleeAngerLvl + 1, 0, maxLvl); SendChanges(); }
-    public void MeleeAngerDown() { meleeAngerLvl = Mathf.Clamp(meleeAngerLvl - 1, 0, maxLvl); SendChanges(); }
+    // --Push --
+    void PushAll() { PushMelee(); PushDash(); PushRanged(); }
 
-    public void MeleeSadnessUp() { meleeSadnessLvl = Mathf.Clamp(meleeSadnessLvl + 1, 0, maxLvl); SendChanges(); }
-    public void MeleeSadnessDown() { meleeSadnessLvl = Mathf.Clamp(meleeSadnessLvl - 1, 0, maxLvl); SendChanges(); }
-
-    public void MeleeLoveUp() { meleeLoveLvl = Mathf.Clamp(meleeLoveLvl + 1, 0, maxLvl); SendChanges(); }
-    public void MeleeLoveDown() { meleeLoveLvl = Mathf.Clamp(meleeLoveLvl - 1, 0, maxLvl); SendChanges(); }
-
-    public void MeleeFearUp() { meleeFearLvl = Mathf.Clamp(meleeFearLvl + 1, 0, maxLvl); SendChanges(); }
-    public void MeleeFearDown() { meleeFearLvl = Mathf.Clamp(meleeFearLvl - 1, 0, maxLvl); SendChanges(); }
-
-    // ---------- Internals ----------
-
-    void SendChanges()
+    void PushMelee()
     {
         if (!playerManager) return;
-
-        // send new values to Player
         playerManager.UpdateUpgrades(
             meleeAOE[Mathf.Clamp(meleeAngerLvl, 0, maxLvl)],
             meleeSlow[Mathf.Clamp(meleeSadnessLvl, 0, maxLvl)],
@@ -162,5 +171,33 @@ public class UpgradeHandler : MonoBehaviour
             meleeLifeSteal[Mathf.Clamp(meleeLoveLvl, 0, maxLvl)],
             meleeStun[Mathf.Clamp(meleeFearLvl, 0, maxLvl)]
         );
+    }
+
+    void PushDash()
+    {
+        if (!dashAbility) return;
+
+        var u = new DashUpgrades
+        {
+            angerAOEPercent = dashAngerAOE[Mathf.Clamp(dashAngerLvl, 0, maxLvl)],
+            angerDoTOnDash = dashAngerLvl > 0,
+            sadnessSlowPercent = dashSadSlow[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)],
+            sadnessSlowSeconds = dashSadSlowLen[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)]
+        };
+        dashAbility.SetDashUpgrades(u);
+    }
+
+    void PushRanged()
+    {
+        if (!playerCombat) return;
+
+        var mods = new RangedModifiers
+        {
+            joyFireRateMultiplier = joyFireRateMult[Mathf.Clamp(rangedJoyLvl, 0, maxLvl)],
+            joyDamageMultiplier = joyDamageMult[Mathf.Clamp(rangedJoyLvl, 0, maxLvl)],
+            angerAOEPercent = angerAOEPercent[Mathf.Clamp(rangedAngerLvl, 0, maxLvl)],
+            angerExplosionOnHit = rangedAngerLvl > 0
+        };
+        playerCombat.SetRangedUpgrades(mods);
     }
 }
