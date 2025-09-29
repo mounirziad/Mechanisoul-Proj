@@ -64,7 +64,6 @@ public class BasicEnemyHealth : MonoBehaviour
         // Apply stun if applicable
         if (stunLength > 0)
         {
-            baseSpeed = 0;
             this.stunTimer = stunLength;
             isStunned = true;
         }
@@ -83,17 +82,29 @@ public class BasicEnemyHealth : MonoBehaviour
         {
             if (isStunned)
             {
-                Debug.Log("STUNNED: Setting speed to 0. Timer: " + stunTimer); // <-- ADD THIS
+                stunTimer -= Time.deltaTime;
                 navAgent.speed = 0f;
+
+                if (stunTimer <= 0f)
+                {
+                    navAgent.speed = 5f;
+                    isStunned = false;
+                    // Return AI to Attack after stun
+                    agent.stateMachine.ChangeState(AiStateId.Attack);
+                }
             }
             else if (isSlowed)
             {
-                Debug.Log("SLOWED: Base Speed: " + baseSpeed + " Slow Amount: " + slowAmount); // <-- ADD THIS
+                slowTimer -= Time.deltaTime;
                 navAgent.speed = baseSpeed * (1f - slowAmount);
+
+                if (slowTimer <= 0f)
+                {
+                    isSlowed = false;
+                }
             }
             else
             {
-                // Debug.Log("NORMAL SPEED: " + baseSpeed); // Optional: if you want to see it reset
                 navAgent.speed = baseSpeed;
             }
         }

@@ -34,6 +34,17 @@ public class AiAttackState : AiState
 
     public void Update(AiAgent agent)
     {
+        // Get health/status
+        BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
+        if (health != null)
+        {
+            // If stunned, skip movement completely
+            if (health.IsStunned())
+                return;
+
+            // If slowed, movement still works, but speed is already reduced in EnemyHealth.Update()
+        }
+
         if (!agent.weapons.HasWeapon())
         {
             agent.stateMachine.ChangeState(AiStateId.FindWeapon);
