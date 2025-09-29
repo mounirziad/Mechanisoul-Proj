@@ -26,36 +26,18 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Hit something");
-        if (other.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, attackRange))
-            {
-                BasicEnemyHealth basicEnemy = other.GetComponent<BasicEnemyHealth>();
-                if (basicEnemy != null)
-                {
-                    Debug.Log("Hit basic enemy");
-                    Vector3 direction = (other.transform.position - transform.position).normalized;
-                    basicEnemy.TakeDamage(damage, direction);
-
-                    basicEnemy.ApplyModifiers(
-                         playerManager.GetSlowAmount(),
-                         playerManager.GetSlowLength(),
-                         playerManager.GetStunLength()
-                     );
-                }
-
                 // Still keep Mechromancer (if that’s another type of enemy)
-                Mechromancer enemy = hit.collider.GetComponent<Mechromancer>();
+                Mechromancer enemy = GetComponent<Mechromancer>();
                 if (enemy != null)
                 {
                     Debug.Log("Hit mechromancer");
                     enemy.TakeDamage(damage);
                 }
-            }
 
-            // spawn hit VFX
-            Vector3 contactPoint = other.ClosestPoint(transform.position);
+                // spawn hit VFX
+                Vector3 contactPoint = other.ClosestPoint(transform.position);
             if (hitVFX != null)
             {
                 GameObject vfxInstance = Instantiate(hitVFX, contactPoint, Quaternion.identity);
@@ -70,6 +52,21 @@ public class Weapon : MonoBehaviour
             {
                 hitBox.OnRayCastHit(this, dir);
             }
+           
+            BasicEnemyHealth basicEEnemy = other.GetComponent<BasicEnemyHealth>();
+            if (basicEEnemy != null)
+            {
+                Debug.Log("Hit basic enemy");
+                Vector3 direction = (other.transform.position - transform.position).normalized;
+                basicEEnemy.TakeDamage(damage, direction);
+
+                basicEEnemy.ApplyModifiers(
+                     playerManager.GetSlowAmount(),
+                     playerManager.GetSlowLength(),
+                     playerManager.GetStunLength()
+                 );
+            }
+
         }
     }
 

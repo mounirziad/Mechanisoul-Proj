@@ -51,6 +51,8 @@ public class BasicEnemyHealth : MonoBehaviour
 
     public void ApplyModifiers(float slowAmount, float slowLength, float stunLength)
     {
+
+        Debug.Log("We Out here applying effects n shit");
         // Apply slow if applicable
         if (slowLength > 0 && slowAmount > 0)
         {
@@ -62,6 +64,7 @@ public class BasicEnemyHealth : MonoBehaviour
         // Apply stun if applicable
         if (stunLength > 0)
         {
+            baseSpeed = 0;
             this.stunTimer = stunLength;
             isStunned = true;
         }
@@ -99,6 +102,7 @@ public class BasicEnemyHealth : MonoBehaviour
 
     public void TakeDamage(float amount, Vector3 direction)
     {
+        
         if (hitCooldown || agent.isDead) return; // Prevent damage if dead
 
         if (hitCooldown) return; // skip repeated hits
