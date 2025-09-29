@@ -43,7 +43,10 @@ public class InputManager : MonoBehaviour
             playerControls = new PlayerControls();
 
             playerControls.PlayerMovement.Movement.performed +=
-                i => movementInput = i.ReadValue<Vector2>();
+            i => movementInput = i.ReadValue<Vector2>();
+
+            playerControls.PlayerMovement.Movement.canceled +=
+                i => movementInput = Vector2.zero; // reset when stick released
 
             playerControls.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
 
