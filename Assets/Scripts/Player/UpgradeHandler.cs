@@ -4,17 +4,17 @@ using UnityEngine.InputSystem.Controls;
 
 public class UpgradeHandler : MonoBehaviour
 {
-    [Header("MELEE LEVELS (0->maxLvl)")]
+    [Header(" MELEE LEVELS (0..maxLvl) ")]
     [SerializeField] int meleeAngerLvl = 0;
     [SerializeField] int meleeSadnessLvl = 0;
     [SerializeField] int meleeLoveLvl = 0;
     [SerializeField] int meleeFearLvl = 0;
 
-    [Header("DASH LEVELS (0->maxLvl)")]
+    [Header(" DASH LEVELS (0..maxLvl) ")]
     [SerializeField] int dashAngerLvl = 0;
     [SerializeField] int dashSadnessLvl = 0;
 
-    [Header("RANGED LEVELS (0->maxLvl)")]
+    [Header(" RANGED LEVELS (0..maxLvl) ")]
     [SerializeField] int rangedJoyLvl = 0;
     [SerializeField] int rangedAngerLvl = 0;
 
@@ -28,25 +28,29 @@ public class UpgradeHandler : MonoBehaviour
 
     [Header("Config")]
     [SerializeField] int maxLvl = 5;
-    [SerializeField] bool enableHotkeys = false; // default off to avoid conflicts
+    [SerializeField] bool enableHotkeys = false; // default off
     [SerializeField] bool allowNumpad = true;
 
-    // Targets
-    PlayerManager playerManager;  // melee sink (unchanged in your project)
-    DashAbility dashAbility;
-    PlayerCombat playerCombat;
+    // Targets (resolve by tag or drag in via Inspector)
+    [SerializeField] PlayerManager playerManager;   // melee sink
+    [SerializeField] DashAbility dashAbility;       // dash sink
+    [SerializeField] PlayerCombat playerCombat;     // ranged sink
 
     void Awake()
     {
         AllocateTables();
         FillTables();
 
-        var player = GameObject.FindGameObjectWithTag("Player");
-        if (player)
+        // Fallback: find by tag if not set via Inspector
+        if (!playerManager || !dashAbility || !playerCombat)
         {
-            playerManager = player.GetComponent<PlayerManager>();
-            dashAbility = player.GetComponent<DashAbility>();
-            playerCombat = player.GetComponent<PlayerCombat>();
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player)
+            {
+                if (!playerManager) playerManager = player.GetComponent<PlayerManager>();
+                if (!dashAbility) dashAbility = player.GetComponent<DashAbility>();
+                if (!playerCombat) playerCombat = player.GetComponent<PlayerCombat>();
+            }
         }
 
         PushAll();
@@ -57,7 +61,7 @@ public class UpgradeHandler : MonoBehaviour
         if (!enableHotkeys) return;
         var kb = Keyboard.current; if (kb == null) return;
 
-        //  MELEE 
+        // --- MELEE ---
         if (Pressed(kb.digit1Key)) MeleeAngerDown();
         if (Pressed(kb.digit2Key)) MeleeAngerUp();
         if (Pressed(kb.digit3Key)) MeleeSadDown();
@@ -67,13 +71,13 @@ public class UpgradeHandler : MonoBehaviour
         if (Pressed(kb.digit7Key)) MeleeFearDown();
         if (Pressed(kb.digit8Key)) MeleeFearUp();
 
-        //  RANGED 
+        // --- RANGED ---
         if (Pressed(kb.jKey)) RangedJoyDown();
         if (Pressed(kb.kKey)) RangedJoyUp();
         if (Pressed(kb.uKey)) RangedAngerDown();
         if (Pressed(kb.iKey)) RangedAngerUp();
 
-        //  DASH 
+        // --- DASH ---
         if (Pressed(kb.nKey)) DashAngerDown();
         if (Pressed(kb.mKey)) DashAngerUp();
         if (Pressed(kb.hKey)) DashSadDown();
@@ -82,7 +86,7 @@ public class UpgradeHandler : MonoBehaviour
 
     bool Pressed(KeyControl key) => key != null && key.wasPressedThisFrame;
 
-    // Tables
+    // ---------- Tables ----------
     void AllocateTables()
     {
         meleeAOE = new float[maxLvl + 1];
@@ -102,19 +106,19 @@ public class UpgradeHandler : MonoBehaviour
 
     void FillTables()
     {
-        // MELEE 
+        // ---- MELEE ----
         FillLinear(meleeAOE, 0f, 0.05f); // +5%/lvl
         FillLinear(meleeSlow, 0f, 0.10f); // +10%/lvl
         FillLinear(meleeSlowLength, 0f, 2.00f); // +2s/lvl
         FillLinear(meleeLifeSteal, 0f, 0.10f); // +10%/lvl
         FillLinear(meleeStun, 0f, 0.50f); // +0.5s/lvl
 
-        // DASH 
+        // ---- DASH ----
         FillLinear(dashAngerAOE, 0f, 0.05f); // +5%/lvl
         FillLinear(dashSadSlow, 0f, 0.08f); // +8%/lvl
         FillLinear(dashSadSlowLen, 0f, 1.20f); // +1.2s/lvl
 
-        // RANGED 
+        // ---- RANGED ----
         // JOY: +15% fire rate / +10% damage per level
         float fr = 1f, dmg = 1f;
         for (int i = 0; i <= maxLvl; i++)
@@ -132,7 +136,7 @@ public class UpgradeHandler : MonoBehaviour
         for (int i = 0; i < arr.Length; i++) { arr[i] = cur; cur += step; }
     }
 
-    // Public (UI) API
+    // ---------- Public (UI) API ----------
     // Melee
     public void MeleeAngerUp() { meleeAngerLvl = ClampUp(meleeAngerLvl); PushMelee(); }
     public void MeleeAngerDown() { meleeAngerLvl = ClampDown(meleeAngerLvl); PushMelee(); }
@@ -158,7 +162,7 @@ public class UpgradeHandler : MonoBehaviour
     int ClampUp(int v) => Mathf.Clamp(v + 1, 0, maxLvl);
     int ClampDown(int v) => Mathf.Clamp(v - 1, 0, maxLvl);
 
-    // --Push --
+    // ---------- Push ----------
     void PushAll() { PushMelee(); PushDash(); PushRanged(); }
 
     void PushMelee()
@@ -177,14 +181,12 @@ public class UpgradeHandler : MonoBehaviour
     {
         if (!dashAbility) return;
 
-        var u = new DashUpgrades
-        {
-            angerAOEPercent = dashAngerAOE[Mathf.Clamp(dashAngerLvl, 0, maxLvl)],
-            angerDoTOnDash = dashAngerLvl > 0,
-            sadnessSlowPercent = dashSadSlow[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)],
-            sadnessSlowSeconds = dashSadSlowLen[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)]
-        };
-        dashAbility.SetDashUpgrades(u);
+        float aoe = dashAngerAOE[Mathf.Clamp(dashAngerLvl, 0, maxLvl)];
+        float slow = dashSadSlow[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)];
+        float slowL = dashSadSlowLen[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)];
+
+        dashAbility.SetDashParams(aoe, slow, slowL);  // single-class setter
+        // If you still have older PlayerManager calling SetUpgrades(...), that will also work due to legacy shim.
     }
 
     void PushRanged()
