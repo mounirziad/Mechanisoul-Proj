@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.WSA;
 
 public class MeshTrail : MonoBehaviour
 {
