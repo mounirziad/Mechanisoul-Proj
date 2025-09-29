@@ -17,10 +17,19 @@ public class AiChasePlayerState : AiState
 
     public void Update(AiAgent agent)
     {
-        if (!agent.enabled)
+        if (!agent.enabled) return;
+
+        // Get health/status
+        BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
+        if (health != null)
         {
-            return;
+            // If stunned, skip movement completely
+            if (health.IsStunned())
+                return;
+
+            // If slowed, movement still works, but speed is already reduced in EnemyHealth.Update()
         }
+
         timer -= Time.deltaTime;
         if (timer < 0.0f)
         {

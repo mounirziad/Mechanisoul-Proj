@@ -1,4 +1,4 @@
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -29,34 +29,33 @@ public class Weapon : MonoBehaviour
         Debug.Log("Hit something");
         if (other.CompareTag("Enemy"))
         {
-            //Added if statement - Alyssa
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, attackRange))
             {
-                Mechromancer enemy = hit.collider.GetComponent<Mechromancer>();
-
-                //added by anthony for test enemy functionality, probably not a good long term solution for how this whole thing is done
-                if (other.gameObject.name == "Test Enemy")
+                BasicEnemyHealth basicEnemy = other.GetComponent<BasicEnemyHealth>();
+                if (basicEnemy != null)
                 {
-                    TestEnemy testEnemy = other.gameObject.GetComponent<TestEnemy>();
-                    
-                    Debug.Log("Hit enemy");
-                    testEnemy.TakeDamage(damage);
-                    testEnemy.ApplyModifiers(playerManager.GetSlowAmount(), playerManager.GetSlowLength(), playerManager.GetStunLength());
+                    Debug.Log("Hit basic enemy");
+                    Vector3 direction = (other.transform.position - transform.position).normalized;
+                    basicEnemy.TakeDamage(damage, direction);
+
+                    basicEnemy.ApplyModifiers(
+                         playerManager.GetSlowAmount(),
+                         playerManager.GetSlowLength(),
+                         playerManager.GetStunLength()
+                     );
                 }
 
-
-                if (enemy!= null)
+                // Still keep Mechromancer (if that’s another type of enemy)
+                Mechromancer enemy = hit.collider.GetComponent<Mechromancer>();
+                if (enemy != null)
                 {
-                    Debug.Log("Hit enemy");
+                    Debug.Log("Hit mechromancer");
                     enemy.TakeDamage(damage);
-
-
-                    
                 }
             }
-            Vector3 contactPoint = other.ClosestPoint(transform.position);
 
-            // spawn hit effect
+            // spawn hit VFX
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
             if (hitVFX != null)
             {
                 GameObject vfxInstance = Instantiate(hitVFX, contactPoint, Quaternion.identity);
@@ -64,14 +63,12 @@ public class Weapon : MonoBehaviour
                     Vector3.Distance(contactPoint, Camera.main.transform.position) - 0.1f;
             }
 
-            // choose your direction
-            Vector3 direction = (other.transform.position - transform.position).normalized;
-
-            // damage enemy through HitBox
+            // hitbox damage forwarding
+            Vector3 dir = (other.transform.position - transform.position).normalized;
             HitBox hitBox = other.GetComponent<HitBox>();
             if (hitBox != null)
             {
-                hitBox.OnRayCastHit(this, direction);
+                hitBox.OnRayCastHit(this, dir);
             }
         }
     }
