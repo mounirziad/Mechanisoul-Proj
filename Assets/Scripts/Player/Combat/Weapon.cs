@@ -11,6 +11,13 @@ public class Weapon : MonoBehaviour
 
     public Camera cam;
 
+    PlayerManager playerManager;
+
+    private void Awake()
+    {
+        playerManager = transform.root.gameObject.GetComponent<PlayerManager>();
+    }
+
     void Start()
     {
         triggerBox = GetComponent<BoxCollider>();
@@ -26,10 +33,25 @@ public class Weapon : MonoBehaviour
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, attackRange))
             {
                 Mechromancer enemy = hit.collider.GetComponent<Mechromancer>();
+
+                //added by anthony for test enemy functionality, probably not a good long term solution for how this whole thing is done
+                if (other.gameObject.name == "Test Enemy")
+                {
+                    TestEnemy testEnemy = other.gameObject.GetComponent<TestEnemy>();
+                    
+                    Debug.Log("Hit enemy");
+                    testEnemy.TakeDamage(damage);
+                    testEnemy.ApplyModifiers(playerManager.GetSlowAmount(), playerManager.GetSlowLength(), playerManager.GetStunLength());
+                }
+
+
                 if (enemy!= null)
                 {
                     Debug.Log("Hit enemy");
-                    enemy.TakeDamage(8f);
+                    enemy.TakeDamage(damage);
+
+
+                    
                 }
             }
             Vector3 contactPoint = other.ClosestPoint(transform.position);

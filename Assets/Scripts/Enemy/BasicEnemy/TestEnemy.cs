@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -7,13 +8,45 @@ public class TestEnemy : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
 
+    //stats for testing
+    float baseSpeed = 10f;
+    [SerializeField] float speed;
+    [SerializeField] bool stunned;
+    float stunTimer;
+    float slowTimer;
+    [SerializeField] bool slowed;
+
   
 
     private bool isDead = false;
 
+    private void Awake()
+    {
+        speed = baseSpeed;
+    }
+
     void Start()
     {
         currentHealth = maxHealth;
+    }
+
+    private void Update()
+    {
+        if (slowed)
+        {
+            slowTimer -= Time.deltaTime;
+
+            if (slowTimer <= 0)
+                slowed = false;
+        }
+
+        if (stunned)
+        {
+            stunTimer -= Time.deltaTime;
+
+            if (stunTimer <= 0)
+                stunned = false;
+        }
     }
 
     public void TakeDamage(float damage)
@@ -29,6 +62,25 @@ public class TestEnemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    public void ApplyModifiers(float slowAmt, float slowLen, float stunLen)
+    {
+        if (!slowed)
+        {
+            speed -= baseSpeed * slowAmt;
+            slowTimer = slowLen;
+
+            Debug.Log("Applied Slow");
+        }
+
+        if (!stunned)
+        {
+            stunned = true;
+            stunTimer = stunLen;
+
+            Debug.Log("Applied Stun");
         }
     }
 

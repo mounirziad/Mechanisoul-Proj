@@ -54,4 +54,29 @@ public class PlayerManager : MonoBehaviour
         if (dash) dash.SetUpgrades(aoeAmount, slowAmount, slowLength, lifeStealAmount, stunLength);
     }
 
+    public float GetAOEAmount()
+    {
+        return aoeAmount;
+    }
+
+    public float GetSlowAmount()
+    {
+        return slowAmount;
+    }
+
+    public float GetSlowLength()
+    {
+        return slowLength;
+    }
+
+    public float GetLifeStealAmount()
+    {
+        return lifeStealAmount;
+    }
+
+    public float GetStunLength()
+    {
+        return stunLength;
+    }
+
 }
