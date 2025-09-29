@@ -74,8 +74,8 @@ public class UpgradeHandler : MonoBehaviour
         // --- RANGED ---
         if (Pressed(kb.jKey)) RangedJoyDown();
         if (Pressed(kb.kKey)) RangedJoyUp();
-        if (Pressed(kb.uKey)) RangedAngerDown();
-        if (Pressed(kb.iKey)) RangedAngerUp();
+        if (Pressed(kb.digit9Key)) RangedAngerDown();
+        if (Pressed(kb.digit0Key)) RangedAngerUp();
 
         // --- DASH ---
         if (Pressed(kb.nKey)) DashAngerDown();
