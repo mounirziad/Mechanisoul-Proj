@@ -4,7 +4,16 @@ using UnityEngine.UIElements;
 
 public class UpgradeUIScript : MonoBehaviour
 {
-    private VisualElement root;
+    public UpgradeHandler upgradeHandler;
+
+    public VisualElement root;
+
+    public VisualElement skillMenu;
+    public VisualElement pauseMenu;
+
+    private Button resumeButton;
+    private Button optionsButton;
+    private Button quitButton;
 
     private Button angerMelee1;
     private Button joyRange1;
@@ -14,14 +23,23 @@ public class UpgradeUIScript : MonoBehaviour
     private Button joyRange2;
     private Button sadDash2;
     private Button angerDash2;
+
     private Button upgradeTab;
     private Button comboTab;
+
     private VisualElement skillTree;
     private VisualElement combos;
 
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
+
+        skillMenu = root.Q<VisualElement>("SkillMenu");
+        pauseMenu = root.Q<VisualElement>("PauseMenu");
+
+        resumeButton = root.Q<Button>("ResumeButton");
+        optionsButton = root.Q<Button>("OptionsButton");
+        quitButton = root.Q<Button>("QuitButton");
 
         angerMelee1 = root.Q<Button>("AngerMelee1");
         joyRange1 = root.Q<Button>("JoyRange1");
@@ -38,6 +56,10 @@ public class UpgradeUIScript : MonoBehaviour
 
         skillTree = root.Q<VisualElement>("SkillTreeEL");
         combos = root.Q<VisualElement>("CombosEL");
+
+        resumeButton.clicked += OnResumeClicked;
+        optionsButton.clicked += OnOptionsClicked;
+        quitButton.clicked += OnQuitClicked;
 
         angerMelee1.clicked += OnAngerMelee1Clicked;
         joyRange1.clicked += OnJoyRange1Clicked;
@@ -77,8 +99,23 @@ public class UpgradeUIScript : MonoBehaviour
         angerDash2.clicked -= OnAngerDash2Clicked;
     }
 
+    private void OnResumeClicked()
+    {
+        Debug.Log("Resume Button Clicked!");
+    }
+    private void OnOptionsClicked()
+    {
+        Debug.Log("Options Button Clicked!");
+    }
+    private void OnQuitClicked()
+    {
+        Application.Quit();
+        Debug.Log("Quit Button Clicked!");
+    }
+
     private void OnAngerMelee1Clicked()
     {
+        
         Debug.Log("Anger Melee Upgrade 1 Clicked!");
     }
 
