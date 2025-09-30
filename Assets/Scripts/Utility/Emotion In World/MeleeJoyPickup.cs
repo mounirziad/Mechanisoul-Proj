@@ -20,7 +20,7 @@ public class MeleeJoyPickup : MonoBehaviour
         handler.MeleeJoyUp();
         handler.MeleeJoyUp();
 
-        Debug.Log("Picked up Melee Love!");
+        Debug.Log("Picked up Melee Joy!");
 
         if (destroyOnPickup) Destroy(gameObject);
     }

@@ -233,6 +233,30 @@ public class UpgradeHandler : MonoBehaviour
         }
     }
 
+    public void MeleeJoyUp()
+    {
+        meleeJoyLvl = ClampUp(meleeJoyLvl); PushMelee();
+
+        for (int i = 0; i < impactVFXPrefabs.Length; i++)
+        {
+            if (impactVFXPrefabs[i].name == "Joy Impact")
+            {
+                weaponScript.hitVFX = impactVFXPrefabs[i];
+            }
+        }
+    }
+    public void MeleeJoyDown()
+    {
+        meleeJoyLvl = ClampDown(meleeJoyLvl); PushMelee();
+
+        if (meleeJoyLvl == 0)
+        {
+            weaponScript.hitVFX = null;
+        }
+    
+    }
+
+
     // Dash
     public void DashAngerUp()
     {
