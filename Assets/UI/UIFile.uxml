@@ -10,11 +10,11 @@
                 <ui:VisualElement name="MeleeUpg" class="row-setup">
                     <ui:Label text="Melee" name="MeleeIcon" style="background-color: rgb(255, 126, 126); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Button" name="Melee1" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Melee1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/loveButton.png?fileID=2800000&amp;guid=eaeedd112c1112a4fa7488ac7bfe4675&amp;type=3#loveButton&quot;);" />
                         <ui:Button text="Anger lvl 1" name="AngerMelee1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Button" name="Melee2" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Melee2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/loveButton.png?fileID=2800000&amp;guid=eaeedd112c1112a4fa7488ac7bfe4675&amp;type=3#loveButton&quot;);" />
                         <ui:Button text="Anger lvl 2" name="AngerMelee2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -22,22 +22,22 @@
                     <ui:Label text="Range" name="RangeIcon" style="width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; background-color: rgb(255, 251, 88); -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
                         <ui:Button text="Joy lvl 1" name="JoyRange1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;);" />
-                        <ui:Button text="Button" name="Range1" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Range1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/fearButton.png?fileID=2800000&amp;guid=e6195a9cc97441e4fb703f8493d19698&amp;type=3#fearButton&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ColumnLvl2" class="column-setup">
                         <ui:Button text="Joy lvl 2" name="JoyRange2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;);" />
-                        <ui:Button text="Button" name="Range2" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Range2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/fearButton.png?fileID=2800000&amp;guid=e6195a9cc97441e4fb703f8493d19698&amp;type=3#fearButton&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="DashUpg" class="row-setup">
                     <ui:Label text="Dash" name="DashIcon" double-click-selects-word="false" style="background-color: rgb(126, 145, 255); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Sad lvl 1&#10;" name="SadDash1" class="upg-button-setup" />
-                        <ui:Button text="Anger lvl 1" name="AngerDash1" class="upg-button-setup" />
+                        <ui:Button text="Sad lvl 1&#10;" name="SadDash1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/sadnessButton.png?fileID=2800000&amp;guid=37f241f04b8fc8b41b0a801ab140a9cf&amp;type=3#sadnessButton&quot;);" />
+                        <ui:Button text="Anger lvl 1" name="AngerDash1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Sad lvl 2" name="SadDash2" class="upg-button-setup" />
-                        <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" />
+                        <ui:Button text="Sad lvl 2" name="SadDash2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/sadnessButton.png?fileID=2800000&amp;guid=37f241f04b8fc8b41b0a801ab140a9cf&amp;type=3#sadnessButton&quot;);" />
+                        <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
