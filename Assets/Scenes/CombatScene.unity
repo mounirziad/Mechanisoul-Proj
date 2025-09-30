@@ -2045,9 +2045,17 @@ MonoBehaviour:
   maxLvl: 2
   enableHotkeys: 1
   allowNumpad: 1
+  vfxMaterials:
+  - {fileID: 2100000, guid: 011e35138c076134eaae1a1506520dc4, type: 2}
+  - {fileID: 2100000, guid: 49a5a80375d8e494ea3bfef6ead4f3de, type: 2}
+  - {fileID: 2100000, guid: 487099de5cb3b5840b8c3fe297ca0bad, type: 2}
+  - {fileID: 2100000, guid: f00239206ce6cf943acfa9b9f598bb3d, type: 2}
+  - {fileID: 2100000, guid: 234142d0a3f6343478aed2a1b5f50340, type: 2}
+  - {fileID: 2100000, guid: a97104aded915c64f899043eb90f905d, type: 2}
   playerManager: {fileID: 8551793984105625944}
   dashAbility: {fileID: 8551793984105625943}
   playerCombat: {fileID: 8551793984105625942}
+  meshTrail: {fileID: 8551793984105625939}
 --- !u!4 &1971551252
 Transform:
   m_ObjectHideFlags: 0
@@ -3320,7 +3328,7 @@ MonoBehaviour:
   activeTime: 0.28
   meshRefreshRate: 0.02
   positionToSpawn: {fileID: 836329700}
-  mat: {fileID: 2100000, guid: 011e35138c076134eaae1a1506520dc4, type: 2}
+  mat: {fileID: 2100000, guid: 49a5a80375d8e494ea3bfef6ead4f3de, type: 2}
   meshDestroyDelay: 0.1
 --- !u!114 &8551793984105625941 stripped
 MonoBehaviour:
