@@ -125,7 +125,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   damage: 5
+  attackRange: 0
   hitVFX: {fileID: 627569255849376440, guid: d4112bc87fd2aec4b96cfe48b0043685, type: 3}
+  cam: {fileID: 0}
 --- !u!1 &900384277556082813
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +515,8 @@ MonoBehaviour:
   dodgeCooldown: 1
   isDodging: 0
   canDodge: 1
+  attackMoveDistance: 0.5
+  attackMoveSpeed: 5
 --- !u!54 &2670944488486193615
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -588,11 +592,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f4739c46ea15542abd6bece082a7d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  cinemachineCam: {fileID: 0}
+  zoomedFOV: 30
+  zoomSpeed: 5
+  projectilePrefab: {fileID: 0}
+  shootPoint: {fileID: 0}
+  projectileDamage: 10
+  baseFireRate: 2
+  rangedEnabled: 1
+  angerExplosionPrefab: {fileID: 0}
+  joyExplosionPrefab: {fileID: 0}
   combo:
   - {fileID: 11400000, guid: e44634732f81e2748a55c502762cd93e, type: 2}
   - {fileID: 11400000, guid: 753fea4ac7ac0314aa49e9416429b28f, type: 2}
+  isAttacking: 0
+  inputBufferTime: 0.3
+  earlyComboWindow: 0.6
+  dodgeCancelWindow: 0.4
   isAiming: 0
   weapon: {fileID: 1370667352295827453}
+  aimAssistRange: 20
+  aimAssistAngle: 30
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  currentTarget: {fileID: 0}
 --- !u!114 &1721138619143970650
 MonoBehaviour:
   m_ObjectHideFlags: 0
