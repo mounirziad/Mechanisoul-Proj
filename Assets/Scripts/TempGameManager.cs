@@ -13,7 +13,10 @@ public class TempGameManager : MonoBehaviour
 
     void Awake()
     {
-        upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+        if (upgradeUIScript != null)
+        {
+            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+        }
         pauseActive = false;
     }
 
@@ -44,14 +47,20 @@ public class TempGameManager : MonoBehaviour
     {
         if (context.performed && pauseActive == false)
         {
-            upgradeUIScript.pauseMenu.style.display = DisplayStyle.Flex;
-            upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
-            pauseActive = true;
+            if (upgradeUIScript != null)
+            {
+                upgradeUIScript.pauseMenu.style.display = DisplayStyle.Flex;
+                upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+                pauseActive = true;
+            }
         }
         else if (context.performed && pauseActive == true)
         {
-            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
-            pauseActive = false;
+            if (upgradeUIScript != null)
+            {
+                upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+                pauseActive = false;
+            }
         }
     }
 
@@ -59,15 +68,21 @@ public class TempGameManager : MonoBehaviour
     {
         if (context.performed && upgradeUIActive == false)
         {
-            upgradeUIScript.skillMenu.style.display = DisplayStyle.Flex;
-            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
-            upgradeUIActive = true;
-            pauseActive = false;
+            if (upgradeUIScript != null)
+            {
+                upgradeUIScript.skillMenu.style.display = DisplayStyle.Flex;
+                upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+                upgradeUIActive = true;
+                pauseActive = false;
+            }
         }
         else if (context.performed && upgradeUIActive == true)
         {
-            upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
-            upgradeUIActive = false;
+            if (upgradeUIScript != null)
+            {
+                upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+                upgradeUIActive = false;
+            }
         }
     }
 }
