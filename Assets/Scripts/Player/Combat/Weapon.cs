@@ -16,13 +16,11 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         playerManager = transform.root.gameObject.GetComponent<PlayerManager>();
-    }
-
-    void Start()
-    {
         triggerBox = GetComponent<BoxCollider>();
         triggerBox.isTrigger = true; // make sure it's set as a trigger
     }
+
+    
 
     private void OnTriggerEnter(Collider other)
     {
