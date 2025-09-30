@@ -30,11 +30,14 @@ public class UpgradeHandler : MonoBehaviour
     [SerializeField] int maxLvl = 5;
     [SerializeField] bool enableHotkeys = false; // default off
     [SerializeField] bool allowNumpad = true;
+    [SerializeField] Material[] vfxMaterials;
+
 
     // Targets (resolve by tag or drag in via Inspector)
     [SerializeField] PlayerManager playerManager;   // melee sink
     [SerializeField] DashAbility dashAbility;       // dash sink
     [SerializeField] PlayerCombat playerCombat;     // ranged sink
+    [SerializeField] MeshTrail meshTrail;
 
     void Awake()
     {
@@ -50,6 +53,7 @@ public class UpgradeHandler : MonoBehaviour
                 if (!playerManager) playerManager = player.GetComponent<PlayerManager>();
                 if (!dashAbility) dashAbility = player.GetComponent<DashAbility>();
                 if (!playerCombat) playerCombat = player.GetComponent<PlayerCombat>();
+                if (!meshTrail) meshTrail = player.GetComponent<MeshTrail>();
             }
         }
 
@@ -148,10 +152,64 @@ public class UpgradeHandler : MonoBehaviour
     public void MeleeFearDown() { meleeFearLvl = ClampDown(meleeFearLvl); PushMelee(); }
 
     // Dash
-    public void DashAngerUp() { dashAngerLvl = ClampUp(dashAngerLvl); PushDash(); }
-    public void DashAngerDown() { dashAngerLvl = ClampDown(dashAngerLvl); PushDash(); }
-    public void DashSadUp() { dashSadnessLvl = ClampUp(dashSadnessLvl); PushDash(); }
-    public void DashSadDown() { dashSadnessLvl = ClampDown(dashSadnessLvl); PushDash(); }
+    public void DashAngerUp()
+    {
+        dashAngerLvl = ClampUp(dashAngerLvl); PushDash();
+
+        for (int i = 0; i < vfxMaterials.Length; i++)
+        {
+            if (vfxMaterials[i].name == "angerDashTrail")
+            {
+                meshTrail.mat = vfxMaterials[i];
+                break;
+            }
+        }
+    }
+    public void DashAngerDown()
+    {
+        dashAngerLvl = ClampDown(dashAngerLvl); PushDash();
+
+        if (dashAngerLvl == 0)
+        {
+            for (int i = 0; i < vfxMaterials.Length; i++)
+            {
+                if (vfxMaterials[i].name == "basicDashTrail")
+                {
+                    meshTrail.mat = vfxMaterials[i];
+                    break;
+                }
+            }
+        }
+    }
+    public void DashSadUp()
+    {
+        dashSadnessLvl = ClampUp(dashSadnessLvl); PushDash();
+
+        for (int i = 0; i < vfxMaterials.Length; i++)
+        {
+            if (vfxMaterials[i].name == "sadnessDashTrail")
+            {
+                meshTrail.mat = vfxMaterials[i];
+                break;
+            }
+        }
+    }
+    public void DashSadDown()
+    {
+        dashSadnessLvl = ClampDown(dashSadnessLvl); PushDash();
+
+        if (dashSadnessLvl == 0)
+        {
+            for (int i = 0; i < vfxMaterials.Length; i++)
+            {
+                if (vfxMaterials[i].name == "basicDashTrail")
+                {
+                    meshTrail.mat = vfxMaterials[i];
+                    break;
+                }
+            }
+        }
+    }
 
     // Ranged
     public void RangedJoyUp() { rangedJoyLvl = ClampUp(rangedJoyLvl); PushRanged(); }

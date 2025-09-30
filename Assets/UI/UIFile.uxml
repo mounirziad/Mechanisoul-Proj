@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/UIStyleSheet.uss?fileID=7433441132597879392&amp;guid=dae730963a6ef20439af387d8ba9f651&amp;type=3#UIStyleSheet" />
     <ui:VisualElement name="root" style="flex-grow: 1; width: 100%; height: 100%; position: absolute;">
-        <ui:VisualElement name="SkillMenu" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex; background-color: rgba(109, 142, 171, 0.65);">
+        <ui:VisualElement name="SkillMenu" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: none; background-color: rgba(109, 142, 171, 0.65);">
             <ui:VisualElement name="TabsEL" style="flex-grow: 1; flex-direction: row; width: auto; height: auto;">
                 <ui:Button text="Upgrades" name="UpgradeTab" class="tabs" />
                 <ui:Button text="Combos" name="ComboTab" class="tabs" />
@@ -10,11 +10,11 @@
                 <ui:VisualElement name="MeleeUpg" class="row-setup">
                     <ui:Label text="Melee" name="MeleeIcon" style="background-color: rgb(255, 126, 126); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Button" name="Melee1" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Melee1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/loveButton.png?fileID=2800000&amp;guid=eaeedd112c1112a4fa7488ac7bfe4675&amp;type=3#loveButton&quot;);" />
                         <ui:Button text="Anger lvl 1" name="AngerMelee1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Button" name="Melee2" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Melee2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/loveButton.png?fileID=2800000&amp;guid=eaeedd112c1112a4fa7488ac7bfe4675&amp;type=3#loveButton&quot;);" />
                         <ui:Button text="Anger lvl 2" name="AngerMelee2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -22,22 +22,22 @@
                     <ui:Label text="Range" name="RangeIcon" style="width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; background-color: rgb(255, 251, 88); -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
                         <ui:Button text="Joy lvl 1" name="JoyRange1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;);" />
-                        <ui:Button text="Button" name="Range1" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Range1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/fearButton.png?fileID=2800000&amp;guid=e6195a9cc97441e4fb703f8493d19698&amp;type=3#fearButton&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ColumnLvl2" class="column-setup">
                         <ui:Button text="Joy lvl 2" name="JoyRange2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;);" />
-                        <ui:Button text="Button" name="Range2" class="upg-button-setup" />
+                        <ui:Button text="Button" name="Range2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/fearButton.png?fileID=2800000&amp;guid=e6195a9cc97441e4fb703f8493d19698&amp;type=3#fearButton&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="DashUpg" class="row-setup">
                     <ui:Label text="Dash" name="DashIcon" double-click-selects-word="false" style="background-color: rgb(126, 145, 255); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
                     <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Sad lvl 1&#10;" name="SadDash1" class="upg-button-setup" />
-                        <ui:Button text="Anger lvl 1" name="AngerDash1" class="upg-button-setup" />
+                        <ui:Button text="Sad lvl 1&#10;" name="SadDash1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/sadnessButton.png?fileID=2800000&amp;guid=37f241f04b8fc8b41b0a801ab140a9cf&amp;type=3#sadnessButton&quot;);" />
+                        <ui:Button text="Anger lvl 1" name="AngerDash1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Sad lvl 2" name="SadDash2" class="upg-button-setup" />
-                        <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" />
+                        <ui:Button text="Sad lvl 2" name="SadDash2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/sadnessButton.png?fileID=2800000&amp;guid=37f241f04b8fc8b41b0a801ab140a9cf&amp;type=3#sadnessButton&quot;);" />
+                        <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
@@ -54,7 +54,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="PauseMenu" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.38); display: none;">
+        <ui:VisualElement name="PauseMenu" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.38); display: flex;">
             <ui:VisualElement name="PauseBG" style="flex-grow: 1; justify-content: space-between; align-items: center; align-content: center; width: 450px; height: 600px; align-self: center; flex-basis: auto; position: absolute; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(164, 164, 164); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(87, 87, 87); border-right-color: rgb(87, 87, 87); border-top-color: rgb(87, 87, 87); border-bottom-color: rgb(87, 87, 87); padding-bottom: 90px; padding-top: 0;">
                 <ui:Label text="Paused" name="PausedTxt" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 88px; padding-bottom: 0; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-right: 0; padding-top: 0; padding-left: 0;" />
                 <ui:Button text="Resume" name="ResumeButton" class="pause-menu-button" />
