@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class UpgradeUIScript : MonoBehaviour
 {
     private CombosMenuUI combosMenuUI;
+
     public UpgradeHandler upgradeHandler;
 
     public VisualElement root;
@@ -45,6 +46,7 @@ public class UpgradeUIScript : MonoBehaviour
         root = GetComponent<UIDocument>().rootVisualElement;
         combosMenuUI = GetComponent<CombosMenuUI>(); // on same GO as UIDocument
 
+
         // Find handler if not dragged in
         if (!upgradeHandler)
         {
@@ -56,7 +58,6 @@ public class UpgradeUIScript : MonoBehaviour
             }
         }
 
-        // --- Query UI Elements ---
         skillMenu = root.Q<VisualElement>("SkillMenu");
         pauseMenu = root.Q<VisualElement>("PauseMenu");
 
@@ -64,6 +65,7 @@ public class UpgradeUIScript : MonoBehaviour
         optionsButton = root.Q<Button>("OptionsButton");
         quitButton = root.Q<Button>("QuitButton");
 
+        // ---- Query buttons ----
         // Melee (ANGER)
         angerMelee1 = root.Q<Button>("AngerMelee1");
         angerMelee2 = root.Q<Button>("AngerMelee2");
@@ -71,13 +73,14 @@ public class UpgradeUIScript : MonoBehaviour
         loveMelee1 = root.Q<Button>("LoveMelee1");
         loveMelee2 = root.Q<Button>("LoveMelee2");
 
-        // Range
+        // Range (JOY only in UI)
         joyRange1 = root.Q<Button>("JoyRange1");
         joyRange2 = root.Q<Button>("JoyRange2");
+
         angerRange1 = root.Q<Button>("AngerRange1");
         angerRange2 = root.Q<Button>("AngerRange2");
 
-        // Dash
+        // Dash (SAD / ANGER)
         sadDash1 = root.Q<Button>("SadDash1");
         sadDash2 = root.Q<Button>("SadDash2");
         angerDash1 = root.Q<Button>("AngerDash1");
@@ -88,22 +91,6 @@ public class UpgradeUIScript : MonoBehaviour
 
         skillTree = root.Q<VisualElement>("SkillTreeEL");
         combos = root.Q<VisualElement>("CombosEL");
-
-        // --- Assign Events ---
-        if (upgradeTab != null)
-            upgradeTab.clicked += () =>
-            {
-                if (skillTree != null) skillTree.style.display = DisplayStyle.Flex;
-                if (combos != null) combos.style.display = DisplayStyle.None;
-            };
-
-        if (comboTab != null)
-            comboTab.clicked += () =>
-            {
-                if (skillTree != null) skillTree.style.display = DisplayStyle.None;
-                if (combos != null) combos.style.display = DisplayStyle.Flex;
-                combosMenuUI?.Refresh();
-            };
 
         if (resumeButton != null) resumeButton.clicked += OnResumeClicked;
         if (optionsButton != null) optionsButton.clicked += OnOptionsClicked;
@@ -122,6 +109,23 @@ public class UpgradeUIScript : MonoBehaviour
         if (angerRange2 != null) angerRange2.clicked += OnAngerRange2Clicked;
         if (sadDash2 != null) sadDash2.clicked += OnSadDash2Clicked;
         if (angerDash2 != null) angerDash2.clicked += OnAngerDash2Clicked;
+
+        if (upgradeTab != null) upgradeTab.clicked += () =>
+        {
+            skillTree.style.display = DisplayStyle.Flex;
+            combos.style.display = DisplayStyle.None;
+        };
+
+        if (comboTab != null) comboTab.clicked += () =>
+        {
+            skillTree.style.display = DisplayStyle.None;
+            combos.style.display = DisplayStyle.Flex;
+
+            // NEW: refresh the combos card when the tab opens
+            if (combosMenuUI != null) combosMenuUI.Refresh();
+        };
+
+
     }
 
     void OnDisable()
@@ -145,9 +149,10 @@ public class UpgradeUIScript : MonoBehaviour
         if (quitButton != null) quitButton.clicked -= OnQuitClicked;
     }
 
-    // ====== HELPERS ======
+    // ====== HELPERS: drive levels via handler Up/Down (no direct setters needed) ======
     void ZeroMelee()
     {
+        // Call downs several times to guarantee 0 regardless of current level caps
         for (int i = 0; i < 10; i++)
         {
             upgradeHandler.MeleeAngerDown();
@@ -181,6 +186,7 @@ public class UpgradeUIScript : MonoBehaviour
         ZeroRange();
         for (int i = 0; i < level; i++) upgradeHandler.RangedJoyUp();
     }
+
     void SetRangeAngerLevel(int level)
     {
         ZeroRange();
@@ -197,35 +203,98 @@ public class UpgradeUIScript : MonoBehaviour
     }
     void SetDashSadLevel(int level)
     {
-        ZeroDash();
+        ZeroDash(); // mutually exclusive with Anger
         for (int i = 0; i < level; i++) upgradeHandler.DashSadUp();
     }
     void SetDashAngerLevel(int level)
     {
-        ZeroDash();
+        ZeroDash(); // mutually exclusive with Sad
         for (int i = 0; i < level; i++) upgradeHandler.DashAngerUp();
     }
 
-    // ====== PAUSE MENU ======
-    private void OnResumeClicked() => Debug.Log("Resume Button Clicked!");
-    private void OnOptionsClicked() => Debug.Log("Options Button Clicked!");
+    // ====== Pause Menu Buttons ======
+    private void OnResumeClicked()
+    {
+        Debug.Log("Resume Button Clicked!");
+    }
+    private void OnOptionsClicked()
+    {
+        Debug.Log("Options Button Clicked!");
+    }
     private void OnQuitClicked()
     {
         Application.Quit();
         Debug.Log("Quit Button Clicked!");
     }
 
-    // ====== SKILL TREE ======
-    private void OnAngerMelee1Clicked() { SetMeleeAngerLevel(1); Debug.Log("Anger Melee Upgrade 1 Clicked!"); }
-    private void OnAngerMelee2Clicked() { SetMeleeAngerLevel(2); Debug.Log("Anger Melee Upgrade 2 Clicked!"); }
-    private void OnLoveMelee1Clicked() { SetMeleeLoveLevel(1); Debug.Log("Love Melee Upgrade 1 Clicked!"); }
-    private void OnLoveMelee2Clicked() { SetMeleeLoveLevel(2); Debug.Log("Love Melee Upgrade 2 Clicked!"); }
-    private void OnJoyRange1Clicked() { SetRangeJoyLevel(1); Debug.Log("Joy Range Upgrade 1 Clicked!"); }
-    private void OnJoyRange2Clicked() { SetRangeJoyLevel(2); Debug.Log("Joy Range Upgrade 2 Clicked!"); }
-    private void OnAngerRange1Clicked() { SetRangeAngerLevel(1); Debug.Log("Anger Range Upgrade 1 Clicked!"); }
-    private void OnAngerRange2Clicked() { SetRangeAngerLevel(2); Debug.Log("Anger Range Upgrade 2 Clicked!"); }
-    private void OnSadDash1Clicked() { SetDashSadLevel(1); Debug.Log("Sad Dash Upgrade 1 Clicked!"); }
-    private void OnSadDash2Clicked() { SetDashSadLevel(2); Debug.Log("Sad Dash Upgrade 2 Clicked!"); }
-    private void OnAngerDash1Clicked() { SetDashAngerLevel(1); Debug.Log("Anger Dash Upgrade 1 Clicked!"); }
-    private void OnAngerDash2Clicked() { SetDashAngerLevel(2); Debug.Log("Anger Dash Upgrade 2 Clicked!"); }
+    // ====== Skill Tree Clicks ======
+    // MELEE (ANGER)
+    private void OnAngerMelee1Clicked()
+    {
+        SetMeleeAngerLevel(1);
+        Debug.Log("Anger Melee Upgrade 1 Clicked!");
+    }
+    private void OnAngerMelee2Clicked()
+    {
+        SetMeleeAngerLevel(2);
+        Debug.Log("Anger Melee Upgrade 2 Clicked!");
+    }
+
+    // MELEE (LOVE)
+    private void OnLoveMelee1Clicked()
+    {
+        SetMeleeLoveLevel(1);
+        Debug.Log("Love Melee Upgrade 1 Clicked!");
+    }
+    private void OnLoveMelee2Clicked()
+    {
+        SetMeleeLoveLevel(2);
+        Debug.Log("Love Melee Upgrade 2 Clicked!");
+    }
+
+    // RANGE (JOY)
+    private void OnJoyRange1Clicked()
+    {
+        SetRangeJoyLevel(1);
+        Debug.Log("Joy Range Upgrade 1 Clicked!");
+    }
+    private void OnJoyRange2Clicked()
+    {
+        SetRangeJoyLevel(2);
+        Debug.Log("Joy Range Upgrade 2 Clicked!");
+    }
+
+    // RANGE (ANGER)
+    private void OnAngerRange1Clicked()
+    {
+        SetRangeAngerLevel(1);
+        Debug.Log("Anger Range Upgrade 1 Clicked!");
+    }
+    private void OnAngerRange2Clicked()
+    {
+        SetRangeAngerLevel(2);
+        Debug.Log("Anger Range Upgrade 2 Clicked!");
+    }
+
+    // DASH (SAD / ANGER)
+    private void OnSadDash1Clicked()
+    {
+        SetDashSadLevel(1);
+        Debug.Log("Sad Dash Upgrade 1 Clicked!");
+    }
+    private void OnSadDash2Clicked()
+    {
+        SetDashSadLevel(2);
+        Debug.Log("Sad Dash Upgrade 2 Clicked!");
+    }
+    private void OnAngerDash1Clicked()
+    {
+        SetDashAngerLevel(1);
+        Debug.Log("Anger Dash Upgrade 1 Clicked!");
+    }
+    private void OnAngerDash2Clicked()
+    {
+        SetDashAngerLevel(2);
+        Debug.Log("Anger Dash Upgrade 2 Clicked!");
+    }
 }
