@@ -17,6 +17,9 @@ public class AiChasePlayerState : AiState
 
     public void Update(AiAgent agent)
     {
+        if (agent.isDead)
+            return;
+
         if (!agent.enabled) return;
 
         // Get health/status

@@ -75,6 +75,12 @@ public class BasicEnemyHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentHealth <= 0 && !agent.isDead)
+        {
+            agent.stateMachine.ChangeState(AiStateId.Death);
+            return; // stop processing other states
+        }
+
         blinkTimer -= Time.deltaTime;
         float lerp = Mathf.Clamp01(blinkTimer / blinkDuration);
         float intensity = (lerp * blinkIntesnity) + 1.0f;

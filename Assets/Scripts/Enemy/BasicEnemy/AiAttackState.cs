@@ -43,6 +43,9 @@ public class AiAttackState : AiState
 
     public void Update(AiAgent agent)
     {
+        if (agent.isDead)
+            return;
+
         // Get health/status
         BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
         if (health != null)
