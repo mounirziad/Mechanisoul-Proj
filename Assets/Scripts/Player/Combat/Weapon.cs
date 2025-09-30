@@ -67,7 +67,6 @@ public class Weapon : MonoBehaviour
                  );
                 playerManager.ApplyLifesteal(damage);
             }
-
         }
     }
 
