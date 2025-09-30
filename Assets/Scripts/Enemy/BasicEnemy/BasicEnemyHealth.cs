@@ -27,6 +27,9 @@ public class BasicEnemyHealth : MonoBehaviour
     public bool IsStunned() => isStunned;
     public bool IsSlowed() => isSlowed;
 
+    public event System.Action OnDeath;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -162,6 +165,9 @@ public class BasicEnemyHealth : MonoBehaviour
 
     private void Die(Vector3 direction)
     {
+        if (OnDeath != null)
+            OnDeath.Invoke();
+
         AiDeathState deathState = agent.stateMachine.GetState(AiStateId.Death) as AiDeathState;
         deathState.direction = direction;
         agent.stateMachine.ChangeState(AiStateId.Death);

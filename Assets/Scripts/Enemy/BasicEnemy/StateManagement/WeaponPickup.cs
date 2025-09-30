@@ -4,19 +4,20 @@ public class WeaponPickup : MonoBehaviour
 {
     public RaycastWeapon weaponFab; // prefab reference
 
+    public bool isTaken = false;   
+
     private void OnTriggerEnter(Collider other)
     {
         AiWeapons aiWeapons = other.GetComponentInParent<AiWeapons>();
-        if (aiWeapons && !aiWeapons.HasWeapon())
+        if (aiWeapons && !aiWeapons.HasWeapon() && !isTaken)
         {
-            // Instantiate once here
+            isTaken = true; // mark as taken
+
             RaycastWeapon newWeapon = Instantiate(weaponFab);
 
-            // Equip the same instance
             aiWeapons.Equip(newWeapon);
 
-            // Destroy pickup
-            Destroy(gameObject);
+            Destroy(gameObject); // remove pickup after taking it
         }
     }
 }

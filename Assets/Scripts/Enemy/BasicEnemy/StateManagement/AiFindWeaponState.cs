@@ -5,6 +5,7 @@ public class AiFindWeaponState : AiState
     public void Enter(AiAgent agent)
     {
         WeaponPickup pickup = FindClosestWeapon(agent);
+
         if (pickup != null)
         {
             if (agent.navMeshAgent != null && agent.navMeshAgent.isActiveAndEnabled && agent.navMeshAgent.isOnNavMesh)
@@ -12,14 +13,11 @@ public class AiFindWeaponState : AiState
                 agent.navMeshAgent.destination = pickup.transform.position;
                 agent.navMeshAgent.speed = 5;
             }
-            else
-            {
-                Debug.LogWarning("NavMeshAgent not active or not on NavMesh — cannot set destination.");
-            }
         }
         else
         {
-            Debug.LogWarning("No weapon pickups found!");
+            Debug.LogWarning("No available weapons found — returning to Idle.");
+            agent.stateMachine.ChangeState(AiStateId.Idle); // <-- push back to Idle
         }
     }
 
@@ -32,7 +30,14 @@ public class AiFindWeaponState : AiState
 
     public void Update(AiAgent agent) 
     {
-        if (agent.weapons.HasWeapon()) 
+        WeaponPickup pickup = FindClosestWeapon(agent);
+        if (pickup == null)
+        {
+            agent.stateMachine.ChangeState(AiStateId.Idle);
+            return;
+        }
+
+        if (agent.weapons.HasWeapon())
         {
             agent.weapons.ActivateWeapon();
         }
@@ -40,7 +45,7 @@ public class AiFindWeaponState : AiState
         if (agent.weapons.HasWeapon())
         {
             float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
-            if (distanceToPlayer < 15f) // arbitrary attack range
+            if (distanceToPlayer < 15f)
             {
                 agent.stateMachine.ChangeState(AiStateId.Attack);
             }
@@ -55,6 +60,8 @@ public class AiFindWeaponState : AiState
 
         foreach (var weapon in weapons)
         {
+            if (weapon.isTaken) continue; // skip taken weapons
+
             float distanceToWeapon = Vector3.Distance(agent.transform.position, weapon.transform.position);
             if (distanceToWeapon < closestDistance)
             {
