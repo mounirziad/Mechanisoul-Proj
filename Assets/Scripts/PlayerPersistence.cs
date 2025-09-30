@@ -31,10 +31,19 @@ public class PlayerPersistence : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        PlayerLocomotion locomotion = GetComponent<PlayerLocomotion>();
-        if (locomotion != null)
+        StartCoroutine(MoveToSpawnPoint());
+    }
+
+    private System.Collections.IEnumerator MoveToSpawnPoint()
+    {
+        // Wait one frame so all scene objects load
+        yield return null;
+
+        GameObject spawnPoint = GameObject.FindWithTag("PlayerSpawn");
+        if (spawnPoint != null)
         {
-            locomotion.RefreshReferences();
+            transform.position = spawnPoint.transform.position;
+            transform.rotation = spawnPoint.transform.rotation;
         }
     }
 }
