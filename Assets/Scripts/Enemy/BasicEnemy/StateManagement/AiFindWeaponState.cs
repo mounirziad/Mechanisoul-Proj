@@ -7,8 +7,15 @@ public class AiFindWeaponState : AiState
         WeaponPickup pickup = FindClosestWeapon(agent);
         if (pickup != null)
         {
-            agent.navMeshAgent.destination = pickup.transform.position;
-            agent.navMeshAgent.speed = 5;
+            if (agent.navMeshAgent != null && agent.navMeshAgent.isActiveAndEnabled && agent.navMeshAgent.isOnNavMesh)
+            {
+                agent.navMeshAgent.destination = pickup.transform.position;
+                agent.navMeshAgent.speed = 5;
+            }
+            else
+            {
+                Debug.LogWarning("NavMeshAgent not active or not on NavMesh — cannot set destination.");
+            }
         }
         else
         {

@@ -9,6 +9,7 @@ public class UpgradeHandler : MonoBehaviour
     [SerializeField] int meleeSadnessLvl = 0;
     [SerializeField] int meleeLoveLvl = 0;
     [SerializeField] int meleeFearLvl = 0;
+    [SerializeField] int meleeJoyLvl = 0;
 
     [Header(" DASH LEVELS (0..maxLvl) ")]
     [SerializeField] int dashAngerLvl = 0;
@@ -20,7 +21,7 @@ public class UpgradeHandler : MonoBehaviour
 
     [Header("Tables (index by level)")]
     // Melee
-    float[] meleeAOE, meleeSlow, meleeSlowLength, meleeLifeSteal, meleeStun;
+    float[] meleeAOE, meleeSlow, meleeSlowLength, meleeLifeSteal, meleeStun, meleeDMG;
     // Dash
     float[] dashAngerAOE, dashSadSlow, dashSadSlowLen;
     // Ranged
@@ -101,6 +102,7 @@ public class UpgradeHandler : MonoBehaviour
         meleeSlowLength = new float[maxLvl + 1];
         meleeLifeSteal = new float[maxLvl + 1];
         meleeStun = new float[maxLvl + 1];
+        meleeDMG = new float[maxLvl + 1];
 
         dashAngerAOE = new float[maxLvl + 1];
         dashSadSlow = new float[maxLvl + 1];
@@ -119,6 +121,7 @@ public class UpgradeHandler : MonoBehaviour
         FillLinear(meleeSlowLength, 0f, 2.00f); // +2s/lvl
         FillLinear(meleeLifeSteal, 0f, 0.10f); // +10%/lvl
         FillLinear(meleeStun, 0f, 0.50f); // +0.5s/lvl
+        FillLinear(meleeDMG, 0f, 2.00f); // +2 damage/lvl   
 
         // ---- DASH ----
         FillLinear(dashAngerAOE, 0f, 0.05f); // +5%/lvl
