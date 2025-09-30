@@ -581,6 +581,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""cb655e8b-0065-4568-ac19-7f7225b65027"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""80783744-8d66-4282-8188-a219b9dafcc0"",
                     ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
