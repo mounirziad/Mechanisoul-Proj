@@ -11,9 +11,10 @@ public class AiAttackState : AiState
     public void Enter(AiAgent agent)
     {
 
-        if (agent.navMeshAgent != null)
+        if (agent.navMeshAgent != null && agent.navMeshAgent.isActiveAndEnabled && agent.navMeshAgent.isOnNavMesh)
+        {
             agent.navMeshAgent.isStopped = true;
-
+        }
         Animator anim = agent.weapons.GetComponent<Animator>();
         if (anim != null && !hasAimed)
         {
@@ -26,9 +27,17 @@ public class AiAttackState : AiState
     public void Exit(AiAgent agent)
     {
         Animator anim = agent.weapons.GetComponent<Animator>();
-        if (agent.navMeshAgent != null)
+
+        if (agent.navMeshAgent != null && agent.navMeshAgent.isActiveAndEnabled && agent.navMeshAgent.isOnNavMesh)
+        {
             agent.navMeshAgent.isStopped = false;
-        anim.SetBool("IsAiming", false);
+        }
+
+        if (anim != null)
+        {
+            anim.SetBool("IsAiming", false);
+        }
+
         hasAimed = false; // reset for next time
     }
 
