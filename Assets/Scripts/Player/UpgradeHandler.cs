@@ -138,8 +138,8 @@ public class UpgradeHandler : MonoBehaviour
 
     // ---------- Public (UI) API ----------
     // Melee
-    public void MeleeAngerUp() { meleeAngerLvl = ClampUp(meleeAngerLvl); PushMelee(); }
-    public void MeleeAngerDown() { meleeAngerLvl = ClampDown(meleeAngerLvl); PushMelee(); }
+    public void MeleeAngerUp() { meleeAngerLvl = ClampUp(meleeAngerLvl); PushMelee(); PushRanged(); }
+    public void MeleeAngerDown() { meleeAngerLvl = ClampDown(meleeAngerLvl); PushMelee(); PushRanged(); }
     public void MeleeSadUp() { meleeSadnessLvl = ClampUp(meleeSadnessLvl); PushMelee(); }
     public void MeleeSadDown() { meleeSadnessLvl = ClampDown(meleeSadnessLvl); PushMelee(); }
     public void MeleeLoveUp() { meleeLoveLvl = ClampUp(meleeLoveLvl); PushMelee(); }
@@ -193,13 +193,19 @@ public class UpgradeHandler : MonoBehaviour
     {
         if (!playerCombat) return;
 
+        // JOY x MELEE-ANGER synergy: turn on Joy VFX when both are > 0
+        bool joyExplode = rangedJoyLvl > 0 && meleeAngerLvl > 0;
+
         var mods = new RangedModifiers
         {
             joyFireRateMultiplier = joyFireRateMult[Mathf.Clamp(rangedJoyLvl, 0, maxLvl)],
             joyDamageMultiplier = joyDamageMult[Mathf.Clamp(rangedJoyLvl, 0, maxLvl)],
+            joyExplosionOnHit = joyExplode,
+
             angerAOEPercent = angerAOEPercent[Mathf.Clamp(rangedAngerLvl, 0, maxLvl)],
             angerExplosionOnHit = rangedAngerLvl > 0
         };
+
         playerCombat.SetRangedUpgrades(mods);
     }
 }

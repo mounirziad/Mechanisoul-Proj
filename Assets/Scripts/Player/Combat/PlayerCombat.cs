@@ -24,6 +24,9 @@ public class PlayerCombat : MonoBehaviour
     private float lastShotTime = -999f;
     private RangedModifiers rangedMods;    // set by UpgradeHandler
 
+    [Header("Ranged VFX Prefabs")]
+    public GameObject joyExplosionPrefab;   // joy vfx
+
     // Melee & input
     public List<AttackSO> combo;
     float lastClickedTime, lastComboEnd;
