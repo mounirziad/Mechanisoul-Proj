@@ -62,12 +62,17 @@ public class PlayerLocomotion : MonoBehaviour
         playerManager = GetComponent<PlayerManager>();
         inputManager = GetComponent<InputManager>();
         playerRigidbody = GetComponent<Rigidbody>();
-        cameraObject = Camera.main.transform;
+        cameraObject = Camera.main != null ? Camera.main.transform : null;
         playerCombat = GetComponent<PlayerCombat>();
     }
-
+    public void RefreshReferences()
+    {
+        cameraObject = Camera.main != null ? Camera.main.transform : null;
+    }
     public void HandleAllMovement()
     {
+        if (cameraObject == null) RefreshReferences();
+
         HandleFallingAndLanding();
         HandleDodgeCooldown(); 
 
@@ -116,6 +121,9 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (cameraObject == null) return;
+
+
         if (isJumping) { return; }
 
         if (playerCombat != null && playerCombat.IsAttacking())
@@ -159,7 +167,10 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleRotation()
     {
-        if(isJumping) { return; }
+        if (cameraObject == null) return;
+
+
+        if (isJumping) { return; }
 
         Vector3 targetDirection = Vector3.zero;
 
