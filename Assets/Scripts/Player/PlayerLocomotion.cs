@@ -55,6 +55,9 @@ public class PlayerLocomotion : MonoBehaviour
     private bool isAttackingWithLunge = false;
     private float attackMoveTimer = 0f;
     private Vector3 attackMoveDirection;
+    private float attackMoveStartTime;
+    private AttackSO currentAttackData;
+    private float originalMoveDistance;
 
     private void Awake()
     {
@@ -101,19 +104,59 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleAttackMovementLock()
     {
-        // Only apply the attack lunge if desired
+        // Apply smooth attack movement with proper curves
         if (isAttackingWithLunge)
         {
             attackMoveTimer -= Time.deltaTime;
-            if (attackMoveTimer > 0)
+            
+            if (attackMoveTimer > 0 && currentAttackData != null)
             {
-                playerRigidbody.MovePosition(transform.position + attackMoveDirection * attackMoveSpeed * Time.deltaTime);
+                // Calculate progress through the attack movement
+                float elapsedTime = Time.time - attackMoveStartTime;
+                float progress = Mathf.Clamp01(elapsedTime / currentAttackData.moveDuration);
+                
+                // Use animation curve for smooth movement falloff
+                float curveValue = currentAttackData.moveCurve.Evaluate(progress);
+                float currentSpeed = currentAttackData.moveSpeed * curveValue;
+                
+                // Apply movement
+                Vector3 movement = attackMoveDirection * currentSpeed * Time.deltaTime;
+                playerRigidbody.MovePosition(transform.position + movement);
             }
             else
             {
                 isAttackingWithLunge = false;
+                currentAttackData = null;
             }
         }
+    }
+
+    public void StartAttackLunge(Vector3 direction, AttackSO attackData)
+    {
+        if (attackData == null) return;
+        
+        // Always reset the attack lunge state for new attacks
+        isAttackingWithLunge = true;
+        attackMoveDirection = direction.normalized;
+        attackMoveTimer = attackData.moveDuration;
+        attackMoveStartTime = Time.time;
+        currentAttackData = attackData;
+        originalMoveDistance = attackData.moveDistance;
+        
+        // Instantly snap to face attack direction for responsive feel
+        if (attackData.rotateTowardsTarget && direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+        
+        Debug.Log($"Started attack lunge: Distance={attackData.moveDistance}, Speed={attackData.moveSpeed}, Duration={attackData.moveDuration}");
+    }
+
+    public void ForceStopAttackLunge()
+    {
+        isAttackingWithLunge = false;
+        attackMoveTimer = 0f;
+        currentAttackData = null;
     }
 
 
@@ -123,13 +166,28 @@ public class PlayerLocomotion : MonoBehaviour
     {
         if (cameraObject == null) return;
 
-
         if (isJumping) { return; }
 
+        Vector3 currentVelocity = playerRigidbody.linearVelocity;
+
+        // Allow limited movement during attack for more fluid combat
         if (playerCombat != null && playerCombat.IsAttacking())
         {
-            // Freeze movement during attack
-            playerRigidbody.linearVelocity = new Vector3(0, playerRigidbody.linearVelocity.y, 0);
+            // Instead of completely freezing, allow slow movement during attacks
+            Vector3 limitedMovement = Vector3.zero;
+            
+            // Only allow movement if not in lunge phase
+            if (!isAttackingWithLunge)
+            {
+                limitedMovement = cameraObject.forward * inputManager.verticalInput * 0.3f;
+                limitedMovement += cameraObject.right * inputManager.horizontalInput * 0.3f;
+                limitedMovement.Normalize();
+                limitedMovement.y = 0;
+                limitedMovement *= walkingSpeed * 0.5f; // Slow movement during attacks
+            }
+            
+            Vector3 targetVelocity = new Vector3(limitedMovement.x, currentVelocity.y, limitedMovement.z);
+            playerRigidbody.linearVelocity = targetVelocity;
             return;
         }
 
@@ -158,10 +216,8 @@ public class PlayerLocomotion : MonoBehaviour
             moveDirection *= walkingSpeed;
         }
 
-        Vector3 currentVelocity = playerRigidbody.linearVelocity;
-        Vector3 targetVelocity = new Vector3(moveDirection.x, currentVelocity.y, moveDirection.z);
-
-        playerRigidbody.linearVelocity = targetVelocity;
+        Vector3 finalTargetVelocity = new Vector3(moveDirection.x, currentVelocity.y, moveDirection.z);
+        playerRigidbody.linearVelocity = finalTargetVelocity;
     }
 
 
@@ -331,6 +387,15 @@ public class PlayerLocomotion : MonoBehaviour
 
         if (dodgeCooldownTimer > 0)
             return;
+        
+        // Check if we can cancel attack with dodge
+        if (playerCombat != null && playerCombat.IsAttacking())
+        {
+            if (!playerCombat.CanDodgeCancel())
+                return;
+            else
+                playerCombat.CancelAttack(); // Cancel the current attack
+        }
 
         // Determine dodge direction based on input
         if (inputManager.moveAmount > 0.1f)

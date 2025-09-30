@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,6 +35,14 @@ public class PlayerCombat : MonoBehaviour
     private float minAnimationPlayTime = 0.4f;
     private float attackStartTime;
     private bool attackQueued = false;
+    
+    [Header("Input Buffer Settings")]
+    public float inputBufferTime = 0.3f;    // How long to buffer attack inputs
+    private float lastAttackInputTime = -999f;
+    
+    [Header("Animation Cancel Settings")]
+    public float earlyComboWindow = 0.6f;   // When in animation you can start next combo (0.6 = 60% through)
+    public float dodgeCancelWindow = 0.4f;  // When you can cancel attack with dodge (0.4 = 40% through)
 
     public bool isAiming = false;
     private InputManager inputManager;
@@ -149,15 +157,47 @@ public class PlayerCombat : MonoBehaviour
         inputManager.shootInput = false;
     }
 
-    // Melee (unchanged) 
+    // Melee (improved)
     private void OnAttackPerformed(InputAction.CallbackContext ctx)
     {
         if (isAiming) { inputManager.shootInput = true; return; }
-        if (CanAttack()) Attack();
-        else if (isAttacking) attackQueued = true;
+        
+        lastAttackInputTime = Time.time;
+        
+        if (CanAttack()) 
+        {
+            Attack();
+        }
+        else if (isAttacking) 
+        {
+            // Buffer the attack input
+            attackQueued = true;
+        }
     }
 
     bool CanAttack() => !isAttacking && !isAiming && Time.time - lastComboEnd > 0.2f;
+
+    // Check for buffered attacks during animation
+    void ProcessQueuedAttack()
+    {
+        if (!attackQueued || isAttacking) return;
+        
+        // Check if we're in the combo window
+        if (Time.time - attackStartTime >= minAnimationPlayTime)
+        {
+            float norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            if (norm >= earlyComboWindow || norm > 0.95f)
+            {
+                Attack();
+            }
+        }
+        
+        // Clear old buffered inputs
+        if (Time.time - lastAttackInputTime > inputBufferTime)
+        {
+            attackQueued = false;
+        }
+    }
 
     private void SetAttackTarget()
     {
@@ -187,6 +227,7 @@ public class PlayerCombat : MonoBehaviour
             weapon.damage = combo[comboCounter].damage;
 
             SetAttackTarget();
+            StartAttackMovement();
             isAttacking = true;
             attackStartTime = Time.time;
             comboCounter++;
@@ -196,27 +237,84 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    void StartAttackMovement()
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        if (playerLoco != null)
+        {
+            Vector3 attackDirection = transform.forward;
+            
+            // If we have a target, move towards it
+            if (currentTarget != null)
+            {
+                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
+                directionToTarget.y = 0;
+                attackDirection = directionToTarget;
+                
+                // Rotate towards target for more dynamic combat
+                transform.rotation = Quaternion.LookRotation(attackDirection);
+            }
+            
+            // Get the correct attack data for the current attack
+            // comboCounter has already been incremented, so we need the previous index
+            int currentAttackIndex = comboCounter - 1;
+            if (currentAttackIndex < 0) currentAttackIndex = combo.Count - 1;
+            
+            AttackSO currentAttackData = combo[currentAttackIndex];
+            
+            // Force stop any existing attack movement and start new one
+            playerLoco.ForceStopAttackLunge();
+            playerLoco.StartAttackLunge(attackDirection, currentAttackData);
+            
+            Debug.Log($"Starting attack {currentAttackIndex} with move distance: {currentAttackData.moveDistance}");
+        }
+    }
+
     void CheckAttackCompletion()
     {
         if (!isAttacking) return;
         float norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
-        if (Time.time - attackStartTime >= minAnimationPlayTime && norm > 0.7f)
-            if (attackQueued) isAttacking = false;
+        
+        // Allow early combo transitions for fluid combat
+        if (Time.time - attackStartTime >= minAnimationPlayTime && norm >= earlyComboWindow)
+        {
+            if (attackQueued) 
+            {
+                isAttacking = false; // Allow next attack to start
+                return;
+            }
+        }
 
+        // Complete attack when animation is nearly finished
         if (norm > 0.95f && anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
             CompleteAttack();
-    }
-
-    void ProcessQueuedAttack()
-    {
-        if (attackQueued && !isAttacking && Time.time - attackStartTime >= minAnimationPlayTime) Attack();
     }
 
     void CompleteAttack()
     {
         isAttacking = false;
-        if (!attackQueued) Invoke(nameof(EndCombo), 0.5f);
+        
+        // Stop attack movement when attack completes (unless combo continues)
+        if (!attackQueued)
+        {
+            var playerLoco = GetComponent<PlayerLocomotion>();
+            if (playerLoco != null)
+            {
+                playerLoco.ForceStopAttackLunge();
+            }
+            Invoke(nameof(EndCombo), 0.5f);
+        }
+        
         currentTarget = null;
+    }
+
+    // Allow dodge canceling during attacks for anime-style mobility
+    public bool CanDodgeCancel()
+    {
+        if (!isAttacking) return true;
+        
+        float norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        return norm >= dodgeCancelWindow;
     }
 
     public bool IsAttacking() => isAttacking;
@@ -234,5 +332,19 @@ public class PlayerCombat : MonoBehaviour
     // Animation events
     public void OnAnimationEnableWeapon() { if (weapon != null) weapon.EnableTriggerBox(); }
     public void OnAnimationDisableWeapon() { if (weapon != null) weapon.DisableTriggerBox(); }
-    public void CancelAttack() { isAttacking = false; attackQueued = false; anim.Play("Idle"); currentTarget = null; }
+    
+    public void CancelAttack() 
+    { 
+        isAttacking = false; 
+        attackQueued = false; 
+        anim.Play("Idle"); 
+        currentTarget = null;
+        
+        // Stop any attack movement
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        if (playerLoco != null)
+        {
+            playerLoco.ForceStopAttackLunge();
+        }
+    }
 }
