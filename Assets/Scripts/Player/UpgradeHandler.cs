@@ -31,6 +31,7 @@ public class UpgradeHandler : MonoBehaviour
     [SerializeField] bool enableHotkeys = false; // default off
     [SerializeField] bool allowNumpad = true;
     [SerializeField] Material[] vfxMaterials;
+    [SerializeField] GameObject[] impactVFXPrefabs;
 
 
     // Targets (resolve by tag or drag in via Inspector)
@@ -38,6 +39,7 @@ public class UpgradeHandler : MonoBehaviour
     [SerializeField] DashAbility dashAbility;       // dash sink
     [SerializeField] PlayerCombat playerCombat;     // ranged sink
     [SerializeField] MeshTrail meshTrail;
+    [SerializeField] Weapon weaponScript;
 
     void Awake()
     {
@@ -45,7 +47,7 @@ public class UpgradeHandler : MonoBehaviour
         FillTables();
 
         // Fallback: find by tag if not set via Inspector
-        if (!playerManager || !dashAbility || !playerCombat)
+        if (!playerManager || !dashAbility || !playerCombat || !meshTrail || !weaponScript)
         {
             var player = GameObject.FindGameObjectWithTag("Player");
             if (player)
@@ -54,6 +56,7 @@ public class UpgradeHandler : MonoBehaviour
                 if (!dashAbility) dashAbility = player.GetComponent<DashAbility>();
                 if (!playerCombat) playerCombat = player.GetComponent<PlayerCombat>();
                 if (!meshTrail) meshTrail = player.GetComponent<MeshTrail>();
+                if (!weaponScript) weaponScript = player.GetComponentInChildren<Weapon>();
             }
         }
 
@@ -142,14 +145,90 @@ public class UpgradeHandler : MonoBehaviour
 
     // ---------- Public (UI) API ----------
     // Melee
-    public void MeleeAngerUp() { meleeAngerLvl = ClampUp(meleeAngerLvl); PushMelee(); PushRanged(); }
-    public void MeleeAngerDown() { meleeAngerLvl = ClampDown(meleeAngerLvl); PushMelee(); PushRanged(); }
-    public void MeleeSadUp() { meleeSadnessLvl = ClampUp(meleeSadnessLvl); PushMelee(); }
-    public void MeleeSadDown() { meleeSadnessLvl = ClampDown(meleeSadnessLvl); PushMelee(); }
-    public void MeleeLoveUp() { meleeLoveLvl = ClampUp(meleeLoveLvl); PushMelee(); }
-    public void MeleeLoveDown() { meleeLoveLvl = ClampDown(meleeLoveLvl); PushMelee(); }
-    public void MeleeFearUp() { meleeFearLvl = ClampUp(meleeFearLvl); PushMelee(); }
-    public void MeleeFearDown() { meleeFearLvl = ClampDown(meleeFearLvl); PushMelee(); }
+    public void MeleeAngerUp()
+    {
+        meleeAngerLvl = ClampUp(meleeAngerLvl); PushMelee(); PushRanged();
+
+        for (int i = 0; i < impactVFXPrefabs.Length; i++)
+        {
+            if (impactVFXPrefabs[i].name == "Anger Impact")
+            {
+                weaponScript.hitVFX = impactVFXPrefabs[i];
+            }
+        }
+    }
+    public void MeleeAngerDown()
+    {
+        meleeAngerLvl = ClampDown(meleeAngerLvl); PushMelee(); PushRanged();
+
+        if (meleeAngerLvl == 0)
+        {
+            weaponScript.hitVFX = null;
+        }
+    }
+
+    public void MeleeSadUp()
+    {
+        meleeSadnessLvl = ClampUp(meleeSadnessLvl); PushMelee();
+        for (int i = 0; i < impactVFXPrefabs.Length; i++)
+        {
+            if (impactVFXPrefabs[i].name == "Sadness Impact")
+            {
+                weaponScript.hitVFX = impactVFXPrefabs[i];
+            }
+        }
+    }
+    public void MeleeSadDown()
+    {
+        meleeSadnessLvl = ClampDown(meleeSadnessLvl); PushMelee();
+
+        if (meleeSadnessLvl == 0)
+        {
+            weaponScript.hitVFX = null;
+        }
+    }
+    public void MeleeLoveUp()
+    {
+        meleeLoveLvl = ClampUp(meleeLoveLvl); PushMelee();
+
+        for (int i = 0; i < impactVFXPrefabs.Length; i++)
+        {
+            if (impactVFXPrefabs[i].name == "Love Impact")
+            {
+                weaponScript.hitVFX = impactVFXPrefabs[i];
+            }
+        }
+    }
+    public void MeleeLoveDown()
+    {
+        meleeLoveLvl = ClampDown(meleeLoveLvl); PushMelee();
+
+        if (meleeLoveLvl == 0)
+        {
+            weaponScript.hitVFX = null;
+        }
+    }
+    public void MeleeFearUp()
+    {
+        meleeFearLvl = ClampUp(meleeFearLvl); PushMelee();
+
+        for (int i = 0; i < impactVFXPrefabs.Length; i++)
+        {
+            if (impactVFXPrefabs[i].name == "Fear Impact")
+            {
+                weaponScript.hitVFX = impactVFXPrefabs[i];
+            }
+        }
+    }
+    public void MeleeFearDown()
+    {
+        meleeFearLvl = ClampDown(meleeFearLvl); PushMelee();
+
+        if (meleeFearLvl == 0)
+        {
+            weaponScript.hitVFX = null;
+        }
+    }
 
     // Dash
     public void DashAngerUp()

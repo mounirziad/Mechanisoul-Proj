@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
     public float damage;
     public float attackRange;
 
-    [SerializeField] private GameObject hitVFX;
+    public GameObject hitVFX;
     private BoxCollider triggerBox;
 
     public Camera cam;

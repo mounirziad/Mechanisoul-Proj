@@ -1,10 +1,22 @@
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class TempGameManager : MonoBehaviour
 {
     [SerializeField] private GameObject UI;
+    [SerializeField] UpgradeUIScript upgradeUIScript;
+    private bool pauseActive = false;
+    private bool upgradeUIActive = false;
+
+    void Awake()
+    {
+        upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+        pauseActive = false;
+    }
+
     public void OnArtScene(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -30,24 +42,32 @@ public class TempGameManager : MonoBehaviour
 
     public void OnExitGame(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && pauseActive == false)
         {
-            Application.Quit();
+            upgradeUIScript.pauseMenu.style.display = DisplayStyle.Flex;
+            upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+            pauseActive = true;
+        }
+        else if (context.performed && pauseActive == true)
+        {
+            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+            pauseActive = false;
         }
     }
 
     public void OnUIActivate(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && upgradeUIActive == false)
         {
-            if (!UI.activeSelf)
-            {
-                UI.SetActive(true);
-            }
-            else
-            {
-                UI.SetActive(false);
-            }
+            upgradeUIScript.skillMenu.style.display = DisplayStyle.Flex;
+            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+            upgradeUIActive = true;
+            pauseActive = false;
+        }
+        else if (context.performed && upgradeUIActive == true)
+        {
+            upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+            upgradeUIActive = false;
         }
     }
 }
