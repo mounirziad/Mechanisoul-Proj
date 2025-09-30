@@ -17,7 +17,6 @@ public class BasicEnemyHealth : MonoBehaviour
     
     private bool isSlowed = false;
     private float slowTimer = 0f;
-    private float slowAmount = 0f;
 
     private bool isStunned = false;
     private float stunTimer = 0f;
@@ -52,19 +51,22 @@ public class BasicEnemyHealth : MonoBehaviour
     public void ApplyModifiers(float slowAmount, float slowLength, float stunLength)
     {
 
-        Debug.Log("We Out here applying effects n shit");
+        
         // Apply slow if applicable
-        if (slowLength > 0 && slowAmount > 0)
+        if (!isSlowed)
         {
-            this.slowAmount = slowAmount;
-            this.slowTimer = slowLength;
+            navAgent.speed -= baseSpeed * slowAmount; 
+
+            slowTimer = slowLength;
             isSlowed = true;
         }
 
         // Apply stun if applicable
-        if (stunLength > 0)
+        if (!isStunned)
         {
-            this.stunTimer = stunLength;
+            navAgent.speed = 0f;
+
+            stunTimer = stunLength;
             isStunned = true;
         }
     }
@@ -78,35 +80,37 @@ public class BasicEnemyHealth : MonoBehaviour
         float intensity = (lerp * blinkIntesnity) + 1.0f;
         agent.skinnedMeshRenderer.material.color = Color.white * intensity;
 
+        //Debug.Log($"current speed: {navAgent.speed}");
+
+
+
         if (navAgent != null)
         {
             if (isStunned)
             {
                 stunTimer -= Time.deltaTime;
-                navAgent.speed = 0f;
 
                 if (stunTimer <= 0f)
                 {
-                    navAgent.speed = 5f;
+                    navAgent.speed = baseSpeed;
                     isStunned = false;
+
                     // Return AI to Attack after stun
                     agent.stateMachine.ChangeState(AiStateId.Attack);
                 }
             }
-            else if (isSlowed)
+            
+            if (isSlowed)
             {
                 slowTimer -= Time.deltaTime;
-                navAgent.speed = baseSpeed * (1f - slowAmount);
 
                 if (slowTimer <= 0f)
                 {
                     isSlowed = false;
+                    navAgent.speed = baseSpeed;
                 }
             }
-            else
-            {
-                navAgent.speed = baseSpeed;
-            }
+            
         }
     }
 

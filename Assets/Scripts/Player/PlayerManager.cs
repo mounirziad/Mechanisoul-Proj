@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour
     InputManager inputManager;
     PlayerLocomotion playerLocomotion;
     Animator animator;
+    PlayerHealth playerHealth;
     public bool isInteracting;
 
     [Header("Dash / Abilities")]
@@ -19,6 +20,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
+        playerHealth = gameObject.GetComponent<PlayerHealth>();
         animator = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
@@ -77,6 +79,12 @@ public class PlayerManager : MonoBehaviour
     public float GetStunLength()
     {
         return stunLength;
+    }
+
+    public void ApplyLifesteal(float damage)
+    {
+        playerHealth.Heal(damage * lifeStealAmount);
+        Debug.Log($"healed {damage * lifeStealAmount} hp");
     }
 
 }
