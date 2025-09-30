@@ -185,7 +185,7 @@ public class UpgradeHandler : MonoBehaviour
         float slow = dashSadSlow[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)];
         float slowL = dashSadSlowLen[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)];
 
-        dashAbility.SetDashParams(aoe, slow, slowL);  // single-class setter
+        dashAbility.SetUpgrades(aoe, slow, slowL);
         // If you still have older PlayerManager calling SetUpgrades(...), that will also work due to legacy shim.
     }
 
