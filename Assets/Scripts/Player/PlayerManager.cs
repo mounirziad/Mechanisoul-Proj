@@ -51,10 +51,8 @@ public class PlayerManager : MonoBehaviour
         this.slowLength = slowLength;
         this.lifeStealAmount = lifeStealAmount;
         this.stunLength = stunLength;
-
-        // Forward to dash module
-        if (dash) dash.SetUpgrades(aoeAmount, slowAmount, slowLength, lifeStealAmount, stunLength);
     }
+
 
     public float GetAOEAmount()
     {
