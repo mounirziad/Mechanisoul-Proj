@@ -1,9 +1,23 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-
+using System;
 public class UpgradeHandler : MonoBehaviour
 {
+
+
+    // === UI/Combos observers ===
+    public event Action LevelsChanged;
+
+    public int MeleeAngerLevel => meleeAngerLvl;
+    public int RangedJoyLevel => rangedJoyLvl;
+
+    // True only while both are > 0 right now
+    public bool HasCombo_AngerMelee_JoyRanged => meleeAngerLvl > 0 && rangedJoyLvl > 0;
+
+    void RaiseLevelsChanged() => LevelsChanged?.Invoke();
+
+
     [Header(" MELEE LEVELS (0..maxLvl) ")]
     [SerializeField] int meleeAngerLvl = 0;
     [SerializeField] int meleeSadnessLvl = 0;
@@ -327,7 +341,7 @@ public class UpgradeHandler : MonoBehaviour
     int ClampDown(int v) => Mathf.Clamp(v - 1, 0, maxLvl);
 
     // ---------- Push ----------
-    void PushAll() { PushMelee(); PushDash(); PushRanged(); }
+    void PushAll() { PushMelee(); PushDash(); PushRanged(); RaiseLevelsChanged(); }
 
     void PushMelee()
     {
@@ -338,7 +352,9 @@ public class UpgradeHandler : MonoBehaviour
             meleeSlowLength[Mathf.Clamp(meleeSadnessLvl, 0, maxLvl)],
             meleeLifeSteal[Mathf.Clamp(meleeLoveLvl, 0, maxLvl)],
             meleeStun[Mathf.Clamp(meleeFearLvl, 0, maxLvl)]
+
         );
+        RaiseLevelsChanged();
     }
 
     void PushDash()
@@ -350,7 +366,7 @@ public class UpgradeHandler : MonoBehaviour
         float slowL = dashSadSlowLen[Mathf.Clamp(dashSadnessLvl, 0, maxLvl)];
 
         dashAbility.SetUpgrades(aoe, slow, slowL);
-        // If you still have older PlayerManager calling SetUpgrades(...), that will also work due to legacy shim.
+        RaiseLevelsChanged();
     }
 
     void PushRanged()
@@ -369,7 +385,7 @@ public class UpgradeHandler : MonoBehaviour
             angerAOEPercent = angerAOEPercent[Mathf.Clamp(rangedAngerLvl, 0, maxLvl)],
             angerExplosionOnHit = rangedAngerLvl > 0
         };
-
+        RaiseLevelsChanged();
         playerCombat.SetRangedUpgrades(mods);
     }
 }

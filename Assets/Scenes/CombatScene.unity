@@ -1596,6 +1596,7 @@ GameObject:
   - component: {fileID: 938769675}
   - component: {fileID: 938769674}
   - component: {fileID: 938769676}
+  - component: {fileID: 938769677}
   m_Layer: 5
   m_Name: UpgradeUI
   m_TagString: Untagged
@@ -1653,7 +1654,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c77d500f62721e44bad87a4255a4479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  upgradeHandler: {fileID: 0}
+  upgradeHandler: {fileID: 1971551251}
+--- !u!114 &938769677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938769673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068a85e48bcee334fbd03c32bddf7eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombosMenuUI
+  handler: {fileID: 0}
+  uiDoc: {fileID: 0}
+  combosRootName: CombosEL
+  titleName: ComboTitle
+  bodyName: ComboBody
+  chipLeftName: ChipLeft
+  chipRightName: ChipRight
+  lockedTitle: Combo Locked
+  lockedBody: Discover by upgrading ??? and ??? (any level).
+  unlockedTitle: 'Rage + Joy: Pop Shot'
+  unlockedBodyTemplate: 'Unlocked! Ranged hits spawn a JOY burst.
+
+    Current: Anger
+    L{0}, Joy L{1}.'
+  angerColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
+  joyColor: {r: 1, g: 0.9, b: 0.15, a: 1}
+  lockedColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
 --- !u!1 &1120122487 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4724468427663662279, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}

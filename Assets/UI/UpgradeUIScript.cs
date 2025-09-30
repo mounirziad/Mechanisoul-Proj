@@ -4,6 +4,8 @@ using UnityEngine.UIElements;
 
 public class UpgradeUIScript : MonoBehaviour
 {
+    private CombosMenuUI combosMenuUI; 
+
     public UpgradeHandler upgradeHandler;
 
     public VisualElement root;
@@ -18,8 +20,8 @@ public class UpgradeUIScript : MonoBehaviour
     // MELEE
     private Button angerMelee1;
     private Button angerMelee2;
-    private Button loveMelee1;   // NEW
-    private Button loveMelee2;   // NEW
+    private Button loveMelee1;   
+    private Button loveMelee2;   
 
     // RANGE
     private Button joyRange1;
@@ -42,6 +44,8 @@ public class UpgradeUIScript : MonoBehaviour
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
+        combosMenuUI = GetComponent<CombosMenuUI>(); // on same GO as UIDocument
+
 
         // Find handler if not dragged in
         if (!upgradeHandler)
@@ -82,8 +86,21 @@ public class UpgradeUIScript : MonoBehaviour
         angerDash1 = root.Q<Button>("AngerDash1");
         angerDash2 = root.Q<Button>("AngerDash2");
 
-        upgradeTab = root.Q<Button>("UpgradeTab");
-        comboTab = root.Q<Button>("ComboTab");
+        upgradeTab.clicked += () =>
+        {
+            skillTree.style.display = DisplayStyle.Flex;
+            combos.style.display = DisplayStyle.None;
+        };
+
+        comboTab.clicked += () =>
+        {
+            skillTree.style.display = DisplayStyle.None;
+            combos.style.display = DisplayStyle.Flex;
+
+            // NEW: refresh the combos card when the tab opens
+            if (combosMenuUI != null) combosMenuUI.Refresh();
+        };
+
 
         skillTree = root.Q<VisualElement>("SkillTreeEL");
         combos = root.Q<VisualElement>("CombosEL");
