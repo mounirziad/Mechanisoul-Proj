@@ -11,6 +11,9 @@ public class AnimatorManager : MonoBehaviour
 
     private void Awake()
     {
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
         horizontal = Animator.StringToHash("Horizontal");
         vertical = Animator.StringToHash("Vertical");
         isAimingHash = Animator.StringToHash("IsAiming"); // Add this
