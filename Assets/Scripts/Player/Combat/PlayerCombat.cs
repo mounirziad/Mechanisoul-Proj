@@ -3,6 +3,13 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum RootMotionMode
+{
+    LungeOnly,      // Use only your existing lunge system (root motion disabled)
+    RootMotionOnly, // Use only root motion from animations (no additional lunge)
+    Hybrid          // Use root motion + reduced lunge for extra impact
+}
+
 public class PlayerCombat : MonoBehaviour
 {
     // Camera zoom while aiming
@@ -49,6 +56,14 @@ public class PlayerCombat : MonoBehaviour
     private PlayerControls playerControls;
     private Animator anim;
     [SerializeField] Weapon weapon;
+    
+    [Header("Root Motion Settings")]
+    [Tooltip("How to combine root motion with attack lunge movement")]
+    public RootMotionMode rootMotionMode = RootMotionMode.Hybrid;
+    
+    [Tooltip("When using Additive mode, multiplier for extra lunge force")]
+    [Range(0.1f, 2f)]
+    public float additionalLungeMultiplier = 0.5f;
 
     [SerializeField] private float aimAssistRange = 20f;
     [SerializeField] private float aimAssistAngle = 30f;
@@ -70,6 +85,12 @@ public class PlayerCombat : MonoBehaviour
             playerControls.PlayerActions.Attack.performed += OnAttackPerformed;
         }
         if (weapon != null) weapon.DisableTriggerBox();
+        
+        // Ensure root motion is disabled initially
+        if (anim != null)
+        {
+            anim.applyRootMotion = false;
+        }
     }
 
     void OnDisable()
@@ -227,13 +248,75 @@ public class PlayerCombat : MonoBehaviour
             weapon.damage = combo[comboCounter].damage;
 
             SetAttackTarget();
-            StartAttackMovement();
+            
+            // Handle different root motion modes
+            switch (rootMotionMode)
+            {
+                case RootMotionMode.LungeOnly:
+                    // Traditional system - no root motion, full lunge
+                    anim.applyRootMotion = false;
+                    StartAttackMovement();
+                    break;
+                    
+                case RootMotionMode.RootMotionOnly:
+                    // Pure root motion - let animation drive movement completely
+                    anim.applyRootMotion = true;
+                    // Don't call StartAttackMovement()
+                    break;
+                    
+                case RootMotionMode.Hybrid:
+                    // Best of both worlds - root motion + reduced lunge
+                    anim.applyRootMotion = true;
+                    StartAttackMovementHybrid();
+                    break;
+            }
+            
             isAttacking = true;
             attackStartTime = Time.time;
             comboCounter++;
             lastClickedTime = Time.time;
             attackQueued = false;
             if (comboCounter >= combo.Count) comboCounter = 0;
+        }
+    }
+
+    void StartAttackMovementHybrid()
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        if (playerLoco != null)
+        {
+            Vector3 attackDirection = transform.forward;
+            
+            // If we have a target, move towards it
+            if (currentTarget != null)
+            {
+                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
+                directionToTarget.y = 0;
+                attackDirection = directionToTarget;
+                
+                // Rotate towards target for more dynamic combat
+                transform.rotation = Quaternion.LookRotation(attackDirection);
+            }
+            
+            // Get the correct attack data for the current attack
+            int currentAttackIndex = comboCounter - 1;
+            if (currentAttackIndex < 0) currentAttackIndex = combo.Count - 1;
+            
+            AttackSO currentAttackData = combo[currentAttackIndex];
+            
+            // Create a modified attack data for hybrid mode (reduced movement since root motion is also active)
+            AttackSO hybridAttackData = ScriptableObject.CreateInstance<AttackSO>();
+            hybridAttackData.moveDistance = currentAttackData.moveDistance * additionalLungeMultiplier;
+            hybridAttackData.moveSpeed = currentAttackData.moveSpeed * additionalLungeMultiplier;
+            hybridAttackData.moveDuration = currentAttackData.moveDuration;
+            hybridAttackData.moveCurve = currentAttackData.moveCurve;
+            hybridAttackData.rotateTowardsTarget = currentAttackData.rotateTowardsTarget;
+            
+            // Force stop any existing attack movement and start new one
+            playerLoco.ForceStopAttackLunge();
+            playerLoco.StartAttackLunge(attackDirection, hybridAttackData);
+            
+            Debug.Log($"Starting hybrid attack {currentAttackIndex} - Root Motion: ON, Extra Lunge: {hybridAttackData.moveDistance}");
         }
     }
 
@@ -294,6 +377,12 @@ public class PlayerCombat : MonoBehaviour
     {
         isAttacking = false;
         
+        // Disable root motion when attack completes (except for LungeOnly mode where it's already off)
+        if (rootMotionMode != RootMotionMode.LungeOnly)
+        {
+            anim.applyRootMotion = false;
+        }
+        
         // Stop attack movement when attack completes (unless combo continues)
         if (!attackQueued)
         {
@@ -339,6 +428,12 @@ public class PlayerCombat : MonoBehaviour
         attackQueued = false; 
         anim.Play("Idle"); 
         currentTarget = null;
+        
+        // Disable root motion when canceling attack (except for LungeOnly mode where it's already off)
+        if (rootMotionMode != RootMotionMode.LungeOnly)
+        {
+            anim.applyRootMotion = false;
+        }
         
         // Stop any attack movement
         var playerLoco = GetComponent<PlayerLocomotion>();
