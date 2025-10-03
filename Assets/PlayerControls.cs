@@ -367,6 +367,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnemyLockOn"",
+                    ""type"": ""Button"",
+                    ""id"": ""7d41604c-b20a-4f52-b36e-b4e1a1317f28"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -499,6 +508,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc7afefc-5903-4205-9887-00e58d7a480b"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnemyLockOn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f10f56c6-dd2c-4436-ad56-f9701ce3659a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnemyLockOn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -650,6 +681,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_Attack = m_PlayerActions.FindAction("Attack", throwIfNotFound: true);
         m_PlayerActions_RangedAim = m_PlayerActions.FindAction("RangedAim", throwIfNotFound: true);
         m_PlayerActions_Shoot = m_PlayerActions.FindAction("Shoot", throwIfNotFound: true);
+        m_PlayerActions_EnemyLockOn = m_PlayerActions.FindAction("EnemyLockOn", throwIfNotFound: true);
         // Temp
         m_Temp = asset.FindActionMap("Temp", throwIfNotFound: true);
         m_Temp_CombatScene = m_Temp.FindAction("Combat Scene", throwIfNotFound: true);
@@ -863,6 +895,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Attack;
     private readonly InputAction m_PlayerActions_RangedAim;
     private readonly InputAction m_PlayerActions_Shoot;
+    private readonly InputAction m_PlayerActions_EnemyLockOn;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player Actions".
     /// </summary>
@@ -898,6 +931,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActions/Shoot".
         /// </summary>
         public InputAction @Shoot => m_Wrapper.m_PlayerActions_Shoot;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/EnemyLockOn".
+        /// </summary>
+        public InputAction @EnemyLockOn => m_Wrapper.m_PlayerActions_EnemyLockOn;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -942,6 +979,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
+            @EnemyLockOn.started += instance.OnEnemyLockOn;
+            @EnemyLockOn.performed += instance.OnEnemyLockOn;
+            @EnemyLockOn.canceled += instance.OnEnemyLockOn;
         }
 
         /// <summary>
@@ -971,6 +1011,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
+            @EnemyLockOn.started -= instance.OnEnemyLockOn;
+            @EnemyLockOn.performed -= instance.OnEnemyLockOn;
+            @EnemyLockOn.canceled -= instance.OnEnemyLockOn;
         }
 
         /// <summary>
@@ -1222,6 +1265,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShoot(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "EnemyLockOn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEnemyLockOn(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Temp" which allows adding and removing callbacks.
