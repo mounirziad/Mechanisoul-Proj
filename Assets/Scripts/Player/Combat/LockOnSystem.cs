@@ -29,6 +29,9 @@ public class LockOnSystem : MonoBehaviour
 
     [HideInInspector] public Transform currentLockTarget;
 
+    private float lastToggleTime = 0f;
+    private float toggleCooldown = 0.5f; // Prevent rapid toggling
+
     PlayerManager playerManager;
     InputManager inputManager;
     PlayerControls playerControls;               // optional if you want to subscribe directly
@@ -43,6 +46,10 @@ public class LockOnSystem : MonoBehaviour
     // Attack movement detection
     private Vector3 lastPlayerPosition;
     private PlayerCombat playerCombat;
+
+    private float lockGracePeriod = 0.3f;
+    private float lockTime;
+
 
     private void Awake()
     {
@@ -103,24 +110,9 @@ public class LockOnSystem : MonoBehaviour
         {
             Debug.Log($"Lock-on Update: Checking target {(currentLockTarget ? currentLockTarget.name : "null")}");
 
-            if (currentLockTarget == null || !IsTargetValid(currentLockTarget))
+            // Always update target position regardless of grace period
+            if (currentLockTarget != null)
             {
-                Debug.Log("Target invalid - attempting retarget or unlock");
-                Transform ret = FindBestTarget();
-                if (ret == null)
-                {
-                    Debug.Log("No new target found - unlocking");
-                    ClearLock(); // This will now handle smooth unlocking
-                }
-                else
-                {
-                    Debug.Log($"Retargeting to: {ret.name}");
-                    SetLockTarget(ret); // Smooth transition to new target
-                }
-            }
-            else
-            {
-                // Update desired position for smooth following
                 desiredPosition = currentLockTarget.position + Vector3.up * targetHeightOffset;
 
                 if (useSmoothing)
@@ -141,6 +133,30 @@ public class LockOnSystem : MonoBehaviour
                 }
 
                 lastPlayerPosition = transform.position;
+            }
+
+            // Only validate target after grace period
+            if (Time.time - lockTime >= lockGracePeriod)
+            {
+                if (currentLockTarget == null || !IsTargetValid(currentLockTarget))
+                {
+                    Debug.Log("Target invalid - attempting retarget or unlock");
+                    Transform ret = FindBestTarget();
+                    if (ret == null)
+                    {
+                        Debug.Log("No new target found - unlocking");
+                        ClearLock(); // This will now handle smooth unlocking
+                    }
+                    else
+                    {
+                        Debug.Log($"Retargeting to: {ret.name}");
+                        SetLockTarget(ret); // Smooth transition to new target
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Within grace period - skipping validation");
             }
         }
 
@@ -185,54 +201,87 @@ public class LockOnSystem : MonoBehaviour
 
     public void ToggleLock()
     {
-        if (isLocked) ClearLock();
+        // Prevent rapid toggling
+        if (Time.time - lastToggleTime < toggleCooldown)
+        {
+            Debug.Log("ToggleLock cooldown - ignoring input");
+            return;
+        }
+
+        lastToggleTime = Time.time;
+
+        Debug.Log($"ToggleLock called - Current lock state: {isLocked}, Current target: {(currentLockTarget ? currentLockTarget.name : "null")}");
+
+        if (isLocked && currentLockTarget != null)
+        {
+            Debug.Log("Already locked - clearing lock");
+            ClearLock();
+        }
         else
         {
+            Debug.Log("Not locked - searching for target");
             Transform best = FindBestTarget();
-            if (best != null) SetLockTarget(best);
+            if (best != null)
+            {
+                Debug.Log($"Found target: {best.name} - setting lock");
+                SetLockTarget(best);
+            }
+            else
+            {
+                Debug.Log("No valid target found");
+            }
         }
     }
 
     public void SetLockTarget(Transform t)
     {
+        Debug.Log($"SetLockTarget called with: {(t ? t.name : "null")}");
+
+        lockTime = Time.time;
+
         if (currentLockTarget != null)
         {
             // Unsubscribe from old target's death event
             var oldHealth = currentLockTarget.GetComponent<BasicEnemyHealth>();
-            if (oldHealth != null) oldHealth.OnDeath -= OnTargetDeath;
+            if (oldHealth != null)
+            {
+                oldHealth.OnDeath -= OnTargetDeath;
+                Debug.Log($"Unsubscribed from old target: {currentLockTarget.name}");
+            }
         }
 
         currentLockTarget = t;
         isLocked = t != null;
 
+        Debug.Log($"After SetLockTarget - isLocked: {isLocked}, currentLockTarget: {(currentLockTarget ? currentLockTarget.name : "null")}");
+
         if (currentLockTarget != null)
         {
             var health = currentLockTarget.GetComponent<BasicEnemyHealth>();
-            if (health != null) health.OnDeath += OnTargetDeath;
+            if (health != null)
+            {
+                health.OnDeath += OnTargetDeath;
+                Debug.Log($"Subscribed to new target: {currentLockTarget.name}");
+            }
         }
 
-
+        // Rest of your existing SetLockTarget code...
         if (freeLookCam != null)
         {
-            freeLookCam.LookAt = lockTargetPoint;  // << fixed
+            freeLookCam.LookAt = lockTargetPoint;
         }
-
-        
 
         if (isLocked)
         {
             desiredPosition = currentLockTarget.position + Vector3.up * targetHeightOffset;
-            
+
             if (useSmoothing)
             {
-                // Start smooth transition to new target
                 if (lockTargetPoint.position == Vector3.zero || Vector3.Distance(lockTargetPoint.position, desiredPosition) > 0.5f)
                 {
-                    // If this is the first lock or target is far, start transitioning
                     isTransitioning = true;
                     if (lockTargetPoint.position == Vector3.zero)
                     {
-                        // Initialize position if this is the first lock
                         targetPosition = transform.position + transform.forward * 2f + Vector3.up * targetHeightOffset;
                     }
                     else
@@ -242,29 +291,29 @@ public class LockOnSystem : MonoBehaviour
                 }
                 else
                 {
-                    // Target is close, update immediately
                     targetPosition = desiredPosition;
                     lockTargetPoint.position = targetPosition;
                 }
             }
             else
             {
-                // Direct assignment (original behavior)
                 lockTargetPoint.position = desiredPosition;
             }
         }
         else
         {
-            if (freeLookCam != null) freeLookCam.LookAt = transform;  // << fixed
+            if (freeLookCam != null) freeLookCam.LookAt = transform;
         }
 
         var combat = GetComponent<PlayerCombat>();
         if (combat != null) combat.currentTarget = isLocked ? currentLockTarget : null;
+
+        Debug.Log($"SetLockTarget completed - isLocked: {isLocked}");
     }
 
     private void OnTargetDeath()
     {
-        Debug.Log("Locked target died — clearing lock");
+        Debug.Log("Locked target died ï¿½ clearing lock");
         ClearLock();
     }
 
@@ -319,11 +368,19 @@ public class LockOnSystem : MonoBehaviour
             return false;
         }
         
-        // Check if enemy is dead
+        // Check if enemy is dead - be more careful with null checks
         AiAgent aiAgent = t.GetComponent<AiAgent>();
         if (aiAgent != null && aiAgent.isDead)
         {
             Debug.Log($"Target validation failed: {t.name} is dead");
+            return false;
+        }
+        
+        // Also check BasicEnemyHealth for consistency
+        BasicEnemyHealth enemyHealth = t.GetComponent<BasicEnemyHealth>();
+        if (enemyHealth != null && enemyHealth.currentHealth <= 0)
+        {
+            Debug.Log($"Target validation failed: {t.name} has no health");
             return false;
         }
         
@@ -334,7 +391,7 @@ public class LockOnSystem : MonoBehaviour
             return false;
         }
 
-        // Skip occlusion check for trigger colliders since raycast won't hit them
+        // For trigger colliders, skip occlusion check as raycasts won't hit them reliably
         Collider targetCollider = t.GetComponent<Collider>();
         if (targetCollider != null && targetCollider.isTrigger)
         {
@@ -342,13 +399,18 @@ public class LockOnSystem : MonoBehaviour
             return true;
         }
 
-        // Occlusion check for non-trigger colliders
+        // For non-trigger colliders, do a more comprehensive occlusion check
         Vector3 origin = transform.position + Vector3.up * 1.2f;
-        Vector3 dir = (t.position + Vector3.up * targetHeightOffset) - origin;
+        Vector3 targetPos = t.position + Vector3.up * targetHeightOffset;
+        Vector3 dir = targetPos - origin;
+        
+        // Use SphereCast instead of Raycast for better detection
         RaycastHit hit;
-        if (Physics.Raycast(origin, dir.normalized, out hit, lockRange))
+        float sphereRadius = 0.1f;
+        if (Physics.SphereCast(origin, sphereRadius, dir.normalized, out hit, lockRange))
         {
-            if (hit.transform != t) 
+            // Check if we hit the target or something on the target (like child colliders)
+            if (hit.transform != t && !hit.transform.IsChildOf(t) && !t.IsChildOf(hit.transform)) 
             {
                 Debug.Log($"Target validation failed: {t.name} occluded by {hit.transform.name}");
                 return false;
@@ -375,52 +437,88 @@ public class LockOnSystem : MonoBehaviour
             Debug.Log($"Lock-on search: Generic search returned {hits.Length} hits");
         }
 
-        int validEnemies = 0;
+        // First pass: collect all valid root enemy GameObjects
+        System.Collections.Generic.HashSet<Transform> rootEnemies = new System.Collections.Generic.HashSet<Transform>();
+        
         foreach (var c in hits)
         {
             if (c.transform == transform) continue;
-            
-            Debug.Log($"Checking object: {c.name}, Tag: {c.tag}, Layer: {LayerMask.LayerToName(c.gameObject.layer)}");
-            
             if (!c.CompareTag(enemyTag)) continue;
             
-            validEnemies++;
-            Debug.Log($"Found valid enemy: {c.name}");
+            // Find the root enemy GameObject (one with AiAgent component)
+            Transform rootEnemy = c.transform;
+            while (rootEnemy != null)
+            {
+                if (rootEnemy.GetComponent<AiAgent>() != null)
+                {
+                    rootEnemies.Add(rootEnemy);
+                    break;
+                }
+                rootEnemy = rootEnemy.parent;
+            }
+        }
 
-            Vector3 toTarget = c.transform.position - transform.position;
+        Debug.Log($"Found {rootEnemies.Count} unique root enemies from {hits.Length} collider hits");
+
+        int validEnemies = 0;
+        foreach (var enemyTransform in rootEnemies)
+        {
+            Debug.Log($"Checking root enemy: {enemyTransform.name}");
+            
+            // Skip dead enemies immediately
+            AiAgent aiAgent = enemyTransform.GetComponent<AiAgent>();
+            if (aiAgent != null && aiAgent.isDead) 
+            {
+                Debug.Log($"Skipping dead enemy: {enemyTransform.name}");
+                continue;
+            }
+            
+            // Also check health component
+            BasicEnemyHealth enemyHealth = enemyTransform.GetComponent<BasicEnemyHealth>();
+            if (enemyHealth != null && enemyHealth.currentHealth <= 0)
+            {
+                Debug.Log($"Skipping enemy with no health: {enemyTransform.name}");
+                continue;
+            }
+            
+            validEnemies++;
+            Debug.Log($"Found valid root enemy: {enemyTransform.name}");
+
+            Vector3 toTarget = enemyTransform.position - transform.position;
             float ang = Vector3.Angle(transform.forward, toTarget);
             if (ang > maxAngle) 
             {
-                Debug.Log($"Enemy {c.name} outside angle range: {ang} > {maxAngle}");
+                Debug.Log($"Enemy {enemyTransform.name} outside angle range: {ang} > {maxAngle}");
                 continue;
             }
 
-            // occlusion check - skip for trigger colliders
-            if (!c.isTrigger)
+            // Check occlusion using the enemy's main collider
+            Collider enemyCollider = enemyTransform.GetComponent<Collider>();
+            if (enemyCollider != null && !enemyCollider.isTrigger)
             {
                 RaycastHit hit;
                 Vector3 origin = transform.position + Vector3.up * 1.2f;
-                Vector3 dir = (c.transform.position + Vector3.up * targetHeightOffset) - origin;
+                Vector3 dir = (enemyTransform.position + Vector3.up * targetHeightOffset) - origin;
                 if (Physics.Raycast(origin, dir.normalized, out hit, lockRange))
                 {
-                    if (hit.transform != c.transform) 
+                    if (hit.transform != enemyTransform && !hit.transform.IsChildOf(enemyTransform) && !enemyTransform.IsChildOf(hit.transform)) 
                     {
-                        Debug.Log($"Enemy {c.name} occluded by {hit.transform.name}");
+                        Debug.Log($"Enemy {enemyTransform.name} occluded by {hit.transform.name}");
                         continue;
                     }
                 }
             }
             else
             {
-                Debug.Log($"Skipping occlusion check for trigger collider: {c.name}");
+                Debug.Log($"Skipping occlusion check for {enemyTransform.name} (trigger or no collider)");
             }
 
             float score = toTarget.sqrMagnitude; // closer is better
             if (score < bestScore)
             {
                 bestScore = score;
-                best = c.transform;
-                Debug.Log($"New best target: {c.name} (score: {score})");
+                best = enemyTransform;
+                Debug.Log($"New best target: {enemyTransform.name} (score: {score})");
             }
         }
 
