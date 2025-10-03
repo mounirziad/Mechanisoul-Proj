@@ -102,75 +102,86 @@ public class LockOnSystem : MonoBehaviour
         if (isLocked)
         {
             Debug.Log($"Lock-on Update: Checking target {(currentLockTarget ? currentLockTarget.name : "null")}");
-            
+
             if (currentLockTarget == null || !IsTargetValid(currentLockTarget))
             {
                 Debug.Log("Target invalid - attempting retarget or unlock");
-                // Try retarget; if fail, clear lock with smooth transition
                 Transform ret = FindBestTarget();
-                if (ret == null) 
+                if (ret == null)
                 {
                     Debug.Log("No new target found - unlocking");
-                    ClearLock();  // This will now handle smooth unlocking
+                    ClearLock(); // This will now handle smooth unlocking
                 }
-                else 
+                else
                 {
                     Debug.Log($"Retargeting to: {ret.name}");
-                    SetLockTarget(ret);  // Smooth transition to new target
+                    SetLockTarget(ret); // Smooth transition to new target
                 }
             }
             else
             {
                 // Update desired position for smooth following
                 desiredPosition = currentLockTarget.position + Vector3.up * targetHeightOffset;
-                
+
                 if (useSmoothing)
                 {
                     // Detect if player is attacking/moving rapidly
                     float playerMovementSpeed = (transform.position - lastPlayerPosition).magnitude / Time.deltaTime;
                     bool isPlayerAttacking = playerCombat != null && playerCombat.IsAttacking();
                     bool isRapidMovement = playerMovementSpeed > attackDetectionThreshold;
-                    
-                    // Use faster following during attacks to reduce jitter
+
                     float currentFollowSpeed = (isPlayerAttacking || isRapidMovement) ? attackFollowSpeed : targetFollowSpeed;
-                    
-                    // Smooth interpolation towards target
+
                     targetPosition = Vector3.Lerp(targetPosition, desiredPosition, currentFollowSpeed * Time.deltaTime);
                     lockTargetPoint.position = targetPosition;
                 }
                 else
                 {
-                    // Direct assignment (original behavior)
                     lockTargetPoint.position = desiredPosition;
                 }
-                
-                // Update player position tracking
+
                 lastPlayerPosition = transform.position;
             }
         }
-        
+
         // Handle smooth transitions when locking/unlocking
         if (isTransitioning && useSmoothing)
         {
             targetPosition = Vector3.Lerp(targetPosition, desiredPosition, lockTransitionSpeed * Time.deltaTime);
             lockTargetPoint.position = targetPosition;
-            
+
+            // Smooth camera rotation during unlock
+            if (isUnlockingSmooth && freeLookCam != null)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(
+                    transform.position - freeLookCam.transform.position,
+                    Vector3.up
+                );
+
+                freeLookCam.transform.rotation = Quaternion.Slerp(
+                    freeLookCam.transform.rotation,
+                    targetRotation,
+                    lockTransitionSpeed * Time.deltaTime
+                );
+            }
+
             // Check if transition is complete
             if (Vector3.Distance(targetPosition, desiredPosition) < 0.1f)
             {
                 isTransitioning = false;
                 targetPosition = desiredPosition;
                 lockTargetPoint.position = targetPosition;
-                
-                // If this was an unlock transition, now switch the camera target
+
                 if (isUnlockingSmooth)
                 {
                     isUnlockingSmooth = false;
-                    if (freeLookCam != null) freeLookCam.LookAt = transform;
+                    if (freeLookCam != null)
+                        freeLookCam.LookAt = transform; // now safe to snap back to player
                 }
             }
         }
     }
+
 
     public void ToggleLock()
     {
