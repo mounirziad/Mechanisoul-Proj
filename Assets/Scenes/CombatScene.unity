@@ -3003,8 +3003,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Radius: 0.9453577
+  m_Center: {x: 0, y: 0.9310726, z: -0.035756826}
 --- !u!4 &2005209252 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1729148676179354263, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
@@ -3501,7 +3501,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8448977124884211448, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1729148676179354263, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
       insertIndex: -1
@@ -4065,6 +4066,10 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3513682766980461440, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.133
+      objectReference: {fileID: 0}
     - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -4196,6 +4201,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8551793984105625945}
+    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8551793984105625952}
     - targetCorrespondingSourceObject: {fileID: 463506979082311740, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1406759758}
@@ -4203,6 +4211,11 @@ PrefabInstance:
 --- !u!4 &8551793984105625928 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+  m_PrefabInstance: {fileID: 8551793984105625927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8551793984105625929 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3513682766980461440, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8551793984105625939
@@ -4278,6 +4291,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c51ce5e558bbde4090110c0f8fc40aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
+--- !u!114 &8551793984105625952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804909517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9272549f561b8d64890052f89be604ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LockOnSystem
+  lockRange: 8.86
+  maxAngle: 60
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  lockTargetPoint: {fileID: 8551793984105625929}
+  freeLookCam: {fileID: 134010726}
+  enemyTag: Enemy
+  targetFollowSpeed: 8
+  lockTransitionSpeed: 6
+  useSmoothing: 1
+  targetHeightOffset: -0.21
+  attackFollowSpeed: 6.07
+  attackDetectionThreshold: 5.72
+  maxTargetsToCheck: 32
+  currentLockTarget: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

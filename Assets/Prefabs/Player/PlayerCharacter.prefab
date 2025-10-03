@@ -128,6 +128,9 @@ MonoBehaviour:
   attackRange: 0
   hitVFX: {fileID: 627569255849376440, guid: d4112bc87fd2aec4b96cfe48b0043685, type: 3}
   cam: {fileID: 0}
+  enableRotationStabilization: 1
+  stabilizationStrength: 0.7
+  rotationSmoothness: 8
 --- !u!1 &900384277556082813
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +157,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8654815397792618019}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7727570193612895918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3513682766980461440}
+  m_Layer: 6
+  m_Name: LockTargetPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3513682766980461440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7727570193612895918}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.991, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -394,6 +428,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3679364286282133915}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3513682766980461440}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       insertIndex: -1
@@ -611,6 +648,8 @@ MonoBehaviour:
   dodgeCancelWindow: 0.4
   isAiming: 0
   weapon: {fileID: 1370667352295827453}
+  rootMotionMode: 2
+  additionalLungeMultiplier: 0.5
   aimAssistRange: 20
   aimAssistAngle: 30
   enemyLayer:

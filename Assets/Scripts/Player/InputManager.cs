@@ -57,6 +57,13 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerActions.RangedAim.performed += i => aimInput = true;
             playerControls.PlayerActions.RangedAim.canceled += i => aimInput = false;
             playerControls.PlayerActions.Shoot.performed += i => shootInput = true;
+            playerControls.PlayerActions.EnemyLockOn.performed += i =>
+            {
+                if (GetComponent<LockOnSystem>() != null)
+                    GetComponent<LockOnSystem>().ToggleLock();
+            };
+
+
         }
         playerControls.Enable();
     }

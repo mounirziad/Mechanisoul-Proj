@@ -59,6 +59,9 @@ public class PlayerLocomotion : MonoBehaviour
     private AttackSO currentAttackData;
     private float originalMoveDistance;
 
+    LockOnSystem lockOnSystem;
+
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -67,6 +70,8 @@ public class PlayerLocomotion : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody>();
         cameraObject = Camera.main != null ? Camera.main.transform : null;
         playerCombat = GetComponent<PlayerCombat>();
+        lockOnSystem = GetComponent<LockOnSystem>();
+
     }
     public void RefreshReferences()
     {
@@ -230,14 +235,23 @@ public class PlayerLocomotion : MonoBehaviour
 
         Vector3 targetDirection = Vector3.zero;
 
-        targetDirection = cameraObject.forward * inputManager.verticalInput;
-        targetDirection = targetDirection + cameraObject.right * inputManager.horizontalInput;
-        targetDirection.Normalize();
-        targetDirection.y = 0;
-
-        if(targetDirection == Vector3.zero)
+        if (lockOnSystem != null && lockOnSystem.IsLocked() && lockOnSystem.currentLockTarget != null)
         {
-            targetDirection = transform.forward;
+            // If locked on, face the target
+            targetDirection = lockOnSystem.currentLockTarget.position - transform.position;
+            targetDirection.y = 0;
+            targetDirection.Normalize();
+        }
+        else
+        {
+            // Normal free movement rotation
+            targetDirection = cameraObject.forward * inputManager.verticalInput;
+            targetDirection += cameraObject.right * inputManager.horizontalInput;
+            targetDirection.Normalize();
+            targetDirection.y = 0;
+
+            if (targetDirection == Vector3.zero)
+                targetDirection = transform.forward;
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
