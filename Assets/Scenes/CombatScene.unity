@@ -254,34 +254,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1321617849}
   m_LocalEulerAnglesHint: {x: -82, y: -105.1, z: 20}
---- !u!1 &124111083 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 706612217909055274, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
-  m_PrefabInstance: {fileID: 4037408074288642213}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &134010726 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
   m_PrefabInstance: {fileID: 4037408074288642213}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 124111083}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
---- !u!114 &134010734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 124111083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7529a18c587776e4b82f93f4b3805f3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!1 &193745675 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6087509090986512672, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
@@ -2131,6 +2114,17 @@ MonoBehaviour:
   lockOnSystem: {fileID: 8551793984105625952}
   activePriority: 20
   inactivePriority: 5
+--- !u!114 &909044749 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+  m_PrefabInstance: {fileID: 909044731}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909044732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
 --- !u!1 &938769673
 GameObject:
   m_ObjectHideFlags: 0
@@ -4841,10 +4835,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 706612217909055274, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 134010734}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
 --- !u!1001 &6319916475735310632
 PrefabInstance:
@@ -5278,7 +5269,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   lockTargetPoint: {fileID: 8551793984105625929}
-  freeLookCam: {fileID: 134010726}
+  freeLookCam: {fileID: 909044749}
   enemyTag: Enemy
   targetFollowSpeed: 8
   lockTransitionSpeed: 6
