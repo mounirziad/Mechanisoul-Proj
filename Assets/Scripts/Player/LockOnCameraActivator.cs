@@ -6,6 +6,10 @@ public class LockOnCameraActivator : MonoBehaviour
     public LockOnSystem lockOnSystem;
     private CinemachineCamera cinemachineCamera;
 
+
+    [Header("Camera Priorities")]
+    public int activePriority = 20;
+    public int inactivePriority = 5;
     private void Start()
     {
         cinemachineCamera = GetComponent<CinemachineCamera>();
@@ -19,7 +23,6 @@ public class LockOnCameraActivator : MonoBehaviour
         // Start with Cinemachine camera component disabled but GameObject active
         if (cinemachineCamera != null)
         {
-            cinemachineCamera.enabled = false;
         }
         else
         {
@@ -31,12 +34,12 @@ public class LockOnCameraActivator : MonoBehaviour
     {
         if (lockOnSystem != null && cinemachineCamera != null)
         {
-            bool shouldBeActive = lockOnSystem.IsLocked();
+            int targetPriority = lockOnSystem.IsLocked() ? activePriority : inactivePriority;
 
-            if (cinemachineCamera.enabled != shouldBeActive)
+            if (cinemachineCamera.Priority != targetPriority)
             {
-                Debug.Log($"Setting Cinemachine camera enabled to: {shouldBeActive}");
-                cinemachineCamera.enabled = shouldBeActive;
+                Debug.Log($"Setting lock-on cam priority to: {targetPriority}");
+                cinemachineCamera.Priority = targetPriority;
             }
         }
     }

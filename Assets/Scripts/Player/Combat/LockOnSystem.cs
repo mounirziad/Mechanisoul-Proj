@@ -160,40 +160,21 @@ public class LockOnSystem : MonoBehaviour
             }
         }
 
-        // Handle smooth transitions when locking/unlocking
         if (isTransitioning && useSmoothing)
         {
-            targetPosition = Vector3.Lerp(targetPosition, desiredPosition, lockTransitionSpeed * Time.deltaTime);
+            targetPosition = Vector3.Lerp(
+                targetPosition,
+                desiredPosition,
+                lockTransitionSpeed * Time.deltaTime
+            );
+
             lockTargetPoint.position = targetPosition;
 
-            // Smooth camera rotation during unlock
-            if (isUnlockingSmooth && freeLookCam != null)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(
-                    transform.position - freeLookCam.transform.position,
-                    Vector3.up
-                );
-
-                freeLookCam.transform.rotation = Quaternion.Slerp(
-                    freeLookCam.transform.rotation,
-                    targetRotation,
-                    lockTransitionSpeed * Time.deltaTime
-                );
-            }
-
-            // Check if transition is complete
             if (Vector3.Distance(targetPosition, desiredPosition) < 0.1f)
             {
+                lockTargetPoint.position = desiredPosition;
                 isTransitioning = false;
-                targetPosition = desiredPosition;
-                lockTargetPoint.position = targetPosition;
-
-                if (isUnlockingSmooth)
-                {
-                    isUnlockingSmooth = false;
-                    if (freeLookCam != null)
-                        freeLookCam.LookAt = transform; // now safe to snap back to player
-                }
+                isUnlockingSmooth = false;
             }
         }
     }
@@ -233,83 +214,40 @@ public class LockOnSystem : MonoBehaviour
         }
     }
 
-    public void SetLockTarget(Transform t)
+    public void SetLockTarget(Transform newTarget)
     {
-        Debug.Log($"SetLockTarget called with: {(t ? t.name : "null")}");
+        if (newTarget == null) return;
 
-        lockTime = Time.time;
-
+        // Unsubscribe from previous target
         if (currentLockTarget != null)
         {
-            // Unsubscribe from old target's death event
             var oldHealth = currentLockTarget.GetComponent<BasicEnemyHealth>();
             if (oldHealth != null)
-            {
                 oldHealth.OnDeath -= OnTargetDeath;
-                Debug.Log($"Unsubscribed from old target: {currentLockTarget.name}");
-            }
         }
 
-        currentLockTarget = t;
-        isLocked = t != null;
+        currentLockTarget = newTarget;
+        isLocked = true;
 
-        Debug.Log($"After SetLockTarget - isLocked: {isLocked}, currentLockTarget: {(currentLockTarget ? currentLockTarget.name : "null")}");
+        // Subscribe to new target’s death
+        var health = currentLockTarget.GetComponent<BasicEnemyHealth>();
+        if (health != null)
+            health.OnDeath += OnTargetDeath;
 
-        if (currentLockTarget != null)
-        {
-            var health = currentLockTarget.GetComponent<BasicEnemyHealth>();
-            if (health != null)
-            {
-                health.OnDeath += OnTargetDeath;
-                Debug.Log($"Subscribed to new target: {currentLockTarget.name}");
-            }
-        }
-
-        // Rest of your existing SetLockTarget code...
-        if (freeLookCam != null)
-        {
-            freeLookCam.LookAt = lockTargetPoint;
-        }
-
-        if (isLocked)
-        {
-            desiredPosition = currentLockTarget.position + Vector3.up * targetHeightOffset;
-
-            if (useSmoothing)
-            {
-                if (lockTargetPoint.position == Vector3.zero || Vector3.Distance(lockTargetPoint.position, desiredPosition) > 0.5f)
-                {
-                    isTransitioning = true;
-                    if (lockTargetPoint.position == Vector3.zero)
-                    {
-                        targetPosition = transform.position + transform.forward * 2f + Vector3.up * targetHeightOffset;
-                    }
-                    else
-                    {
-                        targetPosition = lockTargetPoint.position;
-                    }
-                }
-                else
-                {
-                    targetPosition = desiredPosition;
-                    lockTargetPoint.position = targetPosition;
-                }
-            }
-            else
-            {
-                lockTargetPoint.position = desiredPosition;
-            }
-        }
-        else
-        {
-            if (freeLookCam != null) freeLookCam.LookAt = transform;
-        }
-
+        // Update player combat reference
         var combat = GetComponent<PlayerCombat>();
-        if (combat != null) combat.currentTarget = isLocked ? currentLockTarget : null;
+        if (combat != null) combat.currentTarget = currentLockTarget;
 
-        Debug.Log($"SetLockTarget completed - isLocked: {isLocked}");
+        // Smoothly move lockTargetPoint toward enemy
+        targetPosition = lockTargetPoint.position;
+        desiredPosition = currentLockTarget.position + Vector3.up * targetHeightOffset;
+        isTransitioning = true;
+        isUnlockingSmooth = false;
+
+        if (freeLookCam != null)
+            freeLookCam.LookAt = lockTargetPoint; // always locked to point
     }
+
 
     private void OnTargetDeath()
     {
@@ -319,16 +257,11 @@ public class LockOnSystem : MonoBehaviour
 
     public void ClearLock()
     {
-        Debug.Log("ClearLock() called - unlocking target");
-
-        // Unsubscribe from target's death event
         if (currentLockTarget != null)
         {
             var health = currentLockTarget.GetComponent<BasicEnemyHealth>();
             if (health != null)
-            {
                 health.OnDeath -= OnTargetDeath;
-            }
         }
 
         currentLockTarget = null;
@@ -337,28 +270,25 @@ public class LockOnSystem : MonoBehaviour
         var combat = GetComponent<PlayerCombat>();
         if (combat != null) combat.currentTarget = null;
 
-        if (useSmoothing && lockTargetPoint.position != Vector3.zero)
+        if (useSmoothing)
         {
-            Debug.Log("Starting smooth unlock transition");
-
-            // Start smooth transition away from target
+            // Smooth transition back to player
             isTransitioning = true;
             isUnlockingSmooth = true;
+
             targetPosition = lockTargetPoint.position;
-
-            // Move the lock point to a position slightly in front of the player
-            desiredPosition = transform.position + transform.forward * 3f + Vector3.up * targetHeightOffset;
-
-            // Keep the camera looking at lockTargetPoint during transition
+            desiredPosition = transform.position + Vector3.up * targetHeightOffset;
         }
         else
         {
-            Debug.Log("Immediate unlock (no smoothing)");
-
-            // No smoothing or no previous lock position, switch immediately
-            if (freeLookCam != null) freeLookCam.LookAt = transform;
+            // Instantly reset the point to player
+            lockTargetPoint.position = transform.position + Vector3.up * targetHeightOffset;
         }
+
+        if (freeLookCam != null)
+            freeLookCam.LookAt = lockTargetPoint; // stays on point, no snapping
     }
+
 
     bool IsTargetValid(Transform t)
     {

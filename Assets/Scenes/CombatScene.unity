@@ -1690,6 +1690,14 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Priority.Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Priority.m_Value
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 324691107}
@@ -1719,6 +1727,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   lockOnSystem: {fileID: 8551793984105625952}
+  activePriority: 20
+  inactivePriority: 5
 --- !u!1 &938769673
 GameObject:
   m_ObjectHideFlags: 0
@@ -4412,6 +4422,14 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Priority.Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Priority.m_Value
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 324691107}
@@ -4489,7 +4507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 524346440282771187, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: LensModeOverride.Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2279032322536703407, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: field of view
