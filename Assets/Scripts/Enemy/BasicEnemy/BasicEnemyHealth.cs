@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class BasicEnemyHealth : MonoBehaviour
 {
@@ -13,6 +13,10 @@ public class BasicEnemyHealth : MonoBehaviour
     public float knockbackDuration = 0.2f;
     public float hitCooldownTime = 0.2f;
     private bool hitCooldown = false;
+
+    [Header("VFX Settings")]
+    public GameObject sparkVFXPrefab;
+    public float vfxDestroyDelay = 3f;
 
     
     private bool isSlowed = false;
@@ -126,6 +130,11 @@ public class BasicEnemyHealth : MonoBehaviour
 
     public void TakeDamage(float amount, Vector3 direction)
     {
+        TakeDamageAtPosition(amount, direction, transform.position);
+    }
+
+    public void TakeDamageAtPosition(float amount, Vector3 direction, Vector3 hitPosition)
+    {
         
         if (hitCooldown || agent.isDead) return; // Prevent damage if dead
 
@@ -134,6 +143,9 @@ public class BasicEnemyHealth : MonoBehaviour
         Invoke(nameof(ResetHitCooldown), hitCooldownTime);
 
         currentHealth -= amount;
+
+        // Spawn spark VFX at hit location
+        SpawnHitVFX(hitPosition, direction);
 
         if (currentHealth > 0)
         {
@@ -156,6 +168,30 @@ public class BasicEnemyHealth : MonoBehaviour
         }
 
         blinkTimer = blinkDuration;
+    }
+
+    private void SpawnHitVFX(Vector3 hitPosition, Vector3 hitDirection)
+    {
+        if (sparkVFXPrefab != null)
+        {
+            // Spawn VFX at the enemy's position with some offset
+            Vector3 vfxPosition = hitPosition + Vector3.up * 1.0f; // Offset upwards
+            
+            // Create rotation that faces the hit direction
+            Quaternion vfxRotation = Quaternion.LookRotation(-hitDirection);
+            
+            GameObject vfxInstance = Instantiate(sparkVFXPrefab, vfxPosition, vfxRotation);
+            
+            // Get the particle system and play it
+            ParticleSystem particles = vfxInstance.GetComponent<ParticleSystem>();
+            if (particles != null)
+            {
+                particles.Play();
+            }
+            
+            // Destroy the VFX after a delay
+            Destroy(vfxInstance, vfxDestroyDelay);
+        }
     }
 
     private void ResetHitCooldown()

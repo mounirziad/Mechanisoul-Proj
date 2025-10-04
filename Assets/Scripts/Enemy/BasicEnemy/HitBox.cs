@@ -9,13 +9,16 @@ public class HitBox : MonoBehaviour
         health.TakeDamage(weapon.damage, direction);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public void OnRayCastHit(Weapon weapon, Vector3 direction, Vector3 hitPoint)
+    {
+        health.TakeDamageAtPosition(weapon.damage, direction, hitPoint);
+    }
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
