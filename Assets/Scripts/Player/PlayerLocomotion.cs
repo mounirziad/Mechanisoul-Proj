@@ -61,6 +61,10 @@ public class PlayerLocomotion : MonoBehaviour
 
     LockOnSystem lockOnSystem;
 
+    // Add these new variables for jump cooldown
+    public float jumpCooldown = 1f; // 1 second cooldown after landing
+    private float jumpCooldownTimer = 0f;
+    public bool canJump = true;
 
     private void Awake()
     {
@@ -82,9 +86,10 @@ public class PlayerLocomotion : MonoBehaviour
         if (cameraObject == null) RefreshReferences();
 
         HandleFallingAndLanding();
-        HandleDodgeCooldown(); 
+        HandleDodgeCooldown();
+        HandleJumpCooldown(); // Add this line
 
-        if (playerManager.isInteracting && !isDodging) 
+        if (playerManager.isInteracting && !isDodging)
         {
             return;
         }
@@ -273,8 +278,6 @@ public class PlayerLocomotion : MonoBehaviour
             {
                 animatorManager.PlayTargetAnimation("Falling", false);
             }
-
-            // Let Unity gravity do the work � no AddForce needed
         }
 
         // Ground check using a CapsuleCast
@@ -287,16 +290,38 @@ public class PlayerLocomotion : MonoBehaviour
             if (!isGrounded && !playerManager.isInteracting)
             {
                 animatorManager.PlayTargetAnimation("Land", true);
+                
+
+
+                // Start jump cooldown when landing
+                jumpCooldownTimer = jumpCooldown;
+                canJump = false;
             }
 
             inAirTimer = 0;
             isGrounded = true;
+            isJumping = false; // Reset jumping state when grounded
+
         }
         else
         {
             isGrounded = false;
         }
     }
+
+    private void HandleJumpCooldown()
+    {
+        if (jumpCooldownTimer > 0)
+        {
+            jumpCooldownTimer -= Time.deltaTime;
+            if (jumpCooldownTimer <= 0)
+            {
+                canJump = true;
+                jumpCooldownTimer = 0f;
+            }
+        }
+    }
+
     private void OnDrawGizmos()
     {
         if (Application.isPlaying)
@@ -360,7 +385,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void HandleJumping()
     {
-        if(isGrounded)
+        if (isGrounded && canJump) // Added canJump check
         {
             animatorManager.animator.SetBool("isJumping", true);
             animatorManager.PlayTargetAnimation("Jump", false);
@@ -368,6 +393,9 @@ public class PlayerLocomotion : MonoBehaviour
             Vector3 playerVelocity = moveDirection;
             playerVelocity.y = jumpingVelocity;
             playerRigidbody.linearVelocity = playerVelocity;
+
+            // Set jumping state
+            isJumping = true;
         }
     }
 

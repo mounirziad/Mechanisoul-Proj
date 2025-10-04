@@ -29,6 +29,8 @@ public class InputManager : MonoBehaviour
     private float jumpInputBuffer = 0f;
     private const float jumpBufferTime = 0.2f; // Buffer for 0.2 seconds
 
+    
+
 
     private void Awake()
     {
@@ -135,8 +137,8 @@ public class InputManager : MonoBehaviour
         {
             jumpInputBuffer -= Time.deltaTime;
 
-            // Try to jump while buffer is active
-            if (playerLocomotion.isGrounded)
+            // Try to jump while buffer is active, but only if allowed by cooldown
+            if (playerLocomotion.isGrounded && playerLocomotion.canJump)
             {
                 jumpInputBuffer = 0f; // Consume the buffer
                 playerLocomotion.HandleJumping();
