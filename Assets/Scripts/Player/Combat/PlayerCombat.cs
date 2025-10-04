@@ -51,6 +51,14 @@ public class PlayerCombat : MonoBehaviour
     public float earlyComboWindow = 0.6f;   // When in animation you can start next combo (0.6 = 60% through)
     public float dodgeCancelWindow = 0.4f;  // When you can cancel attack with dodge (0.4 = 40% through)
 
+    [Header("Air Attack Settings")]
+    [Tooltip("Allow limited air attacks (prevents infinite air combos)")]
+    public bool allowAirAttacks = false;
+    [Tooltip("Maximum number of attacks allowed in air before landing")]
+    public int maxAirAttacks = 1;
+    private int currentAirAttackCount = 0;
+    private bool wasGroundedLastFrame = true;
+
     public bool isAiming = false;
     private InputManager inputManager;
     private PlayerControls playerControls;
@@ -105,6 +113,39 @@ public class PlayerCombat : MonoBehaviour
         ProcessQueuedAttack();
         HandleAiming();
         HandleCameraZoom();
+        ClearQueuedAttacksInAir();
+        TrackGroundedState();
+    }
+    
+    void TrackGroundedState()
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+        
+        // Reset air attack counter when landing
+        if (isGrounded && !wasGroundedLastFrame)
+        {
+            currentAirAttackCount = 0;
+        }
+        
+        wasGroundedLastFrame = isGrounded;
+    }
+    
+    void ClearQueuedAttacksInAir()
+    {
+        if (attackQueued)
+        {
+            var playerLoco = GetComponent<PlayerLocomotion>();
+            var playerMgr = GetComponent<PlayerManager>();
+            bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+            bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+            
+            // Clear queued attacks when airborne (if air attacks disabled) or when interacting
+            if (isInteracting || (!isGrounded && !allowAirAttacks))
+            {
+                attackQueued = false;
+            }
+        }
     }
 
     void HandleCameraZoom()
@@ -196,12 +237,63 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    bool CanAttack() => !isAttacking && !isAiming && Time.time - lastComboEnd > 0.2f;
+    bool CanAttack() 
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        var playerMgr = GetComponent<PlayerManager>();
+        bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+        bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+        
+        // Basic checks first (including interaction/landing check)
+        if (isAttacking || isAiming || isInteracting || Time.time - lastComboEnd < 0.2f)
+            return false;
+        
+        // If grounded and not interacting, allow attacks
+        if (isGrounded)
+        {
+            if (!wasGroundedLastFrame) // Just landed
+            {
+                currentAirAttackCount = 0; // Reset air attack counter on landing
+            }
+            return true;
+        }
+        
+        // If in air, check if air attacks are allowed and within limit
+        if (allowAirAttacks && currentAirAttackCount < maxAirAttacks)
+        {
+            return true;
+        }
+        
+        // Default: no attack allowed
+        return false;
+    }
 
     // Check for buffered attacks during animation
     void ProcessQueuedAttack()
     {
         if (!attackQueued || isAttacking) return;
+        
+        // Ensure player can still attack (check grounded, air limits, and interaction state)
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        var playerMgr = GetComponent<PlayerManager>();
+        bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+        bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+        
+        // Cancel queued attack if player is interacting (landing, dodging, etc.)
+        if (isInteracting)
+        {
+            attackQueued = false;
+            return;
+        }
+        
+        if (!isGrounded)
+        {
+            if (!allowAirAttacks || currentAirAttackCount >= maxAirAttacks)
+            {
+                attackQueued = false; // Cancel queued attack if air attacks disabled or limit reached
+                return;
+            }
+        }
         
         // Check if we're in the combo window
         if (Time.time - attackStartTime >= minAnimationPlayTime)
@@ -260,6 +352,14 @@ public class PlayerCombat : MonoBehaviour
             }
 
             SetAttackTarget();
+            
+            // Track air attacks
+            var playerLoco = GetComponent<PlayerLocomotion>();
+            bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+            if (!isGrounded)
+            {
+                currentAirAttackCount++; // Increment air attack counter
+            }
             
             // Handle different root motion modes
             switch (rootMotionMode)
@@ -453,5 +553,38 @@ public class PlayerCombat : MonoBehaviour
         {
             playerLoco.ForceStopAttackLunge();
         }
+    }
+    
+    // Public method to reset air attack counter (useful for abilities, special moves, etc.)
+    public void ResetAirAttackCounter()
+    {
+        currentAirAttackCount = 0;
+    }
+    
+    // Public method to check current air attack status (useful for UI or other systems)
+    public bool CanPerformAirAttack()
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        var playerMgr = GetComponent<PlayerManager>();
+        bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+        bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+        
+        // Can't attack while interacting (landing, dodging, etc.)
+        if (isInteracting) return false;
+        
+        if (isGrounded) return true; // Always can attack when grounded and not interacting
+        
+        return allowAirAttacks && currentAirAttackCount < maxAirAttacks;
+    }
+    
+    // Debug method to get air attack info
+    public string GetAirAttackDebugInfo()
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        var playerMgr = GetComponent<PlayerManager>();
+        bool isGrounded = playerLoco != null && playerLoco.isGrounded;
+        bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+        
+        return $"Grounded: {isGrounded}, Interacting: {isInteracting}, Air Attacks: {currentAirAttackCount}/{maxAirAttacks}, Allow Air: {allowAirAttacks}";
     }
 }
