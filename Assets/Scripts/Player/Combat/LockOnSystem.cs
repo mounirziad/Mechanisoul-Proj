@@ -50,6 +50,8 @@ public class LockOnSystem : MonoBehaviour
     private float lockGracePeriod = 0.3f;
     private float lockTime;
 
+    public LockOnLetterbox letterboxUI;
+
 
     private void Awake()
     {
@@ -216,6 +218,9 @@ public class LockOnSystem : MonoBehaviour
 
     public void SetLockTarget(Transform newTarget)
     {
+
+        letterboxUI?.ShowBars(); //show cinematic bars
+
         if (newTarget == null) return;
 
         // Unsubscribe from previous target
@@ -266,6 +271,7 @@ public class LockOnSystem : MonoBehaviour
 
         currentLockTarget = null;
         isLocked = false;
+        letterboxUI?.HideBars();
 
         var combat = GetComponent<PlayerCombat>();
         if (combat != null) combat.currentTarget = null;
