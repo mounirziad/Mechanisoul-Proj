@@ -13,6 +13,13 @@ public class Weapon : MonoBehaviour
 
     PlayerManager playerManager;
     
+    [Header("Audio Settings")]
+    [SerializeField] private float hitSoundCooldown = 0.2f;
+    private float lastHitSoundTime = -999f;
+    
+    [Header("Hit Tracking")]
+    private WeaponHitTracker hitTracker;
+    
     [Header("Rotation Stabilization")]
     [Tooltip("Enable rotation stabilization to prevent weird rotations during hand animations")]
     public bool enableRotationStabilization = true;
@@ -33,6 +40,13 @@ public class Weapon : MonoBehaviour
         playerManager = transform.root.gameObject.GetComponent<PlayerManager>();
         triggerBox = GetComponent<BoxCollider>();
         triggerBox.isTrigger = true; // make sure it's set as a trigger
+        
+        // Initialize hit tracker
+        hitTracker = GetComponent<WeaponHitTracker>();
+        if (hitTracker == null)
+        {
+            hitTracker = gameObject.AddComponent<WeaponHitTracker>();
+        }
         
         // Initialize stabilization
         characterRoot = transform.root;
@@ -91,6 +105,22 @@ public class Weapon : MonoBehaviour
         {
                 // Still keep Mechromancer (if that’s another type of enemy)
                 Mechromancer enemy = other.GetComponent<Mechromancer>();
+                
+                // Check if this is a new enemy hit using the hit tracker
+                bool isNewHit = hitTracker != null ? hitTracker.TryHitEnemy(other.gameObject) : true;
+                
+                // Play hit sound effect only for new hits with cooldown
+                if (isNewHit && SoundManager.Instance != null && Time.time - lastHitSoundTime >= hitSoundCooldown)
+                {
+                    SoundManager.Instance.PlayHitSound();
+                    lastHitSoundTime = Time.time;
+                    Debug.Log($"Playing hit sound for {other.name}");
+                }
+                else if (!isNewHit)
+                {
+                    Debug.Log($"Skipping hit sound for {other.name} - already hit this enemy");
+                }
+                
                 if (enemy != null)
                 {
                     Debug.Log("Hit mechromancer");
@@ -139,6 +169,21 @@ public class Weapon : MonoBehaviour
     public void DisableTriggerBox()
     {
         triggerBox.enabled = false;
+    }
+    
+    /// <summary>
+    /// Reset the hit sound cooldown to allow a new hit sound to play
+    /// This should be called when a new attack starts
+    /// </summary>
+    public void ResetHitSoundCooldown()
+    {
+        lastHitSoundTime = -999f;
+        
+        // Also start new attack tracking
+        if (hitTracker != null)
+        {
+            hitTracker.StartNewAttack();
+        }
     }
     
     /// <summary>

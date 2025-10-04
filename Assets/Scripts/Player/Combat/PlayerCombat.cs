@@ -246,6 +246,18 @@ public class PlayerCombat : MonoBehaviour
             anim.runtimeAnimatorController = combo[comboCounter].animatorOV;
             anim.Play("Attack", 0, 0);
             weapon.damage = combo[comboCounter].damage;
+            
+            // Reset weapon hit sound cooldown for new attack
+            if (weapon != null)
+            {
+                weapon.ResetHitSoundCooldown();
+            }
+            
+            // Play attack sound effect
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayAttackSound();
+            }
 
             SetAttackTarget();
             

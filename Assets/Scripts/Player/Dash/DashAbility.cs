@@ -1,4 +1,4 @@
-﻿    using System.Collections;
+    using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem; // NEW Input System
 
@@ -125,6 +125,12 @@ public class DashAbility : MonoBehaviour
         isDashing = true;
         dashDir = direction;
         dashStartPos = rb.position;
+        
+        // Play dash sound effect
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayDashSound();
+        }
 
         // Compute body length (prefer capsule/collider height)
         float bodyLen = fallbackBodyLength;
