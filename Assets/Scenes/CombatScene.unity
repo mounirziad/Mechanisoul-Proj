@@ -2240,127 +2240,151 @@ MonoBehaviour:
   angerColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
   joyColor: {r: 1, g: 0.9, b: 0.15, a: 1}
   lockedColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
---- !u!1 &1092660975
-GameObject:
+--- !u!1001 &1021517839
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1092660979}
-  - component: {fileID: 1092660978}
-  - component: {fileID: 1092660977}
-  - component: {fileID: 1092660976}
-  m_Layer: 0
-  m_Name: Third Person Aim Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1092660976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092660975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2588cc5dedbb75e49a44aada63f7b939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonAim
-  AimCollisionFilter:
-    serializedVersion: 2
-    m_Bits: 1
-  IgnoreTag: 
-  AimDistance: 200
-  NoiseCancellation: 1
---- !u!114 &1092660977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092660975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.79, y: 0.5, z: 0}
-  VerticalArmLength: 1.2
-  CameraSide: 1
-  CameraDistance: 4
-  AvoidObstacles:
-    Enabled: 0
-    CollisionFilter:
-      serializedVersion: 2
-      m_Bits: 1
-    IgnoreTag: 
-    CameraRadius: 0.2
-    DampingIntoCollision: 0
-    DampingFromCollision: 0.5
---- !u!114 &1092660978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092660975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
-  Priority:
-    Enabled: 1
-    m_Value: 5
-  OutputChannel: 1
-  StandbyUpdate: 2
-  m_StreamingVersion: 20241001
-  m_LegacyPriority: 0
-  Target:
-    TrackingTarget: {fileID: 8551793984105625928}
-    LookAtTarget: {fileID: 0}
-    CustomLookAtTarget: 0
-  Lens:
-    FieldOfView: 30.4
-    OrthographicSize: 5
-    NearClipPlane: 0.3
-    FarClipPlane: 1000
-    Dutch: 0
-    ModeOverride: 0
-    PhysicalProperties:
-      GateFit: 2
-      SensorSize: {x: 21.946, y: 16.002}
-      LensShift: {x: 0, y: 0}
-      FocusDistance: 10
-      Iso: 200
-      ShutterSpeed: 0.005
-      Aperture: 16
-      BladeCount: 5
-      Curvature: {x: 2, y: 11}
-      BarrelClipping: 0.25
-      Anamorphism: 0
-  BlendHint: 0
---- !u!4 &1092660979
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092660975}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.7930264, y: 1.7, z: -6.3599997}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.5110252
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.4087126
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1570723
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.36181062
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.006166246
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9320959
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.015885467
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 29.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 706612217909055274, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_Name
+      value: AimCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: TargetOffset.y
+      value: -2.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.Top.Height
+      value: 7.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.Top.Radius
+      value: 4.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: VerticalAxis.Value
+      value: 36.330025
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: HorizontalAxis.Value
+      value: -149.07382
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.Bottom.Height
+      value: 9.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.Bottom.Radius
+      value: 19.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.Center.Height
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.Center.Radius
+      value: 3.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Orbits.SplineCurvature
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: TrackerSettings.BindingMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: TrackerSettings.PositionDamping.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: TrackerSettings.PositionDamping.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2469127113217229754, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: TrackerSettings.PositionDamping.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959244262859404678, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_ControllerManager.Controllers.Array.data[1].Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959244262859404678, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: m_ControllerManager.Controllers.Array.data[2].Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655098418604547739, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Composition.ScreenPosition.x
+      value: -0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655098418604547739, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Composition.ScreenPosition.y
+      value: 0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Lens.FieldOfView
+      value: 51
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Priority.Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Priority.m_Value
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+      propertyPath: Target.TrackingTarget
+      value: 
+      objectReference: {fileID: 8551793984105625928}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
 --- !u!1 &1120122487 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4724468427663662279, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
@@ -4089,6 +4113,17 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &2060222146 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8858950653024506373, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+  m_PrefabInstance: {fileID: 1021517839}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
 --- !u!1 &2102072266 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5262535193088277564, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
@@ -5468,7 +5503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4592544167baca84bb2dd3063419dce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonAimCameraManager
-  thirdPersonAimCamera: {fileID: 0}
+  thirdPersonAimCamera: {fileID: 2060222146}
   freeLookCamera: {fileID: 134010726}
   aimCameraPriority: 15
   freeLookCameraPriority: 10
@@ -5482,6 +5517,7 @@ SceneRoots:
   - {fileID: 2053403698}
   - {fileID: 856509845}
   - {fileID: 4037408074288642213}
+  - {fileID: 1021517839}
   - {fileID: 909044731}
   - {fileID: 8551793984105625927}
   - {fileID: 1971551252}
@@ -5502,4 +5538,3 @@ SceneRoots:
   - {fileID: 1700684008}
   - {fileID: 1690852224}
   - {fileID: 737555549}
-  - {fileID: 1092660979}
