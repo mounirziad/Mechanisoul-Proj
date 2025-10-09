@@ -234,41 +234,86 @@ public class PlayerLocomotion : MonoBehaviour
     private void HandleRotation()
     {
         if (cameraObject == null) return;
-
         if (isJumping) { return; }
 
         Vector3 targetDirection = Vector3.zero;
+        float currentRotationSpeed = rotationSpeed;
 
-        // Check if player is aiming (right click held down)
-        bool isAiming = inputManager.aimInput;
-
+        // Priority 1: Lock-on system (highest priority)
         if (lockOnSystem != null && lockOnSystem.IsLocked() && lockOnSystem.currentLockTarget != null)
         {
-            // If locked on, face the target
+            // When locked on, player should ONLY face the target, no camera influence
             targetDirection = lockOnSystem.currentLockTarget.position - transform.position;
             targetDirection.y = 0;
-            targetDirection.Normalize();
-        }
-        else if (isAiming)
-        {
-            // When aiming, rotate player to face camera forward direction
-            targetDirection = cameraObject.forward;
-            targetDirection.y = 0;
-            targetDirection.Normalize();
 
-            // Optional: You can also blend movement input while aiming for strafing
+            // If target is too close or behind, use a more stable approach
+            if (targetDirection.magnitude < 1f)
+            {
+                // If target is very close, use the direction from previous frame or maintain current forward
+                targetDirection = transform.forward;
+            }
+            else
+            {
+                targetDirection.Normalize();
+            }
+
+            // Use faster rotation speed for more responsive lock-on
+            currentRotationSpeed = rotationSpeed * 2f;
+
+            // Apply rotation immediately for locked state
+            if (targetDirection != Vector3.zero)
+            {
+                Quaternion lockOnRotation = Quaternion.LookRotation(targetDirection); // Renamed variable
+                transform.rotation = Quaternion.Slerp(transform.rotation, lockOnRotation, currentRotationSpeed * Time.deltaTime);
+            }
+            return; // CRITICAL: Return early to prevent other rotation logic from interfering
+        }
+
+        // Only execute the following if NOT locked on
+
+        // Priority 2: Aiming system (medium priority)
+        else if (inputManager.aimInput)
+        {
+            // Get the aim camera manager
+            ThirdPersonAimCameraManager aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
+            
+            if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
+            {
+                // Use the aim camera's direction for player rotation
+                targetDirection = aimCameraManager.GetAimDirection();
+                
+                if (targetDirection == Vector3.zero)
+                {
+                    // Fallback to camera forward if aim direction is not available
+                    targetDirection = cameraObject.forward;
+                    targetDirection.y = 0;
+                    targetDirection.Normalize();
+                }
+            }
+            else
+            {
+                // Fallback to camera forward for non-aim camera aiming
+                targetDirection = cameraObject.forward;
+                targetDirection.y = 0;
+                targetDirection.Normalize();
+            }
+
+            // Reduce movement influence on rotation when aiming for more precise control
             if (inputManager.moveAmount > 0.1f)
             {
-                // Combine camera direction with movement for strafing while aiming
                 Vector3 movementDirection = cameraObject.forward * inputManager.verticalInput;
                 movementDirection += cameraObject.right * inputManager.horizontalInput;
                 movementDirection.y = 0;
                 movementDirection.Normalize();
 
-                // Blend between pure camera direction and movement direction
-                targetDirection = Vector3.Lerp(targetDirection, movementDirection, 0.3f);
+                // Reduced blend for more stable aiming (was 0.3f)
+                targetDirection = Vector3.Lerp(targetDirection, movementDirection, 0.1f);
             }
+
+            // Reduced rotation speed when aiming for more precise control
+            currentRotationSpeed = rotationSpeed * 0.8f;
         }
+        // Priority 3: Normal free movement (lowest priority)
         else
         {
             // Normal free movement rotation
@@ -279,13 +324,12 @@ public class PlayerLocomotion : MonoBehaviour
 
             if (targetDirection == Vector3.zero)
                 targetDirection = transform.forward;
+
+            // Use normal rotation speed for free movement
+            currentRotationSpeed = rotationSpeed;
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-
-        // Use different rotation speeds for aiming vs normal movement
-        float currentRotationSpeed = isAiming ? rotationSpeed * 1.5f : rotationSpeed;
-
         Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, currentRotationSpeed * Time.deltaTime);
         transform.rotation = playerRotation;
     }
@@ -531,4 +575,6 @@ public class PlayerLocomotion : MonoBehaviour
             }
         }
     }
+
+
 }

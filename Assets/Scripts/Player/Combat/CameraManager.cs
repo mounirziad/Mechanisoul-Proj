@@ -36,6 +36,26 @@ public class CameraManager : MonoBehaviour
     {
         if (freeLookCamera == null) return;
 
+        // Check if ThirdPersonAimCameraManager is handling camera switching
+        ThirdPersonAimCameraManager aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
+        if (aimCameraManager != null)
+        {
+            // Let the ThirdPersonAimCameraManager handle camera switching
+            // Only apply zoom when FreeLook camera is active
+            if (freeLookCamera.Priority > 5) // Only when FreeLook is the active camera
+            {
+                ApplyFreeLookZoom();
+            }
+        }
+        else
+        {
+            // Fallback to original behavior if no ThirdPersonAimCameraManager
+            ApplyFreeLookZoom();
+        }
+    }
+
+    private void ApplyFreeLookZoom()
+    {
         // Get aiming state from PlayerCombat
         if (playerCombat != null)
         {
