@@ -235,10 +235,12 @@ public class PlayerLocomotion : MonoBehaviour
     {
         if (cameraObject == null) return;
 
-
         if (isJumping) { return; }
 
         Vector3 targetDirection = Vector3.zero;
+
+        // Check if player is aiming (right click held down)
+        bool isAiming = inputManager.aimInput;
 
         if (lockOnSystem != null && lockOnSystem.IsLocked() && lockOnSystem.currentLockTarget != null)
         {
@@ -246,6 +248,26 @@ public class PlayerLocomotion : MonoBehaviour
             targetDirection = lockOnSystem.currentLockTarget.position - transform.position;
             targetDirection.y = 0;
             targetDirection.Normalize();
+        }
+        else if (isAiming)
+        {
+            // When aiming, rotate player to face camera forward direction
+            targetDirection = cameraObject.forward;
+            targetDirection.y = 0;
+            targetDirection.Normalize();
+
+            // Optional: You can also blend movement input while aiming for strafing
+            if (inputManager.moveAmount > 0.1f)
+            {
+                // Combine camera direction with movement for strafing while aiming
+                Vector3 movementDirection = cameraObject.forward * inputManager.verticalInput;
+                movementDirection += cameraObject.right * inputManager.horizontalInput;
+                movementDirection.y = 0;
+                movementDirection.Normalize();
+
+                // Blend between pure camera direction and movement direction
+                targetDirection = Vector3.Lerp(targetDirection, movementDirection, 0.3f);
+            }
         }
         else
         {
@@ -260,10 +282,12 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
+        // Use different rotation speeds for aiming vs normal movement
+        float currentRotationSpeed = isAiming ? rotationSpeed * 1.5f : rotationSpeed;
+
+        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, currentRotationSpeed * Time.deltaTime);
         transform.rotation = playerRotation;
-
     }
 
     private void HandleFallingAndLanding()
