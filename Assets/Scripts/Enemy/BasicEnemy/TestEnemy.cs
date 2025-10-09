@@ -98,11 +98,24 @@ public class TestEnemy : MonoBehaviour
         isDead = true;
         Debug.Log("Enemy died!");
 
+        // Disable all colliders when enemy dies
+        DisableHitBoxes();
+
         // Death camera effects
         OnDeath();
 
         // Destroy or disable enemy
         Destroy(gameObject, 1f); // Optional delay for death animation
+    }
+
+    private void DisableHitBoxes()
+    {
+        // Disable all colliders to prevent any interaction
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
+        }
     }
 
     private void OnDeath()

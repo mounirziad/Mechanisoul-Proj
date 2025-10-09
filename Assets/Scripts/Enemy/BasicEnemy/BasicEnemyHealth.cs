@@ -204,10 +204,34 @@ public class BasicEnemyHealth : MonoBehaviour
         if (OnDeath != null)
             OnDeath.Invoke();
 
+        // Disable all hitboxes when enemy dies
+        DisableHitBoxes();
+
         AiDeathState deathState = agent.stateMachine.GetState(AiStateId.Death) as AiDeathState;
         deathState.direction = direction;
         agent.stateMachine.ChangeState(AiStateId.Death);
        
+    }
+
+    private void DisableHitBoxes()
+    {
+        // Disable all HitBox components
+        HitBox[] hitBoxes = GetComponentsInChildren<HitBox>();
+        foreach (HitBox hitBox in hitBoxes)
+        {
+            hitBox.enabled = false;
+        }
+
+        // Disable all colliders to prevent any interaction
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            // Keep trigger colliders disabled but non-trigger colliders might be needed for ragdoll physics
+            if (collider.isTrigger)
+            {
+                collider.enabled = false;
+            }
+        }
     }
 
      

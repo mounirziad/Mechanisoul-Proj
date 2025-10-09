@@ -19,6 +19,9 @@ public class AiDeathState : AiState
             locomotion.DisableNavMeshAgent();
         }
 
+        // Disable hitboxes and make dead enemy non-collidable with player
+        DisableHitBoxesAndCollision(agent);
+
         agent.ragdoll.ActivateRagdoll();
         direction.y = 1;
         agent.ragdoll.ApplyForce(direction * agent.config.dieForce);
@@ -77,5 +80,29 @@ public class AiDeathState : AiState
 
         // Destroy the GameObject after flashing is complete
         Object.Destroy(agent.gameObject);
+    }
+
+    /// <summary>Disables hitboxes and makes dead enemy non-collidable with player</summary>
+    private void DisableHitBoxesAndCollision(AiAgent agent)
+    {
+        // Disable all HitBox components
+        HitBox[] hitBoxes = agent.GetComponentsInChildren<HitBox>();
+        foreach (HitBox hitBox in hitBoxes)
+        {
+            hitBox.enabled = false;
+        }
+
+        // Move dead enemy to "Ignore Raycast" layer so player can walk through
+        SetLayerRecursively(agent.gameObject, LayerMask.NameToLayer("Ignore Raycast"));
+    }
+
+    /// <summary>Sets the layer of the GameObject and all its children recursively</summary>
+    private void SetLayerRecursively(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
     }
 }
