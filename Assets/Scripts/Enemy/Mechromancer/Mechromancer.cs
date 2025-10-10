@@ -1,11 +1,12 @@
 using UnityEngine;
 using System;
 
-public class Mechromancer : MonoBehaviour
+public class Mechromancer : MonoBehaviour, IDamage
 {
     [Header("Stats")]
     [SerializeField] public float maxHealth = 75f;
-    [SerializeField] private float currentHealth;
+    [SerializeField] public float currentHealth;
+    [SerializeField] private float damageProvider = 8f;
 
     public float rotationSpeed;
     public GameObject blade;
@@ -41,6 +42,11 @@ public class Mechromancer : MonoBehaviour
         {
             attacking = false;
         }
+    }
+
+    public float GetDamage()
+    {
+        return damageProvider;
     }
 
     public void TakeDamage(float damage)

@@ -96,6 +96,7 @@ public class AttackStrategy : IActionStrategy
     public bool CanPerform => true; //agent can always attack
     public bool Complete {  get; private set; }
 
+    readonly IDamage damageProvider;
     readonly GoapAgent agent;
     private Mechromancer mechromancer;
     readonly NavMeshAgent navMesh;
@@ -107,6 +108,7 @@ public class AttackStrategy : IActionStrategy
         this.agent = agent;
         this.navMesh = agent.GetComponent<NavMeshAgent>();
 
+        this.damageProvider = agent.GetComponent<IDamage>();
         this.mechromancer = agent.GetComponent<Mechromancer>();
 
         timer = new CountdownTimer(attackDuration);
@@ -196,8 +198,9 @@ public class AttackStrategy : IActionStrategy
 
         if (playerHealth != null)
         {
-            playerHealth.TakeDamage(agent.damage);
-            Debug.Log($"Boss dealt {agent.damage} damage to the player");
+            float damage = damageProvider != null ? damageProvider.GetDamage() : 8f;
+            playerHealth.TakeDamage(damage);
+            Debug.Log($"Boss dealt {damage} damage to the player");
         }
     }
 }
@@ -207,6 +210,7 @@ public class ResurrectStrategy : IActionStrategy
     public bool CanPerform => true;
     public bool Complete { get; private set; }
 
+    readonly MechromancerBehaviour mechromancer;
     readonly GoapAgent agent;
     readonly GameObject enemyPrefab;
     readonly Transform[] spawnPoints;
@@ -221,6 +225,8 @@ public class ResurrectStrategy : IActionStrategy
         this.enemyPrefab = enemyPrefab;
         this.spawnPoints = spawnPoints;
         //this.agent = boss.GetComponent<GoapAgent>();
+
+        mechromancer = agent.GetComponent<MechromancerBehaviour>();
 
         timer = new CountdownTimer(resurrectionTime);
         timer.OnTimerStart += () => Complete = false;
@@ -237,7 +243,7 @@ public class ResurrectStrategy : IActionStrategy
         hasStarted = true;
 
         timer.Start();
-        agent.MarkResurrected();
+        mechromancer?.MarkResurrected();
     }
 
     public void Update(float deltaTime) => timer.Tick(deltaTime);
