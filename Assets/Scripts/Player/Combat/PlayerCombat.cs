@@ -259,7 +259,7 @@ public class PlayerCombat : MonoBehaviour
         if (aimCameraManager != null)
         {
             Vector3 aimTarget = aimCameraManager.GetAimTarget();
-            
+
             // If we have a valid aim target, calculate direction from shoot point to target
             if (aimTarget != Vector3.zero)
             {
@@ -267,7 +267,7 @@ public class PlayerCombat : MonoBehaviour
                 return direction;
             }
         }
-        
+
         // Fallback: use camera's forward direction if aim camera is active
         if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
         {
@@ -277,8 +277,8 @@ public class PlayerCombat : MonoBehaviour
                 return cameraDirection;
             }
         }
-        
-        // Final fallback: use shoot point forward
+
+        // Final fallback: use shoot point forward (including vertical component)
         return shootPoint.forward;
     }
 

@@ -229,10 +229,8 @@ public class ThirdPersonAimCameraManager : MonoBehaviour
     {
         if (thirdPersonAimCamera != null && thirdPersonAimCamera.Priority > 10)
         {
-            // Get direction from camera's forward, but ensure it's world space
-            Vector3 aimDirection = thirdPersonAimCamera.transform.forward;
-            aimDirection.y = 0; // Remove vertical component for player rotation
-            return aimDirection.normalized;
+            // Return the full camera forward direction including vertical component
+            return thirdPersonAimCamera.transform.forward;
         }
         return Vector3.zero;
     }
