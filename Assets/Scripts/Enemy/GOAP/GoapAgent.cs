@@ -5,36 +5,19 @@ using UnityEngine.AI;
 
 
 [RequireComponent (typeof(NavMeshAgent))]
-public class GoapAgent : MonoBehaviour
+public partial class GoapAgent : MonoBehaviour
 {
     [Header("Sensors")]
     [SerializeField] Sensor chaseSensor; //bigger radius
     [SerializeField] public Sensor attackSensor;
 
-    [Header("Locations")]
-    [SerializeField] Transform restingPosition;
-    [SerializeField] Transform hidingPosition;
-
-    [Header("Stats")] //temporary implementation
-    public float health = 75f;
-    public float damage = 10f;
-
-    [Header("Player Information")]
+    [Header("Player Reference")]
     [SerializeField] private GameObject player;
     public GameObject Player => player;
-
-    [Header("Minion Spawning")]
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private Transform[] spawnPoints;
-
-    private Mechromancer mechromancer;
-
-    NavMeshAgent navMesh;
-    Rigidbody rb;
-
     GameObject target;
     Vector3 destination;
 
+    //Goap core information
     CountdownTimer timer;
 
     AgentGoal lastGoal;
@@ -46,149 +29,48 @@ public class GoapAgent : MonoBehaviour
     public HashSet<AgentAction> actions;
     public HashSet<AgentGoal> goals;
 
-    private bool resurrectedInPhaseOne = false;
-    private bool resurrectedInPhaseTwo = false;
-    public bool canResurrect => EvaluateResurrection();
-
     IGoapPlanner gPlanner;
+    IGoapBehaviour behaviour;
+
+    private NavMeshAgent navMesh;
+    public NavMeshAgent NavMesh => navMesh;
 
     private void Awake()
     {
         navMesh = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>();
+        /*rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.isKinematic = true;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-        mechromancer = GetComponent<Mechromancer>();
+        mechromancer = GetComponent<Mechromancer>();*/
         gPlanner = new GoapPlanner();
     }
 
     private void Start()
     {
         SetupTimers();
-        SetupBeliefs(); //Beliefs have to come first because actions and goals depend on beliefs
-        SetupActions();
-        SetupGoals();
+        //Beliefs have to come first because actions and goals depend on beliefs
+        
+        behaviour = GetComponent<IGoapBehaviour>();
+
+        if (behaviour == null)
+        {
+            Debug.LogError("Missing IGoapBehaviour on agent");
+            enabled = false;
+            return;
+        }
+
+        beliefs = behaviour.ProvideBeliefs();
+        actions = behaviour.ProvideActions(beliefs);
+        goals = behaviour.ProvideGoals(beliefs);
+
+        chaseSensor.OnTargetChanged += HandleTargetChanged;
     }
 
-    void SetupBeliefs()
+    private void OnDestroy()
     {
-        beliefs = new Dictionary<string, AgentBelief>();
-        BeliefFactory factory = new BeliefFactory(this, beliefs);
-
-        factory.AddBelief("Nothing", () => false);
-
-        factory.AddBelief("AgentIdle", () => !navMesh.hasPath);
-        factory.AddBelief("AgentMoving", () => navMesh.hasPath);
-        //factory.AddBelief("MovingToAttack", () => navMesh.hasPath);
-
-        factory.AddBelief("PhaseOne", () => health >= 50);
-        factory.AddBelief("PhaseTwo", () => health < 50 && health >= 35);
-        factory.AddBelief("Rage", () => health < 35);
-
-        factory.AddLocationBelief("AgentAtHidingPosition", 8f, hidingPosition);
-        factory.AddLocationBelief("AgentAtRestingPosition", 3f, restingPosition);
-
-        factory.AddSensorBelief("PlayerInChaseRange", chaseSensor);
-        factory.AddSensorBelief("PlayerInAttackRange", attackSensor);
-
-        factory.AddBelief("AttackingPlayer", () => false); //Player can always be attacked, will never come true
-        factory.AddBelief("CanResurrect", () => canResurrect);
-        factory.AddBelief("HasResurrectedThisPhase", () => !canResurrect);
-    }
-
-    void SetupActions()
-    {
-        actions = new HashSet<AgentAction>();
-
-        actions.Add(new AgentAction.Builder("Relax")
-            .WithStrategy(new IdleStrategy(5))
-            .AddEffect(beliefs["Nothing"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Wander Around")
-            .WithStrategy(new WanderStrategy(navMesh, 10))
-            .AddEffect(beliefs["AgentMoving"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Move To Hiding Position")
-            .WithStrategy(new MoveStrategy(navMesh, () => hidingPosition.position))
-            .AddEffect(beliefs["AgentAtHidingPosition"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Hiding To Rest Area")
-            .WithStrategy(new MoveStrategy(navMesh, () => restingPosition.position))
-            .AddPrecondition(beliefs["AgentAtHidingPosition"])
-            .AddEffect(beliefs["AgentAtRestingPosition"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Scan")
-            .WithStrategy(new WanderStrategy(navMesh, 10))
-            .AddPrecondition(beliefs["AgentAtRestingPosition"])
-            .AddEffect(beliefs["AgentMoving"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Chase Player")
-            .WithStrategy(new MoveStrategy(navMesh, () => beliefs["PlayerInChaseRange"].Location))
-            .AddPrecondition(beliefs["PlayerInChaseRange"])
-            .AddEffect(beliefs["PlayerInAttackRange"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Attack Player")
-            .WithStrategy(new AttackStrategy(this))
-            .AddPrecondition(beliefs["PlayerInAttackRange"])
-            .AddEffect(beliefs["AttackingPlayer"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Drop Down")
-            .WithStrategy(new DropDownStrategy(transform, restingPosition.position))
-            .AddPrecondition(beliefs["AgentAtHidingPosition"])
-            .AddPrecondition(beliefs["PlayerInChaseRange"])
-            .AddEffect(beliefs["PlayerInAttackRange"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Resurrect Robots")
-            .WithStrategy(new ResurrectStrategy(this, enemyPrefab, spawnPoints))
-            .AddPrecondition(beliefs["AgentAtHidingPosition"])
-            .AddPrecondition(beliefs["CanResurrect"])
-            .AddEffect(beliefs["HasResurrectedThisPhase"])
-            .Build());
-    }
-
-    void SetupGoals()
-    {
-        goals = new HashSet<AgentGoal>();
-
-        goals.Add(new AgentGoal.Builder("Chill out")
-            .WithPriority(1)
-            .WithDesiredEffect(beliefs["Nothing"])
-            .Build());
-
-        goals.Add(new AgentGoal.Builder("Wander")
-            .WithPriority(1)
-            .WithDesiredEffect(beliefs["AgentMoving"])
-            .Build());
-
-        goals.Add(new AgentGoal.Builder("Hide")
-            .WithPriority(2)
-            .WithDesiredEffect(beliefs["AgentAtHidingPosition"])
-            .Build());
-
-        goals.Add(new AgentGoal.Builder("Ambush Player")
-            .WithPriority(4)
-            .WithDesiredEffect(beliefs["PlayerInAttackRange"])
-            .Build());
-
-        goals.Add(new AgentGoal.Builder("SeekAndKill")
-            .WithPriority(3)
-            .WithDesiredEffect(beliefs["AttackingPlayer"])
-            .Build());
-
-        goals.Add(new AgentGoal.Builder("Resurrect")
-            .WithPriority(5)
-            .WithDesiredEffect(beliefs["HasResurrectedThisPhase"])
-            .Build());
+        chaseSensor.OnTargetChanged -= HandleTargetChanged;
     }
 
     void SetupTimers() //currently timers are working to change the health bar, for the final build we do not want this as the enemy should only be taking damage from the player REMOVE SOON
@@ -196,16 +78,9 @@ public class GoapAgent : MonoBehaviour
         timer = new CountdownTimer(2f);
         timer.OnTimerStop += () =>
         {
-            UpdateStats();
             timer.Start();
         };
         timer.Start();
-    }
-
-    void UpdateStats()
-    {
-        health += InRangeOf(restingPosition.position, 3f) ? 20 : -10;
-        health = Mathf.Clamp(health, 0, 75);
     }
 
     bool InRangeOf(Vector3 pos, float range) => Vector3.Distance(transform.position, pos) <= range;
@@ -213,7 +88,7 @@ public class GoapAgent : MonoBehaviour
     void OnEnable() => chaseSensor.OnTargetChanged += HandleTargetChanged;
     void OnDisable() => chaseSensor.OnTargetChanged -= HandleTargetChanged;
 
-    void HandleTargetChanged() //force planner to change if things aren't going to plan
+    public void HandleTargetChanged() //force planner to change if things aren't going to plan
     {
         Debug.Log("Target changed, clearing action and goal");
 
@@ -288,7 +163,7 @@ public class GoapAgent : MonoBehaviour
         }
     }
 
-    void CalculatePlan()
+    public void CalculatePlan()
     {
         var priorityLevel = currentGoal?.Priority ?? 0;
 
@@ -305,36 +180,6 @@ public class GoapAgent : MonoBehaviour
         if (potentialPlan != null)
         {
             actionPlan = potentialPlan;
-        }
-    }
-
-    bool EvaluateResurrection()
-    {
-        if (health > 50) //phase one
-        {
-            return !resurrectedInPhaseOne;
-        }
-
-        else if (health > 35) //phase two
-        {
-            return !resurrectedInPhaseTwo;
-        }
-
-        else //rage
-        {
-            return false;
-        }
-    }
-
-    public void MarkResurrected()
-    {
-        if (health > 50)
-        {
-            resurrectedInPhaseOne = true;
-        }
-        else if (health > 35)
-        {
-            resurrectedInPhaseTwo = true;
         }
     }
 }
