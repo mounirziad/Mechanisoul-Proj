@@ -66,6 +66,11 @@ public class PlayerLocomotion : MonoBehaviour
     private float jumpCooldownTimer = 0f;
     public bool canJump = true;
 
+    [Header("Ground Detection Settings")]
+    public float groundDetectionBufferTime = 0.2f; // Time buffer for ground detection
+    private float lastTimeGrounded = 0f;
+    private bool wasGroundedLastFrame = true;
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -336,30 +341,23 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleFallingAndLanding()
     {
-        RaycastHit hit;
-        Vector3 rayCastOrigin = transform.position;
-        rayCastOrigin.y += rayCastHeightOffset;
+        // Use a simple sphere cast straight down from the player's feet for reliable ground detection
+        Vector3 groundCheckPosition = groundCheck.position;
+        bool wasGroundedThisFrame = isGrounded;
 
-        if (!isGrounded && !isJumping)
+        // Simple sphere cast for ground detection - immune to camera rotation issues
+        if (Physics.SphereCast(groundCheckPosition, detectionradius, Vector3.down, out RaycastHit hit, detectionheight, groundLayer))
         {
-            if (!playerManager.isInteracting)
-            {
-                animatorManager.PlayTargetAnimation("Falling", false);
-            }
-        }
+            // Only consider it a proper landing if we meet all these conditions:
+            bool isValidLanding = !isGrounded &&
+                                 !playerManager.isInteracting &&
+                                 !isJumping &&
+                                 playerRigidbody.linearVelocity.y <= 0f && // Only when moving downward
+                                 inAirTimer > 0.1f; // Only if we were actually in air for a bit
 
-        // Ground check using a CapsuleCast
-        Vector3 capsuleBottom = groundCheck.position;
-        Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
-        float capsuleRadius = detectionradius;
-
-        if (Physics.CapsuleCast(capsuleTop, capsuleBottom, capsuleRadius, Vector3.down, out hit, detectionheight, groundLayer))
-        {
-            if (!isGrounded && !playerManager.isInteracting)
+            if (isValidLanding)
             {
                 animatorManager.PlayTargetAnimation("Land", true);
-                
-
 
                 // Start jump cooldown when landing
                 jumpCooldownTimer = jumpCooldown;
@@ -368,13 +366,38 @@ public class PlayerLocomotion : MonoBehaviour
 
             inAirTimer = 0;
             isGrounded = true;
-            isJumping = false; // Reset jumping state when grounded
-
+            isJumping = false;
+            lastTimeGrounded = Time.time;
         }
         else
         {
             isGrounded = false;
+            inAirTimer += Time.deltaTime;
+
+            // Only play falling animation if actually falling (negative Y velocity and not jumping up)
+            if (!isGrounded && !isJumping && ShouldPlayFallingAnimation())
+            {
+                if (!playerManager.isInteracting)
+                {
+                    animatorManager.PlayTargetAnimation("Falling", false);
+                }
+            }
         }
+
+        wasGroundedLastFrame = wasGroundedThisFrame;
+    }
+
+    private bool ShouldPlayFallingAnimation()
+    {
+        // Don't play falling if we're grounded
+        if (isGrounded) return false;
+
+        // Don't play falling if we're jumping upwards
+        if (isJumping && playerRigidbody.linearVelocity.y > 0) return false;
+
+        // Only play falling if we have significant downward velocity AND we've been in air for a bit
+        // This prevents falling animation during brief camera movements
+        return playerRigidbody.linearVelocity.y < -1f && inAirTimer > 0.2f;
     }
 
     private void HandleJumpCooldown()
@@ -386,6 +409,16 @@ public class PlayerLocomotion : MonoBehaviour
             {
                 canJump = true;
                 jumpCooldownTimer = 0f;
+            }
+        }
+
+        // Failsafe: if we're grounded and not in any special state, ensure we can jump
+        if (isGrounded && !playerManager.isInteracting && !isDodging && !isJumping)
+        {
+            // Only force enable jump if cooldown seems stuck and we're clearly grounded
+            if (!canJump && jumpCooldownTimer <= 0)
+            {
+                canJump = true;
             }
         }
     }
