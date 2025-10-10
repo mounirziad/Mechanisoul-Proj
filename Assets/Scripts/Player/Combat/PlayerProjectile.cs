@@ -10,6 +10,8 @@ public class PlayerProjectile : MonoBehaviour
     private Vector3 direction;
     private RangedModifiers mods;
     private PlayerCombat owner;
+    private Vector3 targetPosition;
+    private bool hasTarget = false;
 
     public void Initialize(Vector3 shootDirection, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null)
     {
@@ -17,6 +19,31 @@ public class PlayerProjectile : MonoBehaviour
         damage = projectileDamage;
         mods = rangedMods;
         owner = owningCombat;
+        
+        // Align the projectile's rotation to the direction
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+        
+        Destroy(gameObject, lifetime);
+    }
+
+    public void InitializeWithTarget(Vector3 targetPos, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null)
+    {
+        targetPosition = targetPos;
+        hasTarget = true;
+        direction = (targetPosition - transform.position).normalized;
+        damage = projectileDamage;
+        mods = rangedMods;
+        owner = owningCombat;
+        
+        // Align the projectile's rotation to the direction
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+        
         Destroy(gameObject, lifetime);
     }
 
