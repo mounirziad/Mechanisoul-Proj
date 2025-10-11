@@ -362,7 +362,11 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
       propertyPath: m_Avatar
       value: 
-      objectReference: {fileID: 9000000, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
+      objectReference: {fileID: 9000000, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
+    - target: {fileID: 5866666021909216657, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
       propertyPath: m_Controller
       value: 
@@ -392,7 +396,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6318198384421173044, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
       insertIndex: 0
       addedObject: {fileID: 677558668}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -8540008747433850048, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1747124651}
   m_SourcePrefab: {fileID: 100100000, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
 --- !u!1 &376110444
 GameObject:
@@ -2645,6 +2652,70 @@ MonoBehaviour:
   musicVolume: 0.6
   pitchVariation: 0.1
   globalHitSoundCooldown: 0.15
+--- !u!1 &1747124649 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8540008747433850048, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
+  m_PrefabInstance: {fileID: 325574739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1747124651
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747124649}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 0}
+  m_Bones: []
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 0}
+  m_AABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_DirtyAABB: 0
 --- !u!1 &1804909517 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
@@ -3506,6 +3577,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3328216917659208087, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3385643053220842585, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 18ebb871d92399c44854e7f633fd5d28, type: 3}
+    - target: {fileID: 3385643053220842585, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3385643053220842585, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
@@ -3607,6 +3686,10 @@ PrefabInstance:
     - target: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 8330480493364005207, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalPosition.x
