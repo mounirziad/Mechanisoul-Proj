@@ -149,14 +149,27 @@ public class Weapon : MonoBehaviour
             {
                 Debug.Log("Hit basic enemy");
                 Vector3 direction = (other.transform.position - transform.position).normalized;
-                basicEEnemy.TakeDamage(damage, direction);
+                basicEEnemy.TakeDamage(damage, direction); //replace with new method of dealing damage that uses upgrade modifiers
+                
+                
+                playerManager.AddStack();
 
+
+
+
+
+
+                //relic from old upgrade system o7
+                /*
                 basicEEnemy.ApplyModifiers(
                      playerManager.GetSlowAmount(),
                      playerManager.GetSlowLength(),
                      playerManager.GetStunLength()
                  );
                 playerManager.ApplyLifesteal(damage);
+                */
+
+                
             }
         }
     }

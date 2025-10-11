@@ -8,10 +8,27 @@ public class PlayerManager : MonoBehaviour
     PlayerHealth playerHealth;
     public bool isInteracting;
 
+    [Header("Base Player Values")]
+    [SerializeField] float baseDamage;
+
     [Header("Dash / Abilities")]
     [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
 
-    [Header("Upgrade Values")]
+    [Header("Melee Upgrade Values")]
+    [SerializeField] int buffStackCap; //max dmg buff stacks
+    [SerializeField] float buffPercent; //% buff added after each attack
+    [SerializeField] int buffStacks; //current # of dmg stacks
+    [SerializeField] float buffStackMaxTime; //max amount of time between attacks to keep buff
+    [SerializeField] float buffStackTimer; //current time remaining till lose dmg stacks
+    [SerializeField] bool hasBuffStacks; //if player has dmg buff stacks
+
+
+
+
+
+
+    //should be obsolete soon inshallah
+    [Header("OLD Upgrade Values")]
     [SerializeField] float aoeAmount;
     [SerializeField] float slowAmount;
     [SerializeField] float slowLength;
@@ -32,6 +49,7 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
         inputManager.HandleAllInputs();
+        HandleTimers();
     }
 
     private void FixedUpdate()
@@ -46,6 +64,55 @@ public class PlayerManager : MonoBehaviour
         animator.SetBool("isGrounded", playerLocomotion.isGrounded);
     }
 
+
+    void HandleTimers()
+    {
+        if (hasBuffStacks)
+        {
+            if (buffStackTimer <= 0)
+            {
+                hasBuffStacks = false;
+                buffStacks = 0;
+            }
+
+            buffStackTimer -= Time.deltaTime;
+        }
+    }
+
+    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent)
+    {
+        this.buffStackCap = buffStackCap;
+        this.buffPercent = buffPercent;
+    }
+
+    public void AddStack()
+    {
+        if (buffStacks < buffStackCap) buffStacks++;
+
+        hasBuffStacks = true;
+        buffStackTimer = buffStackMaxTime;
+    }
+
+    public float GetDamageBuffIncrease()
+    {
+        return (float)buffStacks * buffPercent;
+    }
+
+    /*
+     * for use if the basedamage gets moved to this script
+    public float GetDamageDealt()
+    {
+        return baseDamage * GetDamageBuffIncrease();
+    }
+    */
+
+
+
+
+
+
+
+    //old melee upgrades, will delete when fully removed from use
     public void UpdateUpgrades(float aoeAmount, float slowAmount, float slowLength, float lifeStealAmount, float stunLength)
     {
         this.aoeAmount = aoeAmount;
