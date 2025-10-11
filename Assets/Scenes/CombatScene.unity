@@ -434,7 +434,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 52f3aedaa78590f4a8023b2d9352d869, type: 2}
+  - {fileID: 2100000, guid: e5ffd493eb5ce1e4eaac0acfc8190738, type: 2}
   - {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -926,8 +926,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cabeee9fc3347f74bb9f4f97d7e4c6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeLovePickup
-  handler: {fileID: 1971551251}
-  destroyOnPickup: 0
 --- !u!1 &502997565 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2752130247318191580, guid: a4397ed03ffeafe4ab3cfe033d77e00c, type: 3}
@@ -1153,8 +1151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9309cf82ae906f9448280d0e51a29abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeFearPickup
-  handler: {fileID: 1971551251}
-  destroyOnPickup: 0
 --- !u!1 &724149918
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,8 +1991,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40811dac20a8f4408a391641b1f0a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeSadnessPickup
-  handler: {fileID: 1971551251}
-  destroyOnPickup: 0
 --- !u!20 &888794536 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2279032322536703407, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
@@ -3644,8 +3638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507133a3611de654ba5bd952c2f6cda8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetAllUpgradesPickup
-  handler: {fileID: 1971551251}
-  destroyOnPickup: 0
 --- !u!65 &1955632071
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3774,6 +3766,9 @@ MonoBehaviour:
   meleeJoyLvl: 0
   dashAngerLvl: 0
   dashSadnessLvl: 0
+  dashJoyLvl: 0
+  dashLoveLvl: 0
+  dashFearLvl: 0
   rangedJoyLvl: 0
   rangedAngerLvl: 0
   maxLvl: 2
@@ -3793,10 +3788,18 @@ MonoBehaviour:
   - {fileID: 966752437442742923, guid: 9f709deeac89b11469e588813e41a6d9, type: 3}
   - {fileID: 3891848978119441642, guid: 3a2aebf9501729b4ebfe474b48a0a954, type: 3}
   playerManager: {fileID: 8551793984105625944}
-  dashAbility: {fileID: 8551793984105625943}
   playerCombat: {fileID: 8551793984105625942}
   meshTrail: {fileID: 8551793984105625939}
-  weaponScript: {fileID: 0}
+  joyDash: {fileID: 0}
+  angerDash: {fileID: 0}
+  sadnessDash: {fileID: 0}
+  loveDash: {fileID: 0}
+  fearDash: {fileID: 0}
+  joyCritPrefab: {fileID: 0}
+  angerDoTPrefab: {fileID: 0}
+  slowZonePrefab: {fileID: 0}
+  weaknessZonePrefab: {fileID: 0}
+  fearZonePrefab: {fileID: 0}
 --- !u!4 &1971551252
 Transform:
   m_ObjectHideFlags: 0
