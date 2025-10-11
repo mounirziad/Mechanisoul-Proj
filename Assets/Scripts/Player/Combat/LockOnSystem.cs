@@ -464,8 +464,9 @@ public class LockOnSystem : MonoBehaviour
 
     // Expose lock state
     public bool IsLocked() 
-    { 
-        Debug.Log($"IsLocked() called: {isLocked} (target: {(currentLockTarget ? currentLockTarget.name : "null")})");
+    {
+        // commenting out for less console spam -alex
+        // Debug.Log($"IsLocked() called: {isLocked} (target: {(currentLockTarget ? currentLockTarget.name : "null")})");
         return isLocked;
     }
 

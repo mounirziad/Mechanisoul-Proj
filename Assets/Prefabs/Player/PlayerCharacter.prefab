@@ -128,6 +128,7 @@ MonoBehaviour:
   attackRange: 0
   hitVFX: {fileID: 627569255849376440, guid: d4112bc87fd2aec4b96cfe48b0043685, type: 3}
   cam: {fileID: 0}
+  hitSoundCooldown: 0.2
   enableRotationStabilization: 1
   stabilizationStrength: 0.7
   rotationSmoothness: 8
@@ -459,6 +460,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1735667703248446145}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8481794007162226039}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2062997631589936748}
   m_SourcePrefab: {fileID: 100100000, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
 --- !u!95 &3385643053220842585 stripped
 Animator:
@@ -554,6 +561,9 @@ MonoBehaviour:
   canDodge: 1
   attackMoveDistance: 0.5
   attackMoveSpeed: 5
+  jumpCooldown: 1
+  canJump: 1
+  groundDetectionBufferTime: 0.2
 --- !u!54 &2670944488486193615
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -629,6 +639,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f4739c46ea15542abd6bece082a7d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
+  useSpawnCorrection: 1
+  maxSpawnOffset: 0.5
+  showAimDebug: 0
   cinemachineCam: {fileID: 0}
   zoomedFOV: 30
   zoomSpeed: 5
@@ -646,6 +659,8 @@ MonoBehaviour:
   inputBufferTime: 0.3
   earlyComboWindow: 0.6
   dodgeCancelWindow: 0.4
+  allowAirAttacks: 0
+  maxAirAttacks: 1
   isAiming: 0
   weapon: {fileID: 1370667352295827453}
   rootMotionMode: 2
@@ -747,10 +762,60 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fallbackBodyLength: 2
-  fireDoTPrefab: {fileID: 6345824777378919738, guid: e5f5342b64caa60479ff4e56688f1126, type: 3}
-  slowZonePrefab: {fileID: 1398006098761536543, guid: 2ca0e4b767183484b9a6b43d2e29b2d4, type: 3}
-  trailStepMeters: 0.65
-  angerAOENodes: 1
+--- !u!114 &8481794007162226039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a242515ba4ebd6546af6fee1320ea027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeRouter
+--- !u!114 &2062997631589936748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16ac80218e122ae48af297b0524eb61a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeHandler
+  meleeAngerLvl: 0
+  meleeSadnessLvl: 0
+  meleeLoveLvl: 0
+  meleeFearLvl: 0
+  meleeJoyLvl: 0
+  dashAngerLvl: 0
+  dashSadnessLvl: 0
+  dashJoyLvl: 0
+  dashLoveLvl: 0
+  dashFearLvl: 0
+  rangedJoyLvl: 0
+  rangedAngerLvl: 0
+  maxLvl: 2
+  enableHotkeys: 0
+  allowNumpad: 0
+  vfxMaterials: []
+  impactVFXPrefabs:
+  - {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
+  - {fileID: 5016143912377780497, guid: a4c1d18106d2f0848818076121b4d4c7, type: 3}
+  - {fileID: 5617348523836176633, guid: d4112bc87fd2aec4b96cfe48b0043685, type: 3}
+  - {fileID: 966752437442742923, guid: 9f709deeac89b11469e588813e41a6d9, type: 3}
+  - {fileID: 3891848978119441642, guid: 3a2aebf9501729b4ebfe474b48a0a954, type: 3}
+  playerManager: {fileID: 6408783954678075963}
+  playerCombat: {fileID: 3131715302814231125}
+  meshTrail: {fileID: 0}
+  joyDash: {fileID: 0}
+  angerDash: {fileID: 0}
+  sadnessDash: {fileID: 0}
+  loveDash: {fileID: 0}
+  fearDash: {fileID: 0}
 --- !u!4 &8654815397792618019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}

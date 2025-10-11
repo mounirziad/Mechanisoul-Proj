@@ -157,7 +157,7 @@ public class UpgradeUIScript : MonoBehaviour
         {
             upgradeHandler.MeleeAngerDown();
             upgradeHandler.MeleeLoveDown();
-            upgradeHandler.MeleeSadDown();
+            upgradeHandler.MeleeSadnessDown();
             upgradeHandler.MeleeFearDown();
             upgradeHandler.MeleeJoyDown();
         }
@@ -197,14 +197,14 @@ public class UpgradeUIScript : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            upgradeHandler.DashSadDown();
+            upgradeHandler.DashSadnessDown();
             upgradeHandler.DashAngerDown();
         }
     }
     void SetDashSadLevel(int level)
     {
         ZeroDash(); // mutually exclusive with Anger
-        for (int i = 0; i < level; i++) upgradeHandler.DashSadUp();
+        for (int i = 0; i < level; i++) upgradeHandler.DashSadnessUp();
     }
     void SetDashAngerLevel(int level)
     {

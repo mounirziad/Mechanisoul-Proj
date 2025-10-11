@@ -2,10 +2,10 @@ using UnityEngine;
 
 public abstract class Upgrade : MonoBehaviour
 {
-    int upgradeLevel;
-    Emotions selectedEmotion;
+    protected int upgradeLevel;
+    protected Emotions selectedEmotion;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         upgradeLevel = 0;
         selectedEmotion = Emotions.None;
@@ -17,10 +17,7 @@ public abstract class Upgrade : MonoBehaviour
         UpgradeEmotion();
     }
 
-    void DeselectEmotion()
-    {
-        selectedEmotion = Emotions.None;
-    }
+    void DeselectEmotion() => selectedEmotion = Emotions.None;
 
     public void UpgradeEmotion()
     {
@@ -32,25 +29,26 @@ public abstract class Upgrade : MonoBehaviour
     {
         upgradeLevel--;
         LevelChange();
+        if (upgradeLevel == 0) DeselectEmotion();
+    }
 
-        if (upgradeLevel == 0)
-            DeselectEmotion();
+    // let external systems set level directly (UI calls in most cases)
+    public void SetLevel(int level)
+    {
+        upgradeLevel = Mathf.Max(0, level);
+        if (upgradeLevel == 0) selectedEmotion = Emotions.None;
+        LevelChange();
     }
 
     void LevelChange()
     {
         switch (selectedEmotion)
         {
-            case Emotions.Joy:
-                JoyChange(); break;
-            case Emotions.Anger:
-                AngerChange(); break;
-            case Emotions.Sadness:
-                SadnessChange(); break;
-            case Emotions.Love:
-                LoveChange(); break;
-            case Emotions.Fear:
-                FearChange(); break;
+            case Emotions.Joy:     JoyChange();    break;
+            case Emotions.Anger:   AngerChange();  break;
+            case Emotions.Sadness: SadnessChange();break;
+            case Emotions.Love:    LoveChange();   break;
+            case Emotions.Fear:    FearChange();   break;
             case Emotions.None:
                 Debug.LogWarning("No emotion selected for level change");
                 break;
@@ -58,37 +56,14 @@ public abstract class Upgrade : MonoBehaviour
                 Debug.LogError("selected emotion for level change out of bounds");
                 break;
         }
+        UpdatePlayer(); // allow pushing to player/handlers
     }
 
-    //funcs below for updating the values for upgrades, overridden by child class
-    void JoyChange()
-    {
-        
-    }
-
-    void AngerChange()
-    {
-        
-    }
-
-    void SadnessChange()
-    {
-
-    }
-
-    void LoveChange()
-    {
-
-    }
-
-    void FearChange()
-    {
-
-    }
-
-    //send the updated values to player, overridden by child class
-    void UpdatePlayer()
-    {
-
-    }
+    // overridables for futureproofing
+    protected virtual void JoyChange()    {}
+    protected virtual void AngerChange()  {}
+    protected virtual void SadnessChange(){}
+    protected virtual void LoveChange()   {}
+    protected virtual void FearChange()   {}
+    protected virtual void UpdatePlayer() {}
 }
