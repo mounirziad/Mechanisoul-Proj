@@ -201,6 +201,7 @@ public class PlayerCombat : MonoBehaviour
         if (!on) { isAiming = false; anim.SetBool("IsAiming", false); }
     }
 
+    // In your PlayerCombat.cs, modify the HandleShoot method:
     void HandleShoot()
     {
         if (!rangedEnabled) { inputManager.shootInput = false; return; }
@@ -213,15 +214,24 @@ public class PlayerCombat : MonoBehaviour
         {
             // Use corrected spawn position for better alignment
             Vector3 spawnPosition = GetCorrectedSpawnPosition();
-            
+
+            // DEBUG: Check what position we're actually using
+            Debug.Log($"Shooting from spawn position: {spawnPosition}");
+            Debug.Log($"Player position: {transform.position}");
+            Debug.Log($"Distance between: {Vector3.Distance(spawnPosition, transform.position)}");
+
             var go = Instantiate(projectilePrefab, spawnPosition, shootPoint.rotation);
             var proj = go.GetComponent<PlayerProjectile>();
             if (proj != null)
             {
                 float finalDamage = projectileDamage * rangedMods.joyDamageMultiplier;
-                
+
                 // Use trajectory-corrected direction for maximum accuracy
                 Vector3 correctedDirection = GetCorrectedAimDirection();
+
+                // DEBUG: Check the aim direction
+                Debug.Log($"Corrected aim direction: {correctedDirection}");
+
                 proj.Initialize(correctedDirection, finalDamage, rangedMods, this);
             }
             lastShotTime = Time.time;

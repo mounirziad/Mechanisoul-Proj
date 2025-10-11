@@ -13,6 +13,8 @@ public class PlayerProjectile : MonoBehaviour
     private Vector3 targetPosition;
     private bool hasTarget = false;
 
+
+
     public void Initialize(Vector3 shootDirection, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null)
     {
         direction = shootDirection.normalized;
@@ -54,15 +56,39 @@ public class PlayerProjectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Vector3 hitPos = transform.position;
+        // Debug: Print detailed collision info
+        Debug.Log($"=== PROJECTILE COLLISION DEBUG ===");
+        Debug.Log($"Projectile position: {transform.position}");
+        Debug.Log($"Other collider name: {other.name}");
+        Debug.Log($"Other collider tag: {other.tag}");
+        Debug.Log($"Other collider layer: {LayerMask.LayerToName(other.gameObject.layer)}");
+        Debug.Log($"Other transform position: {other.transform.position}");
+        
+        // Check if other is the player
+        if (other.CompareTag("Player"))
+        {
+            Debug.LogError("PROJECTILE HIT PLAYER! This should not happen!");
+            Debug.LogError($"Player position: {other.transform.position}");
+            Debug.LogError($"Projectile position: {transform.position}");
+            // Don't process player hits
+            Destroy(gameObject);
+            return;
+        }
+        
+        Vector3 hitPos = transform.position; // Default to projectile position
         bool hitEnemy = false;
 
-        // Prefer health component if present
+        // Check if we hit an enemy using the most reliable method first
         var enemyHealth = other.GetComponentInParent<BasicEnemyHealth>();
-        if (enemyHealth)
+        if (enemyHealth != null)
         {
+            // Use the exact collision point for better accuracy
+            hitPos = other.ClosestPoint(transform.position);
+            Debug.Log($"Calculated hit position: {hitPos}");
+            Debug.Log($"Enemy health component found on: {enemyHealth.name}");
+            Debug.Log($"Enemy position: {enemyHealth.transform.position}");
+            
             enemyHealth.TakeDamage(damage, direction);
-            hitPos = enemyHealth.transform.position;
             hitEnemy = true;
         }
         else
@@ -70,25 +96,61 @@ public class PlayerProjectile : MonoBehaviour
             // Fallback: tag check
             if (other.CompareTag("Enemy") || (other.transform.root != null && other.transform.root.CompareTag("Enemy")))
             {
-                hitEnemy = true;
                 hitPos = other.ClosestPoint(transform.position);
+                Debug.Log($"Calculated hit position (tag check): {hitPos}");
+                hitEnemy = true;
             }
         }
 
-        // ANGER (gameplay): DoT AoE on impact
-        if (mods.angerExplosionOnHit && owner != null && owner.angerExplosionPrefab != null)
+        // Only spawn VFX if we actually hit an enemy
+        if (hitEnemy)
         {
-            var aoe = Instantiate(owner.angerExplosionPrefab, hitPos, Quaternion.identity);
-            var dot = aoe.GetComponent<FireDoTZone>();
-            if (dot != null) dot.Configure(Mathf.Max(0f, mods.angerAOEPercent));
-            else aoe.SendMessage("Configure", mods.angerAOEPercent, SendMessageOptions.DontRequireReceiver);
-        }
+            Debug.Log($"=== SPAWNING VFX AT POSITION: {hitPos} ===");
+            
+            // ANGER (gameplay): DoT AoE on impact
+            if (mods.angerExplosionOnHit && owner != null && owner.angerExplosionPrefab != null)
+            {
+                Debug.Log($"About to spawn Anger VFX at: {hitPos}");
+                var aoe = Instantiate(owner.angerExplosionPrefab, hitPos, Quaternion.identity);
+                
+                // Disable VFXCameraLookAt component that incorrectly moves VFX to camera
+                var cameraLookAt = aoe.GetComponent<VFXCameraLookAt>();
+                if (cameraLookAt != null)
+                {
+                    cameraLookAt.enabled = false;
+                    Debug.Log("Disabled VFXCameraLookAt component on Anger VFX");
+                }
+                
+                Debug.Log($"Anger VFX actual spawned position: {aoe.transform.position}");
+                
+                var dot = aoe.GetComponent<FireDoTZone>();
+                if (dot != null)
+                    dot.Configure(Mathf.Max(0f, mods.angerAOEPercent));
+                else
+                    aoe.SendMessage("Configure", mods.angerAOEPercent, SendMessageOptions.DontRequireReceiver);
+            }
 
-        // JOY (visual): pop VFX on enemy contact when synergy is active
-        if (hitEnemy && mods.joyExplosionOnHit && owner != null && owner.joyExplosionPrefab != null)
+            // JOY (visual): pop VFX on enemy contact when synergy is active
+            if (mods.joyExplosionOnHit && owner != null && owner.joyExplosionPrefab != null)
+            {
+                Debug.Log($"About to spawn Joy VFX at: {hitPos}");
+                var vfx = Instantiate(owner.joyExplosionPrefab, hitPos, Quaternion.identity);
+                
+                // Disable VFXCameraLookAt component that incorrectly moves VFX to camera
+                var cameraLookAt = vfx.GetComponent<VFXCameraLookAt>();
+                if (cameraLookAt != null)
+                {
+                    cameraLookAt.enabled = false;
+                    Debug.Log("Disabled VFXCameraLookAt component on Joy VFX");
+                }
+                
+                Debug.Log($"Joy VFX actual spawned position: {vfx.transform.position}");
+                AutoDestroyVFX(vfx);
+            }
+        }
+        else
         {
-            var vfx = Instantiate(owner.joyExplosionPrefab, hitPos, Quaternion.identity);
-            AutoDestroyVFX(vfx);
+            Debug.Log($"Hit non-enemy object: {other.name} at position: {hitPos}");
         }
 
         Destroy(gameObject);
@@ -110,4 +172,7 @@ public class PlayerProjectile : MonoBehaviour
 
         Destroy(go, maxTime > 0.05f ? maxTime : fallback);
     }
+
+
 }
+
