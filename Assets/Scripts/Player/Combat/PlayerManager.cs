@@ -73,6 +73,7 @@ public class PlayerManager : MonoBehaviour
             {
                 hasBuffStacks = false;
                 buffStacks = 0;
+                Debug.Log("removed all buff stacks");
             }
 
             buffStackTimer -= Time.deltaTime;
@@ -85,12 +86,15 @@ public class PlayerManager : MonoBehaviour
         this.buffPercent = buffPercent;
     }
 
-    public void AddStack()
+    public void AddBuffStack()
     {
         if (buffStacks < buffStackCap) buffStacks++;
 
         hasBuffStacks = true;
         buffStackTimer = buffStackMaxTime;
+
+        Debug.Log("added buff stack");
+        Debug.Log($"current buff stacks: {buffStacks}");
     }
 
     public float GetDamageBuffIncrease()

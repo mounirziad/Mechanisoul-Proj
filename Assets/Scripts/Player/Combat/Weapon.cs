@@ -125,6 +125,7 @@ public class Weapon : MonoBehaviour
         float finalDamage = damage; // base damage
         if (playerManager != null)
         {
+            //Debug.Log($"pre buff damage: {finalDamage}");
             finalDamage *= 1f + playerManager.GetDamageBuffIncrease(); // dynamic buff multiplier
         }
 
@@ -159,10 +160,9 @@ public class Weapon : MonoBehaviour
             Debug.Log("Hit basic enemy");
             Vector3 direction = (other.transform.position - transform.position).normalized;
             basicEnemy.TakeDamage(finalDamage, direction);
+            //Debug.Log($"Damage Dealt: {finalDamage}");
 
-            // Update buff stacks
-            if (playerManager != null)
-                playerManager.AddStack();
+            
 
             // Optional: old upgrade system relics commented out
             /*
@@ -174,6 +174,10 @@ public class Weapon : MonoBehaviour
             playerManager.ApplyLifesteal(finalDamage);
             */
         }
+
+        // Update buff stacks --- currently being applied multiple times per hit
+        if (playerManager != null)
+            playerManager.AddBuffStack();
     }
 
 
