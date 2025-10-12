@@ -136,8 +136,8 @@ public class Weapon : MonoBehaviour
             mechromancer.TakeDamage(finalDamage);
         }
 
-        // Spawn hit VFX at contact point
-        if (hitVFX != null)
+        // Spawn hit VFX at contact point only for new hits
+        if (hitVFX != null && isNewHit)
         {
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             GameObject vfxInstance = Instantiate(hitVFX, contactPoint, Quaternion.identity);
@@ -175,8 +175,8 @@ public class Weapon : MonoBehaviour
             */
         }
 
-        // Update buff stacks --- currently being applied multiple times per hit
-        if (playerManager != null)
+        // Update buff stacks only for new hits
+        if (playerManager != null && isNewHit)
             playerManager.AddBuffStack();
     }
 
