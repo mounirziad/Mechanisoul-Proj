@@ -278,15 +278,15 @@ public class UpgradeHandler : MonoBehaviour
         }
         
         // Update PlayerManager with melee upgrade values including attack speed
-        playerManager.UpdateMeleeUpgrades(
+        //playerManager.UpdateMeleeUpgrades(
             // Anger buffs (unchanged)
-            0,      // buffStackCap (will be set by anger upgrades when implemented)
-            0f,     // buffPercent (will be set by anger upgrades when implemented)
+       //     0,      // buffStackCap (will be set by anger upgrades when implemented)
+       //     0f,     // buffPercent (will be set by anger upgrades when implemented)
             // Joy buffs (with attack speed)
-            joyAttackSpeed,
-            joyCritChance,
-            joyCritMult
-        );
+         //   joyAttackSpeed,
+         //   joyCritChance,
+         //   joyCritMult
+       // );
         
         RaiseLevelsChanged();
     }
