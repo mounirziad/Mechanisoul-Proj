@@ -70,6 +70,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerControls playerControls;
     private Animator anim;
     [SerializeField] Weapon weapon;
+    private AttackAnimationManager attackAnimManager;
     
     [Header("Root Motion Settings")]
     [Tooltip("How to combine root motion with attack lunge movement")]
@@ -88,6 +89,13 @@ public class PlayerCombat : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
+        attackAnimManager = GetComponent<AttackAnimationManager>();
+        
+        // Add AttackAnimationManager if it doesn't exist
+        if (attackAnimManager == null)
+        {
+            attackAnimManager = gameObject.AddComponent<AttackAnimationManager>();
+        }
     }
 
     void Start()
@@ -505,9 +513,20 @@ public class PlayerCombat : MonoBehaviour
         {
             var playerMgr = GetComponent<PlayerManager>();
             CancelInvoke(nameof(EndCombo));
-            anim.runtimeAnimatorController = combo[comboCounter].animatorOV;
+            
+            // Get the current attack data before setting the animator
+            AttackSO currentAttackData = combo[comboCounter];
+            
+            anim.runtimeAnimatorController = currentAttackData.animatorOV;
             anim.Play("Attack", 0, 0);
-            weapon.damage = combo[comboCounter].damage * playerMgr.GetDamageMultiplier();
+            
+            // Apply attack speed modifier using the dedicated manager with attack data
+            if (attackAnimManager != null)
+            {
+                attackAnimManager.ApplyAttackSpeedToAnimation(currentAttackData);
+            }
+            
+            weapon.damage = currentAttackData.damage * playerMgr.GetDamageMultiplier();
             //Debug.Log($"weapon.damage amount: {weapon.damage}");
 
             // Reset weapon hit sound cooldown for new attack
@@ -660,6 +679,12 @@ public class PlayerCombat : MonoBehaviour
     {
         isAttacking = false;
         
+        // Reset animator speed to normal when attack completes using the manager
+        if (attackAnimManager != null)
+        {
+            attackAnimManager.ResetAnimationSpeed();
+        }
+        
         // Disable root motion when attack completes (except for LungeOnly mode where it's already off)
         if (rootMotionMode != RootMotionMode.LungeOnly)
         {
@@ -695,6 +720,12 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!isAttacking)
         {
+            // Reset animator speed to normal when combo ends using the manager
+            if (attackAnimManager != null)
+            {
+                attackAnimManager.ResetAnimationSpeed();
+            }
+            
             comboCounter = 0;
             lastComboEnd = Time.time;
             attackQueued = false;
@@ -709,6 +740,13 @@ public class PlayerCombat : MonoBehaviour
     { 
         isAttacking = false; 
         attackQueued = false; 
+        
+        // Reset animator speed to normal when canceling attack using the manager
+        if (attackAnimManager != null)
+        {
+            attackAnimManager.ResetAnimationSpeed();
+        }
+        
         anim.Play("Idle"); 
         currentTarget = null;
         

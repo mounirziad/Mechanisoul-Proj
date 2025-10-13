@@ -3693,6 +3693,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8551793984105625966}
+    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8551793984105625975}
     - targetCorrespondingSourceObject: {fileID: 463506979082311740, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1406759758}
@@ -3844,6 +3847,24 @@ MonoBehaviour:
   aimCameraManager: {fileID: 8551793984105625959}
   fadeInOut: 1
   fadeSpeed: 5
+--- !u!114 &8551793984105625975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804909517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa99ff2c11e38a40ae517d45c2fe356, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackAnimationManager
+  minSpeedMultiplier: 0.5
+  maxSpeedMultiplier: 3
+  attackStateTags:
+  - Attack
+  - Combo
+  - MeleeAttack
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
