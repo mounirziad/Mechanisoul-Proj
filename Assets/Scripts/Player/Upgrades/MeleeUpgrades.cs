@@ -4,7 +4,7 @@ public class MeleeUpgrades : Upgrade
 {
     float attackSpeedBuff, critChance, critMult; //joy upgrades
     int buffStackCap; float buffPercent; //anger upgrades
-    float tickDmg, maxTicks; //sadness upgrades
+    float dotTickDmg, dotMaxTicks; //sadness upgrades
 
     protected override void Awake()
     {
@@ -59,7 +59,25 @@ public class MeleeUpgrades : Upgrade
     }
 
     protected override void SadnessChange()
-    { }
+    {
+        switch (upgradeLevel)
+        {
+            case 0:
+                dotTickDmg = 0;
+                dotMaxTicks = 0;
+                break;
+            case 1:
+                dotTickDmg = 0.5f;
+                dotMaxTicks = 5;
+                break;
+            case 2:
+                dotTickDmg = 1;
+                break;
+            case 3:
+                dotMaxTicks = 10;
+                break;
+        }
+    }
 
     protected override void LoveChange()
     { }
@@ -69,6 +87,6 @@ public class MeleeUpgrades : Upgrade
 
     protected override void UpdatePlayer()
     {
-        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult);
+        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult, dotTickDmg, dotMaxTicks);
     }
 }
