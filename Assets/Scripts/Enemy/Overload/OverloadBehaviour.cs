@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Mechromancer))]
-public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
+[RequireComponent(typeof(Overload))]
+public class OverloadBehaviour : MonoBehaviour, IGoapBehaviour
 {
     [Header("Sensors")]
     [SerializeField] Sensor chaseSensor; //bigger radius
     [SerializeField] Sensor attackSensor;
-    [SerializeField] Sensor lightningSensor;
 
     [Header("Locations")]
     [SerializeField] Transform restingPosition;
@@ -17,14 +16,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
     [Header("Player Reference")]
     [SerializeField] GameObject player;
 
-    [Header("Spawning Enemies")]
-    [SerializeField] GameObject enemyPrefab;
-    [SerializeField] Transform[] spawnPoints;
-
-    private Mechromancer mechromancer;
-
-    private bool resurrectedPhase1 = false;
-    private bool resurrectedPhase2 = false;
+    private Overload overload;
 
     private GoapAgent agent;
 
@@ -45,7 +37,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     public Dictionary<string, AgentBelief> ProvideBeliefs()
     {
-        mechromancer = GetComponent<Mechromancer>();
+        overload = GetComponent<Overload>();
 
         var beliefs = new Dictionary<string, AgentBelief>();
         var factory = new BeliefFactory(GetComponent<GoapAgent>(), beliefs);
@@ -55,10 +47,6 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
         factory.AddBelief("AgentIdle", () => !GetComponent<NavMeshAgent>().hasPath);
         factory.AddBelief("AgentMoving", () => GetComponent<NavMeshAgent>().hasPath);
 
-        factory.AddBelief("PhaseOne", () => mechromancer.currentHealth >= 50);
-        factory.AddBelief("PhaseTwo", () => mechromancer.currentHealth < 50 && mechromancer.currentHealth >= 35);
-        factory.AddBelief("Rage", () => mechromancer.currentHealth < 35);
-
         factory.AddLocationBelief("AgentAtHidingPosition", 8f, hidingPosition);
         factory.AddLocationBelief("AgentAtRestingPosition", 3f, restingPosition);
 
@@ -66,8 +54,6 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
         factory.AddSensorBelief("PlayerInAttackRange", attackSensor);
 
         factory.AddBelief("AttackingPlayer", () => false); //Player can always be attacked, will never come true
-        factory.AddBelief("CanResurrect", () => EvaluateResurrection());
-        factory.AddBelief("HasResurrectedThisPhase", () => !EvaluateResurrection());
 
         return beliefs;
     }
@@ -117,20 +103,6 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .AddEffect(beliefs["AttackingPlayer"])
             .Build());
 
-        actions.Add(new AgentAction.Builder("Drop Down")
-            .WithStrategy(new DropDownStrategy(transform, restingPosition.position))
-            .AddPrecondition(beliefs["AgentAtHidingPosition"])
-            .AddPrecondition(beliefs["PlayerInChaseRange"])
-            .AddEffect(beliefs["PlayerInAttackRange"])
-            .Build());
-
-        actions.Add(new AgentAction.Builder("Resurrect Robots")
-            .WithStrategy(new ResurrectStrategy(GetComponent<GoapAgent>(), enemyPrefab, spawnPoints))
-            .AddPrecondition(beliefs["AgentAtHidingPosition"])
-            .AddPrecondition(beliefs["CanResurrect"])
-            .AddEffect(beliefs["HasResurrectedThisPhase"])
-            .Build());
-
         return actions;
     }
 
@@ -163,33 +135,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .WithDesiredEffect(beliefs["AttackingPlayer"])
             .Build());
 
-        goals.Add(new AgentGoal.Builder("Resurrect")
-            .WithPriority(5)
-            .WithDesiredEffect(beliefs["HasResurrectedThisPhase"])
-            .Build());
-
         return goals;
-    }
-
-    private bool EvaluateResurrection()
-    {
-        float health = mechromancer.currentHealth;
-
-        if (health > 50)
-            return !resurrectedPhase1;
-        if (health > 35)
-            return !resurrectedPhase2;
-        return false;
-    }
-
-    public void MarkResurrected()
-    {
-        float health = mechromancer.currentHealth;
-
-        if (health > 50)
-            resurrectedPhase1 = true;
-        else if (health > 35)
-            resurrectedPhase2 = true;
     }
 
     private void HandleTargetChanged()

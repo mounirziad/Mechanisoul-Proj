@@ -228,6 +228,8 @@ public class UpgradeHandler : MonoBehaviour
     void PushMelee()
     {
         if (!playerManager) return;
+        
+        // Push old upgrade system values (will be deprecated)
         playerManager.UpdateUpgrades(
             meleeAOE[Mathf.Clamp(meleeAngerLvl, 0, maxLvl)],
             meleeSlow[Mathf.Clamp(meleeSadnessLvl, 0, maxLvl)],
@@ -235,6 +237,57 @@ public class UpgradeHandler : MonoBehaviour
             meleeLifeSteal[Mathf.Clamp(meleeLoveLvl, 0, maxLvl)],
             meleeStun[Mathf.Clamp(meleeFearLvl, 0, maxLvl)]
         );
+        
+        // Push new melee upgrade system values (Joy upgrade with attack speed)
+        float joyAttackSpeed = 0f;
+        float joyCritChance = 0f;
+        float joyCritMult = 1f;
+        
+        // Calculate Joy upgrade values based on level
+        switch (meleeJoyLvl)
+        {
+            case 0:
+                joyAttackSpeed = 0f;
+                joyCritChance = 0f;
+                joyCritMult = 1f;
+                break;
+            case 1:
+                joyAttackSpeed = 0.15f;  // 15% attack speed increase
+                joyCritChance = 0.10f;   // 10% crit chance
+                joyCritMult = 1.5f;      // 1.5x crit multiplier
+                break;
+            case 2:
+                joyAttackSpeed = 0.25f;  // 25% attack speed increase
+                joyCritChance = 0.20f;   // 20% crit chance
+                joyCritMult = 1.75f;     // 1.75x crit multiplier
+                break;
+            case 3:
+                joyAttackSpeed = 0.40f;  // 40% attack speed increase
+                joyCritChance = 0.30f;   // 30% crit chance
+                joyCritMult = 2f;        // 2x crit multiplier
+                break;
+            default:
+                if (meleeJoyLvl > 3)
+                {
+                    // Scale beyond level 3 for future expansions
+                    joyAttackSpeed = 0.40f + (meleeJoyLvl - 3) * 0.10f;
+                    joyCritChance = 0.30f + (meleeJoyLvl - 3) * 0.05f;
+                    joyCritMult = 2f + (meleeJoyLvl - 3) * 0.25f;
+                }
+                break;
+        }
+        
+        // Update PlayerManager with melee upgrade values including attack speed
+        //playerManager.UpdateMeleeUpgrades(
+            // Anger buffs (unchanged)
+       //     0,      // buffStackCap (will be set by anger upgrades when implemented)
+       //     0f,     // buffPercent (will be set by anger upgrades when implemented)
+            // Joy buffs (with attack speed)
+         //   joyAttackSpeed,
+         //   joyCritChance,
+         //   joyCritMult
+       // );
+        
         RaiseLevelsChanged();
     }
 
@@ -260,7 +313,7 @@ public class UpgradeHandler : MonoBehaviour
             // Disable by default; ApplyDashSelection() will enable the chosen one
             if (c is Behaviour b) b.enabled = false;
 
-            // Push prefabs once so you don’t need to touch the component inspectors
+            // Push prefabs once so you donï¿½t need to touch the component inspectors
             if (c is JoyDashUpgrade joy && joy.joyCritPrefab == null) joy.joyCritPrefab = joyCritPrefab;
             if (c is AngerDashUpgrade anger && anger.fireDoTPrefab == null) anger.fireDoTPrefab = angerDoTPrefab;
             if (c is SadnessDashUpgrade sad && sad.slowZonePrefab == null) sad.slowZonePrefab = slowZonePrefab;

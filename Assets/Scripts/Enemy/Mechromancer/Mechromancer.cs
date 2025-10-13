@@ -7,6 +7,13 @@ public class Mechromancer : MonoBehaviour, IDamage
     [SerializeField] public float maxHealth = 75f;
     [SerializeField] public float currentHealth;
     [SerializeField] private float damageProvider = 8f;
+    [SerializeField] private float lightningDamage = 15f;
+
+    public GameObject cannon;
+    public GameObject rangeAttackPrefab;
+    public float launchForce;
+    public float timeBetweenShots;
+    private float timeSinceLastShot;
 
     public float rotationSpeed;
     public GameObject blade;
@@ -22,6 +29,8 @@ public class Mechromancer : MonoBehaviour, IDamage
 
     private void Update()
     {
+        timeSinceLastShot += Time.deltaTime;
+
         if (attacking)
         {
             blade.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
@@ -41,6 +50,15 @@ public class Mechromancer : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             attacking = false;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            Vector3 targetPosition = new Vector3(other.transform.position.x, cannon.transform.position.y, other.transform.position.z);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPosition - cannon.transform.position);
         }
     }
 

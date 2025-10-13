@@ -20,4 +20,14 @@ public class AttackSO : ScriptableObject
     [Header("Rotation")]
     public bool rotateTowardsTarget = true; // Whether to rotate towards target during attack
     public float rotationSpeed = 720f;     // Degrees per second rotation speed
+    
+    [Header("Attack Speed")]
+    [Tooltip("Base animation speed multiplier for this specific attack (1.0 = normal speed)")]
+    public float baseAnimationSpeed = 1f;
+    
+    [Tooltip("Whether this attack should be affected by Joy upgrade attack speed modifiers")]
+    public bool affectedByAttackSpeedUpgrades = true;
+    
+    [Tooltip("Attack type tags for categorization (e.g., 'Light', 'Heavy', 'Special')")]
+    public List<string> attackTypeTags = new List<string> { "Normal" };
 }

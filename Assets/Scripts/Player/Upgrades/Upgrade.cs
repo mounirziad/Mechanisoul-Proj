@@ -5,10 +5,14 @@ public abstract class Upgrade : MonoBehaviour
     protected int upgradeLevel;
     protected Emotions selectedEmotion;
 
+    protected PlayerManager playerManager;
+
     protected virtual void Awake()
     {
         upgradeLevel = 0;
         selectedEmotion = Emotions.None;
+
+        playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
     }
 
     public void SelectEmotion(Emotions emotion)
