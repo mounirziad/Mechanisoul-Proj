@@ -6629,7 +6629,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -6753,6 +6753,11 @@ MonoBehaviour:
   maxHealth: 75
   currentHealth: 0
   damageProvider: 8
+  lightningDamage: 15
+  cannon: {fileID: 0}
+  rangeAttackPrefab: {fileID: 0}
+  launchForce: 0
+  timeBetweenShots: 0
   rotationSpeed: 300
   blade: {fileID: 1252487333}
 --- !u!114 &339116048
@@ -6769,6 +6774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MechromancerBehaviour
   chaseSensor: {fileID: 677341245}
   attackSensor: {fileID: 1441929568}
+  lightningSensor: {fileID: 0}
   restingPosition: {fileID: 111502752}
   hidingPosition: {fileID: 26188791}
   player: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
