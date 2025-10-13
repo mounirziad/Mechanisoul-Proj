@@ -25,6 +25,13 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float critChance;
     [SerializeField] float critMult;
 
+    [Header("Melee Sadness Upgrade Values")]
+    float dotTickDmg; //dmg per tick
+    float dotMaxTicks; //how many ticks per hit
+    float dotMaxStacks; //max number of dmg stacks
+    float dotTickTimer; //time till next tick
+    float dotTickMaxTime; //time between ticks
+
 
 
 
@@ -83,20 +90,23 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult)
+    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, float dotMaxTicks)
     {
         this.buffStackCap = buffStackCap;
         this.buffPercent = buffPercent;
         this.attackSpeedBuff = attackSpeedBuff;
         this.critChance = critChance;
         this.critMult = critMult;
+        this.dotTickDmg = dotTickDmg;
+        this.dotMaxTicks = dotMaxTicks;
     }
 
     public void AddBuffStack()
     {
         if (buffStacks < buffStackCap) buffStacks++;
 
-        hasBuffStacks = true;
+        
+        if (buffStacks > 0) hasBuffStacks = true;
         buffStackTimer = buffStackMaxTime;
 
         Debug.Log("added buff stack");
@@ -123,6 +133,11 @@ public class PlayerManager : MonoBehaviour
     public float GetAttackSpeedBuff() 
     { 
         return attackSpeedBuff; 
+    }
+
+    public void temp()
+    {
+
     }
 
 
