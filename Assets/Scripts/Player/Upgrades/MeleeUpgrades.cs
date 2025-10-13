@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MeleeUpgrades : Upgrade
 {
-    float attackSpeedBuff, critChance, critDmg; //joy upgrades
+    float attackSpeedBuff, critChance, critMult; //joy upgrades
     int buffStackCap; float buffPercent; //anger upgrades
     float tickDmg, maxTicks; //sadness upgrades
 
@@ -10,7 +10,7 @@ public class MeleeUpgrades : Upgrade
     {
         base.Awake();
 
-        attackSpeedBuff = 0; critChance = 0; critDmg = 0;
+        attackSpeedBuff = 0; critChance = 0; critMult = 0;
         buffStackCap = 0; buffPercent = 0;
     }
 
@@ -21,18 +21,18 @@ public class MeleeUpgrades : Upgrade
             case 0:
                 attackSpeedBuff = 0;
                 critChance = 0;
-                critDmg = 0;
+                critMult = 0;
                 break;
             case 1:
                 attackSpeedBuff = 0.10f;
                 critChance = 0.15f;
-                critDmg = 1.5f;
+                critMult = 1.5f;
                 break;
             case 2:
                 critChance = 0.3f;
                 break;
             case 3:
-                critDmg = 2f;
+                critMult = 2f;
                 break;
         }
     }
@@ -69,6 +69,6 @@ public class MeleeUpgrades : Upgrade
 
     protected override void UpdatePlayer()
     {
-        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent);
+        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult);
     }
 }

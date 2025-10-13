@@ -504,11 +504,10 @@ public class PlayerCombat : MonoBehaviour
         if (comboCounter < combo.Count && combo[comboCounter] != null)
         {
             var playerMgr = GetComponent<PlayerManager>();
-            float damageMultiplier = 1f + (playerMgr != null ? playerMgr.GetDamageBuffIncrease() : 0f);
             CancelInvoke(nameof(EndCombo));
             anim.runtimeAnimatorController = combo[comboCounter].animatorOV;
             anim.Play("Attack", 0, 0);
-            weapon.damage = combo[comboCounter].damage * damageMultiplier;
+            weapon.damage = combo[comboCounter].damage * playerMgr.GetDamageMultiplier();
             //Debug.Log($"weapon.damage amount: {weapon.damage}");
 
             // Reset weapon hit sound cooldown for new attack

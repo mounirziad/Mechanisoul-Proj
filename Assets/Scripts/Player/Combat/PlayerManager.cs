@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -8,19 +9,21 @@ public class PlayerManager : MonoBehaviour
     PlayerHealth playerHealth;
     public bool isInteracting;
 
-    [Header("Base Player Values")]
-    [SerializeField] float baseDamage;
-
     [Header("Dash / Abilities")]
     [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
 
-    [Header("Melee Upgrade Values")]
+    [Header("Melee Anger Upgrade Values")]
     [SerializeField] int buffStackCap; //max dmg buff stacks
     [SerializeField] float buffPercent; //% buff added after each attack
     [SerializeField] int buffStacks; //current # of dmg stacks
     [SerializeField] float buffStackMaxTime; //max amount of time between attacks to keep buff
     [SerializeField] float buffStackTimer; //current time remaining till lose dmg stacks
     [SerializeField] bool hasBuffStacks; //if player has dmg buff stacks
+
+    [Header("Melee Joy Upgrade Values")]
+    [SerializeField] float attackSpeedBuff;
+    [SerializeField] float critChance;
+    [SerializeField] float critMult;
 
 
 
@@ -80,10 +83,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent)
+    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult)
     {
         this.buffStackCap = buffStackCap;
         this.buffPercent = buffPercent;
+        this.attackSpeedBuff = attackSpeedBuff;
+        this.critChance = critChance;
+        this.critMult = critMult;
     }
 
     public void AddBuffStack()
@@ -99,17 +105,25 @@ public class PlayerManager : MonoBehaviour
 
     public float GetDamageBuffIncrease()
     {
-        return (float)buffStacks * buffPercent;
+        return buffStacks * buffPercent;
     }
 
-    /*
-     * for use if the basedamage gets moved to this script
-    public float GetDamageDealt()
+    public float GetCrit()
     {
-        return baseDamage * GetDamageBuffIncrease();
+        if (Random.Range(0f, 1f) <= critChance) return critMult;
+        return 0;
     }
-    */
 
+
+    public float GetDamageMultiplier() //get this for total damage multipler from modifier
+    {
+        return 1 + GetDamageBuffIncrease() + GetCrit();
+    }
+
+    public float GetAttackSpeedBuff() 
+    { 
+        return attackSpeedBuff; 
+    }
 
 
 
