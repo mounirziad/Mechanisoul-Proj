@@ -4,55 +4,116 @@
         <ui:VisualElement name="SkillMenu" enabled="true" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: none; background-color: rgba(109, 142, 171, 0.65);">
             <ui:VisualElement name="TabsEL" style="flex-grow: 1; flex-direction: row; width: auto; height: auto;">
                 <ui:Button text="Upgrades" name="UpgradeTab" class="tabs" />
-                <ui:Button text="Combos" name="ComboTab" class="tabs" />
+                <ui:Button text="Synergies" name="SynergyTab" class="tabs" />
             </ui:VisualElement>
-            <ui:VisualElement name="SkillTreeEL" style="flex-grow: 1; width: auto; height: 90%; align-content: flex-start; align-self: stretch; align-items: stretch; display: flex;">
-                <ui:VisualElement name="MeleeUpg" class="row-setup">
-                    <ui:Label text="Melee" name="MeleeIcon" style="background-color: rgb(255, 126, 126); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
-                    <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Love lvl 1" name="LoveMelee1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/loveButton.png?fileID=2800000&amp;guid=eaeedd112c1112a4fa7488ac7bfe4675&amp;type=3#loveButton&quot;);" />
-                        <ui:Button text="Anger lvl 1" name="AngerMelee1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;);" />
+            <ui:VisualElement name="SkillTreeEL" style="flex-grow: 1; width: 1528px; height: 998px; align-content: flex-start; align-self: stretch; align-items: stretch; display: flex; background-color: rgb(135, 135, 135); position: absolute; top: 82px;">
+                <ui:VisualElement name="UpgradeCategoriesEL" style="flex-grow: 1; width: 1920px; height: 95px; min-width: 1920px; min-height: 95px; align-items: center; flex-direction: row; justify-content: center; background-color: rgb(173, 173, 173); border-bottom-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; display: flex; position: absolute; top: 0;">
+                    <ui:Button text="Melee" name="MeleeTreeButton" class="Upgrade-Cat-Txt" />
+                    <ui:Button text="Range" name="RangeTreeButton" class="Upgrade-Cat-Txt" />
+                    <ui:Button text="Dash" name="DashTreeButton" class="Upgrade-Cat-Txt" style="background-color: rgba(188, 188, 188, 0);" />
+                </ui:VisualElement>
+                <ui:VisualElement name="UpgradeDescEL" style="flex-grow: 1; position: absolute; width: 392px; height: 902px; left: 1528px; bottom: 0; background-color: rgb(217, 217, 217); border-top-width: 2px; border-left-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); top: 94px;">
+                    <ui:Label text="Upgrade Name" name="UpgradeName" style="-unity-text-align: upper-center; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 45px;" />
+                    <ui:Label text="Upgrade Stats&#10;Number go up" name="UpgradeStats" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 42px; -unity-text-align: upper-center;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="MeleeTreeEL" class="skill-tree-setup" style="display: flex; top: 94px;">
+                    <ui:VisualElement name="JoyRow" class="upg-row-setup" style="height: 180px;">
+                        <ui:Button text="Button" name="JoyMelee1" class="upgrade-button" style="background-image: none; background-color: rgb(255, 205, 0);" />
+                        <ui:Button text="Button" name="JoyMelee2" class="upgrade-button" style="background-color: rgb(255, 205, 0);" />
+                        <ui:Button text="Button" name="JoyMelee3" class="upgrade-button" style="background-color: rgb(255, 205, 0);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Love lvl 2" name="LoveMelee2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/loveButton.png?fileID=2800000&amp;guid=eaeedd112c1112a4fa7488ac7bfe4675&amp;type=3#loveButton&quot;);" />
-                        <ui:Button text="Anger lvl 2" name="AngerMelee2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;);" />
+                    <ui:VisualElement name="AngerRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; top: 180px;">
+                        <ui:Button text="Button" name="AngerMelee1" class="upgrade-button" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerMeleeUpgrade.png?fileID=2800000&amp;guid=db205038e915cec4194757f3e08784e1&amp;type=3#angerMeleeUpgrade&quot;); background-color: rgb(0, 0, 0);" />
+                        <ui:Button text="Button" name="AngerMelee2" class="upgrade-button" style="background-color: rgb(255, 0, 0);" />
+                        <ui:Button text="Button" name="AngerMelee3" class="upgrade-button" style="background-color: rgb(255, 0, 0);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="SadnessRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; top: 360px;">
+                        <ui:Button text="Button" name="SadnessMelee1" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                        <ui:Button text="Button" name="SadnessMelee2" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                        <ui:Button text="Button" name="SadnessMelee3" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="LoveRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; bottom: auto; top: 540px;">
+                        <ui:Button text="Button" name="LoveMelee1" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                        <ui:Button text="Button" name="LoveMelee2" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                        <ui:Button text="Button" name="LoveMelee3" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="FearRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; bottom: 0;">
+                        <ui:Button text="Button" name="FearMelee1" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
+                        <ui:Button text="Button" name="FearMelee2" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
+                        <ui:Button text="Button" name="FearMelee3" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="RangeUpg" class="row-setup">
-                    <ui:Label text="Range" name="RangeIcon" style="width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; background-color: rgb(255, 251, 88); -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
-                    <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Joy lvl 1" name="JoyRange1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;);" />
-                        <ui:Button text="Anger lvl 1&#10;" name="AngerRange1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
+                <ui:VisualElement name="RangeTreeEL" class="skill-tree-setup" style="display: none; top: 94px;">
+                    <ui:VisualElement name="JoyRow" class="upg-row-setup" style="height: 180px;">
+                        <ui:Button text="Button" name="JoyRange1" class="upgrade-button" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;); background-color: rgb(0, 0, 0);" />
+                        <ui:Button text="Button" name="JoyRange2" class="upgrade-button" style="background-color: rgb(255, 205, 0);" />
+                        <ui:Button text="Button" name="JoyRange3" class="upgrade-button" style="background-color: rgb(255, 205, 0);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Joy lvl 2" name="JoyRange2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/joyRangedUpgrade.png?fileID=2800000&amp;guid=e051f2d92d06cb44fac00f7668c1be68&amp;type=3#joyRangedUpgrade&quot;);" />
-                        <ui:Button text="Anger lvl 2&#10;" name="AngerRange2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
+                    <ui:VisualElement name="AngerRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; top: 180px;">
+                        <ui:Button text="Button" name="AngerRange1" class="upgrade-button" style="background-image: none; background-color: rgb(255, 0, 0);" />
+                        <ui:Button text="Button" name="AngerRange2" class="upgrade-button" style="background-color: rgb(255, 0, 0);" />
+                        <ui:Button text="Button" name="AngerRange3" class="upgrade-button" style="background-color: rgb(255, 0, 0);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="SadnessRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; top: 360px;">
+                        <ui:Button text="Button" name="SadnessRange1" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                        <ui:Button text="Button" name="SadnessRange2" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                        <ui:Button text="Button" name="SadnessRange3" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="LoveRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; bottom: auto; top: 540px;">
+                        <ui:Button text="Button" name="LoveRange1" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                        <ui:Button text="Button" name="LoveRange2" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                        <ui:Button text="Button" name="LoveRange3" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="FearRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; bottom: 0;">
+                        <ui:Button text="Button" name="FearRange1" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
+                        <ui:Button text="Button" name="FearRange2" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
+                        <ui:Button text="Button" name="FearRange3" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="DashUpg" class="row-setup">
-                    <ui:Label text="Dash" name="DashIcon" double-click-selects-word="false" style="background-color: rgb(126, 145, 255); width: 105px; height: 105px; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;);" />
-                    <ui:VisualElement name="ColumnLvl1" class="column-setup">
-                        <ui:Button text="Sad lvl 1&#10;" name="SadDash1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/sadnessButton.png?fileID=2800000&amp;guid=37f241f04b8fc8b41b0a801ab140a9cf&amp;type=3#sadnessButton&quot;);" />
-                        <ui:Button text="Anger lvl 1" name="AngerDash1" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
+                <ui:VisualElement name="DashTreeEL" class="skill-tree-setup" style="display: none; top: 94px;">
+                    <ui:VisualElement name="JoyRow" class="upg-row-setup" style="height: 180px;">
+                        <ui:Button text="Button" name="JoyDash1" class="upgrade-button" style="background-image: none; background-color: rgb(255, 205, 0);" />
+                        <ui:Button text="Button" name="JoyDash2" class="upgrade-button" style="background-color: rgb(255, 205, 0);" />
+                        <ui:Button text="Button" name="JoyDash3" class="upgrade-button" style="background-color: rgb(255, 205, 0);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="ColumnLvl2" class="column-setup">
-                        <ui:Button text="Sad lvl 2" name="SadDash2" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/sadnessButton.png?fileID=2800000&amp;guid=37f241f04b8fc8b41b0a801ab140a9cf&amp;type=3#sadnessButton&quot;);" />
-                        <ui:Button text="Anger lvl 2" name="AngerDash2" tabindex="-18" class="upg-button-setup" style="background-image: url(&quot;project://database/Assets/UI/UI%20Assets/angerButton.png?fileID=2800000&amp;guid=510e62c52d596ac409e288fba466857b&amp;type=3#angerButton&quot;);" />
+                    <ui:VisualElement name="AngerRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; top: 180px;">
+                        <ui:Button text="Button" name="AngerDash1" class="upgrade-button" style="background-image: none; background-color: rgb(255, 0, 0);" />
+                        <ui:Button text="Button" name="AngerDash2" class="upgrade-button" style="background-color: rgb(255, 0, 0);" />
+                        <ui:Button text="Button" name="AngerDash3" class="upgrade-button" style="background-color: rgb(255, 0, 0);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="SadnessRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; top: 360px;">
+                        <ui:Button text="Button" name="SadnessDash1" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                        <ui:Button text="Button" name="SadnessDash2" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                        <ui:Button text="Button" name="SadnessDash3" class="upgrade-button" style="background-color: rgb(8, 0, 255);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="LoveRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; bottom: auto; top: 540px;">
+                        <ui:Button text="Button" name="LoveDash1" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                        <ui:Button text="Button" name="LoveDash2" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                        <ui:Button text="Button" name="LoveDash3" class="upgrade-button" style="background-color: rgb(255, 93, 170);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="FearRow" class="upg-row-setup" style="flex-grow: 1; flex-direction: row; height: 182px; position: absolute; width: 1528px; align-self: auto; justify-content: space-between; align-items: center; bottom: 0;">
+                        <ui:Button text="Button" name="FearDash1" class="upgrade-button" style="background-color: rgb(0, 0, 0); background-image: url(&quot;project://database/Assets/UI/UI%20Assets/fearButton.png?fileID=2800000&amp;guid=e6195a9cc97441e4fb703f8493d19698&amp;type=3#fearButton&quot;);" />
+                        <ui:Button text="Button" name="FearDash2" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
+                        <ui:Button text="Button" name="FearDash3" class="upgrade-button" style="background-color: rgb(111, 0, 255);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="CombosEL" style="flex-grow: 1; position: relative; height: 90%; flex-direction: row; align-items: flex-start; justify-content: flex-start; overflow: visible; flex-wrap: wrap; display: none;">
-                <ui:VisualElement name="Combo1" class="combo-base">
-                    <ui:Label text=" Combo Skill" name="ComboName" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 30px;">
-                        <ui:VisualElement name="ComboIconEL" style="flex-grow: 1; width: 80px; height: 40px; margin-left: 293px; padding-left: 0; flex-direction: row;">
-                            <ui:VisualElement name="ComboIcon1" style="flex-grow: 1; width: 50%; background-color: rgb(54, 94, 255); height: 100%;" />
-                            <ui:VisualElement name="ComboIcon2" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgb(208, 212, 77);" />
-                        </ui:VisualElement>
-                    </ui:Label>
-                    <ui:VisualElement name="ComboPic" style="flex-grow: 1; width: 100%; height: 40%; min-height: 10%; max-height: 40%; background-color: rgb(190, 190, 190);" />
-                    <ui:Label text="Combo Ablity:&#10;description text&#10;number go up&#10;very epic" name="ComboBody" style="-unity-font-definition: url(&quot;project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&amp;guid=613e0e57669d6a0438189fe9f6bc7238&amp;type=3#Born2bSportyFS&quot;); font-size: 30px; flex-wrap: wrap;" />
+            <ui:ScrollView name="SynergiesEL" style="height: 90%; position: relative; display: none;">
+                <ui:VisualElement name="SynContainer" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; padding-bottom: 0;">
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0); padding-bottom: 0; padding-left: 0;" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
+                    <ui:VisualElement name="VisualElement" class="synergy" style="background-color: rgb(0, 0, 0);" />
                 </ui:VisualElement>
-            </ui:VisualElement>
+            </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="PauseMenu" style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.38); display: none;">
             <ui:VisualElement name="PauseBG" style="flex-grow: 1; justify-content: space-between; align-items: center; align-content: center; width: 450px; height: 600px; align-self: center; flex-basis: auto; position: absolute; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; background-color: rgb(164, 164, 164); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(87, 87, 87); border-right-color: rgb(87, 87, 87); border-top-color: rgb(87, 87, 87); border-bottom-color: rgb(87, 87, 87); padding-bottom: 90px; padding-top: 0;">

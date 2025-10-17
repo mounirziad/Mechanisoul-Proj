@@ -1,48 +1,14 @@
 .tabs {
-    width: 236px;
-    height: 72px;
+    width: 292px;
+    height: 82px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    font-size: 42px;
+    font-size: 50px;
     -unity-font-definition: url("project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&guid=613e0e57669d6a0438189fe9f6bc7238&type=3#Born2bSportyFS");
     background-color: rgb(55, 55, 55);
     color: rgb(255, 255, 255);
-}
-
-.row-setup {
-    flex-grow: 1;
-    justify-content: flex-start;
-    flex-direction: row;
-    align-self: stretch;
-    align-items: center;
-    align-content: center;
-}
-
-.upg-button-setup {
-    width: 120px;
-    height: 120px;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    font-size: 30px;
-    -unity-font-definition: url("project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&guid=613e0e57669d6a0438189fe9f6bc7238&type=3#Born2bSportyFS");
-    color: rgb(255, 255, 255);
-    background-color: rgb(55, 55, 55);
-}
-
-.column-setup {
-    flex-grow: 1;
-    align-self: center;
-    width: 126px;
-    min-width: 0;
-    max-width: 195px;
-    height: 379px;
-    justify-content: space-evenly;
-    align-items: stretch;
-    max-height: 335px;
 }
 
 .pause-menu-button {
@@ -83,4 +49,53 @@
     margin-bottom: 40px;
     min-width: 20%;
     min-height: 50%;
+}
+
+.Upgrade-Cat-Txt {
+    font-size: 40px;
+    -unity-font-definition: url("project://database/Assets/UI/UI%20Assets/Born2bSportyFS.otf?fileID=12800000&guid=613e0e57669d6a0438189fe9f6bc7238&type=3#Born2bSportyFS");
+    padding-left: 50px;
+    padding-right: 50px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.skill-tree-setup {
+    flex-grow: 1;
+    position: absolute;
+    height: 900px;
+    width: 1528px;
+}
+
+.upgrade-button {
+    width: 155px;
+    height: 155px;
+    font-size: 0;
+}
+
+.upg-row-setup {
+    flex-grow: 1;
+    flex-direction: row;
+    height: 180px;
+    position: absolute;
+    width: 1528px;
+    align-self: auto;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.synergy {
+    flex-grow: 0;
+    width: 450px;
+    height: 486px;
+    flex-shrink: 0;
+    padding-right: 5px;
+    padding-left: 0;
+    padding-bottom: 0;
+    margin-bottom: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
