@@ -3459,6 +3459,10 @@ PrefabInstance:
       value: 3.78
       objectReference: {fileID: 0}
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: shootingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: impulseSource
       value: 
       objectReference: {fileID: 1804909529}
@@ -3479,9 +3483,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4129360533268054458, guid: 5a22d81b38f8eb44982c483451848141, type: 3}
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: tracerLinePrefab
+      value: 
+      objectReference: {fileID: 1849142464543589043, guid: 93412110c69b1b040ba5b1054bc174c1, type: 3}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: enemyLayer.m_Bits
       value: 512
       objectReference: {fileID: 0}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: muzzleFlashPrefab
+      value: 
+      objectReference: {fileID: 2925474777121185555, guid: a4814f39caba76149822cf51f11e2587, type: 3}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: impactEffectPrefab
+      value: 
+      objectReference: {fileID: 6344079437793511272, guid: a0e36e3877302c747b17ba1472fe9646, type: 3}
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: joyExplosionPrefab
       value: 
@@ -3498,6 +3514,10 @@ PrefabInstance:
       propertyPath: angerExplosionPrefab
       value: 
       objectReference: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: hitscanLayerMask.m_Bits
+      value: 951
+      objectReference: {fileID: 0}
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: additionalLungeMultiplier
       value: 1.02

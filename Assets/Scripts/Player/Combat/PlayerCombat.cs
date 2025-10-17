@@ -3,11 +3,17 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum ShootingMode
+{
+    Projectile,
+    Hitscan
+}
+
 public enum RootMotionMode
 {
-    LungeOnly,      // Use only your existing lunge system (root motion disabled)
-    RootMotionOnly, // Use only root motion from animations (no additional lunge)
-    Hybrid          // Use root motion + reduced lunge for extra impact
+    LungeOnly,
+    RootMotionOnly,
+    Hybrid
 }
 
 public class PlayerCombat : MonoBehaviour
@@ -25,20 +31,34 @@ public class PlayerCombat : MonoBehaviour
     private float defaultFOV;
 
     // Ranged
-    [Header("Ranged")]
-    [SerializeField] private GameObject projectilePrefab;
+    [Header("Ranged Settings")]
+    [Tooltip("Choose between projectile-based or instant hitscan shooting.")]
+    public ShootingMode shootingMode = ShootingMode.Projectile;
+    
+    [Header("Shared Ranged Settings")]
     [SerializeField] private Transform shootPoint;
-    [SerializeField] private float projectileDamage = 10f;
+    [SerializeField] private float weaponDamage = 10f;
     [Tooltip("Baseline shots per second (Joy multiplies this).")]
     public float baseFireRate = 2f;
     public bool rangedEnabled = true;
-    public GameObject angerExplosionPrefab; // FireDoTZone-like prefab (optional)
+    
+    [Header("Projectile Settings")]
+    [SerializeField] private GameObject projectilePrefab;
+    
+    [Header("Hitscan Settings")]
+    [SerializeField] private float hitscanRange = 100f;
+    [SerializeField] private LayerMask hitscanLayerMask = -1;
+    [SerializeField] private GameObject impactEffectPrefab;
+    [SerializeField] private GameObject muzzleFlashPrefab;
+    [SerializeField] private LineRenderer tracerLinePrefab;
+    [SerializeField] private float tracerDuration = 0.1f;
+    
+    [Header("VFX Prefabs")]
+    public GameObject angerExplosionPrefab;
+    public GameObject joyExplosionPrefab;
 
     private float lastShotTime = -999f;
-    private RangedModifiers rangedMods;    // set by UpgradeHandler
-
-    [Header("Ranged VFX Prefabs")]
-    public GameObject joyExplosionPrefab;   // joy vfx
+    private RangedModifiers rangedMods;
 
     // Melee & input
     public List<AttackSO> combo;
@@ -209,7 +229,6 @@ public class PlayerCombat : MonoBehaviour
         if (!on) { isAiming = false; anim.SetBool("IsAiming", false); }
     }
 
-    // In your PlayerCombat.cs, modify the HandleShoot method:
     void HandleShoot()
     {
         if (!rangedEnabled) { inputManager.shootInput = false; return; }
@@ -218,35 +237,150 @@ public class PlayerCombat : MonoBehaviour
         float cooldown = 1f / Mathf.Max(0.0001f, effectiveRate);
         if (Time.time - lastShotTime < cooldown) { inputManager.shootInput = false; return; }
 
-        if (projectilePrefab && shootPoint)
+        if (shootingMode == ShootingMode.Projectile)
         {
-            // Use corrected spawn position for better alignment
-            Vector3 spawnPosition = GetCorrectedSpawnPosition();
-
-            // DEBUG: Check what position we're actually using
-            Debug.Log($"Shooting from spawn position: {spawnPosition}");
-            Debug.Log($"Player position: {transform.position}");
-            Debug.Log($"Distance between: {Vector3.Distance(spawnPosition, transform.position)}");
-
-            var go = Instantiate(projectilePrefab, spawnPosition, shootPoint.rotation);
-            var proj = go.GetComponent<PlayerProjectile>();
-            if (proj != null)
-            {
-                float finalDamage = projectileDamage * rangedMods.joyDamageMultiplier;
-
-                // Use trajectory-corrected direction for maximum accuracy
-                Vector3 correctedDirection = GetCorrectedAimDirection();
-
-                // DEBUG: Check the aim direction
-                Debug.Log($"Corrected aim direction: {correctedDirection}");
-
-                proj.Initialize(correctedDirection, finalDamage, rangedMods, this);
-            }
-            lastShotTime = Time.time;
+            ShootProjectile();
         }
-        else Debug.LogWarning("Projectile Prefab or Shoot Point not assigned.");
+        else
+        {
+            ShootHitscan();
+        }
 
+        lastShotTime = Time.time;
         inputManager.shootInput = false;
+    }
+
+    void ShootProjectile()
+    {
+        if (projectilePrefab == null || shootPoint == null)
+        {
+            Debug.LogWarning("Projectile Prefab or Shoot Point not assigned.");
+            return;
+        }
+
+        Vector3 spawnPosition = GetCorrectedSpawnPosition();
+        var go = Instantiate(projectilePrefab, spawnPosition, shootPoint.rotation);
+        var proj = go.GetComponent<PlayerProjectile>();
+        
+        if (proj != null)
+        {
+            float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
+            Vector3 correctedDirection = GetCorrectedAimDirection();
+            proj.Initialize(correctedDirection, finalDamage, rangedMods, this);
+        }
+    }
+
+    void ShootHitscan()
+    {
+        if (shootPoint == null)
+        {
+            Debug.LogWarning("Shoot Point not assigned for hitscan.");
+            return;
+        }
+
+        Vector3 shootOrigin = shootPoint.position;
+        Vector3 shootDirection = GetAccurateAimDirection();
+        float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
+
+        if (muzzleFlashPrefab != null)
+        {
+            var muzzle = Instantiate(muzzleFlashPrefab, shootOrigin, Quaternion.LookRotation(shootDirection));
+            Destroy(muzzle, 0.1f);
+        }
+
+        RaycastHit hit;
+        Vector3 hitPosition;
+        bool hitSomething = Physics.Raycast(shootOrigin, shootDirection, out hit, hitscanRange, hitscanLayerMask);
+
+        if (hitSomething)
+        {
+            hitPosition = hit.point;
+
+            if (!hit.collider.CompareTag("Player"))
+            {
+                var enemyHealth = hit.collider.GetComponentInParent<BasicEnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(finalDamage, shootDirection);
+                    SpawnHitscanVFX(hitPosition, hit.normal);
+                }
+                else if (hit.collider.CompareTag("Enemy") || (hit.transform.root != null && hit.transform.root.CompareTag("Enemy")))
+                {
+                    SpawnHitscanVFX(hitPosition, hit.normal);
+                }
+                else
+                {
+                    SpawnImpactEffect(hitPosition, hit.normal);
+                }
+            }
+        }
+        else
+        {
+            hitPosition = shootOrigin + shootDirection * hitscanRange;
+        }
+
+        if (tracerLinePrefab != null)
+        {
+            DrawTracerLine(shootOrigin, hitPosition);
+        }
+    }
+
+    void SpawnHitscanVFX(Vector3 position, Vector3 normal)
+    {
+        if (rangedMods.angerExplosionOnHit && angerExplosionPrefab != null)
+        {
+            var aoe = Instantiate(angerExplosionPrefab, position, Quaternion.LookRotation(normal));
+            var cameraLookAt = aoe.GetComponent<VFXCameraLookAt>();
+            if (cameraLookAt != null) cameraLookAt.enabled = false;
+
+            var dot = aoe.GetComponent<AngerDoTZone>();
+            if (dot != null)
+                dot.Configure(Mathf.Max(0f, rangedMods.angerAOEPercent));
+            else
+                aoe.SendMessage("Configure", rangedMods.angerAOEPercent, SendMessageOptions.DontRequireReceiver);
+        }
+
+        if (rangedMods.joyExplosionOnHit && joyExplosionPrefab != null)
+        {
+            var vfx = Instantiate(joyExplosionPrefab, position, Quaternion.LookRotation(normal));
+            var cameraLookAt = vfx.GetComponent<VFXCameraLookAt>();
+            if (cameraLookAt != null) cameraLookAt.enabled = false;
+
+            AutoDestroyVFX(vfx);
+        }
+    }
+
+    void SpawnImpactEffect(Vector3 position, Vector3 normal)
+    {
+        if (impactEffectPrefab != null)
+        {
+            var impact = Instantiate(impactEffectPrefab, position, Quaternion.LookRotation(normal));
+            Destroy(impact, 2f);
+        }
+    }
+
+    void DrawTracerLine(Vector3 start, Vector3 end)
+    {
+        var tracerObj = Instantiate(tracerLinePrefab, start, Quaternion.identity);
+        tracerObj.SetPosition(0, start);
+        tracerObj.SetPosition(1, end);
+        Destroy(tracerObj.gameObject, tracerDuration);
+    }
+
+    void AutoDestroyVFX(GameObject go)
+    {
+        float fallback = 2f;
+        float maxTime = 0f;
+
+        var psList = go.GetComponentsInChildren<ParticleSystem>();
+        foreach (var ps in psList)
+        {
+            var m = ps.main;
+            float dur = m.duration + m.startLifetime.constantMax;
+            if (dur > maxTime) maxTime = dur;
+        }
+
+        Destroy(go, maxTime > 0.05f ? maxTime : fallback);
     }
 
     Vector3 GetAimTargetPosition()
