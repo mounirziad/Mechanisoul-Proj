@@ -25,6 +25,17 @@ public interface IActionStrategy
     }
 }
 
+public class IntroStrategy : IActionStrategy
+{
+    public bool CanPerform => false; //Can only be achieved after player is noticed
+    public bool Complete { get; private set; } //set complete after intro scene is played
+
+    public IntroStrategy()
+    {
+        //put in cinematic information
+    }
+}
+
 public class IdleStrategy : IActionStrategy
 {
     public bool CanPerform => true; //Agent can always idle
@@ -41,6 +52,26 @@ public class IdleStrategy : IActionStrategy
 
     public void Start() => timer.Start();
     public void Update(float deltaTime) => timer.Tick(deltaTime);
+
+    //Idle animations
+    //Need to add animation state machine in order to get this to work
+    //Save for next SCRUM
+    /*
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+
+    }
+
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+
+    }
+
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+
+    }
+    */
 }
 
 public class WanderStrategy : IActionStrategy
