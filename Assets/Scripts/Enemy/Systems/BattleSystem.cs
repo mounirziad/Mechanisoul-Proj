@@ -21,7 +21,41 @@ public class BattleSystem : MonoBehaviour
 
     private void Update()
     {
-        
+        //switch statement for boss phases
+        switch (BossPhase.Waiting)
+        {
+            case BossPhase.Waiting:
+                //Waiting for player to enter area
+                break;
+
+            case BossPhase.Cinematic:
+                //Play cinematic
+                break;
+
+            case BossPhase.Phase1:
+                //Boss Phase 1 behavior
+                break;
+
+            case BossPhase.MinionWave1:
+                //Spawn minion wave 1
+                break;
+
+            case BossPhase.Phase2:
+                //Boss Phase 2 behavior
+                break;
+
+            case BossPhase.MinionWave2:
+                //Spawn minion wave 2
+                break;
+
+            case BossPhase.Rage:
+                //Boss Rage behavior
+                break;
+
+            case BossPhase.Death:
+                //Boss Death behavior
+                break;
+        }
     }
 
     private void StartBattle()
