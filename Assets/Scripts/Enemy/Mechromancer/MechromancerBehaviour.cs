@@ -198,4 +198,9 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
         agent.ClearCurrentAction();
         agent.CalculatePlan();
     }
+
+    public void TriggerResurrectionPhase()
+    {
+        GoapAgent.EnableOnlyThisGoal(resurrectGoal);
+    }
 }

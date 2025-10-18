@@ -182,4 +182,15 @@ public partial class GoapAgent : MonoBehaviour
             actionPlan = potentialPlan;
         }
     }
+
+    public void EnableOnlyThisGoal(AgentGoal forcedGoal)
+    {
+        foreach (var g in goals)
+        {
+            g.Enabled = (g == forcedGoal);
+        }
+
+        currentGoal = forcedGoal;
+        CalculatePlan();
+    }
 }
