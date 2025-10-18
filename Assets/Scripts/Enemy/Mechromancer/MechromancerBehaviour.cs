@@ -201,6 +201,6 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     public void TriggerResurrectionPhase()
     {
-        GoapAgent.EnableOnlyThisGoal(resurrectGoal);
+        //GoapAgent.EnableOnlyThisGoal(resurrectGoal);
     }
 }

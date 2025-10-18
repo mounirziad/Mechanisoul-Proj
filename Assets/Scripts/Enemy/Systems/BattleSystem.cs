@@ -37,8 +37,8 @@ public class BattleSystem : MonoBehaviour
                 break;
 
             case BossPhase.MinionWave1:
-                MechromancerBehaviour.TriggerResurrectionPhase();
-                currentPhase = BossPhase.Waiting;
+                //MechromancerBehaviour.TriggerResurrectionPhase();
+                //currentPhase = BossPhase.Waiting;
                 break;
 
             case BossPhase.Phase2:
