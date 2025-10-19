@@ -10643,6 +10643,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1707222913931359754, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 1707222913931359754, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1707222913931359754, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.11
+      objectReference: {fileID: 0}
     - target: {fileID: 1896483585987054284, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: freeLookCamera
       value: 
@@ -10658,7 +10670,7 @@ PrefabInstance:
     - target: {fileID: 3368849391516351207, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: crosshairObject
       value: 
-      objectReference: {fileID: 1208704107}
+      objectReference: {fileID: 1717918505}
     - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: capsuleHeight
       value: 0.02
@@ -18958,21 +18970,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1838163544592258235, guid: 181e55b319b4947439064fb135d10c61, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0000150749875
+      objectReference: {fileID: 0}
+    - target: {fileID: 1838163544592258235, guid: 181e55b319b4947439064fb135d10c61, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0000022776887
+      objectReference: {fileID: 0}
+    - target: {fileID: 1838163544592258235, guid: 181e55b319b4947439064fb135d10c61, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0000006224706
+      objectReference: {fileID: 0}
+    - target: {fileID: 3544208360662927641, guid: 181e55b319b4947439064fb135d10c61, type: 3}
+      propertyPath: Target.TrackingTarget
+      value: 
+      objectReference: {fileID: 1640704044}
     - target: {fileID: 4262312743478871049, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_Name
       value: AimCamera
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.36179
+      value: 0.23955435
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.68725
+      value: 3.246634
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.02707
+      value: 8.350458
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19018,11 +19046,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
---- !u!1 &1208704107 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1316613069921117520, guid: 181e55b319b4947439064fb135d10c61, type: 3}
-  m_PrefabInstance: {fileID: 1208704105}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1209281866
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25631,6 +25654,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9272549f561b8d64890052f89be604ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockOnSystem
+--- !u!4 &1640704044 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+  m_PrefabInstance: {fileID: 573434807}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1641691201
 GameObject:
   m_ObjectHideFlags: 0
@@ -29844,6 +29872,11 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!1 &1717918505 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3731401772633776584, guid: 181e55b319b4947439064fb135d10c61, type: 3}
+  m_PrefabInstance: {fileID: 1208704105}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1720629936
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -278,8 +278,19 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
 
+        Vector3 aimTarget = GetAimTargetPosition();
         Vector3 shootOrigin = shootPoint.position;
-        Vector3 shootDirection = GetAccurateAimDirection();
+        Vector3 shootDirection;
+        
+        if (aimTarget != Vector3.zero)
+        {
+            shootDirection = (aimTarget - shootOrigin).normalized;
+        }
+        else
+        {
+            shootDirection = GetAccurateAimDirection();
+        }
+        
         float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
 
         if (muzzleFlashPrefab != null)
