@@ -6,6 +6,7 @@ public class MeleeUpgrades : Upgrade
     int buffStackCap; float buffPercent; //anger upgrades
     float dotTickDmg, dotMaxTicks; //sadness upgrades
     float lsAmt; bool lsDoubleActive; //love upgrades
+    float moveSpeedBuff, moveSpeedDuration; //fear upgrades
 
     protected override void Awake()
     {
@@ -117,10 +118,32 @@ public class MeleeUpgrades : Upgrade
     }
 
     protected override void FearChange()
-    { }
+    {
+        switch (upgradeLevel)
+        {
+            case 0:
+                moveSpeedBuff = 0;
+                moveSpeedDuration = 0;
+                break;
+            case 1:
+                moveSpeedBuff = 0.15f;
+                moveSpeedDuration = 3;
+                break;
+            case 2:
+                moveSpeedBuff = 0.15f;
+                moveSpeedDuration = 5;
+                break;
+            case 3:
+                moveSpeedBuff = 0.3f;
+                break;
+            default:
+                Debug.LogError("upgrade level out of desired range");
+                break;
+        }
+    }
 
     protected override void UpdatePlayer()
     {
-        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult, dotTickDmg, dotMaxTicks);
+        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult, dotTickDmg, dotMaxTicks, lsAmt, lsDoubleActive, moveSpeedBuff, moveSpeedDuration);
     }
 }

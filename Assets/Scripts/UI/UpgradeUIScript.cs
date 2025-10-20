@@ -7,6 +7,7 @@ public class UpgradeUIScript : MonoBehaviour
     private CombosMenuUI combosMenuUI;
 
     public UpgradeHandler upgradeHandler;
+    public MeleeUpgrades meleeUpgrades;
 
     public VisualElement root;
 
@@ -84,6 +85,11 @@ public class UpgradeUIScript : MonoBehaviour
     private VisualElement skillTree;
     private VisualElement synergies;
 
+    private void Awake()
+    {
+        meleeUpgrades = GameObject.Find("UpgradeHolder").GetComponent<MeleeUpgrades>();
+    }
+
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
@@ -109,9 +115,9 @@ public class UpgradeUIScript : MonoBehaviour
         quitButton = root.Q<Button>("QuitButton");
 
         // Upgrade Trees
-        meleeTree = root.Q<VisualElement>("MeleeTree");
-        rangeTree = root.Q<VisualElement>("RangeTree");
-        dashTree = root.Q<VisualElement>("DashTree");
+        meleeTree = root.Q<VisualElement>("MeleeTreeEL");
+        rangeTree = root.Q<VisualElement>("RangeTreeEL");
+        dashTree = root.Q<VisualElement>("DashTreeEL");
 
         // Upgrade Tree Buttons
         meleeTreeButton = root.Q<Button>("MeleeTreeButton");
@@ -192,6 +198,10 @@ public class UpgradeUIScript : MonoBehaviour
         if (resumeButton != null) resumeButton.clicked += OnResumeClicked;
         if (optionsButton != null) optionsButton.clicked += OnOptionsClicked;
         if (quitButton != null) quitButton.clicked += OnQuitClicked;
+        // Skill Trees
+        if (meleeTreeButton != null) meleeTreeButton.clicked += OnMeleeTreeClicked;
+        if (rangeTreeButton != null) rangeTreeButton.clicked += OnRangeTreeClicked;
+        if (dashTreeButton != null) dashTreeButton.clicked += OnDashTreeClicked;
         // Melee 1
         if (joyMelee1 != null) joyMelee1.clicked += OnJoyMelee1Clicked;
         if (angerMelee1 != null) angerMelee1.clicked += OnAngerMelee1Clicked;
@@ -269,6 +279,10 @@ public class UpgradeUIScript : MonoBehaviour
 
     void OnDisable()
     {
+        // Skill Trees
+        if (meleeTreeButton != null) meleeTreeButton.clicked -= OnMeleeTreeClicked;
+        if (rangeTreeButton != null) rangeTreeButton.clicked -= OnRangeTreeClicked;
+        if (dashTreeButton != null) dashTreeButton.clicked -= OnDashTreeClicked;
         // Melee 1
         if (joyMelee1 != null) joyMelee1.clicked -= OnJoyMelee1Clicked;
         if (angerMelee1 != null) angerMelee1.clicked -= OnAngerMelee1Clicked;
@@ -333,29 +347,6 @@ public class UpgradeUIScript : MonoBehaviour
     }
 
     // ====== HELPERS: drive levels via handler Up/Down (no direct setters needed) ======
-    void ZeroMelee()
-    {
-        // Call downs several times to guarantee 0 regardless of current level caps
-        for (int i = 0; i < 10; i++)
-        {
-            upgradeHandler.MeleeAngerDown();
-            upgradeHandler.MeleeLoveDown();
-            upgradeHandler.MeleeSadnessDown();
-            upgradeHandler.MeleeFearDown();
-            upgradeHandler.MeleeJoyDown();
-        }
-    }
-    void SetMeleeAngerLevel(int level)
-    {
-        ZeroMelee();
-        for (int i = 0; i < level; i++) upgradeHandler.MeleeAngerUp();
-    }
-    void SetMeleeLoveLevel(int level)
-    {
-        ZeroMelee();
-        for (int i = 0; i < level; i++) upgradeHandler.MeleeLoveUp();
-    }
-
     void ZeroRange()
     {
         for (int i = 0; i < 10; i++)
@@ -410,78 +401,112 @@ public class UpgradeUIScript : MonoBehaviour
         Debug.Log("Quit Button Clicked!");
     }
 
+    // ====== Swap Skill Trees ======
+    private void OnMeleeTreeClicked()
+    {
+        meleeTree.style.display = DisplayStyle.Flex;
+        rangeTree.style.display = DisplayStyle.None;
+        dashTree.style.display = DisplayStyle.None;
+        Debug.Log("melee tree click");
+    }
+    private void OnRangeTreeClicked()
+    {
+        meleeTree.style.display = DisplayStyle.None;
+        rangeTree.style.display = DisplayStyle.Flex;
+        dashTree.style.display = DisplayStyle.None;
+        Debug.Log("range tree click");
+    }
+    private void OnDashTreeClicked()
+    {
+        meleeTree.style.display = DisplayStyle.None;
+        rangeTree.style.display = DisplayStyle.None;
+        dashTree.style.display = DisplayStyle.Flex;
+        Debug.Log("dash tree click");
+    }
+
     // ====== Skill Tree Clicks ======
     // MELEE (JOY)
     private void OnJoyMelee1Clicked()
     {
+        meleeUpgrades.SelectEmotion(Emotions.Joy);
         Debug.Log("Joy Melee Upgrade 1 Clicked!");
     }
     private void OnJoyMelee2Clicked()
     {
         Debug.Log("Joy Melee Upgrade 2 Clicked!");
+        meleeUpgrades.UpgradeEmotion();
     }
     private void OnJoyMelee3Clicked()
     {
         Debug.Log("Joy Melee Upgrade 3 Clicked!");
+        meleeUpgrades.UpgradeEmotion();
     }
 
     // MELEE (ANGER)
     private void OnAngerMelee1Clicked()
     {
-        SetMeleeAngerLevel(1);
+        meleeUpgrades.SelectEmotion(Emotions.Anger);
         Debug.Log("Anger Melee Upgrade 1 Clicked!");
     }
     private void OnAngerMelee2Clicked()
     {
-        SetMeleeAngerLevel(2);
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Anger Melee Upgrade 2 Clicked!");
     }
     private void OnAngerMelee3Clicked()
     {
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Anger Melee Upgrade 3 Clicked!");
     }
 
     // MELEE (SADNESS)
     private void OnSadnessMelee1Clicked()
     {
+        meleeUpgrades.SelectEmotion(Emotions.Sadness);
         Debug.Log("Sadness Melee Upgrade 1 Clicked!");
     }
     private void OnSadnessMelee2Clicked()
     {
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Sadness Melee Upgrade 2 Clicked!");
     }
     private void OnSadnessMelee3Clicked()
     {
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Sadness Melee Upgrade 3 Clicked!");
     }
 
     // MELEE (LOVE)
     private void OnLoveMelee1Clicked()
     {
-        SetMeleeLoveLevel(1);
+        meleeUpgrades.SelectEmotion(Emotions.Love);
         Debug.Log("Love Melee Upgrade 1 Clicked!");
     }
     private void OnLoveMelee2Clicked()
     {
-        SetMeleeLoveLevel(2);
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Love Melee Upgrade 2 Clicked!");
     }
     private void OnLoveMelee3Clicked()
     {
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Love Melee Upgrade 3 Clicked!");
     }
 
     // MELEE (FEAR)
     private void OnFearMelee1Clicked()
     {
+        meleeUpgrades.SelectEmotion(Emotions.Fear);
         Debug.Log("Fear Melee Upgrade 1 Clicked!");
     }
     private void OnFearMelee2Clicked()
     {
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Fear Melee Upgrade 2 Clicked!");
     }
     private void OnFearMelee3Clicked()
     {
+        meleeUpgrades.UpgradeEmotion();
         Debug.Log("Fear Melee Upgrade 3 Clicked!");
     }
 

@@ -8,6 +8,8 @@ public class PlayerManager : MonoBehaviour
     Animator animator;
     PlayerHealth playerHealth;
     public bool isInteracting;
+    float baseSpeed; // base player speed
+    float speed; //current move speed of player
 
     [Header("Dash / Abilities")]
     [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
@@ -26,12 +28,21 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float critMult;
 
     [Header("Melee Sadness Upgrade Values")]
-    float dotTickDmg; //dmg per tick
-    float dotMaxTicks; //how many ticks per hit
-    float dotMaxStacks; //max number of dmg stacks
-    float dotTickTimer; //time till next tick
-    float dotTickMaxTime; //time between ticks
+    [SerializeField] float dotTickDmg; //dmg per tick
+    [SerializeField] float dotMaxTicks; //how many ticks per hit
+    [SerializeField] float dotMaxStacks; //max number of dmg stacks
+    [SerializeField] float dotTickTimer; //time till next tick
+    [SerializeField] float dotTickMaxTime; //time between ticks
 
+    [Header("Melee Love Upgrade Values")]
+    [SerializeField] float lsAmt;
+    [SerializeField] bool lsDoubleActive;
+
+    [Header("Melee Fear Upgrade Values")]
+    [SerializeField] float moveSpeedBuff;
+    [SerializeField] float moveSpeedDuration;
+    [SerializeField] float moveSpeedTimer;
+    [SerializeField] bool hasMoveSpeedBuff;
 
 
 
@@ -88,9 +99,22 @@ public class PlayerManager : MonoBehaviour
 
             buffStackTimer -= Time.deltaTime;
         }
+
+        if (hasMoveSpeedBuff)
+        {
+            if (moveSpeedTimer <= 0)
+            {
+                hasMoveSpeedBuff = false;
+                speed = baseSpeed;
+                UpdatePlayerSpeed();
+                Debug.Log("reset player speed");
+            }
+
+            moveSpeedTimer -= Time.deltaTime;
+        }
     }
 
-    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, float dotMaxTicks)
+    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, float dotMaxTicks, float lsAmt, bool lsDoubleActive, float moveSpeedBuff, float moveSpeedDuration)
     {
         this.buffStackCap = buffStackCap;
         this.buffPercent = buffPercent;
@@ -99,6 +123,10 @@ public class PlayerManager : MonoBehaviour
         this.critMult = critMult;
         this.dotTickDmg = dotTickDmg;
         this.dotMaxTicks = dotMaxTicks;
+        this.lsAmt = lsAmt;
+        this.lsDoubleActive = lsDoubleActive;
+        this.moveSpeedBuff = moveSpeedBuff;
+        this.moveSpeedDuration = moveSpeedDuration;
     }
 
     public void AddBuffStack()
@@ -135,9 +163,30 @@ public class PlayerManager : MonoBehaviour
         return attackSpeedBuff; 
     }
 
-    public void temp()
+    public void PerformLifesteal(float damage)
     {
+        float lifeSteal = damage * lsAmt;
 
+        if (lsDoubleActive)
+        {
+            if (playerHealth.GetHealthPercent() < 0.3f)
+                lifeSteal *= 2;
+        }
+
+        playerHealth.Heal(lifeSteal);
+    }
+
+    public void ApplyMoveSpeedBuff()
+    {
+        hasMoveSpeedBuff = true;
+        speed = baseSpeed + (baseSpeed * moveSpeedBuff);
+        UpdatePlayerSpeed();
+        moveSpeedTimer = moveSpeedDuration;
+    }
+
+    public void UpdatePlayerSpeed()
+    {
+        //update actual player speed here based on speed var
     }
 
 

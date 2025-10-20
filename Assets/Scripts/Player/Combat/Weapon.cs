@@ -160,6 +160,7 @@ public class Weapon : MonoBehaviour
             Debug.Log("Hit basic enemy");
             Vector3 direction = (other.transform.position - transform.position).normalized;
             basicEnemy.TakeDamage(finalDamage, direction);
+            playerManager.PerformLifesteal(finalDamage);
             //Debug.Log($"Damage Dealt: {finalDamage}");
 
             
