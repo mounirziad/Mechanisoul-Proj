@@ -278,8 +278,19 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
 
+        Vector3 aimTarget = GetCameraCenterAimPoint();
         Vector3 shootOrigin = shootPoint.position;
-        Vector3 shootDirection = GetAccurateAimDirection();
+        Vector3 shootDirection;
+        
+        if (aimTarget != Vector3.zero)
+        {
+            shootDirection = (aimTarget - shootOrigin).normalized;
+        }
+        else
+        {
+            shootDirection = GetAccurateAimDirection();
+        }
+        
         float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
 
         if (muzzleFlashPrefab != null)
@@ -971,5 +982,20 @@ public class PlayerCombat : MonoBehaviour
         // Draw ideal camera-to-target line
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(cameraPos, aimTarget);
+    }
+
+    private Vector3 GetCameraCenterAimPoint()
+    {
+        var cam = Camera.main;
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // reticle center
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, hitscanLayerMask))
+        {
+            return hit.point;
+        }
+        else
+        {
+            return ray.origin + ray.direction * 100f; // default distance
+        }
     }
 }

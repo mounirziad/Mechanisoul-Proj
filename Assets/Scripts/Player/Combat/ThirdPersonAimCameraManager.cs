@@ -241,5 +241,6 @@ public class ThirdPersonAimCameraManager : MonoBehaviour
         return thirdPersonAimCamera != null && thirdPersonAimCamera.Priority > 10;
     }
 
+    
 
 }
