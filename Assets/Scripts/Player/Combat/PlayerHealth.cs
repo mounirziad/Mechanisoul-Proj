@@ -69,6 +69,8 @@ public class PlayerHealth : MonoBehaviour
 
         onHealed?.Invoke(amount);                    // Notify listeners that healing happened
         onHealthChanged?.Invoke(currentHealth, maxHealth); // Update UI or other systems
+
+        //Debug.Log($"Healed for {amount} hp");
     }
 
     public void Die()

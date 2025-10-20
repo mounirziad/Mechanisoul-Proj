@@ -621,10 +621,10 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void ChangeSpeed(float speed)
     {
-        walkingSpeed *= speed;
-        runningSpeed *= speed;
-        sprintingSpeed *= speed;
-        rotationSpeed *= speed;
+        walkingSpeed = baseWalkingSpeed *speed;
+        runningSpeed = baseRunningSpeed * speed;
+        sprintingSpeed = baseSprintingSpeed * speed;
+        rotationSpeed = baseRotationSpeed * speed;
     }
 
 

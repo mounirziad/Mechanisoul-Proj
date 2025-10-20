@@ -93,7 +93,7 @@ public class PlayerManager : MonoBehaviour
             {
                 hasBuffStacks = false;
                 buffStacks = 0;
-                Debug.Log("removed all buff stacks");
+                //Debug.Log("removed all buff stacks");
             }
 
             buffStackTimer -= Time.deltaTime;
@@ -106,7 +106,7 @@ public class PlayerManager : MonoBehaviour
                 hasMoveSpeedBuff = false;
                 speedMult = 1;
                 UpdatePlayerSpeed();
-                Debug.Log("reset player speed");
+                //Debug.Log("reset player speed");
             }
 
             moveSpeedTimer -= Time.deltaTime;
@@ -136,8 +136,8 @@ public class PlayerManager : MonoBehaviour
         if (buffStacks > 0) hasBuffStacks = true;
         buffStackTimer = buffStackMaxTime;
 
-        Debug.Log("added buff stack");
-        Debug.Log($"current buff stacks: {buffStacks}");
+        //Debug.Log("added buff stack");
+        //Debug.Log($"current buff stacks: {buffStacks}");
     }
 
     public float GetDamageBuffIncrease()
@@ -147,7 +147,7 @@ public class PlayerManager : MonoBehaviour
 
     public float GetCrit()
     {
-        if (Random.Range(0f, 1f) <= critChance) { Debug.Log("landed a critical hit");  return critMult; }
+        if (Random.Range(0f, 1f) <= critChance) return critMult;
         return 0;
     }
 

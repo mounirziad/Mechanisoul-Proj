@@ -40,8 +40,9 @@ public abstract class Upgrade : MonoBehaviour
     public void SetLevel(int level)
     {
         upgradeLevel = Mathf.Max(0, level);
-        if (upgradeLevel == 0) selectedEmotion = Emotions.None;
         LevelChange();
+        if (upgradeLevel == 0) DeselectEmotion();
+        
     }
 
     void LevelChange()
@@ -61,6 +62,14 @@ public abstract class Upgrade : MonoBehaviour
                 break;
         }
         UpdatePlayer(); // allow pushing to player/handlers
+    }
+
+    public void Respec()
+    {
+        upgradeLevel = 0;
+        LevelChange();
+        DeselectEmotion();
+        
     }
 
     // overridables for futureproofing
