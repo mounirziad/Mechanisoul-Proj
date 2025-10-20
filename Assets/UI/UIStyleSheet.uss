@@ -76,6 +76,17 @@
     font-size: 0;
 }
 
+.upgrade-button:focus {
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+}
+
 .upg-row-setup {
     flex-grow: 1;
     flex-direction: row;
