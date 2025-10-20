@@ -24,10 +24,15 @@ public class PlayerLocomotion : MonoBehaviour
     public bool isSprinting;
     public bool isGrounded;
 
-    public float walkingSpeed = 1.5f;
-    public float runningSpeed = 5;
-    public float sprintingSpeed = 7;
-    public float rotationSpeed = 15;
+    public float walkingSpeed;
+    public float runningSpeed;
+    public float sprintingSpeed;
+    public float rotationSpeed;
+
+    public float baseWalkingSpeed = 1.5f;
+    public float baseRunningSpeed = 5;
+    public float baseSprintingSpeed = 7;
+    public float baseRotationSpeed = 15;
 
     public float jumpHeight = 3;
     public float gravityIntensity = -15;
@@ -80,6 +85,11 @@ public class PlayerLocomotion : MonoBehaviour
         cameraObject = Camera.main != null ? Camera.main.transform : null;
         playerCombat = GetComponent<PlayerCombat>();
         lockOnSystem = GetComponent<LockOnSystem>();
+
+        walkingSpeed = baseWalkingSpeed;
+        runningSpeed = baseRunningSpeed;
+        sprintingSpeed = baseSprintingSpeed;
+        rotationSpeed = baseRotationSpeed;
 
     }
     public void RefreshReferences()
@@ -607,6 +617,14 @@ public class PlayerLocomotion : MonoBehaviour
                 canDodge = true;
             }
         }
+    }
+
+    public void ChangeSpeed(float speed)
+    {
+        walkingSpeed *= speed;
+        runningSpeed *= speed;
+        sprintingSpeed *= speed;
+        rotationSpeed *= speed;
     }
 
 

@@ -8,8 +8,6 @@ public class PlayerManager : MonoBehaviour
     Animator animator;
     PlayerHealth playerHealth;
     public bool isInteracting;
-    float baseSpeed; // base player speed
-    float speed; //current move speed of player
 
     [Header("Dash / Abilities")]
     [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
@@ -43,6 +41,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float moveSpeedDuration;
     [SerializeField] float moveSpeedTimer;
     [SerializeField] bool hasMoveSpeedBuff;
+    [SerializeField] float speedMult;
 
 
 
@@ -105,7 +104,7 @@ public class PlayerManager : MonoBehaviour
             if (moveSpeedTimer <= 0)
             {
                 hasMoveSpeedBuff = false;
-                speed = baseSpeed;
+                speedMult = 1;
                 UpdatePlayerSpeed();
                 Debug.Log("reset player speed");
             }
@@ -148,7 +147,7 @@ public class PlayerManager : MonoBehaviour
 
     public float GetCrit()
     {
-        if (Random.Range(0f, 1f) <= critChance) return critMult;
+        if (Random.Range(0f, 1f) <= critChance) { Debug.Log("landed a critical hit");  return critMult; }
         return 0;
     }
 
@@ -179,14 +178,14 @@ public class PlayerManager : MonoBehaviour
     public void ApplyMoveSpeedBuff()
     {
         hasMoveSpeedBuff = true;
-        speed = baseSpeed + (baseSpeed * moveSpeedBuff);
+        speedMult = 1 + moveSpeedBuff;
         UpdatePlayerSpeed();
         moveSpeedTimer = moveSpeedDuration;
     }
 
-    public void UpdatePlayerSpeed()
+    void UpdatePlayerSpeed()
     {
-        //update actual player speed here based on speed var
+        playerLocomotion.ChangeSpeed(speedMult);
     }
 
 
