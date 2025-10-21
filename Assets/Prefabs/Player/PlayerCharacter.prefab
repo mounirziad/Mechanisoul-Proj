@@ -130,6 +130,7 @@ MonoBehaviour:
   attackRange: 0
   hitVFX: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
   cam: {fileID: 0}
+  upgradeHandler: {fileID: 0}
   hitSoundCooldown: 0.2
   enableRotationStabilization: 0
   stabilizationStrength: 0.7
@@ -447,6 +448,7 @@ MonoBehaviour:
   attackRange: 0
   hitVFX: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
   cam: {fileID: 0}
+  upgradeHandler: {fileID: 0}
   hitSoundCooldown: 0.2
   enableRotationStabilization: 0
   stabilizationStrength: 0.7
@@ -1017,7 +1019,7 @@ MonoBehaviour:
   buffStackCap: 0
   buffPercent: 0
   buffStacks: 0
-  buffStackMaxTime: 0
+  buffStackMaxTime: 5
   buffStackTimer: 0
   hasBuffStacks: 0
   attackSpeedBuff: 0
@@ -1035,6 +1037,11 @@ MonoBehaviour:
   moveSpeedTimer: 0
   hasMoveSpeedBuff: 0
   speedMult: 0
+  angerImpact: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
+  joyImpact: {fileID: 7849176156349135997, guid: 6aac2e5cfdd94e44e87c1a8a2a06e01f, type: 3}
+  fearImpact: {fileID: 7849176156349135997, guid: 9697469dfd329e94e84af33230686494, type: 3}
+  sadnessImpact: {fileID: 7849176156349135997, guid: b764b6c1eaf4eb84da4de7f09dabbb4c, type: 3}
+  loveImpact: {fileID: 7849176156349135997, guid: 376a4a461d37d504ab52a312f8614604, type: 3}
   aoeAmount: 0
   slowAmount: 4
   slowLength: 10
@@ -1088,6 +1095,11 @@ MonoBehaviour:
   jumpCooldown: 1
   canJump: 1
   groundDetectionBufferTime: 0.2
+  useMultiPointDetection: 1
+  detectionPoints: 5
+  detectionSpread: 0.3
+  maxStairAngle: 50
+  coyoteTime: 0.15
 --- !u!54 &2670944488486193615
 Rigidbody:
   m_ObjectHideFlags: 0
