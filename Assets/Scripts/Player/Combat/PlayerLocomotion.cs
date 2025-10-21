@@ -72,9 +72,17 @@ public class PlayerLocomotion : MonoBehaviour
     public bool canJump = true;
 
     [Header("Ground Detection Settings")]
-    public float groundDetectionBufferTime = 0.2f; // Time buffer for ground detection
+    public float groundDetectionBufferTime = 0.2f;
     private float lastTimeGrounded = 0f;
     private bool wasGroundedLastFrame = true;
+    
+    [Header("Improved Stair Detection")]
+    public bool useMultiPointDetection = true;
+    public int detectionPoints = 5;
+    public float detectionSpread = 0.3f;
+    public float maxStairAngle = 50f;
+    public float coyoteTime = 0.15f;
+    private float timeSinceGrounded = 0f;
 
     private void Awake()
     {
@@ -351,25 +359,30 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleFallingAndLanding()
     {
-        // Use a simple sphere cast straight down from the player's feet for reliable ground detection
         Vector3 groundCheckPosition = groundCheck.position;
         bool wasGroundedThisFrame = isGrounded;
+        bool groundDetected = false;
 
-        // Simple sphere cast for ground detection - immune to camera rotation issues
-        if (Physics.SphereCast(groundCheckPosition, detectionradius, Vector3.down, out RaycastHit hit, detectionheight, groundLayer))
+        if (useMultiPointDetection)
         {
-            // Only consider it a proper landing if we meet all these conditions:
+            groundDetected = MultiPointGroundCheck(groundCheckPosition);
+        }
+        else
+        {
+            groundDetected = Physics.SphereCast(groundCheckPosition, detectionradius, Vector3.down, out RaycastHit hit, detectionheight, groundLayer);
+        }
+
+        if (groundDetected)
+        {
             bool isValidLanding = !isGrounded &&
                                  !playerManager.isInteracting &&
                                  !isJumping &&
-                                 playerRigidbody.linearVelocity.y <= 0f && // Only when moving downward
-                                 inAirTimer > 0.1f; // Only if we were actually in air for a bit
+                                 playerRigidbody.linearVelocity.y <= 0f &&
+                                 inAirTimer > 0.1f;
 
             if (isValidLanding)
             {
                 animatorManager.PlayTargetAnimation("Land", true);
-
-                // Start jump cooldown when landing
                 jumpCooldownTimer = jumpCooldown;
                 canJump = false;
             }
@@ -378,13 +391,19 @@ public class PlayerLocomotion : MonoBehaviour
             isGrounded = true;
             isJumping = false;
             lastTimeGrounded = Time.time;
+            timeSinceGrounded = 0f;
         }
         else
         {
-            isGrounded = false;
+            timeSinceGrounded += Time.deltaTime;
+            
+            if (timeSinceGrounded > coyoteTime)
+            {
+                isGrounded = false;
+            }
+            
             inAirTimer += Time.deltaTime;
 
-            // Only play falling animation if actually falling (negative Y velocity and not jumping up)
             if (!isGrounded && !isJumping && ShouldPlayFallingAnimation())
             {
                 if (!playerManager.isInteracting)
@@ -395,6 +414,48 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         wasGroundedLastFrame = wasGroundedThisFrame;
+    }
+
+    private bool MultiPointGroundCheck(Vector3 centerPosition)
+    {
+        int groundHits = 0;
+        int totalPoints = detectionPoints;
+        
+        RaycastHit hit;
+        if (Physics.SphereCast(centerPosition, detectionradius, Vector3.down, out hit, detectionheight, groundLayer))
+        {
+            groundHits++;
+            
+            if (Vector3.Angle(hit.normal, Vector3.up) <= maxStairAngle)
+            {
+                return true;
+            }
+        }
+        
+        float angleStep = 360f / (totalPoints - 1);
+        for (int i = 0; i < totalPoints - 1; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 offset = new Vector3(
+                Mathf.Cos(angle) * detectionSpread,
+                0f,
+                Mathf.Sin(angle) * detectionSpread
+            );
+            
+            Vector3 checkPosition = centerPosition + offset;
+            
+            if (Physics.SphereCast(checkPosition, detectionradius * 0.8f, Vector3.down, out hit, detectionheight, groundLayer))
+            {
+                groundHits++;
+                
+                if (Vector3.Angle(hit.normal, Vector3.up) <= maxStairAngle)
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return groundHits >= Mathf.Max(1, totalPoints / 3);
     }
 
     private bool ShouldPlayFallingAnimation()
@@ -435,22 +496,38 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
+        if (Application.isPlaying && groundCheck != null)
         {
-            // Visualize the capsule used for ground detection
-            Vector3 capsuleBottom = groundCheck != null ? groundCheck.position : transform.position;
+            Vector3 capsuleBottom = groundCheck.position;
             Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
             float capsuleRadius = detectionradius;
 
             Gizmos.color = isGrounded ? Color.green : Color.red;
 
-            // Draw the capsule
             DrawCapsule(capsuleBottom, capsuleTop, capsuleRadius);
 
-            // Draw the detection distance
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(capsuleBottom, capsuleBottom + Vector3.down * detectionheight);
             Gizmos.DrawLine(capsuleTop, capsuleTop + Vector3.down * detectionheight);
+            
+            if (useMultiPointDetection)
+            {
+                Gizmos.color = Color.cyan;
+                float angleStep = 360f / (detectionPoints - 1);
+                for (int i = 0; i < detectionPoints - 1; i++)
+                {
+                    float angle = i * angleStep * Mathf.Deg2Rad;
+                    Vector3 offset = new Vector3(
+                        Mathf.Cos(angle) * detectionSpread,
+                        0f,
+                        Mathf.Sin(angle) * detectionSpread
+                    );
+                    
+                    Vector3 checkPosition = capsuleBottom + offset;
+                    Gizmos.DrawWireSphere(checkPosition, detectionradius * 0.8f);
+                    Gizmos.DrawLine(checkPosition, checkPosition + Vector3.down * detectionheight);
+                }
+            }
         }
     }
 
