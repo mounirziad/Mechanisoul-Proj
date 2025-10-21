@@ -77,7 +77,6 @@ public abstract class Upgrade : MonoBehaviour
         return upgradeLevel;
     }
     
-    public 
 
     // overridables for futureproofing
     protected virtual void JoyChange()    {}
