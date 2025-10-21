@@ -650,7 +650,7 @@ PrefabInstance:
     - target: {fileID: -714963510296184842, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 877c971a2d918924bb4a3cc3a47e17f3, type: 2}
+      objectReference: {fileID: 2100000, guid: 9a501540d2efaef42b9a831449d7ef7b, type: 2}
     - target: {fileID: -714963510296184842, guid: 5dd17010421dfe44ea9fba7eb1ac1586, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -760,6 +760,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
       propertyPath: m_Name
       value: PlayerModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
       propertyPath: m_Controller
@@ -1019,6 +1023,18 @@ MonoBehaviour:
   attackSpeedBuff: 0
   critChance: 0
   critMult: 0
+  dotTickDmg: 0
+  dotMaxTicks: 0
+  dotMaxStacks: 0
+  dotTickTimer: 0
+  dotTickMaxTime: 0
+  lsAmt: 0
+  lsDoubleActive: 0
+  moveSpeedBuff: 0
+  moveSpeedDuration: 0
+  moveSpeedTimer: 0
+  hasMoveSpeedBuff: 0
+  speedMult: 0
   aoeAmount: 0
   slowAmount: 4
   slowLength: 10
@@ -1053,6 +1069,10 @@ MonoBehaviour:
   runningSpeed: 5
   sprintingSpeed: 8
   rotationSpeed: 15
+  baseWalkingSpeed: 1.5
+  baseRunningSpeed: 5
+  baseSprintingSpeed: 7
+  baseRotationSpeed: 15
   jumpHeight: 2.5
   gravityIntensity: -15
   groundCheck: {fileID: 3679364286282133915}

@@ -12,6 +12,9 @@ public class Weapon : MonoBehaviour
     public Camera cam;
 
     PlayerManager playerManager;
+    [SerializeField] UpgradeHandler upgradeHandler;
+
+    
     
     [Header("Audio Settings")]
     [SerializeField] private float hitSoundCooldown = 0.2f;
@@ -40,17 +43,22 @@ public class Weapon : MonoBehaviour
         playerManager = transform.root.gameObject.GetComponent<PlayerManager>();
         triggerBox = GetComponent<BoxCollider>();
         triggerBox.isTrigger = true; // make sure it's set as a trigger
-        
+
         // Initialize hit tracker
         hitTracker = GetComponent<WeaponHitTracker>();
         if (hitTracker == null)
         {
             hitTracker = gameObject.AddComponent<WeaponHitTracker>();
         }
-        
+
         // Initialize stabilization
         characterRoot = transform.root;
         initialLocalRotation = transform.localRotation;
+    }
+    
+    void OnEnable()
+    {
+        
     }
     
     private void Start()

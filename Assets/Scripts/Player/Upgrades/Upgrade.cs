@@ -69,8 +69,15 @@ public abstract class Upgrade : MonoBehaviour
         upgradeLevel = 0;
         LevelChange();
         DeselectEmotion();
-        
+
     }
+
+    public int GetUpgradeLevel()
+    {
+        return upgradeLevel;
+    }
+    
+    public 
 
     // overridables for futureproofing
     protected virtual void JoyChange()    {}
