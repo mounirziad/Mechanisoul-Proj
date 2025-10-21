@@ -43,8 +43,14 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] bool hasMoveSpeedBuff;
     [SerializeField] float speedMult;
 
-
-
+    [Header("Melee Impact VFX References")]
+    [SerializeField] private GameObject angerImpact;
+    [SerializeField] private GameObject joyImpact;
+    [SerializeField] private GameObject fearImpact;
+    [SerializeField] private GameObject sadnessImpact;
+    [SerializeField] private GameObject loveImpact;
+    Weapon weapon;
+    Emotions selectedMeleeEmotion;
 
 
     //should be obsolete soon inshallah
@@ -63,6 +69,7 @@ public class PlayerManager : MonoBehaviour
         animator = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        weapon = GetComponentInChildren<Weapon>();
         if (!dash) dash = GetComponent<DashAbility>();
     }
 
@@ -132,7 +139,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (buffStacks < buffStackCap) buffStacks++;
 
-        
+
         if (buffStacks > 0) hasBuffStacks = true;
         buffStackTimer = buffStackMaxTime;
 
@@ -157,9 +164,9 @@ public class PlayerManager : MonoBehaviour
         return 1 + GetDamageBuffIncrease() + GetCrit();
     }
 
-    public float GetAttackSpeedBuff() 
-    { 
-        return attackSpeedBuff; 
+    public float GetAttackSpeedBuff()
+    {
+        return attackSpeedBuff;
     }
 
     public void PerformLifesteal(float damage)
@@ -187,6 +194,25 @@ public class PlayerManager : MonoBehaviour
     {
         playerLocomotion.ChangeSpeed(speedMult);
     }
+
+    #region VFX Method
+    public void SetMeleeEmotion(Emotions emotion)
+    {
+        selectedMeleeEmotion = emotion;
+        switch (emotion)
+        {
+            case Emotions.Joy: weapon.SetVFX(joyImpact); break;
+            case Emotions.Anger: weapon.SetVFX(angerImpact); break;
+            case Emotions.Sadness: weapon.SetVFX(sadnessImpact); break;
+            case Emotions.Fear: weapon.SetVFX(fearImpact); break;
+            case Emotions.Love: weapon.SetVFX(loveImpact); break;
+            case Emotions.None:
+                weapon.SetVFX(joyImpact); break;
+            default:
+                weapon.SetVFX(joyImpact); break;
+        }
+    }
+    #endregion
 
 
 

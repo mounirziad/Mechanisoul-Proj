@@ -145,5 +145,6 @@ public class MeleeUpgrades : Upgrade
     protected override void UpdatePlayer()
     {
         playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult, dotTickDmg, dotMaxTicks, lsAmt, lsDoubleActive, moveSpeedBuff, moveSpeedDuration);
+        playerManager.SetMeleeEmotion(selectedEmotion);
     }
 }

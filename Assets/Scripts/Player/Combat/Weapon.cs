@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
     public float damage;
     public float attackRange;
 
-    public GameObject hitVFX;
+    [SerializeField] private GameObject hitVFX;
     private BoxCollider triggerBox;
 
     public Camera cam;
@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     PlayerManager playerManager;
     [SerializeField] UpgradeHandler upgradeHandler;
 
-    
+
     
     [Header("Audio Settings")]
     [SerializeField] private float hitSoundCooldown = 0.2f;
@@ -231,7 +231,7 @@ public class Weapon : MonoBehaviour
     {
         stabilizationStrength = Mathf.Clamp01(strength);
     }
-    
+
     /// <summary>
     /// Reset weapon to its stabilized rotation
     /// </summary>
@@ -242,5 +242,10 @@ public class Weapon : MonoBehaviour
             UpdateTargetRotation();
             transform.rotation = targetRotation;
         }
+    }
+    
+    public void SetVFX(GameObject vfxPrefab)
+    {
+        hitVFX = vfxPrefab;
     }
 }
