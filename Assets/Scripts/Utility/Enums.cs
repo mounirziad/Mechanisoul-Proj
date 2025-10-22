@@ -7,3 +7,10 @@ public enum Emotions
     Love,
     Fear
 }
+
+public enum Upgrades
+{
+    Melee,
+    Range,
+    Dash
+}
