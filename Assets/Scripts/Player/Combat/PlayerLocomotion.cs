@@ -84,6 +84,15 @@ public class PlayerLocomotion : MonoBehaviour
     public float coyoteTime = 0.15f;
     private float timeSinceGrounded = 0f;
 
+    [Header("Ground Check Reparenting")]
+    private Transform originalGroundCheckParent;
+    private Vector3 originalGroundCheckLocalPosition;
+    public Transform footBone;
+    private bool isGroundCheckReparented = false;
+    public float footGroundCheckOffset = 0.3f;
+    public bool useFootTrackingDuringJump = true;
+    private CapsuleCollider playerCapsule;
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -93,12 +102,18 @@ public class PlayerLocomotion : MonoBehaviour
         cameraObject = Camera.main != null ? Camera.main.transform : null;
         playerCombat = GetComponent<PlayerCombat>();
         lockOnSystem = GetComponent<LockOnSystem>();
+        playerCapsule = GetComponent<CapsuleCollider>();
 
         walkingSpeed = baseWalkingSpeed;
         runningSpeed = baseRunningSpeed;
         sprintingSpeed = baseSprintingSpeed;
         rotationSpeed = baseRotationSpeed;
 
+        if (groundCheck != null)
+        {
+            originalGroundCheckParent = groundCheck.parent;
+            originalGroundCheckLocalPosition = groundCheck.localPosition;
+        }
     }
     public void RefreshReferences()
     {
@@ -110,7 +125,8 @@ public class PlayerLocomotion : MonoBehaviour
 
         HandleFallingAndLanding();
         HandleDodgeCooldown();
-        HandleJumpCooldown(); // Add this line
+        HandleJumpCooldown();
+        UpdateGroundCheckPosition();
 
         if (playerManager.isInteracting && !isDodging)
         {
@@ -120,12 +136,11 @@ public class PlayerLocomotion : MonoBehaviour
         if (playerCombat != null && playerCombat.IsAttacking())
         {
             HandleAttackMovementLock();
-            // don't return early — allow HandleRotation() below
         }
 
         HandleDodgeMovement(); 
 
-        if (isDodging) // Skip normal movement during dodge
+        if (isDodging)
         {
             return;
         }
@@ -385,6 +400,13 @@ public class PlayerLocomotion : MonoBehaviour
                 animatorManager.PlayTargetAnimation("Land", true);
                 jumpCooldownTimer = jumpCooldown;
                 canJump = false;
+
+                if (isGroundCheckReparented)
+                {
+                    groundCheck.SetParent(originalGroundCheckParent);
+                    groundCheck.localPosition = originalGroundCheckLocalPosition;
+                    isGroundCheckReparented = false;
+                }
             }
 
             inAirTimer = 0;
@@ -571,9 +593,23 @@ public class PlayerLocomotion : MonoBehaviour
         }
     }
 
+    private void UpdateGroundCheckPosition()
+    {
+        if (groundCheck == null || playerCapsule == null) return;
+
+        if (!isGroundCheckReparented && !isGrounded && useFootTrackingDuringJump)
+        {
+            if (footBone != null)
+            {
+                Vector3 capsuleBottom = transform.position + Vector3.down * (playerCapsule.height * 0.5f - playerCapsule.radius);
+                groundCheck.position = capsuleBottom;
+            }
+        }
+    }
+
     public void HandleJumping()
     {
-        if (isGrounded && canJump) // Added canJump check
+        if (isGrounded && canJump)
         {
             animatorManager.animator.SetBool("isJumping", true);
             animatorManager.PlayTargetAnimation("Jump", false);
@@ -582,8 +618,14 @@ public class PlayerLocomotion : MonoBehaviour
             playerVelocity.y = jumpingVelocity;
             playerRigidbody.linearVelocity = playerVelocity;
 
-            // Set jumping state
             isJumping = true;
+
+            if (groundCheck != null && footBone != null)
+            {
+                groundCheck.SetParent(footBone);
+                groundCheck.localPosition = new Vector3(0, -footGroundCheckOffset, 0);
+                isGroundCheckReparented = true;
+            }
         }
     }
 
