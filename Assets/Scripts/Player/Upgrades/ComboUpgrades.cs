@@ -107,6 +107,7 @@ public class ComboUpgrades : MonoBehaviour
             if (upgradeScript.upgradeLevel <= combo.emotion2Level) { combo.hasCombo = false; continue; }
 
             combo.hasCombo = true;
+            break;
         }
     }
 
