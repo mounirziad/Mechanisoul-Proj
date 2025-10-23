@@ -13,7 +13,7 @@ public class LoveDashUpgrade : DashUpgradeBase
     protected override void Awake()
     {
         base.Awake();
-        selectedEmotion = Emotions.Love;
+        SelectEmotion(Emotions.Love);
     }
 
     protected override void HandleDashFinished(Vector3 start, Vector3 end)

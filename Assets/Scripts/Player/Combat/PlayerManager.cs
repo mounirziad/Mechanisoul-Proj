@@ -72,7 +72,7 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion = GetComponent<PlayerLocomotion>();
         weapon = GetComponentInChildren<Weapon>();
         if (!dash) dash = GetComponent<DashAbility>();
-        comboUpgrade = GetComponent<ComboUpgrade>();
+        comboUpgrades = GetComponent<ComboUpgrades>();
     }
 
     void Update()
@@ -202,7 +202,24 @@ public class PlayerManager : MonoBehaviour
         //not a today problem, im on the swing
     }
 
-
+    #region VFX Method
+    public void SetMeleeEmotion(Emotions emotion)
+    {
+        selectedMeleeEmotion = emotion;
+        switch (emotion)
+        {
+            case Emotions.Joy: weapon.SetVFX(joyImpact); break;
+            case Emotions.Anger: weapon.SetVFX(angerImpact); break;
+            case Emotions.Sadness: weapon.SetVFX(sadnessImpact); break;
+            case Emotions.Fear: weapon.SetVFX(fearImpact); break;
+            case Emotions.Love: weapon.SetVFX(loveImpact); break;
+            case Emotions.None:
+                weapon.SetVFX(joyImpact); break;
+            default:
+                weapon.SetVFX(joyImpact); break;
+        }
+    }
+    #endregion
 
 
 

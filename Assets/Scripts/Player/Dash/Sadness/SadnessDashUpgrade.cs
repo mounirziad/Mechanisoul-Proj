@@ -16,7 +16,7 @@ public class SadnessDashUpgrade : DashUpgradeBase
     protected override void Awake()
     {
         base.Awake();
-        selectedEmotion = Emotions.Sadness;
+        SelectEmotion(Emotions.Sadness);
     }
 
     protected override void OnEnable()

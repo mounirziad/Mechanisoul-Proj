@@ -12,7 +12,7 @@ public class FearDashUpgrade : DashUpgradeBase
     protected override void Awake()
     {
         base.Awake();
-        selectedEmotion = Emotions.Fear;
+        SelectEmotion(Emotions.Fear);
     }
 
     protected override void HandleDashFinished(Vector3 start, Vector3 end)
