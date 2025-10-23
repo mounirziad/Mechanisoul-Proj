@@ -2,19 +2,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-class ComboUpgrade
+public class ComboUpgrade
 {   
     public string name { get; }
     public string description { get; set; }
 
-    public Emotions e1 { get; }
-    public Emotions e2 { get; }
+    public Emotions emotion1 { get; }
+    public Emotions emotion2 { get; }
 
-    public int e1Level { get; }
-    public int e2Level { get; }
+    public int emotion1Level { get; }
+    public int emotion2Level { get; }
 
-    public Upgrades u1 { get; }
-    public Upgrades u2 { get; }
+    public Upgrades upgrade1 { get; }
+    public Upgrades upgrade2 { get; }
+
+    public bool hasCombo;
 
 
 
@@ -22,24 +24,27 @@ class ComboUpgrade
     public ComboUpgrade(string name) => this.name = name;
 
     //constructor with all info except effect
-    public ComboUpgrade(string name, Upgrades u1, Emotions e1, int e1Level, Upgrades u2, Emotions e2, int e2Level, string description = "")
+    public ComboUpgrade(string name, Upgrades upgrade1, Emotions emotion1, int emotion1Level, Upgrades upgrade2, Emotions emotion2, int emotion2Level, string description = "", bool hasCombo = false)
     {
         this.name = name;
-        this.u1 = u1;
-        this.u2 = u2;
-        this.e1 = e1;
-        this.e2 = e2;
-        this.e1Level = e1Level;
-        this.e2Level = e2Level;
+        this.upgrade1 = upgrade1;
+        this.upgrade2 = upgrade2;
+        this.emotion1 = emotion1;
+        this.emotion2 = emotion2;
+        this.emotion1Level = emotion1Level;
+        this.emotion2Level = emotion2Level;
         this.description = description;
+        this.hasCombo = hasCombo;
     }
 }
 
 public class ComboUpgrades : MonoBehaviour
 {
     MeleeUpgrades meleeUpgrades;
-    DashUpgradeBase dashUpgrade;
+    DashUpgradeBase dashUpgrades;
     //ranged upgrades
+
+    public Dictionary<string, ComboUpgrade> comboList { get; private set; }
 
     //all temp names - in future initialize with all info
     static readonly ComboUpgrade[] comboUpgrades =
@@ -56,32 +61,68 @@ public class ComboUpgrades : MonoBehaviour
 
     private void Awake()
     {
+        InitializeComboDictionary();
         InitializeComboDescriptions();
     }
 
-    void InitializeComboDescriptions()
+    void InitializeComboDictionary()
     {
-        var comboList = new Dictionary<string, ComboUpgrade>();
+        comboList = new Dictionary<string, ComboUpgrade>();
         foreach (ComboUpgrade combo in comboUpgrades)
         {
             comboList[combo.name] = combo;
         }
-
-        //write all combo descriptions ex:
-        comboList["meleeS3dashJ3"].description = "description for this combo upgrade";
     }
 
-    public void CheckForCombos() //check upgrade scripts to see if any combos exist **change return type to a list**
+    void InitializeComboDescriptions()
+    {
+        if (comboList == null)
+        {
+            Debug.LogError("Combo Dictionary not initialized before trying to write descriptions");
+            return;
+        }
+        
+        //write all combo descriptions ex:
+        comboList["meleeS3dashJ3"].description = "description for this combo upgrade";
+        //
+        //
+        //
+        //
+    }
+
+    public void CheckCombos() //check upgrade scripts to see if any combos exist **change return type to a list**
     {
         foreach (ComboUpgrade combo in comboUpgrades)
         {
-            //logic for checking if combo is active
-            
-            //check 1st stats, if any dont match - continue
+            Upgrade upgradeScript;
 
-            //check 2nd stats, if any dont match - continue
+            //check 1st stats, if any dont match - hasCombo = false, continue
+            upgradeScript = GetUpgradeScript(combo.upgrade1);
+            if (upgradeScript.selectedEmotion != combo.emotion1) { combo.hasCombo = false; continue; }
+            if (upgradeScript.upgradeLevel <= combo.emotion1Level) { combo.hasCombo = false; continue; }
 
-            //return all valid combos
+            //check 2nd stats, if any dont match - hasCombo = false, continue
+            upgradeScript = GetUpgradeScript(combo.upgrade2);
+            if (upgradeScript.selectedEmotion != combo.emotion2) { combo.hasCombo = false; continue; }
+            if (upgradeScript.upgradeLevel <= combo.emotion2Level) { combo.hasCombo = false; continue; }
+
+            combo.hasCombo = true;
+        }
+    }
+
+    Upgrade GetUpgradeScript(Upgrades upgradeType)
+    {
+        switch (upgradeType)
+        {
+            case Upgrades.Melee:
+                return meleeUpgrades;
+            case Upgrades.Range:
+                return meleeUpgrades; //replace with range upgrade script once available
+            case Upgrades.Dash:
+                return dashUpgrades;
+            default:
+                Debug.LogError("Combo Upgrade not in upgrades list");
+                return null;
         }
     }
 }

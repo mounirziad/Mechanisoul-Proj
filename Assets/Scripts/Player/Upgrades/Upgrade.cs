@@ -2,8 +2,8 @@ using UnityEngine;
 
 public abstract class Upgrade : MonoBehaviour
 {
-    protected int upgradeLevel;
-    protected Emotions selectedEmotion;
+    public int upgradeLevel { get; private set; }
+    public Emotions selectedEmotion { get; private set; }
 
     protected PlayerManager playerManager;
 
@@ -69,8 +69,9 @@ public abstract class Upgrade : MonoBehaviour
         upgradeLevel = 0;
         LevelChange();
         DeselectEmotion();
-
     }
+
+    public Emotions GetEmotion() => selectedEmotion;
 
     // overridables for futureproofing
     protected virtual void JoyChange()    {}

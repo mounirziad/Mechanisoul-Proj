@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     Animator animator;
     PlayerHealth playerHealth;
     public bool isInteracting;
+    ComboUpgrades comboUpgrades;
 
     [Header("Dash / Abilities")]
     [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
@@ -71,6 +72,7 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion = GetComponent<PlayerLocomotion>();
         weapon = GetComponentInChildren<Weapon>();
         if (!dash) dash = GetComponent<DashAbility>();
+        comboUpgrade = GetComponent<ComboUpgrade>();
     }
 
     void Update()
@@ -195,24 +197,10 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion.ChangeSpeed(speedMult);
     }
 
-    #region VFX Method
-    public void SetMeleeEmotion(Emotions emotion)
+    void UpdateCombos()
     {
-        selectedMeleeEmotion = emotion;
-        switch (emotion)
-        {
-            case Emotions.Joy: weapon.SetVFX(joyImpact); break;
-            case Emotions.Anger: weapon.SetVFX(angerImpact); break;
-            case Emotions.Sadness: weapon.SetVFX(sadnessImpact); break;
-            case Emotions.Fear: weapon.SetVFX(fearImpact); break;
-            case Emotions.Love: weapon.SetVFX(loveImpact); break;
-            case Emotions.None:
-                weapon.SetVFX(joyImpact); break;
-            default:
-                weapon.SetVFX(joyImpact); break;
-        }
+        //not a today problem, im on the swing
     }
-    #endregion
 
 
 
@@ -260,5 +248,7 @@ public class PlayerManager : MonoBehaviour
         playerHealth.Heal(damage * lifeStealAmount);
         Debug.Log($"healed {damage * lifeStealAmount} hp");
     }
+
+
 
 }
