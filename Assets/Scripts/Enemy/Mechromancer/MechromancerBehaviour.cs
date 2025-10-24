@@ -171,7 +171,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
         return goals;
     }
 
-    private bool EvaluateResurrection()
+    public bool EvaluateResurrection()
     {
         float health = mechromancer.currentHealth;
 
