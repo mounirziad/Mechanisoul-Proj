@@ -19,7 +19,7 @@ public class Mechromancer : MonoBehaviour, IDamage
     public GameObject blade;
     private bool attacking;
 
-    private bool isDead = false;
+    public bool isDead = false;
 
     private void Start()
     {

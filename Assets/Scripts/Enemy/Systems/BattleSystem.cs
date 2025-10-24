@@ -14,6 +14,37 @@ public class BattleSystem : MonoBehaviour
         Death
     }
 
+    [SerializeField] private MechromancerBehaviour mechromancerBehaviour;
+    [SerializeField] private Mechromancer mechromancer;
+    [SerializeField] private ColliderTrigger arenaTrigger;
+
+    private BossPhase currentPhase = BossPhase.Waiting;
+    private float phaseTimer;
+    private bool playerInArena = false;
+
+    private void OnEnable()
+    {
+        if (arenaTrigger != null)
+        {
+            arenaTrigger.OnPlayerEnterTrigger += HandlePlayerEnterArena;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (arenaTrigger != null)
+        {
+            arenaTrigger.OnPlayerEnterTrigger -= HandlePlayerEnterArena;
+        }
+    }
+
+    private void HandlePlayerEnterArena(object sender, System.EventArgs e)
+    {
+        Debug.Log("Player has entered the arena");
+        playerInArena = true;
+        //currentPhase = BossPhase.Cinematic;
+    }
+
     private void Start()
     {
         StartBattle();
@@ -21,40 +52,65 @@ public class BattleSystem : MonoBehaviour
 
     private void Update()
     {
+        phaseTimer += Time.deltaTime;
+
         //switch statement for boss phases
-        switch (BossPhase.Waiting)
+        switch (currentPhase)
         {
             case BossPhase.Waiting:
-                //Waiting for player to enter area
+                Debug.Log("Waiting for player to enter area");
+                if (playerInArena)
+                {
+                    TransitionToPhase(BossPhase.Cinematic);
+                }
                 break;
 
             case BossPhase.Cinematic:
-                //Play cinematic
+                if (phaseTimer >= 5f) //Assuming cinematic lasts 5 seconds, change as needed
+                {
+                    TransitionToPhase(BossPhase.Phase1);
+                }
                 break;
 
             case BossPhase.Phase1:
-                //Boss Phase 1 behavior
+                if (mechromancerBehaviour.EvaluateResurrection())
+                {
+                    TransitionToPhase(BossPhase.MinionWave1);
+                }
                 break;
 
             case BossPhase.MinionWave1:
-                //MechromancerBehaviour.TriggerResurrectionPhase();
-                //currentPhase = BossPhase.Waiting;
+                mechromancerBehaviour.TriggerResurrectionPhase();
+                if (phaseTimer >= 10f) //Assuming minion wave lasts 10 seconds, change as needed
+                {
+                    TransitionToPhase(BossPhase.Phase2);
+                }
                 break;
 
             case BossPhase.Phase2:
-                //Boss Phase 2 behavior
+                if (mechromancerBehaviour.EvaluateResurrection())
+                {
+                    TransitionToPhase(BossPhase.MinionWave2);
+                }
                 break;
 
             case BossPhase.MinionWave2:
-                //Spawn minion wave 2
+                mechromancerBehaviour.TriggerResurrectionPhase();
+                if (phaseTimer >= 10f) //Assuming minion wave lasts 10 seconds, change as needed
+                {
+                    TransitionToPhase(BossPhase.Rage);
+                }
                 break;
 
             case BossPhase.Rage:
-                //Boss Rage behavior
+                if (mechromancer.isDead)
+                {
+                    TransitionToPhase(BossPhase.Death);
+                }
                 break;
 
             case BossPhase.Death:
-                //Boss Death behavior
+                Debug.Log("Boss defeated!");
                 break;
         }
     }
@@ -62,8 +118,14 @@ public class BattleSystem : MonoBehaviour
     private void StartBattle()
     {
         Debug.Log("StartBattle");
-        //enemyTransform.GetComponent<>().Spawn();
-        //Invoke Mechromancer spawner
+        TransitionToPhase(BossPhase.Waiting);
         //Unsure if needed
+    }
+
+    private void TransitionToPhase(BossPhase nextPhase)
+    {
+        currentPhase = nextPhase;
+        phaseTimer = 0f;
+        Debug.Log("Start battle");
     }
 }

@@ -150,6 +150,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 174147347}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &166528600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 166528602}
+  - component: {fileID: 166528601}
+  m_Layer: 0
+  m_Name: BattleSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &166528601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166528600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 103f13f7847f0f64d87555d3587cb8c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleSystem
+  mechromancerBehaviour: {fileID: 2109452116}
+  mechromancer: {fileID: 2109452117}
+  arenaTrigger: {fileID: 618085870}
+--- !u!4 &166528602
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166528600}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.10279, y: 4.67485, z: 5.42336}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &174147346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1764,6 +1811,7 @@ MonoBehaviour:
   timeBetweenShots: 0
   rotationSpeed: 0
   blade: {fileID: 276123056}
+  isDead: 0
 --- !u!114 &2109452118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1793,3 +1841,4 @@ SceneRoots:
   - {fileID: 686222112}
   - {fileID: 783523088}
   - {fileID: 618085872}
+  - {fileID: 166528602}
