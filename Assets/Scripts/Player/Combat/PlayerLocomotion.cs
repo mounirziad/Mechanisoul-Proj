@@ -81,8 +81,13 @@ public class PlayerLocomotion : MonoBehaviour
     public int detectionPoints = 5;
     public float detectionSpread = 0.3f;
     public float maxStairAngle = 50f;
-    public float coyoteTime = 0.15f;
+    public float coyoteTime = 0.2f;
     private float timeSinceGrounded = 0f;
+    
+    [Header("Slope Handling")]
+    public float maxSlopeAngle = 45f;
+    public bool isOnSlope = false;
+    private Vector3 slopeNormal = Vector3.up;
 
     [Header("Ground Check Reparenting")]
     private Transform originalGroundCheckParent;
@@ -393,11 +398,11 @@ public class PlayerLocomotion : MonoBehaviour
                                  !playerManager.isInteracting &&
                                  !isJumping &&
                                  playerRigidbody.linearVelocity.y <= 0f &&
-                                 inAirTimer > 0.1f;
+                                 inAirTimer > 0.3f;
 
             if (isValidLanding)
             {
-                animatorManager.PlayTargetAnimation("Land", true);
+                animatorManager.PlayTargetAnimation("Land", false);
                 jumpCooldownTimer = jumpCooldown;
                 canJump = false;
 
@@ -442,15 +447,21 @@ public class PlayerLocomotion : MonoBehaviour
     {
         int groundHits = 0;
         int totalPoints = detectionPoints;
+        bool foundValidSlope = false;
+        Vector3 averageNormal = Vector3.zero;
+        int normalCount = 0;
         
         RaycastHit hit;
         if (Physics.SphereCast(centerPosition, detectionradius, Vector3.down, out hit, detectionheight, groundLayer))
         {
             groundHits++;
+            averageNormal += hit.normal;
+            normalCount++;
             
-            if (Vector3.Angle(hit.normal, Vector3.up) <= maxStairAngle)
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            if (slopeAngle <= maxSlopeAngle)
             {
-                return true;
+                foundValidSlope = true;
             }
         }
         
@@ -469,28 +480,39 @@ public class PlayerLocomotion : MonoBehaviour
             if (Physics.SphereCast(checkPosition, detectionradius * 0.8f, Vector3.down, out hit, detectionheight, groundLayer))
             {
                 groundHits++;
+                averageNormal += hit.normal;
+                normalCount++;
                 
-                if (Vector3.Angle(hit.normal, Vector3.up) <= maxStairAngle)
+                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+                if (slopeAngle <= maxSlopeAngle)
                 {
-                    return true;
+                    foundValidSlope = true;
                 }
             }
         }
         
-        return groundHits >= Mathf.Max(1, totalPoints / 3);
+        if (normalCount > 0)
+        {
+            slopeNormal = (averageNormal / normalCount).normalized;
+            float currentSlopeAngle = Vector3.Angle(slopeNormal, Vector3.up);
+            isOnSlope = currentSlopeAngle > 0.1f && currentSlopeAngle <= maxSlopeAngle;
+        }
+        else
+        {
+            slopeNormal = Vector3.up;
+            isOnSlope = false;
+        }
+        
+        return foundValidSlope || groundHits >= Mathf.Max(1, totalPoints / 3);
     }
 
     private bool ShouldPlayFallingAnimation()
     {
-        // Don't play falling if we're grounded
         if (isGrounded) return false;
 
-        // Don't play falling if we're jumping upwards
         if (isJumping && playerRigidbody.linearVelocity.y > 0) return false;
 
-        // Only play falling if we have significant downward velocity AND we've been in air for a bit
-        // This prevents falling animation during brief camera movements
-        return playerRigidbody.linearVelocity.y < -1f && inAirTimer > 0.2f;
+        return playerRigidbody.linearVelocity.y < -2f && inAirTimer > 0.4f;
     }
 
     private void HandleJumpCooldown()
@@ -524,7 +546,7 @@ public class PlayerLocomotion : MonoBehaviour
             Vector3 capsuleTop = capsuleBottom + Vector3.up * capsuleHeight;
             float capsuleRadius = detectionradius;
 
-            Gizmos.color = isGrounded ? Color.green : Color.red;
+            Gizmos.color = isGrounded ? (isOnSlope ? Color.cyan : Color.green) : Color.red;
 
             DrawCapsule(capsuleBottom, capsuleTop, capsuleRadius);
 
@@ -549,6 +571,12 @@ public class PlayerLocomotion : MonoBehaviour
                     Gizmos.DrawWireSphere(checkPosition, detectionradius * 0.8f);
                     Gizmos.DrawLine(checkPosition, checkPosition + Vector3.down * detectionheight);
                 }
+            }
+            
+            if (isOnSlope && isGrounded)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawRay(transform.position, slopeNormal * 2f);
             }
         }
     }
