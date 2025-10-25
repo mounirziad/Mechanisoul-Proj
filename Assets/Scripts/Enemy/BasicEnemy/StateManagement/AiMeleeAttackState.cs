@@ -22,29 +22,25 @@ public class AiMeleeAttackState : AiState
         positionOnEnter = agent.transform.position;
         isAttacking = false;
 
-        // Enable root motion
         Animator animator = agent.GetComponent<Animator>();
         if (animator != null)
         {
             animator.applyRootMotion = true;
+            animator.SetBool("IsInMeleeRange", true);
         }
 
-        // Configure NavMeshAgent for root motion
         if (agent.navMeshAgent != null)
         {
             wasNavMeshAgentEnabled = agent.navMeshAgent.enabled;
 
-            // Keep NavMeshAgent enabled but configure it for root motion
             agent.navMeshAgent.isStopped = true;
             agent.navMeshAgent.ResetPath();
             agent.navMeshAgent.velocity = Vector3.zero;
 
-            // These are correct for root motion:
             agent.navMeshAgent.updatePosition = false;
             agent.navMeshAgent.updateRotation = false;
         }
 
-        // Start attack immediately
         if (Time.time >= lastAttackTime + agent.config.meleeAttackCooldown)
         {
             StartAttack(agent);
@@ -67,42 +63,34 @@ public class AiMeleeAttackState : AiState
             return;
         }
 
-        // ONLY check for weapon changes during attack, not distance
         if (agent.weapons.HasWeapon())
         {
             agent.stateMachine.ChangeState(AiStateId.Attack);
             return;
         }
 
-        // If we're currently in an attack animation, COMMIT to it
+        float distanceToPlayer = Vector3.Distance(agent.transform.position, player.position);
+        
+        Animator animator = agent.GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetBool("IsInMeleeRange", distanceToPlayer <= agent.config.meleeAttackRange);
+        }
+
+        if (distanceToPlayer > agent.config.meleeAttackRange)
+        {
+            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
+            return;
+        }
+
         if (isAttacking)
         {
-            // Wait for attack to complete before checking distance again
             if (Time.time >= attackCommitTime + agent.config.meleeAttackCommitTime)
             {
                 isAttacking = false;
-
-                // NOW check if player moved away
-                float distanceToPlayer = Vector3.Distance(agent.transform.position, player.position);
-                if (distanceToPlayer > agent.config.meleeAttackRange)
-                {
-                    agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
-                    return;
-                }
-            }
-        }
-        else
-        {
-            // Not currently attacking, check distance normally
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, player.position);
-            if (distanceToPlayer > agent.config.meleeAttackRange)
-            {
-                agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
-                return;
             }
         }
 
-        // Only rotate towards player, NO MOVEMENT
         Vector3 directionToPlayer = (player.position - agent.transform.position).normalized;
         directionToPlayer.y = 0;
         if (directionToPlayer != Vector3.zero)
@@ -111,10 +99,6 @@ public class AiMeleeAttackState : AiState
             agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
         }
 
-        // REMOVE the hard position lock since we're using root motion
-        // agent.transform.position = positionOnEnter; // COMMENT THIS OUT
-
-        // Only start new attack if not currently attacking and cooldown is ready
         if (!isAttacking && Time.time >= lastAttackTime + agent.config.meleeAttackCooldown)
         {
             StartAttack(agent);
@@ -126,21 +110,19 @@ public class AiMeleeAttackState : AiState
         Debug.Log($"Exiting {GetId()} state");
         isAttacking = false;
 
-        // Disable root motion
         Animator animator = agent.GetComponent<Animator>();
         if (animator != null)
         {
             animator.applyRootMotion = false;
+            animator.SetBool("IsInMeleeRange", false);
         }
 
-        // Stop any running coroutines
         if (attackCoroutine != null)
         {
             agent.StopCoroutine(attackCoroutine);
             attackCoroutine = null;
         }
 
-        // Re-enable NavMeshAgent properly
         if (agent.navMeshAgent != null && wasNavMeshAgentEnabled)
         {
             agent.navMeshAgent.updatePosition = true;

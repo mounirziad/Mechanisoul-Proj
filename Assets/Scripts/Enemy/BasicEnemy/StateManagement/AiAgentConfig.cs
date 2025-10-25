@@ -9,9 +9,13 @@ public class AiAgentConfig : ScriptableObject
     public float maxSightDistance = 5.0f;
 
     [Header("Melee Attack Settings")]
-    public float meleeAttackRange = 2.5f;
-    public float meleeAttackCooldown = 1.5f;
+    public float meleeAttackRange = 5.0f;
+    public float meleeAttackCooldown = 0f;
     public float meleeDamage = 20f;
-    public float meleeAttackCommitTime = 5.5f; // How long to commit to the attack
+    public float meleeAttackCommitTime = 0f;
 
+    [Header("Patrol Settings")]
+    public float patrolRadius = 10f;
+    public float patrolWaitTime = 2f;
+    public float waypointReachedDistance = 0.5f;
 }
