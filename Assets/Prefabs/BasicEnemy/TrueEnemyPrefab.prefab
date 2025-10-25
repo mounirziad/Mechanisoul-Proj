@@ -4618,6 +4618,8 @@ GameObject:
   - component: {fileID: 619490136704854423}
   - component: {fileID: 6906205058505950365}
   - component: {fileID: 5075267506338831617}
+  - component: {fileID: 2234560102750522051}
+  - component: {fileID: 3734471659517462151}
   m_Layer: 9
   m_Name: TrueEnemyPrefab
   m_TagString: Enemy
@@ -4656,7 +4658,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 6727c9f439e57ca498303d92ec24f8a7, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -4896,3 +4898,30 @@ CapsuleCollider:
   m_Height: 1.6256222
   m_Direction: 1
   m_Center: {x: 0, y: 0.9328112, z: 0}
+--- !u!114 &2234560102750522051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9098531902567193331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98c761c54a88294fbed898bb6d4af1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMeleeDamage
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &3734471659517462151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9098531902567193331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c832ffbb94c55e94392158331cee3ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AiRootMotionController

@@ -8,7 +8,8 @@ public enum AiStateId
     Death,
     Idle,
     FindWeapon,
-    Attack
+    Attack,
+    MeleeAttack
 }
 
 public interface AiState
@@ -18,6 +19,8 @@ public interface AiState
     void Update(AiAgent agent);
 
     void Exit(AiAgent agent);
+
+
 }
 
 
