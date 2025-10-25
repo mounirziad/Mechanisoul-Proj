@@ -402,9 +402,24 @@ public class PlayerLocomotion : MonoBehaviour
 
             if (isValidLanding)
             {
-                animatorManager.PlayTargetAnimation("Land", false);
-                jumpCooldownTimer = jumpCooldown;
-                canJump = false;
+                // Check if player is moving when landing
+                bool isMovingOnLanding = inputManager.moveAmount > 0.1f;
+                
+                // Always reset the jumping state in the animator
+                animatorManager.animator.SetBool("isJumping", false);
+                
+                if (isMovingOnLanding)
+                {
+                    // Skip landing animation and go directly to locomotion
+                    // CrossFade to Empty state with very short transition
+                    animatorManager.animator.CrossFade("Empty", 0.05f, 1);
+                    playerManager.isInteracting = false;
+                }
+                else
+                {
+                    // Play landing animation normally when not moving (don't lock movement)
+                    animatorManager.PlayTargetAnimation("Land", false);
+                }
 
                 if (isGroundCheckReparented)
                 {
@@ -527,10 +542,8 @@ public class PlayerLocomotion : MonoBehaviour
             }
         }
 
-        // Failsafe: if we're grounded and not in any special state, ensure we can jump
         if (isGrounded && !playerManager.isInteracting && !isDodging && !isJumping)
         {
-            // Only force enable jump if cooldown seems stuck and we're clearly grounded
             if (!canJump && jumpCooldownTimer <= 0)
             {
                 canJump = true;
@@ -637,7 +650,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void HandleJumping()
     {
-        if (isGrounded && canJump)
+        if (isGrounded && canJump && !isJumping)
         {
             animatorManager.animator.SetBool("isJumping", true);
             animatorManager.PlayTargetAnimation("Jump", false);
@@ -647,6 +660,8 @@ public class PlayerLocomotion : MonoBehaviour
             playerRigidbody.linearVelocity = playerVelocity;
 
             isJumping = true;
+            canJump = false;
+            jumpCooldownTimer = jumpCooldown;
 
             if (groundCheck != null && footBone != null)
             {
