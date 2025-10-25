@@ -31,6 +31,7 @@ public class AiAgent : MonoBehaviour
         stateMachine.RegisterState(new AiFindWeaponState());
         stateMachine.RegisterState(new AiAttackState());
         stateMachine.RegisterState(new AiMeleeAttackState());
+        stateMachine.RegisterState(new AiAfterMeleeAttackState());
         stateMachine.ChangeState(initialState);
         playertransform = GameObject.FindGameObjectWithTag("Player").transform;
     }

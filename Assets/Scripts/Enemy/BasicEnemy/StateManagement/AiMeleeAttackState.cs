@@ -8,8 +8,7 @@ public class AiMeleeAttackState : AiState
     private Vector3 positionOnEnter;
     private bool wasNavMeshAgentEnabled;
     private bool isAttacking = false;
-    private float attackCommitTime = 0f;
-    private Coroutine attackCoroutine; // ADD THIS MISSING VARIABLE
+    private Coroutine attackCoroutine;
 
     public AiStateId GetId()
     {
@@ -32,11 +31,9 @@ public class AiMeleeAttackState : AiState
         if (agent.navMeshAgent != null)
         {
             wasNavMeshAgentEnabled = agent.navMeshAgent.enabled;
-
             agent.navMeshAgent.isStopped = true;
             agent.navMeshAgent.ResetPath();
             agent.navMeshAgent.velocity = Vector3.zero;
-
             agent.navMeshAgent.updatePosition = false;
             agent.navMeshAgent.updateRotation = false;
         }
@@ -59,7 +56,7 @@ public class AiMeleeAttackState : AiState
         Transform player = agent.playertransform;
         if (player == null)
         {
-            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
+            agent.stateMachine.ChangeState(AiStateId.Idle);
             return;
         }
 
@@ -69,39 +66,33 @@ public class AiMeleeAttackState : AiState
             return;
         }
 
-        float distanceToPlayer = Vector3.Distance(agent.transform.position, player.position);
-        
-        Animator animator = agent.GetComponent<Animator>();
-        if (animator != null)
-        {
-            animator.SetBool("IsInMeleeRange", distanceToPlayer <= agent.config.meleeAttackRange);
-        }
-
-        if (distanceToPlayer > agent.config.meleeAttackRange)
-        {
-            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
-            return;
-        }
-
+        // If we're attacking, just handle rotation and wait for coroutine to complete
         if (isAttacking)
         {
-            if (Time.time >= attackCommitTime + agent.config.meleeAttackCommitTime)
+            // During attack commitment, just rotate towards player but don't chase
+            Vector3 directionToPlayer = (player.position - agent.transform.position).normalized;
+            directionToPlayer.y = 0;
+            if (directionToPlayer != Vector3.zero)
             {
-                isAttacking = false;
+                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+                agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
             }
+            return; // Skip the rest of Update during attack
         }
 
-        Vector3 directionToPlayer = (player.position - agent.transform.position).normalized;
-        directionToPlayer.y = 0;
-        if (directionToPlayer != Vector3.zero)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
-            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
-        }
-
+        // Only check for new attacks when not currently attacking
         if (!isAttacking && Time.time >= lastAttackTime + agent.config.meleeAttackCooldown)
         {
             StartAttack(agent);
+        }
+
+        // Normal rotation when not attacking
+        Vector3 directionToPlayerNormal = (player.position - agent.transform.position).normalized;
+        directionToPlayerNormal.y = 0;
+        if (directionToPlayerNormal != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayerNormal);
+            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
         }
     }
 
@@ -138,26 +129,30 @@ public class AiMeleeAttackState : AiState
     private void StartAttack(AiAgent agent)
     {
         isAttacking = true;
-        attackCommitTime = Time.time;
         lastAttackTime = Time.time;
-
-        // Update the anchor position to current position before attack
-        positionOnEnter = agent.transform.position;
 
         PerformMeleeAttack(agent);
 
-        // Start coroutine to handle attack completion
-        attackCoroutine = agent.StartCoroutine(HandleAttackCompletion(agent));
+        attackCoroutine = agent.StartCoroutine(WaitForAttackCompletion(agent));
     }
 
-    private IEnumerator HandleAttackCompletion(AiAgent agent)
+    private IEnumerator WaitForAttackCompletion(AiAgent agent)
     {
-        // Wait for the attack commitment time
-        yield return new WaitForSeconds(agent.config.meleeAttackCommitTime);
+        Animator animator = agent.GetComponent<Animator>();
 
-        // Update position anchor to wherever we ended up after attack animation
-        positionOnEnter = agent.transform.position;
+        // Wait for the attack animation to start
+        yield return null;
+
+        // Get the current animation clip length
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float animationLength = stateInfo.length;
+
+        // Wait for the animation to complete (plus a small buffer)
+        yield return new WaitForSeconds(animationLength + 1.1f);
+
+        // Now transition to the after attack state
         isAttacking = false;
+        agent.stateMachine.ChangeState(AiStateId.AfterMeleeAttack);
     }
 
     private void PerformMeleeAttack(AiAgent agent)
@@ -168,6 +163,4 @@ public class AiMeleeAttackState : AiState
             animator.SetTrigger("MeleeAttack");
         }
     }
-
-
 }

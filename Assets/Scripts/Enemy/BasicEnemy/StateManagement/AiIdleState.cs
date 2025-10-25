@@ -6,12 +6,16 @@ public class AiIdleState : AiState
     private Vector3 patrolTarget;
     private Vector3 spawnPosition;
     private bool hasReachedDestination;
+    private float lastAttackTime = 0f; // ADD THIS
 
     public void Enter(AiAgent agent)
     {
         spawnPosition = agent.transform.position;
         hasReachedDestination = true;
-        
+
+        // Store the time when we enter idle state
+        lastAttackTime = Time.time; // ADD THIS
+
         if (agent.navMeshAgent != null && !agent.navMeshAgent.enabled)
         {
             agent.navMeshAgent.enabled = true;
@@ -44,6 +48,12 @@ public class AiIdleState : AiState
 
     private bool CheckForPlayer(AiAgent agent)
     {
+        // ADD COOLDOWN CHECK - ignore player for a period after attacking
+        if (Time.time < lastAttackTime + agent.config.meleeAttackCooldown)
+        {
+            return false; // Still in cooldown, ignore player
+        }
+
         Vector3 playerDirection = agent.playertransform.position - agent.transform.position;
         if (playerDirection.magnitude > agent.config.maxSightDistance)
         {
