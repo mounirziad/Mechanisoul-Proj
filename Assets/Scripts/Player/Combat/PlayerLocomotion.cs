@@ -97,6 +97,8 @@ public class PlayerLocomotion : MonoBehaviour
     public float footGroundCheckOffset = 0.3f;
     public bool useFootTrackingDuringJump = true;
     private CapsuleCollider playerCapsule;
+    
+    private bool isPlayingFallingAnimation = false;
 
     private void Awake()
     {
@@ -395,18 +397,22 @@ public class PlayerLocomotion : MonoBehaviour
         if (groundDetected)
         {
             bool isValidLanding = !isGrounded &&
-                                 !playerManager.isInteracting &&
                                  !isJumping &&
                                  playerRigidbody.linearVelocity.y <= 0f &&
                                  inAirTimer > 0.3f;
 
             if (isValidLanding)
             {
+                Debug.Log($"LANDING - isGrounded:{isGrounded}, isJumping:{isJumping}, velocity.y:{playerRigidbody.linearVelocity.y}, inAirTimer:{inAirTimer}");
+                
                 // Check if player is moving when landing
                 bool isMovingOnLanding = inputManager.moveAmount > 0.1f;
                 
                 // Always reset the jumping state in the animator
                 animatorManager.animator.SetBool("isJumping", false);
+                
+                // Reset falling animation flag
+                isPlayingFallingAnimation = false;
                 
                 if (isMovingOnLanding)
                 {
@@ -428,10 +434,25 @@ public class PlayerLocomotion : MonoBehaviour
                     isGroundCheckReparented = false;
                 }
             }
+            
+            // CRITICAL FIX: Force exit falling state when grounded
+            if (isPlayingFallingAnimation && groundDetected)
+            {
+                Debug.Log($"FORCING EXIT FROM FALLING - velocity.y:{playerRigidbody.linearVelocity.y}");
+                isPlayingFallingAnimation = false;
+                
+                // Force animator to exit falling state
+                animatorManager.animator.SetBool("isJumping", false);
+                playerManager.isInteracting = false;
+                
+                // Crossfade to empty to reset animation state
+                animatorManager.animator.CrossFade("Empty", 0.1f, 1);
+            }
 
             inAirTimer = 0;
             isGrounded = true;
             isJumping = false;
+            isPlayingFallingAnimation = false;
             lastTimeGrounded = Time.time;
             timeSinceGrounded = 0f;
         }
@@ -446,11 +467,14 @@ public class PlayerLocomotion : MonoBehaviour
             
             inAirTimer += Time.deltaTime;
 
+            // Only trigger falling animation ONCE, not every frame
             if (!isGrounded && !isJumping && ShouldPlayFallingAnimation())
             {
-                if (!playerManager.isInteracting)
+                if (!playerManager.isInteracting && !isPlayingFallingAnimation)
                 {
+                    Debug.Log($"TRIGGERING FALLING - inAirTimer:{inAirTimer}, velocity.y:{playerRigidbody.linearVelocity.y}");
                     animatorManager.PlayTargetAnimation("Falling", false);
+                    isPlayingFallingAnimation = true;
                 }
             }
         }
@@ -661,6 +685,7 @@ public class PlayerLocomotion : MonoBehaviour
 
             isJumping = true;
             canJump = false;
+            isPlayingFallingAnimation = false;
             jumpCooldownTimer = jumpCooldown;
 
             if (groundCheck != null && footBone != null)
