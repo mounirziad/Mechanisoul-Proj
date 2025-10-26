@@ -1,6 +1,5 @@
 # Mechanisoul
 
-**Role:** Lead Programmer – Character & Combat Systems  
 **Studio:** DreamStatic Studios (Internal Project)  
 **Duration:** Aug 2025 – Present  
 
