@@ -64,7 +64,7 @@ public class AiIdleState : AiState
         playerDirection.Normalize();
 
         float dotProduct = Vector3.Dot(playerDirection, agentDirection);
-        if (dotProduct > 0.0f)
+        if (dotProduct > -0.707f)
         {
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
             return true;
