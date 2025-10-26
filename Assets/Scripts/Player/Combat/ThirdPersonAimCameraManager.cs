@@ -153,19 +153,15 @@ public class ThirdPersonAimCameraManager : MonoBehaviour
     {
         if (playerCombat == null || inputManager == null) return;
         
-        // Check if lock-on system is active - it should take priority over aiming camera
         LockOnSystem lockOnSystem = GetComponent<LockOnSystem>();
+        
         if (lockOnSystem != null && lockOnSystem.IsLocked())
         {
-            // Let lock-on camera handle everything, disable aim camera
             SetCameraMode(false);
             return;
         }
         
-        // Check if player is aiming
         bool isAiming = inputManager.aimInput;
-        
-        // Switch camera based on aiming state
         SetCameraMode(isAiming);
     }
     

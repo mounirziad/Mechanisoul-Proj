@@ -268,6 +268,11 @@ public class PlayerCombat : MonoBehaviour
             Vector3 correctedDirection = GetCorrectedAimDirection();
             proj.Initialize(correctedDirection, finalDamage, rangedMods, this);
         }
+        
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayLaserSound();
+        }
     }
 
     void ShootHitscan()
@@ -297,6 +302,11 @@ public class PlayerCombat : MonoBehaviour
         {
             var muzzle = Instantiate(muzzleFlashPrefab, shootOrigin, Quaternion.LookRotation(shootDirection));
             Destroy(muzzle, 0.1f);
+        }
+        
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayLaserSound();
         }
 
         RaycastHit hit;

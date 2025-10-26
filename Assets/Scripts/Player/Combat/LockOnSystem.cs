@@ -107,19 +107,16 @@ public class LockOnSystem : MonoBehaviour
 
     void Update()
     {
-        // If locked and target becomes invalid (dead/out of range/occluded) auto unlock or retarget
         if (isLocked)
         {
             Debug.Log($"Lock-on Update: Checking target {(currentLockTarget ? currentLockTarget.name : "null")}");
 
-            // Always update target position regardless of grace period
             if (currentLockTarget != null)
             {
                 desiredPosition = currentLockTarget.position + Vector3.up * targetHeightOffset;
 
                 if (useSmoothing)
                 {
-                    // Detect if player is attacking/moving rapidly
                     float playerMovementSpeed = (transform.position - lastPlayerPosition).magnitude / Time.deltaTime;
                     bool isPlayerAttacking = playerCombat != null && playerCombat.IsAttacking();
                     bool isRapidMovement = playerMovementSpeed > attackDetectionThreshold;
@@ -137,7 +134,6 @@ public class LockOnSystem : MonoBehaviour
                 lastPlayerPosition = transform.position;
             }
 
-            // Only validate target after grace period
             if (Time.time - lockTime >= lockGracePeriod)
             {
                 if (currentLockTarget == null || !IsTargetValid(currentLockTarget))
@@ -147,12 +143,12 @@ public class LockOnSystem : MonoBehaviour
                     if (ret == null)
                     {
                         Debug.Log("No new target found - unlocking");
-                        ClearLock(); // This will now handle smooth unlocking
+                        ClearLock();
                     }
                     else
                     {
                         Debug.Log($"Retargeting to: {ret.name}");
-                        SetLockTarget(ret); // Smooth transition to new target
+                        SetLockTarget(ret);
                     }
                 }
             }
@@ -164,6 +160,11 @@ public class LockOnSystem : MonoBehaviour
 
         if (isTransitioning && useSmoothing)
         {
+            if (isUnlockingSmooth)
+            {
+                desiredPosition = transform.position + Vector3.up * targetHeightOffset;
+            }
+            
             targetPosition = Vector3.Lerp(
                 targetPosition,
                 desiredPosition,
@@ -176,8 +177,17 @@ public class LockOnSystem : MonoBehaviour
             {
                 lockTargetPoint.position = desiredPosition;
                 isTransitioning = false;
-                isUnlockingSmooth = false;
+                
+                if (isUnlockingSmooth)
+                {
+                    isUnlockingSmooth = false;
+                    lockTargetPoint.position = transform.position + Vector3.up * targetHeightOffset;
+                }
             }
+        }
+        else if (!isLocked && !isTransitioning)
+        {
+            lockTargetPoint.position = transform.position + Vector3.up * targetHeightOffset;
         }
     }
 
@@ -233,6 +243,7 @@ public class LockOnSystem : MonoBehaviour
 
         currentLockTarget = newTarget;
         isLocked = true;
+        lockTime = Time.time;
 
         // Subscribe to new target’s death
         var health = currentLockTarget.GetComponent<BasicEnemyHealth>();
