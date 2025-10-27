@@ -7,7 +7,7 @@ public class AiAfterMeleeAttackState : AiState
     private Vector3 spawnPosition;
     private bool hasReachedDestination;
     private float stateEnterTime;
-    private float stateDuration = 5f; // 5 seconds in this state
+    private float stateDuration = 1f; // 1 seconds in this state
 
     public AiStateId GetId()
     {

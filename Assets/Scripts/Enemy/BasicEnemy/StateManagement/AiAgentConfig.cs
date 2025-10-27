@@ -6,7 +6,7 @@ public class AiAgentConfig : ScriptableObject
     public float maxTime = 1.0f;
     public float maxDistance = 1.0f;
     public float dieForce = 10f;
-    public float maxSightDistance = 5.0f;
+    public float maxSightDistance = 20.0f;
 
     [Header("Melee Attack Settings")]
     public float meleeAttackRange = 5.0f;
