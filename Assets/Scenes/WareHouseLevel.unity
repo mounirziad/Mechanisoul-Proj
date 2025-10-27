@@ -11548,6 +11548,10 @@ PrefabInstance:
       propertyPath: useFootTrackingDuringJump
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4644661815058940984, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: freeLookCam
       value: 
@@ -11556,6 +11560,14 @@ PrefabInstance:
       propertyPath: letterboxUI
       value: 
       objectReference: {fileID: 842954510}
+    - target: {fileID: 6659901205269706922, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659901205269706922, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7b2b55717036ab24ba2c844ec893fe88, type: 2}
     - target: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
@@ -11600,6 +11612,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9084117669945274229, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2845e23621bb2144cb1c6629cbfe9b42, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -30045,10 +30061,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4714706995705864148, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'spine_02'\n\tTransform 'hand_r'\n\tTransform
-        'spine_02'\n\tTransform 'hand_r'\n\tTransform 'spine_02'\n\tTransform 'hand_r'"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4714706995705864148, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
       propertyPath: m_ApplyRootMotion
