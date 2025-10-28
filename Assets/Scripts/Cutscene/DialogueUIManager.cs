@@ -7,17 +7,29 @@ public class DialogueUIManager : MonoBehaviour
     [Header("Legacy UI Setup - Use DialogueSystemSetup instead")]
     [SerializeField] private Canvas dialogueCanvas;
     [SerializeField] private GameObject dialogueUIParent;
+    [SerializeField] private GameObject dialogueBoxBackground;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI shadowText;
     [SerializeField] private CanvasGroup canvasGroup;
     
     [Header("Positioning")]
-    [SerializeField] private float bottomOffset = 100f;
+    [SerializeField] private float topOffset = 100f;
     [SerializeField] private float sideMargin = 50f;
+    
+    [Header("Box Settings")]
+    [SerializeField] private Color boxColor = Color.black;
+    [SerializeField] private float boxPadding = 20f;
+    [SerializeField] private float boxHeight = 200f;
     
     [Header("Shadow Settings")]
     [SerializeField] private Vector2 shadowOffset = new Vector2(3f, -3f);
     [SerializeField] private Color shadowColor = new Color(0f, 0f, 0f, 0.9f);
+    
+    [ContextMenu("Setup Dialogue UI")]
+    public void SetupDialogueUIFromInspector()
+    {
+        CreateDialogueUI();
+    }
     
     private void Start()
     {
@@ -47,19 +59,35 @@ public class DialogueUIManager : MonoBehaviour
             dialogueUIParent.transform.SetParent(dialogueCanvas.transform, false);
             
             RectTransform parentRect = dialogueUIParent.AddComponent<RectTransform>();
-            parentRect.anchorMin = new Vector2(0f, 0f);
-            parentRect.anchorMax = new Vector2(1f, 0f);
-            parentRect.anchoredPosition = new Vector2(0f, bottomOffset);
-            parentRect.sizeDelta = new Vector2(-sideMargin * 2, 200f);
+            parentRect.anchorMin = new Vector2(0f, 1f);
+            parentRect.anchorMax = new Vector2(1f, 1f);
+            parentRect.anchoredPosition = new Vector2(0f, -topOffset);
+            parentRect.sizeDelta = new Vector2(-sideMargin * 2, boxHeight);
             
             canvasGroup = dialogueUIParent.AddComponent<CanvasGroup>();
             canvasGroup.alpha = 0f;
         }
         
+        CreateDialogueBox();
         CreateShadowText();
         CreateMainText();
         
         SetupDialogueSystem();
+    }
+    
+    private void CreateDialogueBox()
+    {
+        dialogueBoxBackground = new GameObject("DialogueBoxBackground");
+        dialogueBoxBackground.transform.SetParent(dialogueUIParent.transform, false);
+        
+        Image boxImage = dialogueBoxBackground.AddComponent<Image>();
+        boxImage.color = boxColor;
+        
+        RectTransform boxRect = boxImage.rectTransform;
+        boxRect.anchorMin = Vector2.zero;
+        boxRect.anchorMax = Vector2.one;
+        boxRect.offsetMin = Vector2.zero;
+        boxRect.offsetMax = Vector2.zero;
     }
     
     private void CreateShadowText()
@@ -71,14 +99,14 @@ public class DialogueUIManager : MonoBehaviour
         shadowText.text = "";
         shadowText.fontSize = 24;
         shadowText.color = shadowColor;
-        shadowText.alignment = TextAlignmentOptions.BottomLeft;
+        shadowText.alignment = TextAlignmentOptions.TopLeft;
         shadowText.fontStyle = FontStyles.Bold;
         
         RectTransform shadowRect = shadowText.rectTransform;
         shadowRect.anchorMin = Vector2.zero;
         shadowRect.anchorMax = Vector2.one;
-        shadowRect.offsetMin = Vector2.zero;
-        shadowRect.offsetMax = Vector2.zero;
+        shadowRect.offsetMin = new Vector2(boxPadding, boxPadding);
+        shadowRect.offsetMax = new Vector2(-boxPadding, -boxPadding);
         shadowRect.anchoredPosition = shadowOffset;
     }
     
@@ -91,14 +119,14 @@ public class DialogueUIManager : MonoBehaviour
         dialogueText.text = "";
         dialogueText.fontSize = 24;
         dialogueText.color = Color.white;
-        dialogueText.alignment = TextAlignmentOptions.BottomLeft;
+        dialogueText.alignment = TextAlignmentOptions.TopLeft;
         dialogueText.fontStyle = FontStyles.Bold;
         
         RectTransform textRect = dialogueText.rectTransform;
         textRect.anchorMin = Vector2.zero;
         textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = Vector2.zero;
-        textRect.offsetMax = Vector2.zero;
+        textRect.offsetMin = new Vector2(boxPadding, boxPadding);
+        textRect.offsetMax = new Vector2(-boxPadding, -boxPadding);
     }
     
     private void SetupDialogueSystem()

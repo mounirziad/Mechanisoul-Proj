@@ -1613,6 +1613,7 @@ GameObject:
   - component: {fileID: 2109452118}
   - component: {fileID: 2109452117}
   - component: {fileID: 2109452116}
+  - component: {fileID: 2109452119}
   m_Layer: 0
   m_Name: Mechromancer
   m_TagString: Untagged
@@ -1785,7 +1786,7 @@ MonoBehaviour:
   restingPosition: {fileID: 71930871}
   hidingPosition: {fileID: 853496458}
   player: {fileID: 1287706582}
-  enemyPrefab: {fileID: 9098531902567193331, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
+  enemyPrefab: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
   spawnPoints:
   - {fileID: 1066582866}
   - {fileID: 1700429636}
@@ -1827,6 +1828,31 @@ MonoBehaviour:
   chaseSensor: {fileID: 2105732030}
   attackSensor: {fileID: 1588496698}
   player: {fileID: 1287706582}
+--- !u!114 &2109452119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109452108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8aa39015cd18b40970a8989c18df03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightningController
+  playerTransform: {fileID: 1287706595}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
+  raycastHeight: 50
+  positionOffset: {x: 0, y: 0, z: 0}
+  warmupTime: 2
+  indicatorPrefab: {fileID: 0}
+  lightningPrefab: {fileID: 0}
+  strikeHeight: 0
+  alignToNormal: 1
+  damage: 15
+  debugDrawRay: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

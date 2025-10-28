@@ -11,6 +11,8 @@ public class TempGameManager : MonoBehaviour
     private bool pauseActive = false;
     private bool upgradeUIActive = false;
 
+
+
     void Awake()
     {
         if (upgradeUIScript != null)
