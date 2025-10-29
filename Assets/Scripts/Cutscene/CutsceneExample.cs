@@ -9,6 +9,9 @@ public class CutsceneExample : MonoBehaviour
     [SerializeField] private string[] dialogueTexts;
     [SerializeField] private bool testOnStart = true;
 
+    [Header("Scene Transition")]
+    [SerializeField] private string sceneToLoadAfterCutscene;
+
     [Header("Test Settings")]
     [SerializeField] private float transitionDuration = 2f;
     [SerializeField] private bool waitForDialogue = true;
@@ -37,6 +40,13 @@ public class CutsceneExample : MonoBehaviour
         }
 
         Debug.Log("Starting example cutscene...");
+        
+        if (!string.IsNullOrEmpty(sceneToLoadAfterCutscene))
+        {
+            cutsceneManager.SetSceneToLoad(sceneToLoadAfterCutscene);
+            Debug.Log($"Scene '{sceneToLoadAfterCutscene}' will load after cutscene completes");
+        }
+        
         SetupCamerasAndTargets();
         CreateExampleShots();
         cutsceneManager.PlayCutscene();

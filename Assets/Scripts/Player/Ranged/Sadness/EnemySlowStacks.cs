@@ -14,6 +14,7 @@ public class EnemySlowStacks : MonoBehaviour
     int cap;
 
     NavMeshAgent agent;
+    BasicEnemyHealth health;
     float baseSpeed;
     Coroutine loop;
 
@@ -21,10 +22,34 @@ public class EnemySlowStacks : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         if (agent) baseSpeed = agent.speed;
+        health = GetComponent<BasicEnemyHealth>();
+        if (health != null)
+        {
+            health.OnDeath += HandleDeath;
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (health != null)
+        {
+            health.OnDeath -= HandleDeath;
+        }
+    }
+
+    void HandleDeath()
+    {
+        if (loop != null)
+        {
+            StopCoroutine(loop);
+            loop = null;
+        }
+        stacks = 0;
     }
 
     public void ApplyStackingSlow(float slowPerStack, int maxStacks)
     {
+        if (health != null && health.currentHealth <= 0) return;
         perStack = Mathf.Max(0f, slowPerStack);
         cap = Mathf.Max(1, maxStacks);
         stacks = Mathf.Clamp(stacks + 1, 1, cap);
@@ -53,7 +78,7 @@ public class EnemySlowStacks : MonoBehaviour
     {
         float mult = Mathf.Clamp01(1f - stacks * perStack);
         mult = Mathf.Max(minSpeedMultiplier, mult);
-        if (agent) agent.speed = baseSpeed * mult;
+        if (agent && agent.isOnNavMesh && agent.isActiveAndEnabled) agent.speed = baseSpeed * mult;
         CurrentSpeedMultiplier = mult;
     }
 

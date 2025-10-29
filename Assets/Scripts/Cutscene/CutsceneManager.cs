@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class CutsceneManager : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField] private CutsceneShot[] shots;
     [SerializeField] private bool playOnStart = false;
     [SerializeField] private bool loopCutscene = false;
+
+    [Header("Scene Transition")]
+    [SerializeField] private string sceneToLoadOnComplete;
+    [SerializeField] private bool transitionOnLastDialogueInput = true;
+    [SerializeField] private float delayBeforeSceneTransition = 0.5f;
 
     [Header("Camera Management")]
     [SerializeField] private Camera[] cutsceneCameras;
@@ -26,6 +32,7 @@ public class CutsceneManager : MonoBehaviour
     private int currentShotIndex = 0;
     private bool isPlayingCutscene = false;
     private bool isWaitingForDialogue = false;
+    private bool isWaitingForLastDialogue = false;
     private Coroutine cutsceneCoroutine;
     private Coroutine cameraTransitionCoroutine;
 
@@ -77,6 +84,19 @@ public class CutsceneManager : MonoBehaviour
             if (!DialogueSystem.Instance.IsDisplaying && !DialogueSystem.Instance.IsWaitingForInput)
             {
                 isWaitingForDialogue = false;
+            }
+        }
+
+        if (isWaitingForLastDialogue && DialogueSystem.Instance != null)
+        {
+            if (!DialogueSystem.Instance.IsDisplaying && !DialogueSystem.Instance.IsWaitingForInput)
+            {
+                isWaitingForLastDialogue = false;
+                
+                if (transitionOnLastDialogueInput && !string.IsNullOrEmpty(sceneToLoadOnComplete))
+                {
+                    LoadSceneImmediately();
+                }
             }
         }
     }
@@ -144,6 +164,7 @@ public class CutsceneManager : MonoBehaviour
 
         isPlayingCutscene = false;
         isWaitingForDialogue = false;
+        isWaitingForLastDialogue = false;
 
         RestoreAllCameras();
 
@@ -154,6 +175,55 @@ public class CutsceneManager : MonoBehaviour
 
         OnCutsceneComplete?.Invoke();
         Debug.Log("Cutscene stopped");
+
+        if (!transitionOnLastDialogueInput && !string.IsNullOrEmpty(sceneToLoadOnComplete))
+        {
+            StartCoroutine(LoadSceneAfterDelay());
+        }
+    }
+
+    private IEnumerator LoadSceneAfterDelay()
+    {
+        Debug.Log($"Transitioning to scene '{sceneToLoadOnComplete}' in {delayBeforeSceneTransition} seconds...");
+        
+        yield return new WaitForSeconds(delayBeforeSceneTransition);
+
+        Debug.Log($"Loading scene: {sceneToLoadOnComplete}");
+        SceneManager.LoadScene(sceneToLoadOnComplete);
+    }
+
+    private void LoadSceneImmediately()
+    {
+        Debug.Log($"Loading scene immediately: {sceneToLoadOnComplete}");
+        
+        isPlayingCutscene = false;
+        isWaitingForLastDialogue = false;
+        
+        if (cutsceneCoroutine != null)
+        {
+            StopCoroutine(cutsceneCoroutine);
+            cutsceneCoroutine = null;
+        }
+        
+        if (delayBeforeSceneTransition > 0f)
+        {
+            StartCoroutine(LoadSceneWithMinimalDelay());
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneToLoadOnComplete);
+        }
+    }
+
+    private IEnumerator LoadSceneWithMinimalDelay()
+    {
+        yield return new WaitForSeconds(delayBeforeSceneTransition);
+        SceneManager.LoadScene(sceneToLoadOnComplete);
+    }
+
+    public void SetSceneToLoad(string sceneName)
+    {
+        sceneToLoadOnComplete = sceneName;
     }
 
     public void NextShot()
@@ -261,10 +331,8 @@ public class CutsceneManager : MonoBehaviour
 
         OnShotStart?.Invoke(currentShotIndex);
 
-        // Switch to the shot's camera using depth system
         SwitchToCameraUsingDepth(shot.shotCamera);
 
-        // Move camera to shot position
         if (cameraTransitionCoroutine != null)
         {
             StopCoroutine(cameraTransitionCoroutine);
@@ -272,10 +340,10 @@ public class CutsceneManager : MonoBehaviour
 
         cameraTransitionCoroutine = StartCoroutine(TransitionCameraToTarget(shot));
 
-        // Wait for camera transition to complete
         yield return cameraTransitionCoroutine;
 
-        // Start dialogue for this shot
+        bool isLastShot = currentShotIndex >= shots.Length - 1;
+
         if (shot.dialogueLine != null && !string.IsNullOrEmpty(shot.dialogueLine.text))
         {
             if (DialogueSystem.Instance != null)
@@ -284,13 +352,21 @@ public class CutsceneManager : MonoBehaviour
 
                 if (shot.waitForDialogueCompletion)
                 {
-                    isWaitingForDialogue = true;
-                    yield return new WaitUntil(() => !isWaitingForDialogue);
+                    if (isLastShot && transitionOnLastDialogueInput && !string.IsNullOrEmpty(sceneToLoadOnComplete))
+                    {
+                        isWaitingForLastDialogue = true;
+                        yield return new WaitUntil(() => !isWaitingForLastDialogue);
+                        yield break;
+                    }
+                    else
+                    {
+                        isWaitingForDialogue = true;
+                        yield return new WaitUntil(() => !isWaitingForDialogue);
+                    }
                 }
             }
         }
 
-        // Wait additional time if specified
         if (shot.additionalWaitTime > 0f)
         {
             yield return new WaitForSeconds(shot.additionalWaitTime);

@@ -3894,7 +3894,7 @@ MonoBehaviour:
     targetRotation: {x: 0, y: 0, z: 0}
     transitionDuration: 0
     dialogueLine:
-      text: kaue is a furry
+      text: Idealistically, we'd be going into the tutorial scene right now
       displayDuration: 0
       speakerName: 
       voiceClip: {fileID: 0}
@@ -3918,7 +3918,7 @@ MonoBehaviour:
     targetRotation: {x: 0, y: 0, z: 0}
     transitionDuration: 0
     dialogueLine:
-      text: kaue is a furry
+      text: But Instead we're going to the warehouse. SMH
       displayDuration: 0
       speakerName: 
       voiceClip: {fileID: 0}
@@ -3938,6 +3938,8 @@ MonoBehaviour:
     fovTransitionDuration: 0
   playOnStart: 0
   loopCutscene: 0
+  sceneToLoadOnComplete: WareHouseLevel
+  delayBeforeSceneTransition: 0
   cutsceneCameras:
   - {fileID: 1772553431}
   - {fileID: 1729027953}
@@ -8622,9 +8624,10 @@ MonoBehaviour:
   - {fileID: 1290749976}
   - {fileID: 1403222349}
   dialogueTexts:
-  - kaue is a furry
-  - kaue is a furry
+  - Idealistically, we'd be going into the tutorial scene right now
+  - But Instead we're going to the warehouse. SMH
   testOnStart: 1
+  sceneToLoadAfterCutscene: WareHouseLevel
   transitionDuration: 6.31
   waitForDialogue: 1
   createCamerasIfMissing: 1
