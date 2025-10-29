@@ -4,7 +4,7 @@ public class BasicEnemyHealth : MonoBehaviour
 {
     public float maxHealth;
     public float currentHealth;
-   
+
     public float blinkIntesnity;
     public float blinkDuration;
     float blinkTimer;
@@ -18,7 +18,7 @@ public class BasicEnemyHealth : MonoBehaviour
     public GameObject sparkVFXPrefab;
     public float vfxDestroyDelay = 3f;
 
-    
+
     private bool isSlowed = false;
     private float slowTimer = 0f;
 
@@ -48,9 +48,9 @@ public class BasicEnemyHealth : MonoBehaviour
         agent.skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         currentHealth = maxHealth;
         var rigidBodies = GetComponentsInChildren<Rigidbody>();
-        foreach(var rigidBody in rigidBodies)
+        foreach (var rigidBody in rigidBodies)
         {
-           HitBox hitBox = rigidBody.gameObject.AddComponent<HitBox>();
+            HitBox hitBox = rigidBody.gameObject.AddComponent<HitBox>();
             hitBox.health = this;
         }
     }
@@ -58,11 +58,11 @@ public class BasicEnemyHealth : MonoBehaviour
     public void ApplyModifiers(float slowAmount, float slowLength, float stunLength)
     {
 
-        
+
         // Apply slow if applicable
         if (!isSlowed)
         {
-            navAgent.speed -= baseSpeed * slowAmount; 
+            navAgent.speed -= baseSpeed * slowAmount;
 
             slowTimer = slowLength;
             isSlowed = true;
@@ -112,7 +112,7 @@ public class BasicEnemyHealth : MonoBehaviour
                     agent.stateMachine.ChangeState(AiStateId.Attack);
                 }
             }
-            
+
             if (isSlowed)
             {
                 slowTimer -= Time.deltaTime;
@@ -123,7 +123,7 @@ public class BasicEnemyHealth : MonoBehaviour
                     navAgent.speed = baseSpeed;
                 }
             }
-            
+
         }
     }
 
@@ -135,7 +135,7 @@ public class BasicEnemyHealth : MonoBehaviour
 
     public void TakeDamageAtPosition(float amount, Vector3 direction, Vector3 hitPosition)
     {
-        
+
         if (hitCooldown || agent.isDead) return; // Prevent damage if dead
 
         if (hitCooldown) return; // skip repeated hits
@@ -176,19 +176,19 @@ public class BasicEnemyHealth : MonoBehaviour
         {
             // Spawn VFX at the enemy's position with some offset
             Vector3 vfxPosition = hitPosition + Vector3.up * 1.0f; // Offset upwards
-            
+
             // Create rotation that faces the hit direction
             Quaternion vfxRotation = Quaternion.LookRotation(-hitDirection);
-            
+
             GameObject vfxInstance = Instantiate(sparkVFXPrefab, vfxPosition, vfxRotation);
-            
+
             // Get the particle system and play it
             ParticleSystem particles = vfxInstance.GetComponent<ParticleSystem>();
             if (particles != null)
             {
                 particles.Play();
             }
-            
+
             // Destroy the VFX after a delay
             Destroy(vfxInstance, vfxDestroyDelay);
         }
@@ -210,7 +210,7 @@ public class BasicEnemyHealth : MonoBehaviour
         AiDeathState deathState = agent.stateMachine.GetState(AiStateId.Death) as AiDeathState;
         deathState.direction = direction;
         agent.stateMachine.ChangeState(AiStateId.Death);
-       
+
     }
 
     private void DisableHitBoxes()
@@ -234,5 +234,5 @@ public class BasicEnemyHealth : MonoBehaviour
         }
     }
 
-     
+
 }

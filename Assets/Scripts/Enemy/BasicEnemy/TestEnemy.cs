@@ -16,7 +16,7 @@ public class TestEnemy : MonoBehaviour
     float slowTimer;
     [SerializeField] bool slowed;
 
-  
+
 
     private bool isDead = false;
 
@@ -86,10 +86,10 @@ public class TestEnemy : MonoBehaviour
 
     private void OnHit()
     {
-        
+
     }
 
-   
+
 
     private void Die()
     {
@@ -120,7 +120,7 @@ public class TestEnemy : MonoBehaviour
 
     private void OnDeath()
     {
-      
+
 
         // Optional: Screen shake on death
         StartCoroutine(DeathScreenShake());

@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 7801623008629805837}
   - component: {fileID: 1552257943147106557}
   - component: {fileID: 5689836507373273664}
+  - component: {fileID: -7286206719710203060}
+  - component: {fileID: 4352944311986289925}
+  - component: {fileID: -1029184919705909223}
   - component: {fileID: 905619469402032460}
   - component: {fileID: 795409339620480311}
   - component: {fileID: 345973425707464067}
@@ -107,6 +110,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f967f15e92acea040bec0ff98719d559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ragdoll
+--- !u!114 &-7286206719710203060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3782171841442537842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54c6f95f2dc32e946aebc3d1e5d42e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySlowStacks
+  minSpeedMultiplier: 0.2
+  stackDecayDelay: 2
+  checkInterval: 0.1
+--- !u!114 &4352944311986289925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3782171841442537842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e8e8ea43821144a84db09dbe9a6a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCharm
+--- !u!114 &-1029184919705909223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3782171841442537842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 968ed3d43c85e0e41810c41a65c75795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStun
 --- !u!114 &905619469402032460
 MonoBehaviour:
   m_ObjectHideFlags: 0

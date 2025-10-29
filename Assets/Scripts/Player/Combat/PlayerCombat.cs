@@ -322,9 +322,19 @@ public class PlayerCombat : MonoBehaviour
                 var enemyHealth = hit.collider.GetComponentInParent<BasicEnemyHealth>();
                 if (enemyHealth != null)
                 {
-                    enemyHealth.TakeDamage(finalDamage, shootDirection);
+                    RangedHitscanHelper.Apply(
+                        weaponDamage,          // base per-shot damage (before joy dmg mult)
+                        rangedMods,            // from UpgradeHandler.SetRangedUpgrades
+                        enemyHealth,
+                        hitPosition,
+                        shootDirection,
+                        hit.collider.transform,
+                        enemyLayer
+                    );
+
                     SpawnHitscanVFX(hitPosition, hit.normal);
                 }
+
                 else if (hit.collider.CompareTag("Enemy") || (hit.transform.root != null && hit.transform.root.CompareTag("Enemy")))
                 {
                     SpawnHitscanVFX(hitPosition, hit.normal);

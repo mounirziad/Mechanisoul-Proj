@@ -25,7 +25,6 @@ public class UpgradeRouter : MonoBehaviour
         love = Ensure<LoveDashUpgrade>();
         fear = Ensure<FearDashUpgrade>();
 
-        // Register these in the handler
         upgradeHandler.InjectDashComponents(joy, anger, sad, love, fear);
     }
 
@@ -36,4 +35,20 @@ public class UpgradeRouter : MonoBehaviour
         c.enabled = false;
         return c;
     }
+
+    // RANGED (ui hooks)
+    public void RangedJoyUp() { if (upgradeHandler) upgradeHandler.RangedJoyUp(); }
+    public void RangedJoyDown() { if (upgradeHandler) upgradeHandler.RangedJoyDown(); }
+
+    public void RangedAngerUp() { if (upgradeHandler) upgradeHandler.RangedAngerUp(); }
+    public void RangedAngerDown() { if (upgradeHandler) upgradeHandler.RangedAngerDown(); }
+
+    public void RangedSadnessUp() { if (upgradeHandler) upgradeHandler.RangedSadnessUp(); }
+    public void RangedSadnessDown() { if (upgradeHandler) upgradeHandler.RangedSadnessDown(); }
+
+    public void RangedLoveUp() { if (upgradeHandler) upgradeHandler.RangedLoveUp(); }
+    public void RangedLoveDown() { if (upgradeHandler) upgradeHandler.RangedLoveDown(); }
+
+    public void RangedFearUp() { if (upgradeHandler) upgradeHandler.RangedFearUp(); }
+    public void RangedFearDown() { if (upgradeHandler) upgradeHandler.RangedFearDown(); }
 }
