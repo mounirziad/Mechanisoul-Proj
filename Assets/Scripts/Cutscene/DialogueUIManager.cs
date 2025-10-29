@@ -17,9 +17,11 @@ public class DialogueUIManager : MonoBehaviour
     [SerializeField] private float sideMargin = 50f;
     
     [Header("Box Settings")]
+    [SerializeField] private Sprite customDialogueBoxSprite;
     [SerializeField] private Color boxColor = Color.black;
     [SerializeField] private float boxPadding = 20f;
     [SerializeField] private float boxHeight = 200f;
+    [SerializeField] private Image.Type imageType = Image.Type.Sliced;
     
     [Header("Shadow Settings")]
     [SerializeField] private Vector2 shadowOffset = new Vector2(3f, -3f);
@@ -81,7 +83,17 @@ public class DialogueUIManager : MonoBehaviour
         dialogueBoxBackground.transform.SetParent(dialogueUIParent.transform, false);
         
         Image boxImage = dialogueBoxBackground.AddComponent<Image>();
-        boxImage.color = boxColor;
+        
+        if (customDialogueBoxSprite != null)
+        {
+            boxImage.sprite = customDialogueBoxSprite;
+            boxImage.type = imageType;
+            boxImage.color = Color.white;
+        }
+        else
+        {
+            boxImage.color = boxColor;
+        }
         
         RectTransform boxRect = boxImage.rectTransform;
         boxRect.anchorMin = Vector2.zero;
