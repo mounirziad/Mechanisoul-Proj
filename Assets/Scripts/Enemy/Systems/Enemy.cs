@@ -5,8 +5,8 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] float maxHealth;
-    [SerializeField] float currentHealth;
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected float currentHealth;
 
     float dotTickDmg; //dmg per tick
     int dotMaxTicks; //how many ticks per hit
@@ -16,12 +16,12 @@ public abstract class Enemy : MonoBehaviour
     bool dotActive; //currently taking dmg over time
     List<int> dotStacks = new List<int>(); //list to store the dot stacks
 
-    private void Awake()
+    protected virtual void Awake()
     {
         currentHealth = maxHealth;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (dotActive)
         {

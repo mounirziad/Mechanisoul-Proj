@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     PlayerHealth playerHealth;
     public bool isInteracting;
     ComboUpgrades comboUpgrades;
+    public Transform player; //Added by Alyssa
 
     [Header("Dash / Abilities")]
     [SerializeField] private DashAbility dash; // forwards upgrade values to dash effects (Anger/Sadness)
@@ -73,6 +74,9 @@ public class PlayerManager : MonoBehaviour
         weapon = GetComponentInChildren<Weapon>();
         if (!dash) dash = GetComponent<DashAbility>();
         comboUpgrades = GetComponent<ComboUpgrades>();
+
+        //Alyssa update for Transform
+        player = this.transform;
     }
 
     void Update()

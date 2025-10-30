@@ -26,8 +26,22 @@ public class LightningController : MonoBehaviour
 
     private Coroutine strikeRoutine;
 
+    private void Start()
+    {
+        if (playerTransform == null)
+        {
+            playerTransform = FindFirstObjectByType<PlayerManager>().transform;
+        }
+    }
+
     public void StartLightningAtPlayer()
     {
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("Player transform not assigned");
+            return;
+        }
+
         if (strikeRoutine != null)
         {
             StopCoroutine(strikeRoutine);

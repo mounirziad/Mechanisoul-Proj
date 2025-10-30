@@ -28,6 +28,8 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     private GoapAgent agent;
 
+    private int health; //placeholder until health system fixed
+
     public void Awake()
     {
         agent = GetComponent<GoapAgent>();
@@ -55,9 +57,9 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
         factory.AddBelief("AgentIdle", () => !GetComponent<NavMeshAgent>().hasPath);
         factory.AddBelief("AgentMoving", () => GetComponent<NavMeshAgent>().hasPath);
 
-        factory.AddBelief("PhaseOne", () => mechromancer.currentHealth >= 50);
+        /*factory.AddBelief("PhaseOne", () => mechromancer.currentHealth >= 50);
         factory.AddBelief("PhaseTwo", () => mechromancer.currentHealth < 50 && mechromancer.currentHealth >= 35);
-        factory.AddBelief("Rage", () => mechromancer.currentHealth < 35);
+        factory.AddBelief("Rage", () => mechromancer.currentHealth < 35);*/
 
         factory.AddLocationBelief("AgentAtHidingPosition", 8f, hidingPosition);
         factory.AddLocationBelief("AgentAtRestingPosition", 3f, restingPosition);
@@ -173,7 +175,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     public bool EvaluateResurrection()
     {
-        float health = mechromancer.currentHealth;
+        //float health = mechromancer.currentHealth;
 
         if (health > 50)
             return !resurrectedPhase1;
@@ -184,7 +186,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     public void MarkResurrected()
     {
-        float health = mechromancer.currentHealth;
+        //float health = mechromancer.currentHealth;
 
         if (health > 50)
             resurrectedPhase1 = true;

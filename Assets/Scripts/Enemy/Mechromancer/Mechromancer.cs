@@ -1,36 +1,34 @@
 using UnityEngine;
 using System;
 
-public class Mechromancer : MonoBehaviour, IDamage
+public class Mechromancer : Enemy, IDamage
 {
     [Header("Stats")]
-    [SerializeField] public float maxHealth = 75f;
-    [SerializeField] public float currentHealth;
+    //[SerializeField] public float maxHealth = 75f;
+    //[SerializeField] public float currentHealth;
     [SerializeField] private float damageProvider = 8f;
-    [SerializeField] private float lightningDamage = 15f;
-
-    public GameObject cannon;
-    public GameObject rangeAttackPrefab;
-    public float launchForce;
-    public float timeBetweenShots;
-    private float timeSinceLastShot;
-
+    
+    Transform player;
     public float rotationSpeed;
     public GameObject blade;
     private bool attacking;
 
     public bool isDead = false;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        player = GameObject.FindWithTag("Player").transform;
+    }
+
     private void Start()
     {
-        currentHealth = maxHealth;
         attacking = false;
     }
 
-    private void Update()
+    protected override void Update()
     {
-        timeSinceLastShot += Time.deltaTime;
-
+        base.Update();
         if (attacking)
         {
             blade.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
@@ -53,14 +51,14 @@ public class Mechromancer : MonoBehaviour, IDamage
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Player")
         {
             Vector3 targetPosition = new Vector3(other.transform.position.x, cannon.transform.position.y, other.transform.position.z);
             Quaternion targetRotation = Quaternion.LookRotation(targetPosition - cannon.transform.position);
         }
-    }
+    }*/
 
     public float GetDamage()
     {
