@@ -6,9 +6,9 @@ using UnityEngine.AI;
 public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 {
     [Header("Sensors")]
-    [SerializeField] Sensor chaseSensor; //bigger radius
-    [SerializeField] Sensor attackSensor;
-    [SerializeField] Sensor lightningSensor;
+    [SerializeField] Sensor chaseSensor; //medium radius
+    [SerializeField] Sensor attackSensor; //smallest radius
+    [SerializeField] Sensor lightningSensor; //biggest radius
 
     [Header("Locations")]
     [SerializeField] Transform restingPosition;
@@ -16,6 +16,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     [Header("Player Reference")]
     [SerializeField] GameObject player;
+    private Transform playerTransform; //for lightning attack
 
     [Header("Spawning Enemies")]
     [SerializeField] GameObject enemyPrefab;
@@ -66,6 +67,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
         factory.AddSensorBelief("PlayerInChaseRange", chaseSensor);
         factory.AddSensorBelief("PlayerInAttackRange", attackSensor);
+        factory.AddSensorBelief("PlayerInLightningRange", lightningSensor);
 
         factory.AddBelief("AttackingPlayer", () => false); //Player can always be attacked, will never come true
         factory.AddBelief("CanResurrect", () => EvaluateResurrection());
@@ -119,6 +121,12 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .AddEffect(beliefs["AttackingPlayer"])
             .Build());
 
+        actions.Add(new AgentAction.Builder("Lightning Attack") //Possible integration with the Machine Learning AI where the mech chooses if it wants to melee or range attack player
+            .WithStrategy(new AttackStrategy(GetComponent<GoapAgent>()))
+            .AddPrecondition(beliefs["PlayerInLightningRange"])
+            .AddEffect(beliefs["AttackingPlayer"])
+            .Build());
+
         actions.Add(new AgentAction.Builder("Drop Down")
             .WithStrategy(new DropDownStrategy(transform, restingPosition.position))
             .AddPrecondition(beliefs["AgentAtHidingPosition"])
@@ -155,14 +163,14 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .WithDesiredEffect(beliefs["AgentAtHidingPosition"])
             .Build());
 
-        goals.Add(new AgentGoal.Builder("Ambush Player")
-            .WithPriority(4)
-            .WithDesiredEffect(beliefs["PlayerInAttackRange"])
-            .Build());
-
         goals.Add(new AgentGoal.Builder("SeekAndKill")
             .WithPriority(3)
             .WithDesiredEffect(beliefs["AttackingPlayer"])
+            .Build());
+
+        goals.Add(new AgentGoal.Builder("Ambush Player")
+            .WithPriority(4)
+            .WithDesiredEffect(beliefs["PlayerInAttackRange"])
             .Build());
 
         goals.Add(new AgentGoal.Builder("Resurrect")

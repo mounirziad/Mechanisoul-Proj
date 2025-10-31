@@ -130,6 +130,7 @@ public class AttackStrategy : IActionStrategy
     readonly IDamage damageProvider;
     readonly GoapAgent agent;
     private Mechromancer mechromancer;
+    private LightningController controller;
     readonly NavMeshAgent navMesh;
     readonly float attackDuration = 1.5f;
     readonly CountdownTimer timer;

@@ -13,7 +13,6 @@ public class LightningController : MonoBehaviour
     public float warmupTime = 2.0f;
 
     [Header("Prefabs")]
-    public GameObject indicatorPrefab; //in case we want an indicator circle on the floor
     public GameObject lightningPrefab; //lightning VFX
 
     [Header("Strike")]

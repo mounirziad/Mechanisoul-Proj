@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class LightningStrike : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public float damage = 18f;
+    public float lifetime = 2f;
+
+    private void Start()
     {
-        
+        Destroy(gameObject, lifetime);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+        }
     }
 }
