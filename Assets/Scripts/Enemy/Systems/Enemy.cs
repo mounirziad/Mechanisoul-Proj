@@ -5,11 +5,10 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] protected float maxHealth;
-    [SerializeField] protected float currentHealth;
+    [SerializeField] public float maxHealth;
+    [SerializeField] public float currentHealth;
 
     float dotTickDmg; //dmg per tick
-    int dotMaxTicks; //how many ticks per hit
     float dotMaxStacks; //max number of dmg stacks
     float dotTickTimer; //time till next tick
     float dotTickMaxTime; //time between ticks
@@ -32,10 +31,10 @@ public abstract class Enemy : MonoBehaviour
             }
         }
     }
+
     public void applyDOT(float dotTickDMG, int dotMaxTicks) //apply the dot effect if not at max stacks, set active, start timer
     {
         this.dotTickDmg = dotTickDMG;
-        this.dotMaxTicks = dotMaxTicks;
 
         if (dotStacks.Count < dotMaxStacks) dotStacks.Add(dotMaxTicks);
 

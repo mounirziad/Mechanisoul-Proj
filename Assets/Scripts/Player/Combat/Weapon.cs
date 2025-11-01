@@ -129,19 +129,14 @@ public class Weapon : MonoBehaviour
             Debug.Log($"Skipping hit sound for {other.name} - already hit this enemy");
         }
 
-        // Calculate damage with player upgrades / buffs
-        float finalDamage = damage; // base damage
-        if (playerManager != null)
-        {
-            //Debug.Log($"pre buff damage: {finalDamage}");
-            finalDamage *= 1f + playerManager.GetDamageBuffIncrease(); // dynamic buff multiplier
-        }
+        
+
 
         // Apply damage to Mechromancer if present
         if (mechromancer != null)
         {
             Debug.Log("Hit Mechromancer");
-            mechromancer.TakeDamage(finalDamage);
+            mechromancer.TakeDamage(damage);
         }
 
         // Spawn hit VFX at contact point only for new hits
@@ -167,7 +162,17 @@ public class Weapon : MonoBehaviour
         {
             Debug.Log("Hit basic enemy");
             Vector3 direction = (other.transform.position - transform.position).normalized;
+
+            // Calculate damage with player upgrades / buffs
+            float finalDamage = damage; // base damage
+            if (playerManager != null)
+            {
+                //Debug.Log($"pre buff damage: {finalDamage}");
+                finalDamage *= 1f + playerManager.GetDamageBuffIncrease(); // dynamic buff multiplier
+            }
+
             basicEnemy.TakeDamage(finalDamage, direction);
+            basicEnemy.applyDOT(playerManager.GetDOTDmg(), playerManager.GetDOTMaxTicks());
             playerManager.PerformLifesteal(finalDamage);
             playerManager.ApplyMoveSpeedBuff();
             //Debug.Log($"Damage Dealt: {finalDamage}");
@@ -187,7 +192,9 @@ public class Weapon : MonoBehaviour
 
         // Update buff stacks only for new hits
         if (playerManager != null && isNewHit)
-            playerManager.AddBuffStack();
+        {
+            playerManager.AddBuffStack(); //add melee anger buff to player
+        }
     }
 
 

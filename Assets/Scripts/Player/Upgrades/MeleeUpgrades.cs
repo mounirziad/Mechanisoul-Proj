@@ -4,7 +4,7 @@ public class MeleeUpgrades : Upgrade
 {
     float attackSpeedBuff, critChance, critMult; //joy upgrades
     int buffStackCap; float buffPercent; //anger upgrades
-    float dotTickDmg, dotMaxTicks; //sadness upgrades
+    float dotTickDmg; int dotMaxTicks; //sadness upgrades
     float lsAmt; bool lsDoubleActive; //love upgrades
     float moveSpeedBuff, moveSpeedDuration; //fear upgrades
 

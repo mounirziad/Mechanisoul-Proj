@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class BasicEnemyHealth : MonoBehaviour
+public class BasicEnemyHealth : Enemy
 {
-    public float maxHealth;
-    public float currentHealth;
 
     public float blinkIntesnity;
     public float blinkDuration;
@@ -80,7 +78,7 @@ public class BasicEnemyHealth : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (currentHealth <= 0 && !agent.isDead)
         {

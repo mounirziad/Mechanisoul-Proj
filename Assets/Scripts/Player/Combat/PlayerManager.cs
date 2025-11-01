@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    #region var creation
     InputManager inputManager;
     PlayerLocomotion playerLocomotion;
     Animator animator;
@@ -26,11 +27,11 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float attackSpeedBuff;
     [SerializeField] float critChance;
     [SerializeField] float critMult;
+    public bool didCrit;
 
     [Header("Melee Sadness Upgrade Values")]
     [SerializeField] float dotTickDmg; //dmg per tick
-    [SerializeField] float dotMaxTicks; //how many ticks per hit
-    [SerializeField] float dotMaxStacks; //max number of dmg stacks
+    [SerializeField] int dotMaxTicks; //how many ticks per hit
     [SerializeField] float dotTickTimer; //time till next tick
     [SerializeField] float dotTickMaxTime; //time between ticks
 
@@ -44,6 +45,16 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float moveSpeedTimer;
     [SerializeField] bool hasMoveSpeedBuff;
     [SerializeField] float speedMult;
+
+    [Header("Combo Statuses")]
+    [SerializeField] bool combo1Active;
+    [SerializeField] bool combo2Active;
+    [SerializeField] bool combo3Active;
+    [SerializeField] bool combo4Active;
+    [SerializeField] bool combo5Active;
+    [SerializeField] bool combo6Active;
+    [SerializeField] bool combo7Active;
+    [SerializeField] bool combo8Active;
 
     [Header("Melee Impact VFX References")]
     [SerializeField] private GameObject angerImpact;
@@ -62,6 +73,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float slowLength;
     [SerializeField] float lifeStealAmount;
     [SerializeField] float stunLength;
+    #endregion
 
 
 
@@ -126,7 +138,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, float dotMaxTicks, float lsAmt, bool lsDoubleActive, float moveSpeedBuff, float moveSpeedDuration)
+    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, int dotMaxTicks, float lsAmt, bool lsDoubleActive, float moveSpeedBuff, float moveSpeedDuration)
     {
         this.buffStackCap = buffStackCap;
         this.buffPercent = buffPercent;
@@ -160,7 +172,12 @@ public class PlayerManager : MonoBehaviour
 
     public float GetCrit()
     {
-        if (Random.Range(0f, 1f) <= critChance) return critMult;
+        if (Random.Range(0f, 1f) <= critChance)
+        {
+            didCrit = true;
+            return critMult;
+        }
+        didCrit = false;
         return 0;
     }
 
@@ -201,10 +218,13 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion.ChangeSpeed(speedMult);
     }
 
-    void UpdateCombos()
+    public float GetDOTDmg() => dotTickDmg;
+    public int GetDOTMaxTicks()
     {
-        //not a today problem, im on the swing
+        if (combo1Active && didCrit) return dotMaxTicks *= (int)critMult;
+        return dotMaxTicks;
     }
+
 
     #region VFX Method
     public void SetMeleeEmotion(Emotions emotion)
@@ -226,8 +246,19 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
 
+    #region ComboUpgraders
+    public void UpdateCombo1(bool active) => combo1Active = active;
+    public void UpdateCombo2(bool active) => combo2Active = active;
+    public void UpdateCombo3(bool active) => combo3Active = active;
+    public void UpdateCombo4(bool active) => combo4Active = active;
+    public void UpdateCombo5(bool active) => combo5Active = active;
+    public void UpdateCombo6(bool active) => combo6Active = active;
+    public void UpdateCombo7(bool active) => combo7Active = active;
+    public void UpdateCombo8(bool active) => combo8Active = active;
+    #endregion
 
 
+    #region old melee upgrades
     //old melee upgrades, will delete when fully removed from use
     public void UpdateUpgrades(float aoeAmount, float slowAmount, float slowLength, float lifeStealAmount, float stunLength)
     {
@@ -269,6 +300,7 @@ public class PlayerManager : MonoBehaviour
         playerHealth.Heal(damage * lifeStealAmount);
         Debug.Log($"healed {damage * lifeStealAmount} hp");
     }
+    #endregion
 
 
 

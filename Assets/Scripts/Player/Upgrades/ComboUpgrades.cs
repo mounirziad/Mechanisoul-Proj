@@ -43,11 +43,12 @@ public class ComboUpgrades : MonoBehaviour
     MeleeUpgrades meleeUpgrades;
     DashUpgradeBase dashUpgrades;
     //ranged upgrades
+    PlayerManager playerManager;
 
     public Dictionary<string, ComboUpgrade> comboList { get; private set; }
 
     //all temp names - in future initialize with all info
-    static readonly ComboUpgrade[] comboUpgrades =
+    public readonly ComboUpgrade[] comboUpgrades =
     {
         new ComboUpgrade("meleeS3dashJ3"),
         new ComboUpgrade("meleeJ3rangeA3"),
@@ -63,6 +64,8 @@ public class ComboUpgrades : MonoBehaviour
     {
         InitializeComboDictionary();
         InitializeComboDescriptions();
+
+        playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
     }
 
     void InitializeComboDictionary()
@@ -107,7 +110,40 @@ public class ComboUpgrades : MonoBehaviour
             if (upgradeScript.upgradeLevel <= combo.emotion2Level) { combo.hasCombo = false; continue; }
 
             combo.hasCombo = true;
-            break;
+            //break; uncomment if we are sure one upgrade is tied to only 1 combo
+
+            //update playermanager with new combo status --- update names once combo names are finalized
+            switch (combo.name)
+            {
+                case "meleeS3dashJ3":
+                    playerManager.UpdateCombo1(combo.hasCombo);
+                    break;
+                case "meleeJ3rangeA3":
+                    playerManager.UpdateCombo2(combo.hasCombo);
+                    break;
+                case "meleeA3dashL3":
+                    playerManager.UpdateCombo3(combo.hasCombo);
+                    break;
+                case "meleeF3dashA3":
+                    playerManager.UpdateCombo4(combo.hasCombo);
+                    break;
+                case "meleeL3rangeF3":
+                    playerManager.UpdateCombo5(combo.hasCombo);
+                    break;
+                case "dashS3rangeJ3":
+                    playerManager.UpdateCombo6(combo.hasCombo);
+                    break;
+                case "dashF3rangeL3":
+                    playerManager.UpdateCombo7(combo.hasCombo);
+                    break;
+                case "dashF3rangeS3":
+                    playerManager.UpdateCombo8(combo.hasCombo);
+                    break;
+                default:
+                    Debug.LogError("Combo Name does not match any stored combos");
+                    break;
+            }
+
         }
     }
 

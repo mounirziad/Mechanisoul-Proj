@@ -6,6 +6,7 @@ public abstract class Upgrade : MonoBehaviour
     public Emotions selectedEmotion { get; private set; }
 
     protected PlayerManager playerManager;
+    protected ComboUpgrades comboUpgrades;
 
     protected virtual void Awake()
     {
@@ -13,6 +14,7 @@ public abstract class Upgrade : MonoBehaviour
         selectedEmotion = Emotions.None;
 
         playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
+        comboUpgrades = gameObject.GetComponent<ComboUpgrades>();
     }
 
     public void SelectEmotion(Emotions emotion)
@@ -62,6 +64,7 @@ public abstract class Upgrade : MonoBehaviour
                 break;
         }
         UpdatePlayer(); // allow pushing to player/handlers
+        comboUpgrades.CheckCombos();
     }
 
     public void Respec()
