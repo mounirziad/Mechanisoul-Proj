@@ -1854,6 +1854,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507133a3611de654ba5bd952c2f6cda8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetAllUpgradesPickup
+  handler: {fileID: 0}
+  destroyOnPickup: 1
 --- !u!65 &1955632071
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2167,6 +2169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2101532530}
   - component: {fileID: 2101532529}
+  - component: {fileID: 2101532531}
   m_Layer: 0
   m_Name: UpgradeHolder
   m_TagString: Untagged
@@ -2201,6 +2204,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2101532531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101532528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b9bf2f391d7004199158de674ac653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComboUpgrades
 --- !u!1001 &630829754209757228
 PrefabInstance:
   m_ObjectHideFlags: 0
