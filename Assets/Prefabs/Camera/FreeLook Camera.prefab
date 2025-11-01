@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 6959244262859404678}
   - component: {fileID: 1806709984449201883}
   - component: {fileID: 3708100848799619743}
+  - component: {fileID: 9026207668182087621}
+  - component: {fileID: 4348529440698694582}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Untagged
@@ -62,7 +64,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 55.1
+    FieldOfView: 45
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -108,7 +110,7 @@ MonoBehaviour:
       Height: 2.78
     Center:
       Radius: 4.9
-      Height: 0.86
+      Height: 1.28
     Bottom:
       Radius: 4.9
       Height: 0.7
@@ -258,7 +260,7 @@ MonoBehaviour:
   ChannelMask: -1
   Gain: 1
   Use2DDistance: 0
-  UseCameraSpace: 1
+  UseCameraSpace: 0
   SignalCombinationMode: 0
   ReactionSettings:
     m_SecondaryNoise: {fileID: 0}
@@ -279,3 +281,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraPlayerAssigner
   freeLookCamera: {fileID: 8858950653024506373}
+--- !u!114 &9026207668182087621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706612217909055274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
+  CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1
+  IgnoreTag: Player
+  TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  MinimumDistanceFromTarget: 1.8
+  AvoidObstacles:
+    Enabled: 1
+    DistanceLimit: 20
+    MinimumOcclusionTime: 0
+    CameraRadius: 0.4
+    UseFollowTarget:
+      Enabled: 0
+      YOffset: 0
+    Strategy: 0
+    MaximumEffort: 4
+    SmoothingTime: 0
+    Damping: 0.4
+    DampingWhenOccluded: 0.2
+  ShotQualityEvaluation:
+    Enabled: 0
+    OptimalDistance: 10
+    NearLimit: 5
+    FarLimit: 30
+    MaxQualityBoost: 0.2
+--- !u!114 &4348529440698694582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706612217909055274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a10c5840b885c24f840fade18c336bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatCameraController
+  freeLookCamera: {fileID: 8858950653024506373}
+  defaultFOV: 60
+  combatFOV: 73.9
+  fovTransitionSpeed: 2

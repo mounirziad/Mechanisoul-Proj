@@ -29,6 +29,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float zoomedFOV = 30f;
     [SerializeField] private float zoomSpeed = 5f;
     private float defaultFOV;
+    private CombatCameraController combatCameraController;
 
     // Ranged
     [Header("Ranged Settings")]
@@ -120,7 +121,11 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-        if (cinemachineCam != null) defaultFOV = cinemachineCam.Lens.FieldOfView;
+        if (cinemachineCam != null)
+        {
+            defaultFOV = cinemachineCam.Lens.FieldOfView;
+            combatCameraController = cinemachineCam.GetComponent<CombatCameraController>();
+        }
         if (inputManager != null && inputManager.playerControls != null)
         {
             playerControls = inputManager.playerControls;
@@ -185,6 +190,12 @@ public class PlayerCombat : MonoBehaviour
     void HandleCameraZoom()
     {
         if (cinemachineCam == null) return;
+
+        if (combatCameraController != null && combatCameraController.IsInCombatZone)
+        {
+            return;
+        }
+
         float targetFOV = isAiming ? zoomedFOV : defaultFOV;
         var lens = cinemachineCam.Lens;
         lens.FieldOfView = Mathf.Lerp(lens.FieldOfView, targetFOV, Time.deltaTime * zoomSpeed);

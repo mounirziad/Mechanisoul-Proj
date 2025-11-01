@@ -22,6 +22,10 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
     [Tooltip("Enable doors at start (they'll be disabled when enemies are defeated)")]
     public bool enableDoorsAtStart = true;
 
+    [Header("Combat Camera")]
+    [Tooltip("The combat camera controller to trigger when player enters the room")]
+    public CombatCameraController combatCameraController;
+
     [Header("Debug")]
     [SerializeField] private int totalEnemies;
     [SerializeField] private int remainingEnemies;
@@ -29,6 +33,7 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
 
     private HashSet<BasicEnemyHealth> trackedEnemies = new HashSet<BasicEnemyHealth>();
     private Collider roomTrigger;
+    private bool playerInRoom = false;
 
     private void Awake()
     {
@@ -144,6 +149,37 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
             doorToDisable.SetActive(false);
             roomCleared = true;
             Debug.Log($"Room {gameObject.name} cleared! Doors {doorToDisable.name} have been disabled.");
+        }
+
+        if (combatCameraController != null && playerInRoom)
+        {
+            combatCameraController.ExitCombatZone();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRoom = true;
+
+            if (!roomCleared && combatCameraController != null)
+            {
+                combatCameraController.EnterCombatZone();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRoom = false;
+
+            if (combatCameraController != null)
+            {
+                combatCameraController.ExitCombatZone();
+            }
         }
     }
 
