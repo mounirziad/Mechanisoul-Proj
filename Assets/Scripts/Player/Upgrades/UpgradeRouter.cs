@@ -31,8 +31,8 @@ public class UpgradeRouter : MonoBehaviour
     T Ensure<T>() where T : Behaviour
     {
         var c = GetComponent<T>();
-        //if (!c) c = gameObject.AddComponent<T>();
-        //c.enabled = false;
+        if (!c) c = gameObject.AddComponent<T>();
+        c.enabled = false;
         return c;
     }
 
