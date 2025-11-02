@@ -1,131 +1,159 @@
 using UnityEngine;
+using System.Reflection;
 using System;
 
-/// <summary>
-/// Spawns a colored ring at the player's feet when a dash finishes.
-/// Determines the active dash emotion by checking which dash upgrade component is enabled.
-/// For Anger/Sadness (whose radius comes from zone prefabs), provide fallback radii.
-/// </summary>
 [RequireComponent(typeof(DashAbility))]
 public class DashRingSpawner : MonoBehaviour
 {
-    [Header("Ring Prefab")]
+    [Header("Ring")]
     [SerializeField] RingIndicator ringPrefab;
     [SerializeField] float ringLifetime = 1.2f;
-
-    [Header("Fallback Radii (used for Anger/Sadness)")]
-    [SerializeField] float angerRadius = 2.0f;
-    [SerializeField] float sadnessRadius = 2.0f;
+    [SerializeField] bool spawnRingAtStart = true;   // we use START now
+    [SerializeField] bool spawnEndRing = false;      // disable end ring
 
     [Header("Colors")]
-    [SerializeField] Color joyColor = new Color(1f, .92f, .16f, 0.9f);      // yellow
-    [SerializeField] Color angerColor = new Color(1f, .35f, .1f, 0.9f);     // orange/red
-    [SerializeField] Color sadnessColor = new Color(.35f, .6f, 1f, 0.9f);   // blue
-    [SerializeField] Color loveColor = new Color(1f, .4f, .8f, 0.9f);       // pink
-    [SerializeField] Color fearColor = new Color(.6f, 0f, 1f, 0.9f);        // purple
+    [SerializeField] Color angerColor = new Color(1f, .35f, .1f, 0.9f);
+
+    [Header("Anger Burst (START)")]
+    [Tooltip("Spawn an Anger burst at dash START if Anger level > 0.")]
+    public bool spawnAngerBurstAtStart = true;
+    public AngerBurstZone angerBurstPrefab;          // optional; if null we create at runtime
+    [Tooltip("Fallback radius if your Anger data is unavailable.")]
+    public float angerBurstFallbackRadius = 2.0f;
+    [Tooltip("Fallback base damage if your Anger data is unavailable.")]
+    public float angerBurstFallbackDamage = 20f;
+    [Tooltip("Fallback knockback impulse if your Anger data is unavailable.")]
+    public float angerBurstFallbackImpulse = 8f;
+    public float angerBurstFallbackKnockup = 2f;
+
+    [Header("Diagnostics")]
+    public bool debugLogs = true;
+    [Tooltip("If true, an upgrade with upgradeLevel>0 will be considered active even if the component is disabled.")]
+    public bool considerLevelEvenIfDisabled = true;
 
     DashAbility dash;
-
-    // Cached refs (optional)
-    JoyDashUpgrade joy;
-    AngerDashUpgrade anger;
-    SadnessDashUpgrade sadness;
-    LoveDashUpgrade love;
-    FearDashUpgrade fear;
+    AngerDashUpgrade anger; // we only care about anger for this feature
 
     void Awake()
     {
         dash = GetComponent<DashAbility>();
-        if (!dash) { enabled = false; return; }
-
-        // Try cache (components may be auto-added at runtime by your router/handler)
-        joy = GetComponent<JoyDashUpgrade>();
-        anger = GetComponent<AngerDashUpgrade>();
-        sadness = GetComponent<SadnessDashUpgrade>();
-        love = GetComponent<LoveDashUpgrade>();
-        fear = GetComponent<FearDashUpgrade>();
+        if (!dash)
+        {
+            if (debugLogs) Debug.LogError("[DashRingSpawner] No DashAbility found; disabling.", this);
+            enabled = false;
+            return;
+        }
+        RefreshUpgradeRefs();
+        if (debugLogs) Debug.Log($"[DashRingSpawner] Awake. ring={(ringPrefab ? ringPrefab.name : "NULL")}", this);
     }
 
     void OnEnable()
     {
         dash.OnDashFinished += HandleDashFinished;
+        if (debugLogs) Debug.Log("[DashRingSpawner] OnEnable: subscribed to OnDashFinished.", this);
     }
 
     void OnDisable()
     {
         dash.OnDashFinished -= HandleDashFinished;
+        if (debugLogs) Debug.Log("[DashRingSpawner] OnDisable: unsubscribed from OnDashFinished.", this);
     }
 
     void HandleDashFinished(Vector3 start, Vector3 end)
     {
-        // Components might be added later; refresh refs if needed
-        if (!joy) joy = GetComponent<JoyDashUpgrade>();
+        if (debugLogs) Debug.Log($"[DashRingSpawner] OnDashFinished. start={start} end={end}", this);
+
+        // pickups may add/modify upgrades at runtime
+        RefreshUpgradeRefs();
+
+        // Spawn START burst for Anger
+        if (spawnAngerBurstAtStart && IsUpgradeActive(anger))
+        {
+            float pct = GetPercentScale(anger); // read aoePercent[level] if present
+            if (angerBurstPrefab != null)
+            {
+                var burst = Instantiate(angerBurstPrefab, start, Quaternion.identity);
+                burst.Configure(pct);
+                if (debugLogs) Debug.Log($"[DashRingSpawner] START Anger Burst (prefab) @ {start} +%={pct}", burst);
+            }
+            else
+            {
+                // No prefab? Create an ad-hoc burst so your damage/KB still happen.
+                var go = new GameObject("AngerBurstZone (AdHoc)");
+                go.transform.position = start;
+                var burst = go.AddComponent<AngerBurstZone>();
+                burst.radius = angerBurstFallbackRadius;
+                burst.baseBurstDamage = angerBurstFallbackDamage;
+                burst.knockbackImpulse = angerBurstFallbackImpulse;
+                burst.knockupImpulse = angerBurstFallbackKnockup;
+                burst.includeTriggers = true;
+                burst.debugLogs = true; // make it loud so we see hits
+                burst.Configure(pct);
+                if (debugLogs) Debug.Log($"[DashRingSpawner] START Anger Burst (adhoc) @ {start} +%={pct}", burst);
+            }
+        }
+
+        //Spawn ring AT START (not end)
+        if (spawnRingAtStart)
+            SpawnRingAt(start, angerColor);   // red/orange ring at the start
+        else if (spawnEndRing)
+            SpawnRingAt(end, angerColor);     // end ring if you turn this on
+    }
+
+    void SpawnRingAt(Vector3 pos, Color color)
+    {
+        if (!ringPrefab)
+        {
+            if (debugLogs) Debug.LogWarning("[DashRingSpawner] ringPrefab is NULL; no ring spawned.", this);
+            return;
+        }
+        var ring = Instantiate(ringPrefab, pos, Quaternion.identity);
+        ring.Spawn(2f, color, ringLifetime); // radius here is just visual; tweak if desired
+        if (debugLogs) Debug.Log($"[DashRingSpawner] Spawned ring at {pos}", this);
+    }
+
+    // ---------- helpers ----------
+    void RefreshUpgradeRefs()
+    {
+        // Try local children parents
         if (!anger) anger = GetComponent<AngerDashUpgrade>();
-        if (!sadness) sadness = GetComponent<SadnessDashUpgrade>();
-        if (!love) love = GetComponent<LoveDashUpgrade>();
-        if (!fear) fear = GetComponent<FearDashUpgrade>();
-
-        // Determine which upgrade is active
-        if (joy && joy.isActiveAndEnabled)     SpawnRing(GetJoyRadius(joy), joyColor);
-        else if (anger && anger.isActiveAndEnabled)   SpawnRing(GetAngerRadius(), angerColor);
-        else if (sadness && sadness.isActiveAndEnabled) SpawnRing(GetSadnessRadius(), sadnessColor);
-        else if (love && love.isActiveAndEnabled)     SpawnRing(GetLoveRadius(love), loveColor);
-        else if (fear && fear.isActiveAndEnabled)     SpawnRing(GetFearRadius(fear), fearColor);
+        if (!anger) anger = GetComponentInChildren<AngerDashUpgrade>(true);
+        if (!anger) anger = GetComponentInParent<AngerDashUpgrade>();
     }
 
-    void SpawnRing(float radius, Color color)
+    bool IsUpgradeActive(MonoBehaviour mb)
     {
-        if (!ringPrefab) return;
-        var ring = Instantiate(ringPrefab, transform.position, Quaternion.identity);
-        ring.Spawn(radius, color, ringLifetime);
+        if (!mb) return false;
+        if (mb.isActiveAndEnabled) return true;
+        if (!considerLevelEvenIfDisabled) return false;
+        return GetLevel(mb) > 0;
     }
 
-    // --- Radius helpers ---
-    float GetJoyRadius(JoyDashUpgrade j)
+    int GetLevel(MonoBehaviour mb)
     {
-        // if script exposes Level, prefer it; otherwise all levels use same radius in our defaults
-        try {
-            var levelProp = j.GetType().GetProperty("Level");
-            if (levelProp != null) {
-                int lvl = Mathf.Clamp((int)levelProp.GetValue(j), 0, j.radius.Length - 1);
-                return j.radius[Mathf.Max(0, lvl)];
-            }
-        } catch {}
-        return (j.radius != null && j.radius.Length > 0) ? j.radius[j.radius.Length - 1] : 3f;
+        if (!mb) return 0;
+        var t = mb.GetType();
+        var f = t.GetField("upgradeLevel", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (f != null && f.FieldType == typeof(int)) { try { return (int)f.GetValue(mb); } catch { } }
+        var pUL = t.GetProperty("upgradeLevel", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (pUL != null && pUL.PropertyType == typeof(int)) { try { return (int)pUL.GetValue(mb); } catch { } }
+        var p = t.GetProperty("Level", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (p != null && p.PropertyType == typeof(int)) { try { return (int)p.GetValue(mb); } catch { } }
+        return 0;
     }
 
-    float GetLoveRadius(LoveDashUpgrade l)
+    // try read float[] aoePercent[level] if it exists; else 0
+    float GetPercentScale(MonoBehaviour mb)
     {
-        try {
-            var levelProp = l.GetType().GetProperty("Level");
-            if (levelProp != null) {
-                int lvl = Mathf.Clamp((int)levelProp.GetValue(l), 0, l.radius.Length - 1);
-                return l.radius[Mathf.Max(0, lvl)];
-            }
-        } catch {}
-        return (l.radius != null && l.radius.Length > 0) ? l.radius[l.radius.Length - 1] : 2.5f;
-    }
-
-    float GetFearRadius(FearDashUpgrade f)
-    {
-        try {
-            var levelProp = f.GetType().GetProperty("Level");
-            if (levelProp != null) {
-                int lvl = Mathf.Clamp((int)levelProp.GetValue(f), 0, f.radius.Length - 1);
-                return f.radius[Mathf.Max(0, lvl)];
-            }
-        } catch {}
-        return (f.radius != null && f.radius.Length > 0) ? f.radius[f.radius.Length - 1] : 2.5f;
-    }
-
-    float GetAngerRadius()
-    {
-        // Uses DoT zone radius; fallback if unknown
-        return Mathf.Max(0.1f, angerRadius);
-    }
-
-    float GetSadnessRadius()
-    {
-        return Mathf.Max(0.1f, sadnessRadius);
+        if (!mb) return 0f;
+        var t = mb.GetType();
+        var f = t.GetField("aoePercent", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        int lvl = GetLevel(mb);
+        if (f != null && typeof(float[]).IsAssignableFrom(f.FieldType))
+        {
+            var arr = f.GetValue(mb) as float[];
+            if (arr != null && lvl >= 0 && lvl < arr.Length) return arr[lvl];
+        }
+        return 0f;
     }
 }

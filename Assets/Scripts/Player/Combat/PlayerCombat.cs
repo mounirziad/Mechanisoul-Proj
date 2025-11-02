@@ -375,7 +375,7 @@ public class PlayerCombat : MonoBehaviour
             var cameraLookAt = aoe.GetComponent<VFXCameraLookAt>();
             if (cameraLookAt != null) cameraLookAt.enabled = false;
 
-            var dot = aoe.GetComponent<AngerDoTZone>();
+            var dot = aoe.GetComponent<AngerBurstZone>();
             if (dot != null)
                 dot.Configure(Mathf.Max(0f, rangedMods.angerAOEPercent));
             else

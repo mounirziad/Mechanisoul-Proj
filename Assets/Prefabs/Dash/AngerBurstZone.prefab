@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2824084935702792104
+--- !u!1 &6131866537544226548
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,58 +8,61 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7782395429071365541}
-  - component: {fileID: 4981326311370949480}
-  - component: {fileID: 4287899279601366645}
+  - component: {fileID: 3963909814785576980}
+  - component: {fileID: 2040267038493676359}
+  - component: {fileID: 5693994285815184951}
   m_Layer: 0
-  m_Name: AngerDoTZone
+  m_Name: AngerBurstZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7782395429071365541
+--- !u!4 &3963909814785576980
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2824084935702792104}
+  m_GameObject: {fileID: 6131866537544226548}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.25519, y: -0, z: -12.87817}
+  m_LocalPosition: {x: -7.47116, y: 0, z: -5.0619}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4981326311370949480
+--- !u!114 &2040267038493676359
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2824084935702792104}
+  m_GameObject: {fileID: 6131866537544226548}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2bec28e3b2484184cb25346259a65861, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AngerDoTZone
-  lifetime: 4
-  tickInterval: 0.5
+  m_EditorClassIdentifier: Assembly-CSharp::AngerBurstZone
   radius: 2
   enemyMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  baseTickDamage: 5
-  forceNonBlocking: 1
---- !u!135 &4287899279601366645
+    m_Bits: 128
+  includeTriggers: 0
+  baseBurstDamage: 20
+  percentScale: 0
+  knockbackImpulse: 8
+  knockupImpulse: 2
+  autoDestroyDelay: 0.05
+  debugLogs: 0
+--- !u!135 &5693994285815184951
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2824084935702792104}
+  m_GameObject: {fileID: 6131866537544226548}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

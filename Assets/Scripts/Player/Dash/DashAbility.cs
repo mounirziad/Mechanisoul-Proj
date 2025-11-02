@@ -24,6 +24,9 @@ public class DashAbility : MonoBehaviour
     public AnimationCurve dashEase = AnimationCurve.EaseInOut(0, 0, 1, 1);
     public float fallbackBodyLength = 2.0f;
 
+    [Header("Debug")]
+    public bool debugLogs = true;
+
     bool isDashing;
     bool dashOnCooldown;
     float curveArea = 1f;
@@ -34,6 +37,7 @@ public class DashAbility : MonoBehaviour
         curveArea = ApproxCurveArea(dashEase, 200);
         if (curveArea < 1e-3f) curveArea = 1f;
         if (!directionSource) directionSource = transform;
+        if (debugLogs) Debug.Log("[DashAbility] Awake. rb=" + rb + " dirSrc=" + directionSource + " curveArea=" + curveArea, this);
     }
 
     void OnEnable()
@@ -43,6 +47,7 @@ public class DashAbility : MonoBehaviour
             dashAction.action.performed += OnDashPerformed;
             if (!dashAction.action.enabled) dashAction.action.Enable();
         }
+        if (debugLogs) Debug.Log("[DashAbility] OnEnable. Subscribed input; OnDashFinished subscribers=" + (OnDashFinished?.GetInvocationList()?.Length ?? 0), this);
     }
 
     void OnDisable()
@@ -52,15 +57,21 @@ public class DashAbility : MonoBehaviour
             dashAction.action.performed -= OnDashPerformed;
             if (dashAction.action.enabled) dashAction.action.Disable();
         }
+        if (debugLogs) Debug.Log("[DashAbility] OnDisable. Unsubscribed input.", this);
     }
 
     void OnDashPerformed(InputAction.CallbackContext _) => TryDash();
 
     public void TryDash()
     {
-        if (isDashing || dashOnCooldown) return;
+        if (isDashing || dashOnCooldown)
+        {
+            if (debugLogs) Debug.Log($"[DashAbility] TryDash ignored. isDashing={isDashing} cooldown={dashOnCooldown}", this);
+            return;
+        }
         Vector3 dir = GetDashDirection();
         if (dir.sqrMagnitude < 0.0001f) dir = directionSource.forward;
+        if (debugLogs) Debug.Log($"[DashAbility] TryDash start. dir={dir}", this);
         StartCoroutine(DashRoutine(dir.normalized));
     }
 
@@ -84,6 +95,8 @@ public class DashAbility : MonoBehaviour
         float totalDistance = bodyLen * dashDistanceInBodyLengths;
 
         float t = 0f;
+        if (debugLogs) Debug.Log($"[DashAbility] DashRoutine begin. totalDistance={totalDistance} duration={dashDuration}", this);
+
         while (t < dashDuration)
         {
             float dt = Mathf.Max(Time.deltaTime, 1e-4f);
@@ -96,19 +109,65 @@ public class DashAbility : MonoBehaviour
             Vector3 step = direction * stepLen;
 
             rb.MovePosition(rb.position + step);
-            OnDashStep?.Invoke(rb.position);
+            SafeInvokeDashStep(rb.position);
 
             t += dt;
             yield return null;
         }
 
         Vector3 endPos = rb.position;
-        OnDashFinished?.Invoke(startPos, endPos);
+        if (debugLogs) Debug.Log($"[DashAbility] DashRoutine end. start={startPos} end={endPos}", this);
+
+        SafeInvokeDashFinished(startPos, endPos);
 
         isDashing = false;
         dashOnCooldown = true;
         yield return new WaitForSeconds(dashCooldown);
         dashOnCooldown = false;
+        if (debugLogs) Debug.Log("[DashAbility] Cooldown complete.", this);
+    }
+
+    // --- Safe fan-out with per-subscriber try/catch so one throw won't block others
+
+    void SafeInvokeDashStep(Vector3 pos)
+    {
+        var handlers = OnDashStep?.GetInvocationList();
+        if (handlers == null) return;
+
+        for (int i = 0; i < handlers.Length; i++)
+        {
+            try
+            {
+                ((Action<Vector3>)handlers[i]).Invoke(pos);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e, this);
+            }
+        }
+    }
+
+    void SafeInvokeDashFinished(Vector3 startPos, Vector3 endPos)
+    {
+        var handlers = OnDashFinished?.GetInvocationList();
+        if (debugLogs) Debug.Log("[DashAbility] OnDashFinished fan-out to " + (handlers?.Length ?? 0) + " subscribers.", this);
+        if (handlers == null) return;
+
+        for (int i = 0; i < handlers.Length; i++)
+        {
+            var h = handlers[i];
+            try
+            {
+                if (debugLogs) Debug.Log($"[DashAbility] -> invoking {h.Target?.GetType().Name}.{h.Method.Name}", this);
+                ((Action<Vector3, Vector3>)h).Invoke(startPos, endPos);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e, this);
+            }
+        }
+
+        if (debugLogs) Debug.Log("[DashAbility] OnDashFinished dispatch complete.", this);
     }
 
     // curve area approximation for movement scaling (broken?)

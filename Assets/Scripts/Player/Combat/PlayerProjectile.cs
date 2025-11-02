@@ -123,7 +123,7 @@ public class PlayerProjectile : MonoBehaviour
                 
                 Debug.Log($"Anger VFX actual spawned position: {aoe.transform.position}");
                 
-                var dot = aoe.GetComponent<AngerDoTZone>();
+                var dot = aoe.GetComponent<AngerBurstZone>();
                 if (dot != null)
                     dot.Configure(Mathf.Max(0f, mods.angerAOEPercent));
                 else
