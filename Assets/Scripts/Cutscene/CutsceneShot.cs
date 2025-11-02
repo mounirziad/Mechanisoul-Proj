@@ -17,6 +17,16 @@ public class CutsceneShot
     public string animationStateName;
     public bool playAnimation = false;
     
+    [Header("Player Teleportation")]
+    public bool teleportPlayer = false;
+    public Transform playerTargetPosition;
+    
+    [Header("Screen Fade")]
+    public bool fadeOutBeforeShot = false;
+    public bool fadeInAfterShot = false;
+    public float fadeOutDuration = 1f;
+    public float fadeInDuration = 1f;
+    
     [Header("Shot Settings")]
     public string shotName;
     public bool waitForDialogueCompletion = true;
@@ -27,6 +37,10 @@ public class CutsceneShot
     public bool useFieldOfViewTransition = false;
     public float targetFieldOfView = 60f;
     public float fovTransitionDuration = 1f;
+    
+    [Header("GameObject Activation")]
+    public GameObject[] objectsToEnable;
+    public GameObject[] objectsToDisable;
     
     public CutsceneShot()
     {

@@ -41,6 +41,10 @@ public class CutsceneBehaviour : PlayableBehaviour
     public float targetFieldOfView = 60f;
     public AnimationCurve transitionCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     
+    [Header("GameObject Activation")]
+    public GameObject[] objectsToEnable;
+    public GameObject[] objectsToDisable;
+    
     private CutsceneManager cutsceneManager;
     private bool hasTriggered = false;
     
@@ -73,8 +77,10 @@ public class CutsceneBehaviour : PlayableBehaviour
     
     private void TriggerCutsceneShot()
     {
+        ActivateGameObjects();
+        
         CutsceneShot shot = new CutsceneShot();
-        shot.shotCamera = cutsceneManager.CurrentCamera; // Use current camera or assign specific one
+        shot.shotCamera = cutsceneManager.CurrentCamera;
         shot.targetPosition = cameraTarget;
         shot.targetPos = cameraPosition;
         shot.targetRotation = cameraRotation;
@@ -93,12 +99,36 @@ public class CutsceneBehaviour : PlayableBehaviour
             displayDuration = waitForDialogueCompletion ? 0f : 3f
         };
         
-        // Add this shot to the cutscene manager and play it
         cutsceneManager.AddShot(shot);
         
         if (!cutsceneManager.IsPlaying)
         {
             cutsceneManager.PlayCutscene();
+        }
+    }
+    
+    private void ActivateGameObjects()
+    {
+        if (objectsToEnable != null)
+        {
+            foreach (GameObject obj in objectsToEnable)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(true);
+                }
+            }
+        }
+        
+        if (objectsToDisable != null)
+        {
+            foreach (GameObject obj in objectsToDisable)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(false);
+                }
+            }
         }
     }
     

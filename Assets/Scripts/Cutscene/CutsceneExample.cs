@@ -13,8 +13,26 @@ public class CutsceneExample : MonoBehaviour
     [SerializeField] private string[] animationStateNames;
     [SerializeField] private bool enableAnimations = false;
 
+    [Header("Player Teleportation")]
+    [SerializeField] private bool enablePlayerTeleportation = false;
+    [SerializeField] private Transform[] playerTargetPositions;
+
+    [Header("Screen Fade")]
+    [SerializeField] private bool enableScreenFades = false;
+    [SerializeField] private int[] shotIndexesToFadeOut;
+    [SerializeField] private int[] shotIndexesToFadeIn;
+    [SerializeField] private float defaultFadeOutDuration = 1f;
+    [SerializeField] private float defaultFadeInDuration = 1f;
+
     [Header("Scene Transition")]
     [SerializeField] private string sceneToLoadAfterCutscene;
+    
+    [Header("GameObject Activation")]
+    [SerializeField] private bool enableGameObjectActivation = false;
+    [SerializeField] private GameObject[] objectsToEnable;
+    [SerializeField] private int[] shotIndexesToEnableObjects;
+    [SerializeField] private GameObject[] objectsToDisable;
+    [SerializeField] private int[] shotIndexesToDisableObjects;
 
     [Header("Test Settings")]
     [SerializeField] private float transitionDuration = 2f;
@@ -77,6 +95,11 @@ public class CutsceneExample : MonoBehaviour
             {
                 CreateCameraTargets();
             }
+
+            if (enablePlayerTeleportation && (playerTargetPositions == null || playerTargetPositions.Length == 0))
+            {
+                CreatePlayerTargetPositions();
+            }
         }
     }
 
@@ -110,10 +133,44 @@ public class CutsceneExample : MonoBehaviour
             shots[i].transitionDuration = transitionDuration;
             shots[i].waitForDialogueCompletion = waitForDialogue;
 
+            if (enablePlayerTeleportation && playerTargetPositions != null && i < playerTargetPositions.Length)
+            {
+                shots[i].teleportPlayer = true;
+                shots[i].playerTargetPosition = playerTargetPositions[i];
+            }
+
+            if (enableScreenFades)
+            {
+                if (shotIndexesToFadeOut != null && System.Array.IndexOf(shotIndexesToFadeOut, i) >= 0)
+                {
+                    shots[i].fadeOutBeforeShot = true;
+                    shots[i].fadeOutDuration = defaultFadeOutDuration;
+                }
+
+                if (shotIndexesToFadeIn != null && System.Array.IndexOf(shotIndexesToFadeIn, i) >= 0)
+                {
+                    shots[i].fadeInAfterShot = true;
+                    shots[i].fadeInDuration = defaultFadeInDuration;
+                }
+            }
+
             if (enableAnimations && animationStateNames != null && i < animationStateNames.Length && !string.IsNullOrEmpty(animationStateNames[i]))
             {
                 shots[i].playAnimation = true;
                 shots[i].animationStateName = animationStateNames[i];
+            }
+            
+            if (enableGameObjectActivation)
+            {
+                if (shotIndexesToEnableObjects != null && System.Array.IndexOf(shotIndexesToEnableObjects, i) >= 0)
+                {
+                    shots[i].objectsToEnable = objectsToEnable;
+                }
+                
+                if (shotIndexesToDisableObjects != null && System.Array.IndexOf(shotIndexesToDisableObjects, i) >= 0)
+                {
+                    shots[i].objectsToDisable = objectsToDisable;
+                }
             }
 
             string dialogueText = "";
@@ -232,6 +289,45 @@ public class CutsceneExample : MonoBehaviour
         }
 
         Debug.Log($"Created {cameraTargets.Length} camera targets");
+    }
+
+    [ContextMenu("Create Player Target Positions")]
+    public void CreatePlayerTargetPositions()
+    {
+        GameObject targetsParent = GameObject.Find("Player Target Positions");
+        if (targetsParent == null)
+        {
+            targetsParent = new GameObject("Player Target Positions");
+        }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 basePos = player != null ? player.transform.position : Vector3.zero;
+
+        Vector3[] positions = {
+            basePos + Vector3.forward * 2f,
+            basePos + Vector3.right * 3f + Vector3.forward * 3f,
+            basePos + Vector3.left * 2f + Vector3.forward * 5f
+        };
+
+        Vector3[] rotations = {
+            Vector3.up * 0f,
+            Vector3.up * 45f,
+            Vector3.up * -30f
+        };
+
+        playerTargetPositions = new Transform[positions.Length];
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            GameObject target = new GameObject($"Player Target {i + 1}");
+            target.transform.SetParent(targetsParent.transform);
+            target.transform.position = positions[i];
+            target.transform.rotation = Quaternion.Euler(rotations[i]);
+
+            playerTargetPositions[i] = target.transform;
+        }
+
+        Debug.Log($"Created {playerTargetPositions.Length} player target positions");
     }
 
     [ContextMenu("Debug Setup")]

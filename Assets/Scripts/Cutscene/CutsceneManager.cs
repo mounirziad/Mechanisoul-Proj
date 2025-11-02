@@ -13,6 +13,7 @@ public class CutsceneManager : MonoBehaviour
 
     [Header("Character Setup")]
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Transform playerTransform;
 
     [Header("Scene Transition")]
     [SerializeField] private string sceneToLoadOnComplete;
@@ -24,6 +25,9 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField] private Camera originalMainCamera;
     [SerializeField] private bool smoothTransitions = true;
     [SerializeField] private float defaultTransitionSpeed = 2f;
+
+    [Header("Screen Fade")]
+    [SerializeField] private FadingScript fadingScript;
 
     [Header("Events")]
     public UnityEvent OnCutsceneStart;
@@ -334,9 +338,21 @@ public class CutsceneManager : MonoBehaviour
 
         OnShotStart?.Invoke(currentShotIndex);
 
+        if (shot.fadeOutBeforeShot && fadingScript != null)
+        {
+            yield return StartCoroutine(FadeOut(shot.fadeOutDuration));
+        }
+
         SwitchToCameraUsingDepth(shot.shotCamera);
 
         bool isLastShot = currentShotIndex >= shots.Length - 1;
+
+        if (shot.teleportPlayer && shot.playerTargetPosition != null)
+        {
+            TeleportPlayer(shot.playerTargetPosition);
+        }
+        
+        ActivateGameObjectsForShot(shot);
 
         if (shot.playAnimation && !string.IsNullOrEmpty(shot.animationStateName))
         {
@@ -349,6 +365,11 @@ public class CutsceneManager : MonoBehaviour
             {
                 Debug.LogWarning("Player Animator is not assigned in CutsceneManager!");
             }
+        }
+
+        if (shot.fadeInAfterShot && fadingScript != null)
+        {
+            yield return StartCoroutine(FadeIn(shot.fadeInDuration));
         }
 
         if (shot.dialogueLine != null && !string.IsNullOrEmpty(shot.dialogueLine.text))
@@ -536,6 +557,113 @@ public class CutsceneManager : MonoBehaviour
                 originalMainCamera.gameObject.SetActive(true);
                 originalMainCamera.enabled = true;
                 originalMainCamera.depth = 0f; // Default main camera depth
+            }
+        }
+    }
+
+    private IEnumerator FadeOut(float duration)
+    {
+        if (fadingScript == null)
+        {
+            Debug.LogWarning("FadingScript is not assigned in CutsceneManager!");
+            yield break;
+        }
+
+        float elapsed = 0f;
+        CanvasGroup canvasGroup = fadingScript.GetComponent<CanvasGroup>();
+
+        if (canvasGroup == null)
+        {
+            Debug.LogWarning("CanvasGroup not found on FadingScript GameObject!");
+            yield break;
+        }
+
+        float startAlpha = canvasGroup.alpha;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, 1f, elapsed / duration);
+            yield return null;
+        }
+
+        canvasGroup.alpha = 1f;
+    }
+
+    private IEnumerator FadeIn(float duration)
+    {
+        if (fadingScript == null)
+        {
+            Debug.LogWarning("FadingScript is not assigned in CutsceneManager!");
+            yield break;
+        }
+
+        float elapsed = 0f;
+        CanvasGroup canvasGroup = fadingScript.GetComponent<CanvasGroup>();
+
+        if (canvasGroup == null)
+        {
+            Debug.LogWarning("CanvasGroup not found on FadingScript GameObject!");
+            yield break;
+        }
+
+        float startAlpha = canvasGroup.alpha;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsed / duration);
+            yield return null;
+        }
+
+        canvasGroup.alpha = 0f;
+    }
+
+    private void TeleportPlayer(Transform targetTransform)
+    {
+        if (playerTransform == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playerTransform = player.transform;
+            }
+            else
+            {
+                Debug.LogWarning("Player Transform is not assigned and could not find GameObject with 'Player' tag!");
+                return;
+            }
+        }
+
+        playerTransform.position = targetTransform.position;
+        playerTransform.rotation = targetTransform.rotation;
+
+        Debug.Log($"Teleported player to position: {targetTransform.position}, rotation: {targetTransform.rotation.eulerAngles}");
+    }
+    
+    private void ActivateGameObjectsForShot(CutsceneShot shot)
+    {
+        if (shot.objectsToEnable != null)
+        {
+            foreach (GameObject obj in shot.objectsToEnable)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(true);
+                    Debug.Log($"Enabled GameObject: {obj.name}");
+                }
+            }
+        }
+        
+        if (shot.objectsToDisable != null)
+        {
+            foreach (GameObject obj in shot.objectsToDisable)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(false);
+                    Debug.Log($"Disabled GameObject: {obj.name}");
+                }
             }
         }
     }
