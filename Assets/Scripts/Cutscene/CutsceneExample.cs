@@ -9,6 +9,10 @@ public class CutsceneExample : MonoBehaviour
     [SerializeField] private string[] dialogueTexts;
     [SerializeField] private bool testOnStart = true;
 
+    [Header("Animation Setup")]
+    [SerializeField] private string[] animationStateNames;
+    [SerializeField] private bool enableAnimations = false;
+
     [Header("Scene Transition")]
     [SerializeField] private string sceneToLoadAfterCutscene;
 
@@ -99,7 +103,6 @@ public class CutsceneExample : MonoBehaviour
             }
             else
             {
-                // Use default positions if no targets
                 shots[i].targetPos = cutsceneCameras[i].transform.position + Vector3.forward * 2f;
                 shots[i].targetRotation = cutsceneCameras[i].transform.eulerAngles;
             }
@@ -107,7 +110,12 @@ public class CutsceneExample : MonoBehaviour
             shots[i].transitionDuration = transitionDuration;
             shots[i].waitForDialogueCompletion = waitForDialogue;
 
-            // Set dialogue text
+            if (enableAnimations && animationStateNames != null && i < animationStateNames.Length && !string.IsNullOrEmpty(animationStateNames[i]))
+            {
+                shots[i].playAnimation = true;
+                shots[i].animationStateName = animationStateNames[i];
+            }
+
             string dialogueText = "";
             if (dialogueTexts != null && i < dialogueTexts.Length && !string.IsNullOrEmpty(dialogueTexts[i]))
             {

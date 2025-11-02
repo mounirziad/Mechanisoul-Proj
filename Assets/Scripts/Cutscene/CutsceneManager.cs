@@ -11,6 +11,9 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField] private bool playOnStart = false;
     [SerializeField] private bool loopCutscene = false;
 
+    [Header("Character Setup")]
+    [SerializeField] private Animator playerAnimator;
+
     [Header("Scene Transition")]
     [SerializeField] private string sceneToLoadOnComplete;
     [SerializeField] private bool transitionOnLastDialogueInput = true;
@@ -333,6 +336,29 @@ public class CutsceneManager : MonoBehaviour
 
         SwitchToCameraUsingDepth(shot.shotCamera);
 
+        bool isLastShot = currentShotIndex >= shots.Length - 1;
+
+        if (shot.playAnimation && !string.IsNullOrEmpty(shot.animationStateName))
+        {
+            if (playerAnimator != null)
+            {
+                playerAnimator.Play(shot.animationStateName);
+                Debug.Log($"Playing animation: {shot.animationStateName}");
+            }
+            else
+            {
+                Debug.LogWarning("Player Animator is not assigned in CutsceneManager!");
+            }
+        }
+
+        if (shot.dialogueLine != null && !string.IsNullOrEmpty(shot.dialogueLine.text))
+        {
+            if (DialogueSystem.Instance != null)
+            {
+                DialogueSystem.Instance.ShowDialogue(shot.dialogueLine);
+            }
+        }
+
         if (cameraTransitionCoroutine != null)
         {
             StopCoroutine(cameraTransitionCoroutine);
@@ -342,14 +368,10 @@ public class CutsceneManager : MonoBehaviour
 
         yield return cameraTransitionCoroutine;
 
-        bool isLastShot = currentShotIndex >= shots.Length - 1;
-
         if (shot.dialogueLine != null && !string.IsNullOrEmpty(shot.dialogueLine.text))
         {
             if (DialogueSystem.Instance != null)
             {
-                DialogueSystem.Instance.ShowDialogue(shot.dialogueLine);
-
                 if (shot.waitForDialogueCompletion)
                 {
                     if (isLastShot && transitionOnLastDialogueInput && !string.IsNullOrEmpty(sceneToLoadOnComplete))

@@ -13,6 +13,10 @@ public class CutsceneShot
     [Header("Dialogue")]
     public DialogueLine dialogueLine;
     
+    [Header("Animation")]
+    public string animationStateName;
+    public bool playAnimation = false;
+    
     [Header("Shot Settings")]
     public string shotName;
     public bool waitForDialogueCompletion = true;
