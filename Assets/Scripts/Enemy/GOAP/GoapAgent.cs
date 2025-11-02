@@ -35,6 +35,8 @@ public partial class GoapAgent : MonoBehaviour
     private NavMeshAgent navMesh;
     public NavMeshAgent NavMesh => navMesh;
 
+    private bool isActive = false;
+
     private void Awake()
     {
         navMesh = GetComponent<NavMeshAgent>();
@@ -112,6 +114,7 @@ public partial class GoapAgent : MonoBehaviour
     private void Update()
     {
         //StatsTimer and Animations update
+        //if (!isActive) return;
 
         //Update the plan and current action if there is one
         if (currentAction == null)
@@ -193,4 +196,16 @@ public partial class GoapAgent : MonoBehaviour
         currentGoal = forcedGoal;
         CalculatePlan();
     }
+
+    /*public void Activate()
+    {
+        isActive = true;
+        Debug.Log($"{name}: GOAP Agent activated");
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+        Debug.Log($"{name}: GOAP Agent deactivated");
+    }*/
 }

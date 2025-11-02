@@ -122,7 +122,7 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .Build());
 
         actions.Add(new AgentAction.Builder("Lightning Attack") //Possible integration with the Machine Learning AI where the mech chooses if it wants to melee or range attack player
-            .WithStrategy(new AttackStrategy(GetComponent<GoapAgent>()))
+            .WithStrategy(new LightningAttackStrategy(GetComponent<GoapAgent>(), GetComponent<LightningController>()))
             .AddPrecondition(beliefs["PlayerInLightningRange"])
             .AddEffect(beliefs["AttackingPlayer"])
             .Build());

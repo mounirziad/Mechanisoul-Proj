@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -127,13 +128,12 @@ public class AttackStrategy : IActionStrategy
     public bool CanPerform => true; //agent can always attack
     public bool Complete {  get; private set; }
 
-    readonly IDamage damageProvider;
-    readonly GoapAgent agent;
+    private readonly IDamage damageProvider;
+    private readonly GoapAgent agent;
     private Mechromancer mechromancer;
-    private LightningController controller;
-    readonly NavMeshAgent navMesh;
-    readonly float attackDuration = 1.5f;
-    readonly CountdownTimer timer;
+    private readonly NavMeshAgent navMesh;
+    private readonly float attackDuration = 1.5f;
+    private readonly CountdownTimer timer;
 
     public AttackStrategy(GoapAgent agent)
     {
@@ -235,6 +235,102 @@ public class AttackStrategy : IActionStrategy
             Debug.Log($"Boss dealt {damage} damage to the player");
         }
     }
+}
+
+public class LightningAttackStrategy : IActionStrategy
+{
+    public bool CanPerform => true;
+    public bool Complete {  get; private set; }
+
+    private readonly GoapAgent agent;
+    private readonly NavMeshAgent navMesh;
+    private readonly IDamage damageProvider;
+    private readonly LightningController lightningController;
+    private readonly CountdownTimer timer;
+
+    private readonly float attackDuration = 2.5f;
+
+    private Mechromancer mechromancer;
+    private Vector3 targetPosition;
+    private bool lightningFired = false;
+
+    public LightningAttackStrategy(GoapAgent agent, LightningController lightningController)
+    {
+        this.agent = agent;
+        this.navMesh = agent.GetComponent<NavMeshAgent>();
+        this.damageProvider = agent.GetComponent<IDamage>();
+        this.mechromancer = agent.GetComponent<Mechromancer>();
+        this.lightningController = lightningController;
+
+        timer = new CountdownTimer(attackDuration);
+        timer.OnTimerStart += () => Complete = false;
+        timer.OnTimerStop += () =>
+        {
+            Complete = true;
+            lightningController.StopLightning();
+        };
+    }
+
+    public void Start()
+    {
+        Debug.Log("Starting lightning strategy");
+        navMesh.isStopped = true;
+
+        if (agent.Player == null)
+        {
+            Debug.LogWarning("No player found, cannot cast lightning. Check inspector");
+            Complete = true;
+            return;
+        }
+
+        targetPosition = agent.Player.transform.position;
+
+        //animation
+        //mechromancer?.TriggerLightningAnimation();
+
+        timer.Start();
+
+        float castDelay = 0.75f; //so boss can raise their hand
+        agent.StartCoroutine(DelayedLightningCast(castDelay));
+    }
+
+    private System.Collections.IEnumerator DelayedLightningCast(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        FireLightning();
+    }
+
+    private void FireLightning()
+    {
+        if (lightningFired) return;
+
+        lightningFired = true;
+        lightningController.CastLightning(targetPosition);
+        Debug.Log("Lightning casted toward {targetPosition}");
+    }
+
+    public void Update(float deltaTime)
+    {
+        timer.Tick(deltaTime);
+
+        if (agent.Player != null && !Complete)
+        {
+            Vector3 direction = (agent.Player.transform.position - agent.transform.position).normalized;
+            direction.y = 0f;
+            if (direction != Vector3.zero)
+            {
+                agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, Quaternion.LookRotation(direction), deltaTime * 3f);
+            }
+        }
+    }
+
+    public void Stop()
+    {
+        lightningController.StopLightning();
+        navMesh.isStopped = false;
+        Complete = true;
+    }
+
 }
 
 public class ResurrectStrategy : IActionStrategy

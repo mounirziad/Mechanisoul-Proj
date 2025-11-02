@@ -1,91 +1,46 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class LightningController : MonoBehaviour
 {
-    [Header("Targeting")]
-    public Transform playerTransform;
-    public LayerMask groundMask;
-    public float raycastHeight = 50f;
-    public Vector3 positionOffset = Vector3.zero;
+    [Header("Lightning")]
+    [SerializeField] private GameObject lightning;
+    [SerializeField] private float lightningDuration = 1.5f;
+    [SerializeField] private Transform lightningOrigin;
 
-    [Header("Timing")]
-    public float warmupTime = 2.0f;
+    private GameObject activeLightning;
+    private bool isAttacking;
 
-    [Header("Prefabs")]
-    public GameObject lightningPrefab; //lightning VFX
-
-    [Header("Strike")]
-    public float strikeHeight = 0f;
-    public bool alignToNormal = true;
-    public int damage = 15;
-
-    [Header("Options")]
-    public bool debugDrawRay = false;
-
-    private Coroutine strikeRoutine;
-
-    private void Start()
+    public void CastLightning(Vector3 targetPosition)
     {
-        if (playerTransform == null)
+        if (isAttacking) return;
+
+        isAttacking = true;
+
+        activeLightning = Instantiate(lightning, lightningOrigin.position, Quaternion.identity);
+
+        LightningStrike strike = activeLightning.GetComponent<LightningStrike>();
+        if (strike != null)
         {
-            playerTransform = FindFirstObjectByType<PlayerManager>().transform;
+            strike.Initialize(targetPosition);
         }
+
+        Debug.Log("Lightning cast toward player last known position: {targetPosition}");
+
+        Invoke(nameof(StopLightning), lightningDuration);
     }
 
-    public void StartLightningAtPlayer()
+    public void StopLightning()
     {
-        if (playerTransform == null)
+        if (!isAttacking) return;
+
+        if (activeLightning != null)
         {
-            Debug.LogWarning("Player transform not assigned");
-            return;
+            Destroy(activeLightning);
         }
 
-        if (strikeRoutine != null)
-        {
-            StopCoroutine(strikeRoutine);
-            //strikeRoutine = StartCoroutine(DoLightningRoutine());
-        }
+        isAttacking = false;
+        Debug.Log("Lightning stopped");
     }
-
-    /*private IEnumerator DoLightningRoutine()
-    {
-        Vector3 playerPos = playerTransform.position + positionOffset;
-
-        Vector3 rayStart = playerPos + Vector3.up * raycastHeight;
-        RaycastHit hit;
-        Vector3 strikePos = playerPos;
-        Vector3 strikeNormal = Vector3.up;
-
-        if (Physics.Raycast(rayStart, Vector3.down, out hit, raycastHeight * 2f, groundMask))
-        {
-            strikePos = hit.point;
-            strikeNormal = hit.normal;
-            if (debugDrawRay)
-            {
-                Debug.DrawLine(rayStart, hit.point, Color.cyan, warmupTime);
-            }
-        }
-
-        else
-        {
-            strikePos.y = playerPos.y + strikeHeight;
-            if (debugDrawRay)
-            {
-                Debug.DrawLine(rayStart, rayStart - Vector3.up * (raycastHeight * 2f), Color.red, warmupTime);
-            }
-        }
-
-        GameObject indicator = null;
-        if (indicatorPrefab != null)
-        {
-            indicator = Instantiate(indicatorPrefab, strikePos, Quaternion.identity);
-            if (alignToNormal)
-            {
-                indicator.transform.rotation = Quaternion.FromToRotation(Vector3.up, strikeNormal);
-            }
-        }
-
-        strikeRoutine = null;
-    }*/
 }

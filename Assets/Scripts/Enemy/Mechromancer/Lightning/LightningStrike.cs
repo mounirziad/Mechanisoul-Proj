@@ -2,19 +2,58 @@ using UnityEngine;
 
 public class LightningStrike : MonoBehaviour
 {
-    public float damage = 18f;
-    public float lifetime = 2f;
+    [Header("Movement Settings")]
+    [SerializeField] private float speed = 25f;
+    [SerializeField] private float maxLifetime = 3f;
+    [SerializeField] private float hitRadius = 1.5f;
 
-    private void Start()
+    private Vector3 targetPosition;
+    private bool hasTarget;
+    private float lifetime;
+
+    public void Initialize(Vector3 target)
     {
-        Destroy(gameObject, lifetime);
+        targetPosition = target;
+        hasTarget = true;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Player"))
+        if (!hasTarget) return;
+
+        lifetime += Time.deltaTime;
+
+        if (lifetime > maxLifetime)
         {
-            other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
         }
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, targetPosition) < hitRadius)
+        {
+            LightningDamage();
+        }
+    }
+
+    private void LightningDamage()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, hitRadius);
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                PlayerHealth health = hit.GetComponent<PlayerHealth>();
+                if (health != null)
+                {
+                    health.TakeDamage(15f);
+                    Debug.Log("Player hit by lightning");
+                }
+            }
+        }
+
+        //Play sound or impact VFX
+        Destroy(gameObject);
     }
 }

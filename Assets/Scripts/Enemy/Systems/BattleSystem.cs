@@ -47,7 +47,8 @@ public class BattleSystem : MonoBehaviour
 
     private void Start()
     {
-        StartBattle();
+        Debug.Log("Battle system started, waiting for player to enter arena");
+        currentPhase = BossPhase.Waiting;
     }
 
     private void Update()
