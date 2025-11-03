@@ -2,41 +2,33 @@ using UnityEngine;
 
 public class SadnessDashUpgrade : DashUpgradeBase
 {
-    [Header("Sadness Settings")]
-    [Range(0f,1f)] public float[] slowPercent = { 0f, 0.35f, 0.35f };
-    public float[] slowSeconds = { 0f, 2.5f, 2.5f };
-    public float dropEveryMeters = 0.65f;
+    [Header("Sadness (single zone @ START if legacy toggle is ON)")]
+    [SerializeField] private SlowZone slowZonePrefab;
 
-    [Header("Prefabs")]
-    public SlowZone slowZonePrefab;
+    [Tooltip("Per-level slow percent (0.35 = 35%). Index by upgradeLevel.")]
+    public float[] slowPercent = { 0f, 0.25f, 0.35f, 0.45f };
 
-    float accum;
-    Vector3 _lastPos;
+    [Tooltip("Per-level slow seconds. Index by upgradeLevel.")]
+    public float[] slowSeconds = { 1.5f, 2.0f, 2.5f, 3.0f };
 
-    protected override void Awake()
+    [Header("Debug")]
+    public bool debugLogs = true;
+    protected override void HandleDashFinished(Vector3 start, Vector3 end)
     {
-        base.Awake();
-        SelectEmotion(Emotions.Sadness);
-    }
+        if (!autoSubscribeToDash) return;              // centralized spawner path = OFF
+        if (upgradeLevel <= 0) return;
+        if (!slowZonePrefab) return;
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        _lastPos = transform.position;
-        accum = 0f;
-    }
+        int lvl = Mathf.Clamp(upgradeLevel, 0, Mathf.Max(slowPercent.Length - 1, 0));
+        float pct = slowPercent[Mathf.Clamp(lvl, 0, slowPercent.Length - 1)];
+        float sec = slowSeconds[Mathf.Clamp(lvl, 0, slowSeconds.Length - 1)];
 
-    protected override void HandleDashStep(Vector3 pos)
-    {
-        if (upgradeLevel <= 0) { _lastPos = pos; return; }
-        float step = Vector3.Distance(pos, _lastPos);
-        _lastPos = pos;
-        accum += step;
-        if (accum >= dropEveryMeters)
+        var z = Spawn(slowZonePrefab, start);
+        if (z != null)
         {
-            accum = 0f;
-            var z = Spawn(slowZonePrefab, pos);
-            if (z != null) z.Configure(slowPercent[upgradeLevel], slowSeconds[upgradeLevel]);
+            z.Configure(pct, sec);
+            if (debugLogs)
+                Debug.Log($"[SadnessDashUpgrade] (Legacy) SlowZone @ {start} | slow={pct:P0} | sec={sec:F1} | level={upgradeLevel}", z);
         }
     }
 }
