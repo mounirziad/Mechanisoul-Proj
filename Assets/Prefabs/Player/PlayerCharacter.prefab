@@ -1047,6 +1047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   isInteracting: 0
+  player: {fileID: 0}
   dash: {fileID: 1735667703248446145}
   buffStackCap: 0
   buffPercent: 0
@@ -1057,9 +1058,9 @@ MonoBehaviour:
   attackSpeedBuff: 0
   critChance: 0
   critMult: 0
+  didCrit: 0
   dotTickDmg: 0
   dotMaxTicks: 0
-  dotMaxStacks: 0
   dotTickTimer: 0
   dotTickMaxTime: 0
   lsAmt: 0
@@ -1069,6 +1070,14 @@ MonoBehaviour:
   moveSpeedTimer: 0
   hasMoveSpeedBuff: 0
   speedMult: 0
+  combo1Active: 0
+  combo2Active: 0
+  combo3Active: 0
+  combo4Active: 0
+  combo5Active: 0
+  combo6Active: 0
+  combo7Active: 0
+  combo8Active: 0
   angerImpact: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
   joyImpact: {fileID: 7849176156349135997, guid: 6aac2e5cfdd94e44e87c1a8a2a06e01f, type: 3}
   fearImpact: {fileID: 7849176156349135997, guid: 9697469dfd329e94e84af33230686494, type: 3}
@@ -1326,6 +1335,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fallbackBodyLength: 2
+  debugLogs: 1
 --- !u!114 &8481794007162226039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1364,16 +1374,9 @@ MonoBehaviour:
   dashFearLvl: 0
   rangedJoyLvl: 0
   rangedAngerLvl: 0
-  maxLvl: 2
-  enableHotkeys: 0
-  allowNumpad: 0
-  vfxMaterials: []
-  impactVFXPrefabs:
-  - {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
-  - {fileID: 5016143912377780497, guid: a4c1d18106d2f0848818076121b4d4c7, type: 3}
-  - {fileID: 5617348523836176633, guid: d4112bc87fd2aec4b96cfe48b0043685, type: 3}
-  - {fileID: 966752437442742923, guid: 9f709deeac89b11469e588813e41a6d9, type: 3}
-  - {fileID: 3891848978119441642, guid: 3a2aebf9501729b4ebfe474b48a0a954, type: 3}
+  rangedSadnessLvl: 0
+  rangedLoveLvl: 0
+  rangedFearLvl: 0
   playerManager: {fileID: 6408783954678075963}
   playerCombat: {fileID: 3131715302814231125}
   meshTrail: {fileID: 0}
@@ -1382,11 +1385,7 @@ MonoBehaviour:
   sadnessDash: {fileID: 0}
   loveDash: {fileID: 0}
   fearDash: {fileID: 0}
-  joyCritPrefab: {fileID: 4791582663665990050, guid: c09f6bbfebb5fc5468811744805ab131, type: 3}
-  angerDoTPrefab: {fileID: 4981326311370949480, guid: 1e226d3f8c3a7ff49a54fee99b9fb9b7, type: 3}
-  slowZonePrefab: {fileID: 4106177591748687251, guid: 2ca0e4b767183484b9a6b43d2e29b2d4, type: 3}
-  weaknessZonePrefab: {fileID: 2302945470790535838, guid: 39eebcabca70bbd468949272b95737d2, type: 3}
-  fearZonePrefab: {fileID: 1826759558794953501, guid: 85cbbd952a10e9b42983db91dea6e6ae, type: 3}
+  maxLvl: 2
 --- !u!114 &7517454570625612806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1399,15 +1398,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ebb9cba6c9a0d0449e5d3f7c0efb6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashRingSpawner
+  dash: {fileID: 1735667703248446145}
+  handler: {fileID: 2062997631589936748}
   ringPrefab: {fileID: 5720126518462165007, guid: c056d6f8dced98d4d97ac65a037b6bb2, type: 3}
   ringLifetime: 4
-  angerRadius: 2
-  sadnessRadius: 2
-  joyColor: {r: 1, g: 0.92, b: 0.16, a: 0.9}
-  angerColor: {r: 1, g: 0.35, b: 0.1, a: 0.9}
-  sadnessColor: {r: 0.35, g: 0.6, b: 1, a: 0.9}
-  loveColor: {r: 1, g: 0.4, b: 0.8, a: 0.9}
-  fearColor: {r: 0.6, g: 0, b: 1, a: 0.9}
+  ringColor: {r: 1, g: 0.35, b: 0.1, a: 0.9}
+  angerBurstPrefab: {fileID: 2040267038493676359, guid: db105c2bf2996f0419f7dec205552934, type: 3}
+  anger_aoePercent:
+  - 0
+  - 0.1
+  - 0.25
+  - 0.4
+  joyCritPrefab: {fileID: 4791582663665990050, guid: c09f6bbfebb5fc5468811744805ab131, type: 3}
+  joy_chance:
+  - 0
+  - 0.2
+  - 0.35
+  - 0.5
+  joy_radius:
+  - 2.5
+  - 3
+  - 3.5
+  - 4
+  joy_duration:
+  - 1.5
+  - 2
+  - 2.5
+  - 3
+  slowZonePrefab: {fileID: 4106177591748687251, guid: 2ca0e4b767183484b9a6b43d2e29b2d4, type: 3}
+  sadness_slowPercent:
+  - 0
+  - 0.25
+  - 0.35
+  - 0.45
+  sadness_slowSeconds:
+  - 1.5
+  - 2
+  - 2.5
+  - 3
+  sadness_dropEveryMeters:
+  - 0.75
+  - 0.65
+  - 0.55
+  - 0.45
+  weaknessZonePrefab: {fileID: 2302945470790535838, guid: 39eebcabca70bbd468949272b95737d2, type: 3}
+  love_weaknessPercent:
+  - 0
+  - 0.1
+  - 0.2
+  - 0.3
+  love_duration:
+  - 2.5
+  - 3
+  - 3.5
+  - 4
+  love_radius:
+  - 2
+  - 2.5
+  - 3
+  - 3.5
+  fearZonePrefab: {fileID: 1826759558794953501, guid: 85cbbd952a10e9b42983db91dea6e6ae, type: 3}
+  fear_seconds:
+  - 2.5
+  - 3
+  - 4
+  - 5
+  fear_radius:
+  - 2
+  - 2.5
+  - 3
+  - 3.5
+  debugLogs: 1
 --- !u!114 &2314828440493032216
 MonoBehaviour:
   m_ObjectHideFlags: 0

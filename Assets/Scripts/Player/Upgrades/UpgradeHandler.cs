@@ -161,9 +161,9 @@ public class UpgradeHandler : MonoBehaviour
     public void RangedLoveDown() { rangedLoveLvl = ClampDown(rangedLoveLvl); PushRanged(); }
     public void RangedFearDown() { rangedFearLvl = ClampDown(rangedFearLvl); PushRanged(); }
 
-    void PushAll() { ApplyDashSelection(); PushRanged(); RaiseLevelsChanged(); }
+    public void PushAll() { ApplyDashSelection(); PushRanged(); RaiseLevelsChanged(); }
 
-    void PushRanged()
+    public void PushRanged()
     {
         if (!playerCombat) return;
 

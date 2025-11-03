@@ -71,7 +71,9 @@ public class SlowZone : MonoBehaviour
 
             if (t.CompareTag("Enemy") || (t.root != null && t.root.CompareTag("Enemy")))
                 t.SendMessage("AddSlow", new object[] { slowPercent, slowSeconds }, SendMessageOptions.DontRequireReceiver);
+
         }
+
     }
 
 #if UNITY_EDITOR

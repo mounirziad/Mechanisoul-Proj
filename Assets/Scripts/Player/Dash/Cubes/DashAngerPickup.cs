@@ -18,6 +18,9 @@ public class DashAngerPickup : MonoBehaviour
         for (int i = 0; i < 3; i++) { handler.DashAngerDown(); handler.DashSadnessDown(); handler.DashJoyDown(); handler.DashLoveDown(); handler.DashFearDown(); }
         for (int i = 0; i < targetLevel; i++) handler.DashAngerUp();
 
+        for (int i = 0; i < 3; i++) { handler.RangedAngerDown(); handler.RangedSadnessDown(); handler.RangedJoyDown(); handler.RangedLoveDown(); handler.RangedFearDown(); }
+        for (int i = 0; i < targetLevel; i++) handler.RangedAngerUp();
+
         Debug.Log("Picked up Dash Anger!");
         if (destroyOnPickup) Destroy(gameObject);
     }

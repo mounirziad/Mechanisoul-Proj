@@ -13,7 +13,7 @@ public class Terminal : MonoBehaviour
         if (inRange)
         {
             //show visual ui for terminal "press e to open terminal"
-            Debug.Log("in terminal range");
+            //Debug.Log("in terminal range");
 
             //if interact key is pressed, open terminal
         }

@@ -3,52 +3,40 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class UpgradeRouter : MonoBehaviour
 {
-    [SerializeField] UpgradeHandler upgradeHandler;   // big controller
-    [SerializeField] DashAbility dashAbility;         // movement logic
-
-    // references to all possible upgrade scripts
-    JoyDashUpgrade joy;
-    AngerDashUpgrade anger;
-    SadnessDashUpgrade sad;
-    LoveDashUpgrade love;
-    FearDashUpgrade fear;
+    [SerializeField] UpgradeHandler upgradeHandler;
+    [SerializeField] DashAbility dashAbility;
 
     void Awake()
     {
         if (!upgradeHandler) upgradeHandler = GetComponent<UpgradeHandler>();
         if (!dashAbility) dashAbility = GetComponent<DashAbility>();
 
-        // Autospawn or fetch upgrade scripts if not already on prefab
-        joy = Ensure<JoyDashUpgrade>();
-        anger = Ensure<AngerDashUpgrade>();
-        sad = Ensure<SadnessDashUpgrade>();
-        love = Ensure<LoveDashUpgrade>();
-        fear = Ensure<FearDashUpgrade>();
-
-        upgradeHandler.InjectDashComponents(joy, anger, sad, love, fear);
+        // nothing else needed: the handler centralizes both ranged push and dash spawning
+        // your UI buttons can keep calling the Router, which delegates to the handler:
     }
 
-    T Ensure<T>() where T : Behaviour
-    {
-        var c = GetComponent<T>();
-        if (!c) c = gameObject.AddComponent<T>();
-        c.enabled = false;
-        return c;
-    }
+    // RANGED UI hooks (unchanged)
+    public void RangedJoyUp() { upgradeHandler?.RangedJoyUp(); }
+    public void RangedJoyDown() { upgradeHandler?.RangedJoyDown(); }
+    public void RangedAngerUp() { upgradeHandler?.RangedAngerUp(); }
+    public void RangedAngerDown() { upgradeHandler?.RangedAngerDown(); }
+    public void RangedSadnessUp() { upgradeHandler?.RangedSadnessUp(); }
+    public void RangedSadnessDown() { upgradeHandler?.RangedSadnessDown(); }
+    public void RangedLoveUp() { upgradeHandler?.RangedLoveUp(); }
+    public void RangedLoveDown() { upgradeHandler?.RangedLoveDown(); }
+    public void RangedFearUp() { upgradeHandler?.RangedFearUp(); }
+    public void RangedFearDown() { upgradeHandler?.RangedFearDown(); }
 
-    // RANGED (ui hooks)
-    public void RangedJoyUp() { if (upgradeHandler) upgradeHandler.RangedJoyUp(); }
-    public void RangedJoyDown() { if (upgradeHandler) upgradeHandler.RangedJoyDown(); }
-
-    public void RangedAngerUp() { if (upgradeHandler) upgradeHandler.RangedAngerUp(); }
-    public void RangedAngerDown() { if (upgradeHandler) upgradeHandler.RangedAngerDown(); }
-
-    public void RangedSadnessUp() { if (upgradeHandler) upgradeHandler.RangedSadnessUp(); }
-    public void RangedSadnessDown() { if (upgradeHandler) upgradeHandler.RangedSadnessDown(); }
-
-    public void RangedLoveUp() { if (upgradeHandler) upgradeHandler.RangedLoveUp(); }
-    public void RangedLoveDown() { if (upgradeHandler) upgradeHandler.RangedLoveDown(); }
-
-    public void RangedFearUp() { if (upgradeHandler) upgradeHandler.RangedFearUp(); }
-    public void RangedFearDown() { if (upgradeHandler) upgradeHandler.RangedFearDown(); }
+    // DASH UI hooks (mutual exclusivity handled inside handler)
+    public void DashAngerUp() { upgradeHandler?.DashAngerUp(); }
+    public void DashAngerDown() { upgradeHandler?.DashAngerDown(); }
+    public void DashSadnessUp() { upgradeHandler?.DashSadnessUp(); }
+    public void DashSadnessDown() { upgradeHandler?.DashSadnessDown(); }
+    public void DashJoyUp() { upgradeHandler?.DashJoyUp(); }
+    public void DashJoyDown() { upgradeHandler?.DashJoyDown(); }
+    public void DashLoveUp() { upgradeHandler?.DashLoveUp(); }
+    public void DashLoveDown() { upgradeHandler?.DashLoveDown(); }
+    public void DashFearUp() { upgradeHandler?.DashFearUp(); }
+    public void DashFearDown() { upgradeHandler?.DashFearDown(); }
+    public void ClearDash() { upgradeHandler?.ClearDash(); }
 }
