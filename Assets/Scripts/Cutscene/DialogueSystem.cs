@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class DialogueLine
@@ -31,25 +32,25 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI shadowText;
     [SerializeField] private CanvasGroup dialogueCanvasGroup;
     [SerializeField] private AudioSource audioSource;
-    
+
     [Header("Animation Settings")]
     [SerializeField] private float typewriterSpeed = 0.05f;
-    
+
     [Header("Visual Settings")]
     [SerializeField] private Vector2 shadowOffset = new Vector2(2f, -2f);
     [SerializeField] private Color shadowColor = new Color(0f, 0f, 0f, 0.8f);
-    
+
     [Header("Text Chunking Settings")]
     [SerializeField] private int maxCharactersPerChunk = 120;
     [SerializeField] private bool autoChunkLongText = true;
     [SerializeField] private float chunkPauseDuration = 0.5f;
-    
+
     [Header("Input Settings")]
     [SerializeField] private bool useJumpToAdvance = true;
-    
+
     private PlayerControls playerControls;
-    private bool jumpPressedThisFrame = false;
-    
+    private bool advancePressedThisFrame = false; // RENAMED: from jumpPressedThisFrame
+
     private Coroutine currentDialogueCoroutine;
     private bool isDisplaying = false;
     private bool waitingForInput = false;
@@ -58,44 +59,103 @@ public class DialogueSystem : MonoBehaviour
     private int currentChunkIndex = 0;
     private DialogueSequence currentSequence;
     private int currentSequenceIndex = 0;
-    
+
     public static DialogueSystem Instance { get; private set; }
-    
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
+            if (Instance != this)
+            {
+                TransferUIReferencesFromDuplicate(this);
+            }
             Destroy(gameObject);
         }
     }
-    
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindAndLinkUIReferences();
+    }
+
+    private void TransferUIReferencesFromDuplicate(DialogueSystem duplicate)
+    {
+        if (duplicate.dialogueText != null) dialogueText = duplicate.dialogueText;
+        if (duplicate.shadowText != null) shadowText = duplicate.shadowText;
+        if (duplicate.dialogueCanvasGroup != null) dialogueCanvasGroup = duplicate.dialogueCanvasGroup;
+        if (duplicate.audioSource != null) audioSource = duplicate.audioSource;
+        
+        SetupShadowText();
+        
+        if (dialogueCanvasGroup != null)
+        {
+            dialogueCanvasGroup.alpha = 0f;
+        }
+    }
+
+    private void FindAndLinkUIReferences()
+    {
+        DialogueSystem[] allDialogueSystems = FindObjectsOfType<DialogueSystem>(true);
+        
+        foreach (DialogueSystem ds in allDialogueSystems)
+        {
+            if (ds != this && ds.dialogueCanvasGroup != null)
+            {
+                dialogueText = ds.dialogueText;
+                shadowText = ds.shadowText;
+                dialogueCanvasGroup = ds.dialogueCanvasGroup;
+                audioSource = ds.audioSource;
+                
+                SetupShadowText();
+                
+                if (dialogueCanvasGroup != null)
+                {
+                    dialogueCanvasGroup.alpha = 0f;
+                }
+                
+                if (ds.gameObject != this.gameObject)
+                {
+                    Destroy(ds.gameObject);
+                }
+                
+                break;
+            }
+        }
+    }
+
     private void Start()
     {
         SetupShadowText();
-        dialogueCanvasGroup.alpha = 0f;
         
+        if (dialogueCanvasGroup != null)
+        {
+            dialogueCanvasGroup.alpha = 0f;
+        }
+
         // Set up direct PlayerControls input
         if (useJumpToAdvance)
         {
             SetupPlayerInput();
         }
     }
-    
+
     private void SetupPlayerInput()
     {
         playerControls = new PlayerControls();
-        
-        // Subscribe to jump input events
-        playerControls.PlayerActions.Jump.performed += OnJumpPressed;
-        
+
+        // Subscribe to ADVANCE DIALOGUE input events (not jump)
+        playerControls.PlayerActions.AdvanceDialogue.performed += OnAdvancePressed;
+
         playerControls.Enable();
     }
-    
+
     private void SetupShadowText()
     {
         if (shadowText != null && dialogueText != null)
@@ -104,44 +164,80 @@ public class DialogueSystem : MonoBehaviour
             shadowText.rectTransform.anchoredPosition = dialogueText.rectTransform.anchoredPosition + shadowOffset;
         }
     }
-    
+
     private void OnDestroy()
     {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+        
         if (playerControls != null)
         {
-            playerControls.PlayerActions.Jump.performed -= OnJumpPressed;
+            playerControls.PlayerActions.AdvanceDialogue.performed -= OnAdvancePressed;
             playerControls.Disable();
             playerControls.Dispose();
         }
     }
-    
-    private void OnJumpPressed(UnityEngine.InputSystem.InputAction.CallbackContext context)
+
+    private void OnAdvancePressed(UnityEngine.InputSystem.InputAction.CallbackContext context) // RENAMED
     {
         if (waitingForInput)
         {
-            jumpPressedThisFrame = true;
+            advancePressedThisFrame = true;
         }
     }
-    
+
     private void Update()
     {
-        if (waitingForInput && jumpPressedThisFrame)
+        // Check if UI references have been destroyed (e.g., during scene transition)
+        if (isDisplaying && dialogueCanvasGroup == null)
         {
-            jumpPressedThisFrame = false;
+            StopAllDialogue();
+            return;
+        }
+
+        // NEW: Alternative input method through InputManager
+        if (waitingForInput && !advancePressedThisFrame)
+        {
+            InputManager inputManager = FindObjectOfType<InputManager>();
+            if (inputManager != null && inputManager.GetAdvanceDialogueInput())
+            {
+                advancePressedThisFrame = true;
+            }
+        }
+
+        if (waitingForInput && advancePressedThisFrame)
+        {
+            advancePressedThisFrame = false;
             AdvanceDialogue();
         }
     }
-    
+
+    private void StopAllDialogue()
+    {
+        if (currentDialogueCoroutine != null)
+        {
+            StopCoroutine(currentDialogueCoroutine);
+            currentDialogueCoroutine = null;
+        }
+
+        isDisplaying = false;
+        waitingForInput = false;
+        canAdvance = false;
+        advancePressedThisFrame = false;
+    }
+
     public void ShowDialogue(DialogueLine dialogueLine)
     {
         if (currentDialogueCoroutine != null)
         {
             StopCoroutine(currentDialogueCoroutine);
         }
-        
+
         currentDialogueCoroutine = StartCoroutine(DisplaySingleDialogueCoroutine(dialogueLine));
     }
-    
+
     public void ShowDialogue(string text, float duration = 3f, AudioClip voiceClip = null)
     {
         DialogueLine line = new DialogueLine
@@ -153,19 +249,19 @@ public class DialogueSystem : MonoBehaviour
         };
         ShowDialogue(line);
     }
-    
+
     public void ShowDialogueSequence(DialogueSequence sequence)
     {
         if (currentDialogueCoroutine != null)
         {
             StopCoroutine(currentDialogueCoroutine);
         }
-        
+
         currentSequence = sequence;
         currentSequenceIndex = 0;
         currentDialogueCoroutine = StartCoroutine(DisplaySequenceCoroutine());
     }
-    
+
     public void ShowDialogueSequence(DialogueLine[] lines, bool loop = false)
     {
         DialogueSequence sequence = new DialogueSequence
@@ -175,30 +271,38 @@ public class DialogueSystem : MonoBehaviour
         };
         ShowDialogueSequence(sequence);
     }
-    
+
     private void AdvanceDialogue()
     {
         if (!canAdvance) return;
-        
+
         waitingForInput = false;
         canAdvance = false;
     }
-    
+
     public void HideDialogue()
     {
         if (currentDialogueCoroutine != null)
         {
             StopCoroutine(currentDialogueCoroutine);
         }
-        
-        // Instant hide instead of fade
-        dialogueCanvasGroup.alpha = 0f;
+
+        if (dialogueCanvasGroup != null)
+        {
+            // Instant hide instead of fade
+            dialogueCanvasGroup.alpha = 0f;
+        }
+
+        // Reset input state
+        advancePressedThisFrame = false;
+        waitingForInput = false;
+        canAdvance = false;
     }
-    
+
     private IEnumerator DisplaySingleDialogueCoroutine(DialogueLine dialogueLine)
     {
         isDisplaying = true;
-        
+
         if (autoChunkLongText)
         {
             currentTextChunks = ChunkText(dialogueLine.text);
@@ -207,20 +311,26 @@ public class DialogueSystem : MonoBehaviour
         {
             currentTextChunks = new List<string> { dialogueLine.text };
         }
-        
+
+        if (dialogueCanvasGroup == null)
+        {
+            isDisplaying = false;
+            yield break;
+        }
+
         // Instant show instead of fade
         dialogueCanvasGroup.alpha = 1f;
-        
+
         if (dialogueLine.voiceClip != null && audioSource != null)
         {
             audioSource.clip = dialogueLine.voiceClip;
             audioSource.Play();
         }
-        
+
         for (currentChunkIndex = 0; currentChunkIndex < currentTextChunks.Count; currentChunkIndex++)
         {
             yield return StartCoroutine(TypewriterEffect(currentTextChunks[currentChunkIndex]));
-            
+
             if (currentChunkIndex < currentTextChunks.Count - 1)
             {
                 if (dialogueLine.waitForInput)
@@ -235,7 +345,7 @@ public class DialogueSystem : MonoBehaviour
                 }
             }
         }
-        
+
         if (dialogueLine.waitForInput)
         {
             waitingForInput = true;
@@ -246,13 +356,16 @@ public class DialogueSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(dialogueLine.displayDuration);
         }
-        
-        // Instant hide instead of fade
-        dialogueCanvasGroup.alpha = 0f;
-        
+
+        if (dialogueCanvasGroup != null)
+        {
+            // Instant hide instead of fade
+            dialogueCanvasGroup.alpha = 0f;
+        }
+
         isDisplaying = false;
     }
-    
+
     private IEnumerator DisplaySequenceCoroutine()
     {
         do
@@ -260,7 +373,7 @@ public class DialogueSystem : MonoBehaviour
             for (currentSequenceIndex = 0; currentSequenceIndex < currentSequence.lines.Length; currentSequenceIndex++)
             {
                 yield return StartCoroutine(DisplaySingleDialogueCoroutine(currentSequence.lines[currentSequenceIndex]));
-                
+
                 if (currentSequenceIndex < currentSequence.lines.Length - 1)
                 {
                     yield return new WaitForSeconds(0.2f);
@@ -269,27 +382,27 @@ public class DialogueSystem : MonoBehaviour
         }
         while (currentSequence.loopSequence);
     }
-    
+
     private List<string> ChunkText(string text)
     {
         List<string> chunks = new List<string>();
-        
+
         if (text.Length <= maxCharactersPerChunk)
         {
             chunks.Add(text);
             return chunks;
         }
-        
+
         string[] sentences = text.Split('.', '!', '?');
         string currentChunk = "";
-        
+
         foreach (string sentence in sentences)
         {
             string trimmedSentence = sentence.Trim();
             if (string.IsNullOrEmpty(trimmedSentence)) continue;
-            
+
             string potentialChunk = currentChunk + (currentChunk.Length > 0 ? ". " : "") + trimmedSentence + ".";
-            
+
             if (potentialChunk.Length <= maxCharactersPerChunk)
             {
                 currentChunk = potentialChunk;
@@ -307,7 +420,7 @@ public class DialogueSystem : MonoBehaviour
                     {
                         string[] words = trimmedSentence.Split(' ');
                         string wordChunk = "";
-                        
+
                         foreach (string word in words)
                         {
                             if ((wordChunk + " " + word).Length <= maxCharactersPerChunk - 1)
@@ -323,7 +436,7 @@ public class DialogueSystem : MonoBehaviour
                                 }
                             }
                         }
-                        
+
                         if (wordChunk.Length > 0)
                         {
                             currentChunk = wordChunk + ".";
@@ -336,25 +449,25 @@ public class DialogueSystem : MonoBehaviour
                 }
             }
         }
-        
+
         if (currentChunk.Length > 0)
         {
             chunks.Add(currentChunk);
         }
-        
+
         return chunks;
     }
-    
+
     private IEnumerator DisplayDialogueCoroutine(DialogueLine dialogueLine)
     {
         yield return StartCoroutine(DisplaySingleDialogueCoroutine(dialogueLine));
     }
-    
+
     private IEnumerator TypewriterEffect(string text)
     {
         dialogueText.text = "";
         shadowText.text = "";
-        
+
         for (int i = 0; i <= text.Length; i++)
         {
             string currentText = text.Substring(0, i);
@@ -363,7 +476,7 @@ public class DialogueSystem : MonoBehaviour
             yield return new WaitForSeconds(typewriterSpeed);
         }
     }
-    
+
     public bool IsDisplaying => isDisplaying;
     public bool IsWaitingForInput => waitingForInput;
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class RoomDetection : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class RoomDetection : MonoBehaviour
     [SerializeField] private bool triggerOnce = true;
     [SerializeField] private bool requiresTag = true;
     [SerializeField] private string requiredTag = "Player";
+    
+    [Header("Door Settings")]
+    [SerializeField] private GameObject doorToOpen;
+    [SerializeField] private bool openDoorAfterDialogue = false;
     
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
@@ -75,6 +80,11 @@ public class RoomDetection : MonoBehaviour
         {
             Debug.Log($"Player entered room: {gameObject.name}. Dialogue triggered.");
         }
+        
+        if (openDoorAfterDialogue && doorToOpen != null)
+        {
+            StartCoroutine(WaitForDialogueAndOpenDoor());
+        }
     }
     
     private void TriggerRoomDialogue()
@@ -103,6 +113,21 @@ public class RoomDetection : MonoBehaviour
         if (dialogueSystem != null)
         {
             TriggerRoomDialogue();
+        }
+    }
+    
+    private IEnumerator WaitForDialogueAndOpenDoor()
+    {
+        yield return new WaitUntil(() => !dialogueSystem.IsDisplaying);
+        
+        if (doorToOpen != null)
+        {
+            doorToOpen.SetActive(false);
+            
+            if (showDebugLogs)
+            {
+                Debug.Log($"Door opened: {doorToOpen.name}");
+            }
         }
     }
 }

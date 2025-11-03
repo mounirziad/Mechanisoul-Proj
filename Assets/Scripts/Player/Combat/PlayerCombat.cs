@@ -204,6 +204,13 @@ public class PlayerCombat : MonoBehaviour
 
     void HandleAiming()
     {
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
+        if (isDialogueActive)
+        {
+            if (isAiming) StopAiming();
+            return;
+        }
+        
         if (inputManager.aimInput && !isAttacking && !isAiming) StartAiming();
         else if (isAiming && !inputManager.aimInput) StopAiming();
 
@@ -575,6 +582,9 @@ public class PlayerCombat : MonoBehaviour
     // Melee (improved)
     private void OnAttackPerformed(InputAction.CallbackContext ctx)
     {
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
+        if (isDialogueActive) return;
+        
         if (isAiming) { inputManager.shootInput = true; return; }
         
         lastAttackInputTime = Time.time;
@@ -624,6 +634,13 @@ public class PlayerCombat : MonoBehaviour
     // Check for buffered attacks during animation
     void ProcessQueuedAttack()
     {
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
+        if (isDialogueActive)
+        {
+            attackQueued = false;
+            return;
+        }
+        
         if (!attackQueued || isAttacking) return;
         
         // Ensure player can still attack (check grounded, air limits, and interaction state)

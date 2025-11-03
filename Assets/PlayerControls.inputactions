@@ -247,6 +247,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "AdvanceDialogue",
+                    "type": "Button",
+                    "id": "e9b2e18d-12ba-4bdc-84bf-85fa285f5eab",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Dodge",
                     "type": "Button",
                     "id": "40d0fcb3-b7c4-44dd-b97e-d67d55e655f3",
@@ -334,6 +343,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cbcfb23c-7fd2-42bb-b7bb-2ae4b3b12658",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AdvanceDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d3ba132-863f-4395-8b5a-bc25d4644c5f",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AdvanceDialogue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

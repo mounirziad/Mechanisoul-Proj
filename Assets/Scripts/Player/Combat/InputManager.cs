@@ -18,6 +18,7 @@ public class InputManager : MonoBehaviour
     public float horizontalInput;
 
     public bool jumpInput;
+    public bool advanceDialogueInput; // NEW: Separate input for dialogue
 
     public bool b_Input;
 
@@ -28,9 +29,6 @@ public class InputManager : MonoBehaviour
 
     private float jumpInputBuffer = 0f;
     private const float jumpBufferTime = 0.2f; // Buffer for 0.2 seconds
-
-    
-
 
     private void Awake()
     {
@@ -55,6 +53,7 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerActions.B.performed += i => b_Input = true;
             playerControls.PlayerActions.B.canceled += i => b_Input = false;
             playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
+            playerControls.PlayerActions.AdvanceDialogue.performed += i => advanceDialogueInput = true; // NEW
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
             playerControls.PlayerActions.RangedAim.performed += i => aimInput = true;
             playerControls.PlayerActions.RangedAim.canceled += i => aimInput = false;
@@ -64,8 +63,6 @@ public class InputManager : MonoBehaviour
                 if (GetComponent<LockOnSystem>() != null)
                     GetComponent<LockOnSystem>().ToggleLock();
             };
-
-
         }
         playerControls.Enable();
     }
@@ -73,6 +70,7 @@ public class InputManager : MonoBehaviour
     private void LateUpdate()
     {
         shootInput = false; // Reset shoot input each frame
+        advanceDialogueInput = false; // NEW: Reset dialogue input each frame
     }
 
     private void OnDisable()
@@ -83,13 +81,28 @@ public class InputManager : MonoBehaviour
 
     public void HandleAllInputs()
     {
-        HandleMovementInput();
-        HandleSprintingInput();
-        HandleJumpingInput();
-        HandleDodgeInput();
-    }
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
 
-   
+        if (!isDialogueActive)
+        {
+            HandleMovementInput();
+            HandleSprintingInput();
+            HandleJumpingInput();
+            HandleDodgeInput();
+        }
+        else
+        {
+            movementInput = Vector2.zero;
+            verticalInput = 0f;
+            horizontalInput = 0f;
+            moveAmount = 0f;
+            dodgeInput = false;
+            jumpInput = false; // Reset jump input during dialogue
+            aimInput = false;
+            shootInput = false;
+            animatorManager.UpdateAnimatorValues(0, 0, false);
+        }
+    }
 
     private void HandleDodgeInput()
     {
@@ -114,10 +127,11 @@ public class InputManager : MonoBehaviour
 
     private void HandleSprintingInput()
     {
-        if(b_Input && moveAmount > 0.5f)
+        if (b_Input && moveAmount > 0.5f)
         {
             playerLocomotion.isSprinting = true;
-        } else
+        }
+        else
         {
             playerLocomotion.isSprinting = false;
         }
@@ -125,21 +139,11 @@ public class InputManager : MonoBehaviour
 
     private void HandleJumpingInput()
     {
-        // Check if dialogue is active - if so, don't process jump for movement
-        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
-        
         // Set buffer when jump is pressed
         if (jumpInput)
         {
             jumpInput = false;
-            
-            // If dialogue is active, don't process jump for movement
-            if (isDialogueActive)
-            {
-                jumpInputBuffer = 0f;
-                return;
-            }
-            
+
             // Only set buffer if we're actually able to jump
             if (playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
             {
@@ -157,12 +161,36 @@ public class InputManager : MonoBehaviour
         {
             jumpInputBuffer -= Time.deltaTime;
 
-            // Try to jump while buffer is active (but not during dialogue)
-            if (!isDialogueActive && playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
+            // Try to jump while buffer is active
+            if (playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
             {
                 jumpInputBuffer = 0f; // Consume the buffer
                 playerLocomotion.HandleJumping();
             }
+        }
+    }
+
+    // NEW: Public method to check for dialogue input
+    public bool GetAdvanceDialogueInput()
+    {
+        return advanceDialogueInput;
+    }
+
+    // Inside InputManager.cs
+    public void SetMovementInputActive(bool isActive)
+    {
+        if (playerControls == null) return;
+
+        if (isActive)
+        {
+            playerControls.PlayerMovement.Enable();
+            playerControls.PlayerActions.Enable();
+        }
+        else
+        {
+            playerControls.PlayerMovement.Disable();
+            playerControls.PlayerActions.Disable();
+            jumpInput = false;
         }
     }
 }
