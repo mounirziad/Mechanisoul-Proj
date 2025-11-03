@@ -79,6 +79,8 @@ public class UpgradeUIScript : MonoBehaviour
     private Button fearDash2;
     private Button fearDash3;
 
+    private Button purchaseButton;
+
     private Button upgradeTab;
     private Button synergyTab;
 
@@ -188,6 +190,7 @@ public class UpgradeUIScript : MonoBehaviour
         fearDash2 = root.Q<Button>("FearDash2");
         fearDash3 = root.Q<Button>("FearDash3");
 
+        purchaseButton = root.Q<Button>("PurchaseButton");
 
         upgradeTab = root.Q<Button>("UpgradeTab");
         synergyTab = root.Q<Button>("SynergyTab");
@@ -258,6 +261,8 @@ public class UpgradeUIScript : MonoBehaviour
         if (loveDash3 != null) loveDash3.clicked += OnLoveDash3Clicked;
         if (fearDash3 != null) fearDash3.clicked += OnFearDash3Clicked;
         if (angerDash3 != null) angerDash3.clicked += OnAngerDash3Clicked;
+
+        if (purchaseButton != null) purchaseButton.clicked += OnPurchaseClicked;
 
         if (upgradeTab != null) upgradeTab.clicked += () =>
         {
@@ -340,6 +345,7 @@ public class UpgradeUIScript : MonoBehaviour
         if (fearDash3 != null) fearDash3.clicked -= OnFearDash3Clicked;
         if (angerDash3 != null) angerDash3.clicked -= OnAngerDash3Clicked;
 
+        if (purchaseButton != null) purchaseButton.clicked -= OnPurchaseClicked;
 
         if (resumeButton != null) resumeButton.clicked -= OnResumeClicked;
         if (optionsButton != null) optionsButton.clicked -= OnOptionsClicked;
@@ -658,4 +664,8 @@ public class UpgradeUIScript : MonoBehaviour
         Debug.Log("Fear Dash Upgrade 3 Clicked!");
     }
 
+    private void OnPurchaseClicked()
+    {
+               Debug.Log("Purchase Button Clicked!");
+    }
 }
