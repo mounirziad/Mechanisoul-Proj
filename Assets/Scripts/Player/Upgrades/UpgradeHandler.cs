@@ -110,8 +110,41 @@ public class UpgradeHandler : MonoBehaviour
     void ApplyDashSelection()
     {
         EnsureDashRefs();
-        bool joy = dashJoyLvl > 0;
-        if (joyDash) { joyDash.enabled = joy; joyDash.SetLevel(dashJoyLvl); }
+        
+        if (joyDash)
+        {
+            joyDash.enabled = dashJoyLvl > 0;
+            joyDash.SetLevel(dashJoyLvl);
+        }
+        
+        if (angerDash)
+        {
+            angerDash.enabled = dashAngerLvl > 0;
+            if (angerDash is DashUpgradeBase angerBase)
+                angerBase.SetLevel(dashAngerLvl);
+        }
+        
+        if (sadnessDash)
+        {
+            sadnessDash.enabled = dashSadnessLvl > 0;
+            if (sadnessDash is DashUpgradeBase sadBase)
+                sadBase.SetLevel(dashSadnessLvl);
+        }
+        
+        if (loveDash)
+        {
+            loveDash.enabled = dashLoveLvl > 0;
+            if (loveDash is DashUpgradeBase loveBase)
+                loveBase.SetLevel(dashLoveLvl);
+        }
+        
+        if (fearDash)
+        {
+            fearDash.enabled = dashFearLvl > 0;
+            if (fearDash is DashUpgradeBase fearBase)
+                fearBase.SetLevel(dashFearLvl);
+        }
+        
         RaiseLevelsChanged();
     }
 
