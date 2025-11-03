@@ -38,7 +38,7 @@ public class LockOnCameraActivator : MonoBehaviour
 
             if (cinemachineCamera.Priority != targetPriority)
             {
-                Debug.Log($"Setting lock-on cam priority to: {targetPriority}");
+                // Debug.Log($"Setting lock-on cam priority to: {targetPriority}");
                 cinemachineCamera.Priority = targetPriority;
             }
         }
