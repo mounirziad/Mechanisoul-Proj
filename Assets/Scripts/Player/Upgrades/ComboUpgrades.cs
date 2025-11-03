@@ -41,8 +41,8 @@ public class ComboUpgrade
 public class ComboUpgrades : MonoBehaviour
 {
     MeleeUpgrades meleeUpgrades;
-    DashUpgradeBase dashUpgrades;
-    //ranged upgrades
+    DashUpgrades dashUpgrades;
+    RangedUpgrades rangedUpgrades;
     PlayerManager playerManager;
 
     public Dictionary<string, ComboUpgrade> comboList { get; private set; }
@@ -50,14 +50,13 @@ public class ComboUpgrades : MonoBehaviour
     //all temp names - in future initialize with all info
     public readonly ComboUpgrade[] comboUpgrades =
     {
-        new ComboUpgrade("meleeS3dashJ3"),
-        new ComboUpgrade("meleeJ3rangeA3"),
-        new ComboUpgrade("meleeA3dashL3"),
-        new ComboUpgrade("meleeF3dashA3"),
-        new ComboUpgrade("meleeL3rangeF3"),
-        new ComboUpgrade("dashS3rangeJ3"),
-        new ComboUpgrade("dashF3rangeL3"),
-        new ComboUpgrade("dashF3rangeS3")
+        new ComboUpgrade("meleeS3dashJ3", Upgrades.Melee, Emotions.Sadness, 3, Upgrades.Dash, Emotions.Joy, 3),
+        new ComboUpgrade("meleeJ3rangeA3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        new ComboUpgrade("meleeF3dashA3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        new ComboUpgrade("meleeL3rangeF3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        new ComboUpgrade("dashS3rangeJ3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        new ComboUpgrade("dashF3rangeL3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        new ComboUpgrade("dashF3rangeS3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0)
     };
 
     private void Awake()
@@ -66,6 +65,10 @@ public class ComboUpgrades : MonoBehaviour
         InitializeComboDescriptions();
 
         playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
+
+        meleeUpgrades = GetComponent<MeleeUpgrades>();
+        dashUpgrades = GetComponent<DashUpgrades>();
+        rangedUpgrades = GetComponent<RangedUpgrades>();
     }
 
     void InitializeComboDictionary()
@@ -93,6 +96,7 @@ public class ComboUpgrades : MonoBehaviour
         //
     }
 
+    [ContextMenu("Check Combos")]
     public void CheckCombos() //check upgrade scripts to see if any combos exist **change return type to a list**
     {
         foreach (ComboUpgrade combo in comboUpgrades)
@@ -101,15 +105,19 @@ public class ComboUpgrades : MonoBehaviour
 
             //check 1st stats, if any dont match - hasCombo = false, continue
             upgradeScript = GetUpgradeScript(combo.upgrade1);
+
+            if (upgradeScript == null) { combo.hasCombo = false; continue; }
+
             if (upgradeScript.selectedEmotion != combo.emotion1) { combo.hasCombo = false; continue; }
-            if (upgradeScript.upgradeLevel <= combo.emotion1Level) { combo.hasCombo = false; continue; }
+            if (upgradeScript.upgradeLevel < combo.emotion1Level) { combo.hasCombo = false; continue; }
 
             //check 2nd stats, if any dont match - hasCombo = false, continue
             upgradeScript = GetUpgradeScript(combo.upgrade2);
             if (upgradeScript.selectedEmotion != combo.emotion2) { combo.hasCombo = false; continue; }
-            if (upgradeScript.upgradeLevel <= combo.emotion2Level) { combo.hasCombo = false; continue; }
+            if (upgradeScript.upgradeLevel < combo.emotion2Level) { combo.hasCombo = false; continue; }
 
             combo.hasCombo = true;
+            Debug.Log($"activated {combo.name} combo");
             //break; uncomment if we are sure one upgrade is tied to only 1 combo
 
             //update playermanager with new combo status --- update names once combo names are finalized
@@ -152,9 +160,10 @@ public class ComboUpgrades : MonoBehaviour
         switch (upgradeType)
         {
             case Upgrades.Melee:
+                Debug.Log("Ronaldo");
                 return meleeUpgrades;
             case Upgrades.Range:
-                return meleeUpgrades; //replace with range upgrade script once available
+                return rangedUpgrades;
             case Upgrades.Dash:
                 return dashUpgrades;
             default:

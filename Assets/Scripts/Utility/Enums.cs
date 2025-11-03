@@ -10,6 +10,7 @@ public enum Emotions
 
 public enum Upgrades
 {
+    None,
     Melee,
     Range,
     Dash

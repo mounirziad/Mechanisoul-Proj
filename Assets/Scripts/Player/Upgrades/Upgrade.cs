@@ -2,8 +2,8 @@ using UnityEngine;
 
 public abstract class Upgrade : MonoBehaviour
 {
-    public int upgradeLevel { get; private set; }
-    public Emotions selectedEmotion { get; private set; }
+    public int upgradeLevel; //{ get; private set; }
+    public Emotions selectedEmotion; //{ get; private set; }
 
     protected PlayerManager playerManager;
     protected ComboUpgrades comboUpgrades;
