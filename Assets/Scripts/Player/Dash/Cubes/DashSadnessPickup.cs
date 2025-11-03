@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class RangedSadnessPickup : MonoBehaviour
+public class DashSadnessPickup : MonoBehaviour
 {
     [SerializeField] private UpgradeHandler handler;
     [SerializeField, Range(1,2)] private int targetLevel = 2;
@@ -13,12 +13,12 @@ public class RangedSadnessPickup : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         if (!handler) handler = FindObjectOfType<UpgradeHandler>();
-        if (!handler) { Debug.LogWarning("[RangedSadnessPickup] UpgradeHandler not found."); return; }
+        if (!handler) { Debug.LogWarning("[DashSadnessPickup] UpgradeHandler not found."); return; }
 
-        for (int i = 0; i < 3; i++) { handler.RangedAngerDown(); handler.RangedSadnessDown(); handler.RangedJoyDown(); handler.RangedLoveDown(); handler.RangedFearDown(); }
-        for (int i = 0; i < targetLevel; i++) handler.RangedSadnessUp();
+        for (int i = 0; i < 3; i++) { handler.DashAngerDown(); handler.DashSadnessDown(); handler.DashJoyDown(); handler.DashLoveDown(); handler.DashFearDown(); }
+        for (int i = 0; i < targetLevel; i++) handler.DashSadnessUp();
 
-        Debug.Log("Picked up Ranged Sadness!");
+        Debug.Log("Picked up Dash Sadness!");
         if (destroyOnPickup) Destroy(gameObject);
     }
 }

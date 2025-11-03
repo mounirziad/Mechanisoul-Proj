@@ -1,159 +1,178 @@
 using UnityEngine;
-using System.Reflection;
-using System;
 
 [RequireComponent(typeof(DashAbility))]
 public class DashRingSpawner : MonoBehaviour
 {
-    [Header("Ring")]
-    [SerializeField] RingIndicator ringPrefab;
-    [SerializeField] float ringLifetime = 1.2f;
-    [SerializeField] bool spawnRingAtStart = true;   // we use START now
-    [SerializeField] bool spawnEndRing = false;      // disable end ring
+    [Header("Ring Prefab")]
+    [SerializeField] private RingIndicator ringPrefab;
+    [SerializeField] private float ringLifetime = 1.2f;
+
+    [Header("Spawn timing")]
+    [Tooltip("Spawn at the beginning of the dash path (the 'start' position passed by DashAbility).")]
+    [SerializeField] private bool spawnAtStart = true;
+    [Tooltip("Spawn at the end of the dash path (the 'end' position passed by DashAbility).")]
+    [SerializeField] private bool spawnAtEnd = false;
+
+    [Header("Visual Radii (per emotion, per level)")]
+
+    [SerializeField] private float[] joyRadii = { 2.5f, 3.0f, 3.5f };
+    [SerializeField] private float[] loveRadii = { 2.0f, 2.5f, 3.0f };
+    [SerializeField] private float[] fearRadii = { 2.0f, 2.5f, 3.0f };
+    [SerializeField] private float[] angerRadii = { 2.0f, 2.5f, 3.0f };
+    [SerializeField] private float[] sadnessRadii = { 2.0f, 2.5f, 3.0f };
 
     [Header("Colors")]
-    [SerializeField] Color angerColor = new Color(1f, .35f, .1f, 0.9f);
+    [SerializeField] private Color joyColor = new Color(1f, .92f, .16f, 0.9f); // yellow
+    [SerializeField] private Color angerColor = new Color(1f, .35f, .10f, 0.9f); // orange/red
+    [SerializeField] private Color sadnessColor = new Color(.35f, .60f, 1f, 0.9f); // blue
+    [SerializeField] private Color loveColor = new Color(1f, .40f, .80f, 0.9f); // pink
+    [SerializeField] private Color fearColor = new Color(.60f, 0f, 1f, 0.9f);   // purple
 
-    [Header("Anger Burst (START)")]
-    [Tooltip("Spawn an Anger burst at dash START if Anger level > 0.")]
-    public bool spawnAngerBurstAtStart = true;
-    public AngerBurstZone angerBurstPrefab;          // optional; if null we create at runtime
-    [Tooltip("Fallback radius if your Anger data is unavailable.")]
-    public float angerBurstFallbackRadius = 2.0f;
-    [Tooltip("Fallback base damage if your Anger data is unavailable.")]
-    public float angerBurstFallbackDamage = 20f;
-    [Tooltip("Fallback knockback impulse if your Anger data is unavailable.")]
-    public float angerBurstFallbackImpulse = 8f;
-    public float angerBurstFallbackKnockup = 2f;
+    [Header("Debug")]
+    [SerializeField] private bool debugLogs = true;
 
-    [Header("Diagnostics")]
-    public bool debugLogs = true;
-    [Tooltip("If true, an upgrade with upgradeLevel>0 will be considered active even if the component is disabled.")]
-    public bool considerLevelEvenIfDisabled = true;
+    private DashAbility dash;
+    private UpgradeHandler handler;
 
-    DashAbility dash;
-    AngerDashUpgrade anger; // we only care about anger for this feature
-
-    void Awake()
+    private void Awake()
     {
         dash = GetComponent<DashAbility>();
+        handler = GetComponent<UpgradeHandler>() ?? GetComponentInParent<UpgradeHandler>();
+
+        if (debugLogs)
+        {
+            Debug.Log($"[DashRingSpawner] Awake. prefab={(ringPrefab ? ringPrefab.name : "NULL")}", this);
+        }
+
         if (!dash)
         {
-            if (debugLogs) Debug.LogError("[DashRingSpawner] No DashAbility found; disabling.", this);
+            Debug.LogError("[DashRingSpawner] No DashAbility found; disabling.", this);
             enabled = false;
-            return;
         }
-        RefreshUpgradeRefs();
-        if (debugLogs) Debug.Log($"[DashRingSpawner] Awake. ring={(ringPrefab ? ringPrefab.name : "NULL")}", this);
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
-        dash.OnDashFinished += HandleDashFinished;
-        if (debugLogs) Debug.Log("[DashRingSpawner] OnEnable: subscribed to OnDashFinished.", this);
-    }
-
-    void OnDisable()
-    {
-        dash.OnDashFinished -= HandleDashFinished;
-        if (debugLogs) Debug.Log("[DashRingSpawner] OnDisable: unsubscribed from OnDashFinished.", this);
-    }
-
-    void HandleDashFinished(Vector3 start, Vector3 end)
-    {
-        if (debugLogs) Debug.Log($"[DashRingSpawner] OnDashFinished. start={start} end={end}", this);
-
-        // pickups may add/modify upgrades at runtime
-        RefreshUpgradeRefs();
-
-        // Spawn START burst for Anger
-        if (spawnAngerBurstAtStart && IsUpgradeActive(anger))
+        if (dash != null)
         {
-            float pct = GetPercentScale(anger); // read aoePercent[level] if present
-            if (angerBurstPrefab != null)
-            {
-                var burst = Instantiate(angerBurstPrefab, start, Quaternion.identity);
-                burst.Configure(pct);
-                if (debugLogs) Debug.Log($"[DashRingSpawner] START Anger Burst (prefab) @ {start} +%={pct}", burst);
-            }
-            else
-            {
-                // No prefab? Create an ad-hoc burst so your damage/KB still happen.
-                var go = new GameObject("AngerBurstZone (AdHoc)");
-                go.transform.position = start;
-                var burst = go.AddComponent<AngerBurstZone>();
-                burst.radius = angerBurstFallbackRadius;
-                burst.baseBurstDamage = angerBurstFallbackDamage;
-                burst.knockbackImpulse = angerBurstFallbackImpulse;
-                burst.knockupImpulse = angerBurstFallbackKnockup;
-                burst.includeTriggers = true;
-                burst.debugLogs = true; // make it loud so we see hits
-                burst.Configure(pct);
-                if (debugLogs) Debug.Log($"[DashRingSpawner] START Anger Burst (adhoc) @ {start} +%={pct}", burst);
-            }
+            dash.OnDashFinished += HandleDashFinished;
+            if (debugLogs) Debug.Log("[DashRingSpawner] OnEnable: subscribed to OnDashFinished.", this);
         }
-
-        //Spawn ring AT START (not end)
-        if (spawnRingAtStart)
-            SpawnRingAt(start, angerColor);   // red/orange ring at the start
-        else if (spawnEndRing)
-            SpawnRingAt(end, angerColor);     // end ring if you turn this on
     }
 
-    void SpawnRingAt(Vector3 pos, Color color)
+    private void OnDisable()
+    {
+        if (dash != null)
+        {
+            dash.OnDashFinished -= HandleDashFinished;
+            if (debugLogs) Debug.Log("[DashRingSpawner] OnDisable: unsubscribed from OnDashFinished.", this);
+        }
+    }
+
+    private void HandleDashFinished(Vector3 start, Vector3 end)
     {
         if (!ringPrefab)
         {
-            if (debugLogs) Debug.LogWarning("[DashRingSpawner] ringPrefab is NULL; no ring spawned.", this);
+            if (debugLogs) Debug.LogWarning("[DashRingSpawner] No ringPrefab assigned; skipping.", this);
             return;
         }
-        var ring = Instantiate(ringPrefab, pos, Quaternion.identity);
-        ring.Spawn(2f, color, ringLifetime); // radius here is just visual; tweak if desired
-        if (debugLogs) Debug.Log($"[DashRingSpawner] Spawned ring at {pos}", this);
-    }
 
-    // ---------- helpers ----------
-    void RefreshUpgradeRefs()
-    {
-        // Try local children parents
-        if (!anger) anger = GetComponent<AngerDashUpgrade>();
-        if (!anger) anger = GetComponentInChildren<AngerDashUpgrade>(true);
-        if (!anger) anger = GetComponentInParent<AngerDashUpgrade>();
-    }
+        // --- Determine the single active dash emotion from UpgradeHandler levels ---
+        var (emotion, lvl) = ResolveActiveEmotionFromHandler();
 
-    bool IsUpgradeActive(MonoBehaviour mb)
-    {
-        if (!mb) return false;
-        if (mb.isActiveAndEnabled) return true;
-        if (!considerLevelEvenIfDisabled) return false;
-        return GetLevel(mb) > 0;
-    }
-
-    int GetLevel(MonoBehaviour mb)
-    {
-        if (!mb) return 0;
-        var t = mb.GetType();
-        var f = t.GetField("upgradeLevel", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (f != null && f.FieldType == typeof(int)) { try { return (int)f.GetValue(mb); } catch { } }
-        var pUL = t.GetProperty("upgradeLevel", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (pUL != null && pUL.PropertyType == typeof(int)) { try { return (int)pUL.GetValue(mb); } catch { } }
-        var p = t.GetProperty("Level", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (p != null && p.PropertyType == typeof(int)) { try { return (int)p.GetValue(mb); } catch { } }
-        return 0;
-    }
-
-    // try read float[] aoePercent[level] if it exists; else 0
-    float GetPercentScale(MonoBehaviour mb)
-    {
-        if (!mb) return 0f;
-        var t = mb.GetType();
-        var f = t.GetField("aoePercent", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        int lvl = GetLevel(mb);
-        if (f != null && typeof(float[]).IsAssignableFrom(f.FieldType))
+        if (emotion == Emotion.None)
         {
-            var arr = f.GetValue(mb) as float[];
-            if (arr != null && lvl >= 0 && lvl < arr.Length) return arr[lvl];
+            if (debugLogs)
+            {
+                Debug.Log($"[DashRingSpawner] No active dash emotion (Joy={Get(handler?.dashJoyLvl)}, Anger={Get(handler?.dashAngerLvl)}, " +
+                          $"Sadness={Get(handler?.dashSadnessLvl)}, Love={Get(handler?.dashLoveLvl)}, Fear={Get(handler?.dashFearLvl)}).", this);
+            }
+            return;
         }
-        return 0f;
+
+        // Clamp level to 0..2 for our radius arrays (adjust if you support more)
+        int clampedLvl = Mathf.Clamp(lvl, 0, 2);
+
+        float radius = GetRadius(emotion, clampedLvl);
+        Color color = GetColor(emotion);
+
+        if (spawnAtStart)
+        {
+            SpawnRing(start, radius, color, "START", emotion, clampedLvl);
+        }
+
+        if (spawnAtEnd)
+        {
+            SpawnRing(end, radius, color, "END", emotion, clampedLvl);
+        }
     }
+
+    private void SpawnRing(Vector3 pos, float radius, Color color, string where, Emotion e, int lvl)
+    {
+        var ring = Instantiate(ringPrefab, pos, Quaternion.identity);
+        ring.Spawn(Mathf.Max(0.05f, radius), color, ringLifetime);
+
+        if (debugLogs)
+        {
+            Debug.Log($"[DashRingSpawner] Spawned {where} ring for {e} (lvl {lvl}) at {pos} radius={radius} lifetime={ringLifetime}", this);
+        }
+    }
+
+    private (Emotion, int) ResolveActiveEmotionFromHandler()
+    {
+        if (handler == null)
+        {
+            if (debugLogs) Debug.LogWarning("[DashRingSpawner] No UpgradeHandler found; cannot resolve active emotion.", this);
+            return (Emotion.None, 0);
+        }
+
+        // Only one should be > 0. If multiple, we pick the first found in this order.
+        if (handler.dashJoyLvl > 0) return (Emotion.Joy, handler.dashJoyLvl);
+        if (handler.dashAngerLvl > 0) return (Emotion.Anger, handler.dashAngerLvl);
+        if (handler.dashSadnessLvl > 0) return (Emotion.Sadness, handler.dashSadnessLvl);
+        if (handler.dashLoveLvl > 0) return (Emotion.Love, handler.dashLoveLvl);
+        if (handler.dashFearLvl > 0) return (Emotion.Fear, handler.dashFearLvl);
+
+        return (Emotion.None, 0);
+    }
+
+    private float GetRadius(Emotion e, int lvl)
+    {
+        switch (e)
+        {
+            case Emotion.Joy: return GetFrom(joyRadii, lvl, 3f);
+            case Emotion.Anger: return GetFrom(angerRadii, lvl, 2f);
+            case Emotion.Sadness: return GetFrom(sadnessRadii, lvl, 2f);
+            case Emotion.Love: return GetFrom(loveRadii, lvl, 2.5f);
+            case Emotion.Fear: return GetFrom(fearRadii, lvl, 2.5f);
+            default: return 2f;
+        }
+    }
+
+    private Color GetColor(Emotion e)
+    {
+        switch (e)
+        {
+            case Emotion.Joy: return joyColor;
+            case Emotion.Anger: return angerColor;
+            case Emotion.Sadness: return sadnessColor;
+            case Emotion.Love: return loveColor;
+            case Emotion.Fear: return fearColor;
+            default: return Color.white;
+        }
+    }
+
+    private static float GetFrom(float[] arr, int index, float fallback)
+    {
+        if (arr != null && arr.Length > 0)
+        {
+            int i = Mathf.Clamp(index, 0, arr.Length - 1);
+            return arr[i];
+        }
+        return fallback;
+    }
+
+    private static string Get(int? v) => v.HasValue ? v.Value.ToString() : "null";
+
+    private enum Emotion { None, Joy, Anger, Sadness, Love, Fear }
 }

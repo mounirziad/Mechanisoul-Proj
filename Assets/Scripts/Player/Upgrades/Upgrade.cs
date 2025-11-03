@@ -13,8 +13,14 @@ public abstract class Upgrade : MonoBehaviour
         upgradeLevel = 0;
         selectedEmotion = Emotions.None;
 
-        playerManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
-        comboUpgrades = gameObject.GetComponent<ComboUpgrades>();
+        // These may be absent during bootstrap scenes or test prefabs—guard them.
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            playerManager = player.GetComponent<PlayerManager>();
+        else
+            playerManager = null;
+
+        comboUpgrades = GetComponent<ComboUpgrades>();
     }
 
     public void SelectEmotion(Emotions emotion)
@@ -33,7 +39,7 @@ public abstract class Upgrade : MonoBehaviour
 
     public void DowngradeEmotion()
     {
-        upgradeLevel--;
+        upgradeLevel = Mathf.Max(0, upgradeLevel - 1);
         LevelChange();
         if (upgradeLevel == 0) DeselectEmotion();
     }
@@ -44,18 +50,17 @@ public abstract class Upgrade : MonoBehaviour
         upgradeLevel = Mathf.Max(0, level);
         LevelChange();
         if (upgradeLevel == 0) DeselectEmotion();
-        
     }
 
     void LevelChange()
     {
         switch (selectedEmotion)
         {
-            case Emotions.Joy:     JoyChange();    break;
-            case Emotions.Anger:   AngerChange();  break;
-            case Emotions.Sadness: SadnessChange();break;
-            case Emotions.Love:    LoveChange();   break;
-            case Emotions.Fear:    FearChange();   break;
+            case Emotions.Joy: JoyChange(); break;
+            case Emotions.Anger: AngerChange(); break;
+            case Emotions.Sadness: SadnessChange(); break;
+            case Emotions.Love: LoveChange(); break;
+            case Emotions.Fear: FearChange(); break;
             case Emotions.None:
                 Debug.LogWarning("No emotion selected for level change");
                 break;
@@ -63,8 +68,14 @@ public abstract class Upgrade : MonoBehaviour
                 Debug.LogError("selected emotion for level change out of bounds");
                 break;
         }
-        UpdatePlayer(); // allow pushing to player/handlers
-        comboUpgrades.CheckCombos();
+
+        // Let derived upgrades push values to handlers/player if they need to.
+        // (Base UpdatePlayer is empty; derived classes may depend on playerManager.)
+        try { UpdatePlayer(); } catch { /* keep base resilient */ }
+
+        // ComboUpgrades is optional; only call if present.
+        if (comboUpgrades != null)
+            comboUpgrades.CheckCombos();
     }
 
     public void Respec()
@@ -77,10 +88,10 @@ public abstract class Upgrade : MonoBehaviour
     public Emotions GetEmotion() => selectedEmotion;
 
     // overridables for futureproofing
-    protected virtual void JoyChange()    {}
-    protected virtual void AngerChange()  {}
-    protected virtual void SadnessChange(){}
-    protected virtual void LoveChange()   {}
-    protected virtual void FearChange()   {}
-    protected virtual void UpdatePlayer() {}
+    protected virtual void JoyChange() { }
+    protected virtual void AngerChange() { }
+    protected virtual void SadnessChange() { }
+    protected virtual void LoveChange() { }
+    protected virtual void FearChange() { }
+    protected virtual void UpdatePlayer() { }
 }
