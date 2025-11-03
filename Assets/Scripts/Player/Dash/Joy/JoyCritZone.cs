@@ -5,7 +5,7 @@ public class JoyCritZone : MonoBehaviour
 {
     [SerializeField, Min(0f)] float critChance = 0.40f; // +40% by default (set by JoyDashUpgrade tables), cant go lower unless off
     [SerializeField, Min(0.1f)] float radius = 3.0f;
-    [SerializeField, Min(0.1f)] float lifetime = 2.0f;
+    [SerializeField, Min(0.1f)] public float lifetime = 2.0f;
     [SerializeField] string playerTag = "Player";
 
     SphereCollider col;
