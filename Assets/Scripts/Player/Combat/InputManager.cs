@@ -125,10 +125,20 @@ public class InputManager : MonoBehaviour
 
     private void HandleJumpingInput()
     {
+        // Check if dialogue is active - if so, don't process jump for movement
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
+        
         // Set buffer when jump is pressed
         if (jumpInput)
         {
             jumpInput = false;
+            
+            // If dialogue is active, don't process jump for movement
+            if (isDialogueActive)
+            {
+                jumpInputBuffer = 0f;
+                return;
+            }
             
             // Only set buffer if we're actually able to jump
             if (playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
@@ -147,8 +157,8 @@ public class InputManager : MonoBehaviour
         {
             jumpInputBuffer -= Time.deltaTime;
 
-            // Try to jump while buffer is active
-            if (playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
+            // Try to jump while buffer is active (but not during dialogue)
+            if (!isDialogueActive && playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
             {
                 jumpInputBuffer = 0f; // Consume the buffer
                 playerLocomotion.HandleJumping();

@@ -5205,10 +5205,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FreeLook Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 9026207668182087621, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11616,10 +11612,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2279032322536703407, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
-      propertyPath: field of view
-      value: 45
-      objectReference: {fileID: 0}
     - target: {fileID: 2566186267747248608, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -12712,18 +12704,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1707222913931359754, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.154
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707222913931359754, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.004
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707222913931359754, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.11
-      objectReference: {fileID: 0}
     - target: {fileID: 1896483585987054284, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: freeLookCamera
       value: 
@@ -12732,10 +12712,6 @@ PrefabInstance:
       propertyPath: thirdPersonAimCamera
       value: 
       objectReference: {fileID: 1208704106}
-    - target: {fileID: 2670944488486193615, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: cinemachineCam
       value: 
@@ -12744,58 +12720,6 @@ PrefabInstance:
       propertyPath: crosshairObject
       value: 
       objectReference: {fileID: 1717918505}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: footBone
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: jumpHeight
-      value: 3.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: jumpCooldown
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: capsuleHeight
-      value: 0.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: dodgeCooldown
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: sprintingSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: detectionheight
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: detectionradius
-      value: 0.04
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: gravityIntensity
-      value: -8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: footGroundCheckOffset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: groundDetectionBufferTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: useFootTrackingDuringJump
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4644661815058940984, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: freeLookCam
       value: 
@@ -12804,14 +12728,18 @@ PrefabInstance:
       propertyPath: letterboxUI
       value: 
       objectReference: {fileID: 842954510}
-    - target: {fileID: 6659901205269706922, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6659901205269706922, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
+    - target: {fileID: 7968741960594981455, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: aimCamera
       value: 
-      objectReference: {fileID: 2100000, guid: 7b2b55717036ab24ba2c844ec893fe88, type: 2}
+      objectReference: {fileID: 1208704106}
+    - target: {fileID: 7968741960594981455, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: lockOnCamera
+      value: 
+      objectReference: {fileID: 697617727}
+    - target: {fileID: 7968741960594981455, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: freeLookCamera
+      value: 
+      objectReference: {fileID: 225087151}
     - target: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
@@ -12856,20 +12784,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9084117669945274229, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 2845e23621bb2144cb1c6629cbfe9b42, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1640704064}
-    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1640704065}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
 --- !u!114 &583721438 stripped
 MonoBehaviour:
@@ -21377,11 +21295,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 12.405974, y: 3.983839, z: 0.21276695}
   m_Center: {x: 0.049585916, y: -0.00000016943993, z: 1.4872848e-15}
---- !u!1 &1154680664 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-  m_PrefabInstance: {fileID: 573434807}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1163938044
 GameObject:
   m_ObjectHideFlags: 0
@@ -23068,18 +22981,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1838163544592258235, guid: 181e55b319b4947439064fb135d10c61, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.0000150749875
-      objectReference: {fileID: 0}
-    - target: {fileID: 1838163544592258235, guid: 181e55b319b4947439064fb135d10c61, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.0000022776887
-      objectReference: {fileID: 0}
-    - target: {fileID: 1838163544592258235, guid: 181e55b319b4947439064fb135d10c61, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.0000006224706
-      objectReference: {fileID: 0}
     - target: {fileID: 3544208360662927641, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
@@ -32251,7 +32152,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 573434807}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1154680664}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9272549f561b8d64890052f89be604ce, type: 3}
@@ -32262,44 +32163,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 573434807}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1640704064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1154680664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e08b9966c3bafc42922ebde52f2302e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraPriorityFixer
-  freeLookCamera: {fileID: 225087151}
-  lockOnCamera: {fileID: 697617727}
-  aimCamera: {fileID: 1208704106}
-  freeLookDefaultPriority: 10
-  aimCameraPriority: 15
-  lockOnActivePriority: 20
-  inactivePriority: 0
-  showDebugLogs: 0
---- !u!114 &1640704065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1154680664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3855bacc8d0f5449813661837af6558, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FootstepController
-  footstepMode: 0
-  enableDebugLogs: 0
-  walkStepInterval: 0.5
-  runStepInterval: 0.55
-  sprintStepInterval: 0.25
-  minimumMovementSpeed: 0.5
 --- !u!1 &1641691201
 GameObject:
   m_ObjectHideFlags: 0

@@ -250,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 3464790166973928009}
   serializedVersion: 2
   m_LocalRotation: {x: -0.02906003, y: 0.0458505, z: 0.7121227, w: -0.6999533}
-  m_LocalPosition: {x: -0.055494525, y: -0.013317711, z: -0.026978508}
+  m_LocalPosition: {x: -0.154, y: 0.004, z: 0.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -603,10 +603,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 70.3
       objectReference: {fileID: 0}
+    - target: {fileID: -3940903821249888345, guid: a5db16ff6b2de2948aeaa50a62897a10, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7b2b55717036ab24ba2c844ec893fe88, type: 2}
     - target: {fileID: 919132149155446097, guid: a5db16ff6b2de2948aeaa50a62897a10, type: 3}
       propertyPath: m_Name
       value: robotbat_low
       objectReference: {fileID: 0}
+    - target: {fileID: 7724487974197373048, guid: a5db16ff6b2de2948aeaa50a62897a10, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2845e23621bb2144cb1c6629cbfe9b42, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -840,15 +848,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.0030264
+      value: 0.23955435
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.6266341
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.36
+      value: 12.710459
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -999,6 +1007,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2600823131919539455}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7968741960594981455}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2575761040196860491}
   m_SourcePrefab: {fileID: 100100000, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
 --- !u!95 &3385643053220842585 stripped
 Animator:
@@ -1107,33 +1121,33 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1025
-  detectionradius: 0.02
-  detectionheight: 0.2
-  capsuleHeight: 0.09
+  detectionradius: 0.04
+  detectionheight: 1
+  capsuleHeight: 0.02
   isJumping: 0
   isSprinting: 0
   isGrounded: 1
   walkingSpeed: 1.5
   runningSpeed: 5
-  sprintingSpeed: 8
+  sprintingSpeed: 15
   rotationSpeed: 15
   baseWalkingSpeed: 1.5
   baseRunningSpeed: 5
   baseSprintingSpeed: 7
   baseRotationSpeed: 15
-  jumpHeight: 2.5
-  gravityIntensity: -15
+  jumpHeight: 3.25
+  gravityIntensity: -8
   groundCheck: {fileID: 3679364286282133915}
   stepHeight: 0.3
   stepSmooth: 0.1
   dodgeSpeed: 5
   dodgeDuration: 0.5
-  dodgeCooldown: 1
+  dodgeCooldown: 1.5
   isDodging: 0
   canDodge: 1
   attackMoveDistance: 0.19
   attackMoveSpeed: 10
-  jumpCooldown: 1
+  jumpCooldown: 1.2
   canJump: 1
   groundDetectionBufferTime: 0.2
   useMultiPointDetection: 1
@@ -1144,8 +1158,8 @@ MonoBehaviour:
   maxSlopeAngle: 45
   isOnSlope: 0
   footBone: {fileID: 0}
-  footGroundCheckOffset: 0.3
-  useFootTrackingDuringJump: 1
+  footGroundCheckOffset: 0
+  useFootTrackingDuringJump: 0
 --- !u!54 &2670944488486193615
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1172,7 +1186,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!136 &4492006118717792498
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1436,11 +1450,6 @@ MonoBehaviour:
   - 2
   - 2.5
   - 3
-  sadness_dropEveryMeters:
-  - 0.75
-  - 0.65
-  - 0.55
-  - 0.45
   weaknessZonePrefab: {fileID: 2302945470790535838, guid: 39eebcabca70bbd468949272b95737d2, type: 3}
   love_weaknessPercent:
   - 0
@@ -1633,6 +1642,44 @@ MonoBehaviour:
   - Attack
   - Combo
   - MeleeAttack
+--- !u!114 &7968741960594981455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e08b9966c3bafc42922ebde52f2302e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraPriorityFixer
+  freeLookCamera: {fileID: 0}
+  lockOnCamera: {fileID: 0}
+  aimCamera: {fileID: 0}
+  freeLookDefaultPriority: 10
+  aimCameraPriority: 15
+  lockOnActivePriority: 20
+  inactivePriority: 0
+  showDebugLogs: 0
+--- !u!114 &2575761040196860491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3855bacc8d0f5449813661837af6558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepController
+  footstepMode: 0
+  enableDebugLogs: 0
+  walkStepInterval: 0.5
+  runStepInterval: 0.55
+  sprintStepInterval: 0.25
+  minimumMovementSpeed: 0.5
 --- !u!4 &8654815397792618019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
