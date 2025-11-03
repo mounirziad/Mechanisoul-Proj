@@ -1364,6 +1364,99 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &238740857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 238740860}
+  - component: {fileID: 238740859}
+  - component: {fileID: 238740858}
+  m_Layer: 0
+  m_Name: TutorialRoom2Detection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &238740858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238740857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 683e5954582d7cb4db3db24e51b082d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomDetection
+  roomDialogue:
+    lines: []
+    loopSequence: 0
+  useCustomLines: 1
+  customDialogueLines:
+  - text: 'You gotta destroy the attack dummy bro '
+    displayDuration: 4
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+  - text: Absolutely Destroy that attack dummy
+    displayDuration: 5
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+  - text: Murk Him
+    displayDuration: 5
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+  triggerOnce: 1
+  requiresTag: 1
+  requiredTag: Player
+  showDebugLogs: 1
+--- !u!65 &238740859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238740857}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.3, y: 6.01, z: 7.21}
+  m_Center: {x: 0.14, y: 0, z: 0}
+--- !u!4 &238740860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238740857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.19057, y: 0.87482, z: 3.23}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &241291525
 Mesh:
   m_ObjectHideFlags: 0
@@ -10234,4 +10327,5 @@ SceneRoots:
   - {fileID: 1655817228}
   - {fileID: 1953547965}
   - {fileID: 2091272285}
+  - {fileID: 238740860}
   - {fileID: 1399311285}
