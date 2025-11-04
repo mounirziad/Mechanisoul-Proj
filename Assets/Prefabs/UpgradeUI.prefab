@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7867661648576069937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5363898079364958404}
+  - component: {fileID: 6784864754222244534}
+  - component: {fileID: 2117285214392636463}
+  - component: {fileID: 6902037818979390990}
+  m_Layer: 5
+  m_Name: UpgradeUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5363898079364958404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867661648576069937}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6784864754222244534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867661648576069937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 92dce67f7b2620341b21e88c329bde72, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 4765fcfa829e1b3459e0c519f562ceea, type: 3}
+  m_SortingOrder: 2
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &2117285214392636463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867661648576069937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c77d500f62721e44bad87a4255a4479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  upgradeHandler: {fileID: 0}
+  meleeUpgrades: {fileID: 0}
+--- !u!114 &6902037818979390990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867661648576069937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068a85e48bcee334fbd03c32bddf7eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombosMenuUI
+  handler: {fileID: 0}
+  uiDoc: {fileID: 0}
+  combosRootName: CombosEL
+  titleName: ComboTitle
+  bodyName: ComboBody
+  chipLeftName: ChipLeft
+  chipRightName: ChipRight
+  lockedTitle: Combo Locked
+  lockedBody: Discover by upgrading ??? and ??? (any level).
+  unlockedTitle: 'Rage + Joy: Pop Shot'
+  unlockedBodyTemplate: 'Unlocked! Ranged hits spawn a JOY burst.
+
+    Current: Anger
+    L{0}, Joy L{1}.'
+  angerColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
+  joyColor: {r: 1, g: 0.9, b: 0.15, a: 1}
+  lockedColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}

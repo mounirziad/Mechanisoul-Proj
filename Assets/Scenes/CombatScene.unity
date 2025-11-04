@@ -1345,68 +1345,15 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 2279032322536703407, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
   m_PrefabInstance: {fileID: 6319916475735310632}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &938769673
+--- !u!1 &938769673 stripped
 GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 7867661648576069937, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+  m_PrefabInstance: {fileID: 4388993918575928026}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 938769675}
-  - component: {fileID: 938769674}
-  - component: {fileID: 938769676}
-  - component: {fileID: 938769677}
-  m_Layer: 5
-  m_Name: UpgradeUI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &938769674
+--- !u!114 &938769676 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938769673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 92dce67f7b2620341b21e88c329bde72, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 4765fcfa829e1b3459e0c519f562ceea, type: 3}
-  m_SortingOrder: 2
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
---- !u!4 &938769675
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938769673}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &938769676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2117285214392636463, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+  m_PrefabInstance: {fileID: 4388993918575928026}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938769673}
   m_Enabled: 1
@@ -1414,37 +1361,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c77d500f62721e44bad87a4255a4479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  upgradeHandler: {fileID: 0}
-  meleeUpgrades: {fileID: 0}
---- !u!114 &938769677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 938769673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 068a85e48bcee334fbd03c32bddf7eab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombosMenuUI
-  handler: {fileID: 0}
-  uiDoc: {fileID: 0}
-  combosRootName: CombosEL
-  titleName: ComboTitle
-  bodyName: ComboBody
-  chipLeftName: ChipLeft
-  chipRightName: ChipRight
-  lockedTitle: Combo Locked
-  lockedBody: Discover by upgrading ??? and ??? (any level).
-  unlockedTitle: 'Rage + Joy: Pop Shot'
-  unlockedBodyTemplate: 'Unlocked! Ranged hits spawn a JOY burst.
-
-    Current: Anger
-    L{0}, Joy L{1}.'
-  angerColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
-  joyColor: {r: 1, g: 0.9, b: 0.15, a: 1}
-  lockedColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
 --- !u!1 &1132340409 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7494953122932337494, guid: 1bb83082c9ee85a4b90c1e0c9099b951, type: 3}
@@ -1635,14 +1551,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6970102285412763335, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970102285412763335, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: b168a2e05110d674f87f4bc681243e04, type: 2}
     - target: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_Name
       value: FinalEnemyPrefab
@@ -1687,6 +1595,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6970102285412763335, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6970102285412763335, guid: 53aa83e61d1672541bb993ee8e307f47, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b168a2e05110d674f87f4bc681243e04, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2196,6 +2112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1274f91fdaef7c14992951f45d43dc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeUpgrades
+  upgradeLevel: 0
+  selectedEmotion: 0
 --- !u!4 &2101532530
 Transform:
   m_ObjectHideFlags: 0
@@ -2235,6 +2153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a00a950d74f464cafadade170bd1bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashUpgrades
+  upgradeLevel: 0
+  selectedEmotion: 0
   handler: {fileID: 8551793984105625976}
 --- !u!114 &2101532533
 MonoBehaviour:
@@ -2248,6 +2168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a50c79b34c4aa42a0230419967502d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangedUpgrades
+  upgradeLevel: 0
+  selectedEmotion: 0
   handler: {fileID: 8551793984105625976}
 --- !u!1001 &630829754209757228
 PrefabInstance:
@@ -2571,19 +2493,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1181255871096592447, guid: 582902f25090e924fbca9253af378363, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99905896
+      value: 0.9990324
       objectReference: {fileID: 0}
     - target: {fileID: 1181255871096592447, guid: 582902f25090e924fbca9253af378363, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.034301147
+      value: -0.034300238
       objectReference: {fileID: 0}
     - target: {fileID: 1181255871096592447, guid: 582902f25090e924fbca9253af378363, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.026530124
+      value: 0.027514346
       objectReference: {fileID: 0}
     - target: {fileID: 1181255871096592447, guid: 582902f25090e924fbca9253af378363, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0009108709
+      value: 0.00094466284
       objectReference: {fileID: 0}
     - target: {fileID: 1181255871096592447, guid: 582902f25090e924fbca9253af378363, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2632,19 +2554,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9987013
+      value: 0.99868447
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.046381168
+      value: 0.046380386
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.021062981
+      value: 0.021845026
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000978196
+      value: -0.0010145152
       objectReference: {fileID: 0}
     - target: {fileID: 315344221230158431, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2671,6 +2593,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ee54d53bd570364a9aad9914bb635f7, type: 3}
+--- !u!1001 &4388993918575928026
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7867661648576069937, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_Name
+      value: UpgradeUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
 --- !u!1001 &6319916475735310632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2693,19 +2672,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9987013
+      value: 0.99868447
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.04638117
+      value: 0.046380393
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.021062985
+      value: 0.02184503
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0009781963
+      value: -0.0010145155
       objectReference: {fileID: 0}
     - target: {fileID: 404969130687341085, guid: 92feb5fb4489d254ea112bee93c8a9b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3054,6 +3033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AngerDashUpgrade
   upgradeLevel: 0
+  selectedEmotion: 0
   autoSubscribeToDash: 0
   aoePercent:
   - 0
@@ -3091,19 +3071,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9971724
+      value: 0.9969771
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.020347923
+      value: 0.020343939
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.07232563
+      value: 0.074970365
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0014758497
+      value: -0.0015298169
       objectReference: {fileID: 0}
     - target: {fileID: 7979091180098062330, guid: 181e55b319b4947439064fb135d10c61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3213,7 +3193,7 @@ SceneRoots:
   - {fileID: 1045277235083557063}
   - {fileID: 217425574}
   - {fileID: 745772711}
-  - {fileID: 938769675}
+  - {fileID: 4388993918575928026}
   - {fileID: 923261219307631048}
   - {fileID: 2002516911}
   - {fileID: 502265961}

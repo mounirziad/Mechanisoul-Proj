@@ -3000,6 +3000,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e27de58efedb2d45b84808788f1b191, type: 3}
+--- !u!1 &140045748 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1584632863017116700, guid: 8e27de58efedb2d45b84808788f1b191, type: 3}
+  m_PrefabInstance: {fileID: 140045747}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &141362515
 Mesh:
   m_ObjectHideFlags: 0
@@ -41689,6 +41694,74 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1673786b56bb0344683c341754ddf673, type: 3}
   m_PrefabInstance: {fileID: 1968647974}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1974629848
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.48055
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.62663
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.78679
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363898079364958404, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7867661648576069937, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+      propertyPath: m_Name
+      value: UpgradeUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+--- !u!114 &1974629849 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2117285214392636463, guid: e4fe501f18d473047b783b2f35861b24, type: 3}
+  m_PrefabInstance: {fileID: 1974629848}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c77d500f62721e44bad87a4255a4479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &1977985563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48810,9 +48883,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2180440214418068658, guid: b48e6e4bb746e174e9e9a754fa98005a, type: 3}
+      propertyPath: UI
+      value: 
+      objectReference: {fileID: 140045748}
+    - target: {fileID: 2180440214418068658, guid: b48e6e4bb746e174e9e9a754fa98005a, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2180440214418068658, guid: b48e6e4bb746e174e9e9a754fa98005a, type: 3}
+      propertyPath: upgradeUIScript
+      value: 
+      objectReference: {fileID: 1974629849}
     - target: {fileID: 4094618239974452327, guid: b48e6e4bb746e174e9e9a754fa98005a, type: 3}
       propertyPath: m_Name
       value: Temp Game Manager
@@ -48879,4 +48960,5 @@ SceneRoots:
   - {fileID: 1233616452}
   - {fileID: 1026228989}
   - {fileID: 140045747}
+  - {fileID: 1974629848}
   - {fileID: 358749007}
