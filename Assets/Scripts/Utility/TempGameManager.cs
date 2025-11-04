@@ -13,7 +13,7 @@ public class TempGameManager : MonoBehaviour
 
     void Awake()
     {
-        if (upgradeUIScript != null)
+        if (upgradeUIScript != null && upgradeUIScript.pauseMenu != null)
         {
             upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
         }
@@ -53,6 +53,9 @@ public class TempGameManager : MonoBehaviour
                 upgradeUIScript.pauseMenu.style.display = DisplayStyle.Flex;
                 upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
                 pauseActive = true;
+                
+                UnityEngine.Cursor.visible = true;
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
             }
         }
         else if (context.performed && pauseActive == true)
@@ -61,6 +64,9 @@ public class TempGameManager : MonoBehaviour
             {
                 upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
                 pauseActive = false;
+                
+                UnityEngine.Cursor.visible = false;
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }
@@ -75,6 +81,9 @@ public class TempGameManager : MonoBehaviour
                 upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
                 upgradeUIActive = true;
                 pauseActive = false;
+                
+                UnityEngine.Cursor.visible = true;
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
             }
         }
         else if (context.performed && upgradeUIActive == true)
@@ -83,6 +92,9 @@ public class TempGameManager : MonoBehaviour
             {
                 upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
                 upgradeUIActive = false;
+                
+                UnityEngine.Cursor.visible = false;
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }
