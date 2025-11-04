@@ -372,6 +372,21 @@ public class UpgradeUIScript : MonoBehaviour
         ZeroRange();
         for (int i = 0; i < level; i++) upgradeHandler.RangedAngerUp();
     }
+    void SetRangeSadnessLevel(int level)
+    {
+        ZeroRange();
+        for (int i = 0; i < level; i++) upgradeHandler.RangedSadnessUp();
+    }
+    void SetRangeFearLevel(int level)
+    {
+        ZeroRange();
+        for (int i = 0; i < level; i++) upgradeHandler.RangedFearUp();
+    }
+    void SetRangeLoveLevel(int level)
+    {
+        ZeroRange();
+        for (int i = 0; i < level; i++) upgradeHandler.RangedLoveUp();
+    }
 
     void ZeroDash()
     {
@@ -383,13 +398,28 @@ public class UpgradeUIScript : MonoBehaviour
     }
     void SetDashSadLevel(int level)
     {
-        ZeroDash(); // mutually exclusive with Anger
+        ZeroDash(); // mutually exclusive
         for (int i = 0; i < level; i++) upgradeHandler.DashSadnessUp();
     }
     void SetDashAngerLevel(int level)
     {
-        ZeroDash(); // mutually exclusive with Sad
+        ZeroDash(); // mutually exclusive 
         for (int i = 0; i < level; i++) upgradeHandler.DashAngerUp();
+    }
+    void SetDashFearLevel(int level)
+    {
+        ZeroDash(); // mutually exclusive
+        for (int i = 0; i < level; i++) upgradeHandler.DashFearUp();
+    }
+    void SetDashLoveLevel(int level)
+    {
+        ZeroDash(); // mutually exclusive
+        for (int i = 0; i < level; i++) upgradeHandler.DashLoveUp();
+    }
+    void SetDashJoyLevel(int level)
+    {
+        ZeroDash(); // mutually exclusive
+        for (int i = 0; i < level; i++) upgradeHandler.DashJoyUp();
     }
 
     // ====== Pause Menu Buttons ======
@@ -529,6 +559,7 @@ public class UpgradeUIScript : MonoBehaviour
     }
     private void OnJoyRange3Clicked()
     {
+        SetRangeJoyLevel(3);
         Debug.Log("Joy Range Upgrade 3 Clicked!");
     }
 
@@ -545,62 +576,75 @@ public class UpgradeUIScript : MonoBehaviour
     }
     private void OnAngerRange3Clicked()
     {
+        SetRangeAngerLevel(3);
         Debug.Log("Anger Range Upgrade 3 Clicked!");
     }
 
     // RANGE (SADNESS)
     private void OnSadnessRange1Clicked()
     {
+        SetRangeSadnessLevel(1);
         Debug.Log("Sadness Range Upgrade 1 Clicked!");
     }
     private void OnSadnessRange2Clicked()
     {
+        SetRangeSadnessLevel(2);
         Debug.Log("Sadness Range Upgrade 2 Clicked!");
     }
     private void OnSadnessRange3Clicked()
     {
+        SetRangeSadnessLevel(3);
         Debug.Log("Sadness Range Upgrade 3 Clicked!");
     }
 
     // RANGE (LOVE)
     private void OnLoveRange1Clicked()
     {
+        SetRangeLoveLevel(1);
         Debug.Log("Love Range Upgrade 1 Clicked!");
     }
     private void OnLoveRange2Clicked()
     {
+        SetRangeLoveLevel(2);
         Debug.Log("Love Range Upgrade 2 Clicked!");
     }
     private void OnLoveRange3Clicked()
     {
+        SetRangeLoveLevel(3);
         Debug.Log("Love Range Upgrade 3 Clicked!");
     }
 
     // RANGE (FEAR)
     private void OnFearRange1Clicked()
     {
+        SetRangeFearLevel(1);
         Debug.Log("Fear Range Upgrade 1 Clicked!");
     }
     private void OnFearRange2Clicked()
     {
+        SetRangeFearLevel(2);
         Debug.Log("Fear Range Upgrade 2 Clicked!");
     }
     private void OnFearRange3Clicked()
     {
+        SetRangeFearLevel(3);
         Debug.Log("Fear Range Upgrade 3 Clicked!");
     }
 
     // DASH (JOY)
     private void OnJoyDash1Clicked()
     {
+        SetDashJoyLevel(1);
         Debug.Log("Joy Dash Upgrade 1 Clicked!");
     }
     private void OnJoyDash2Clicked()
     {
+        SetDashJoyLevel(2);
         Debug.Log("Joy Dash Upgrade 2 Clicked!");
     }
     private void OnJoyDash3Clicked()
     {
+        SetDashJoyLevel(3);
         Debug.Log("Joy Dash Upgrade 3 Clicked!");
     }
 
@@ -617,6 +661,7 @@ public class UpgradeUIScript : MonoBehaviour
     }
     private void OnAngerDash3Clicked()
     {
+        SetDashAngerLevel(3);
         Debug.Log("Anger Dash Upgrade 3 Clicked!");
     }
 
@@ -633,34 +678,41 @@ public class UpgradeUIScript : MonoBehaviour
     }
     private void OnSadnessDash3Clicked()
     {
+        SetDashSadLevel(3);
         Debug.Log("Sad Dash Upgrade 3 Clicked!");
     }
 
     // DASH (LOVE)
     private void OnLoveDash1Clicked()
     {
+        SetDashLoveLevel(1);
         Debug.Log("Love Dash Upgrade 1 Clicked!");
     }
     private void OnLoveDash2Clicked()
     {
+        SetDashLoveLevel(2);
         Debug.Log("Love Dash Upgrade 2 Clicked!");
     }
     private void OnLoveDash3Clicked()
     {
+        SetDashLoveLevel(3);
         Debug.Log("Love Dash Upgrade 3 Clicked!");
     }
 
     // DASH (FEAR)
     private void OnFearDash1Clicked()
     {
+        SetDashFearLevel(1);
         Debug.Log("Fear Dash Upgrade 1 Clicked!");
     }
     private void OnFearDash2Clicked()
     {
+        SetDashFearLevel(2);
         Debug.Log("Fear Dash Upgrade 2 Clicked!");
     }
     private void OnFearDash3Clicked()
     {
+        SetDashFearLevel(3);
         Debug.Log("Fear Dash Upgrade 3 Clicked!");
     }
 
