@@ -154,6 +154,34 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 6d8b9a49-9077-4d9a-bf11-1eed90540129
     m_ActionName: 'Temp/Exit[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2180440214418068658}
+        m_TargetAssemblyTypeName: TempGameManager, Assembly-CSharp
+        m_MethodName: OnUIActivate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6a0c35d0-ce4a-4a77-b11f-df320a163d5c
+    m_ActionName: 'Temp/UI Activate[/Keyboard/l]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ff97a826-1a39-4613-babb-a47414bb7219
+    m_ActionName: 'Player Movement/Run[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9b2e18d-12ba-4bdc-84bf-85fa285f5eab
+    m_ActionName: 'Player Actions/AdvanceDialogue[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7d41604c-b20a-4f52-b36e-b4e1a1317f28
+    m_ActionName: 'Player Actions/EnemyLockOn[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Temp
@@ -171,3 +199,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b94919fd673c847a1fbea5d5329233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TempGameManager
+  UI: {fileID: 0}
+  upgradeUIScript: {fileID: 0}
