@@ -46,16 +46,8 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            InitializeSoundLibrary();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+        InitializeSoundLibrary();
     }
     
     private void Start()
