@@ -6345,7 +6345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5968cde0747e44ebd68db30aea81b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sensor
-  detectionRadius: 2
+  detectionRadius: 4
   timerInterval: 1
 --- !u!135 &838735397
 SphereCollider:
@@ -6366,7 +6366,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &838735398
 Transform:
@@ -6744,7 +6744,7 @@ GameObject:
   - component: {fileID: 990853133}
   m_Layer: 0
   m_Name: MechBoss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7190,7 +7190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5968cde0747e44ebd68db30aea81b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sensor
-  detectionRadius: 8
+  detectionRadius: 20
   timerInterval: 1
 --- !u!135 &1245257133
 SphereCollider:
@@ -7211,7 +7211,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 8
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1245257134
 Transform:
@@ -8351,7 +8351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5968cde0747e44ebd68db30aea81b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sensor
-  detectionRadius: 5
+  detectionRadius: 12
   timerInterval: 1
 --- !u!135 &1445351301
 SphereCollider:
@@ -8372,7 +8372,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 12
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1445351302
 Transform:
@@ -8505,6 +8505,7 @@ MonoBehaviour:
   mechromancerBehaviour: {fileID: 1760355384}
   mechromancer: {fileID: 1760355385}
   arenaTrigger: {fileID: 1269423818}
+  agent: {fileID: 1760355386}
 --- !u!1 &1499782181
 GameObject:
   m_ObjectHideFlags: 0
@@ -8520,7 +8521,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1499782182
 Transform:
   m_ObjectHideFlags: 0
@@ -9609,7 +9610,7 @@ GameObject:
   - component: {fileID: 1760355383}
   m_Layer: 0
   m_Name: Mechromancer
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9646,6 +9647,7 @@ MonoBehaviour:
   lightningSensor: {fileID: 1245257132}
   restingPosition: {fileID: 662178032}
   hidingPosition: {fileID: 110077538}
+  hidingPos: {fileID: 110077538}
   player: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   enemyPrefab: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
   spawnPoints:

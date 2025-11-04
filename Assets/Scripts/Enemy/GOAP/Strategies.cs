@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
@@ -342,17 +343,19 @@ public class ResurrectStrategy : IActionStrategy
     readonly GoapAgent agent;
     readonly GameObject enemyPrefab;
     readonly Transform[] spawnPoints;
+    readonly Transform hidingPos;
     readonly float resurrectionTime = 5f;
     CountdownTimer timer;
 
     bool hasStarted = false;
+    bool movingToHiding = false;
 
-    public ResurrectStrategy(GoapAgent agent, GameObject enemyPrefab, Transform[] spawnPoints)
+    public ResurrectStrategy(GoapAgent agent, GameObject enemyPrefab, Transform[] spawnPoints, Transform hidingPos)
     {
         this.agent = agent;
         this.enemyPrefab = enemyPrefab;
         this.spawnPoints = spawnPoints;
-        //this.agent = boss.GetComponent<GoapAgent>();
+        this.hidingPos = hidingPos;
 
         mechromancer = agent.GetComponent<MechromancerBehaviour>();
 
@@ -370,11 +373,38 @@ public class ResurrectStrategy : IActionStrategy
         if (hasStarted) return; //prevent it happening multiple times
         hasStarted = true;
 
-        timer.Start();
-        mechromancer?.MarkResurrected();
+        if (Vector3.Distance(agent.transform.position, hidingPos.position) > 1f)
+        {
+            movingToHiding = true;
+            agent.StartCoroutine(MoveToHidingCoroutine());
+        }
+        else
+        {
+            timer.Start();
+            mechromancer?.MarkResurrected();
+        }
     }
 
-    public void Update(float deltaTime) => timer.Tick(deltaTime);
+    public void Update(float deltaTime)
+    {
+        if (movingToHiding) return;
+        timer.Tick(deltaTime);
+    }
+
+    private IEnumerator MoveToHidingCoroutine()
+    {
+        var nav = agent.GetComponent<NavMeshAgent>();
+        nav.SetDestination(hidingPos.position);
+
+        while (Vector3.Distance(agent.transform.position, hidingPos.position) > 1f)
+        {
+            yield return null;
+        }
+
+        movingToHiding = false;
+        timer.Start();
+        mechromancer.MarkResurrected();
+    }
 
     void ResurrectRobots()
     {

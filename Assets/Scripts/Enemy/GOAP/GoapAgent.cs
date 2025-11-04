@@ -114,7 +114,7 @@ public partial class GoapAgent : MonoBehaviour
     private void Update()
     {
         //StatsTimer and Animations update
-        //if (!isActive) return;
+        if (!isActive) return;
 
         //Update the plan and current action if there is one
         if (currentAction == null)
@@ -197,7 +197,7 @@ public partial class GoapAgent : MonoBehaviour
         CalculatePlan();
     }
 
-    /*public void Activate()
+    public void Activate()
     {
         isActive = true;
         Debug.Log($"{name}: GOAP Agent activated");
@@ -207,5 +207,5 @@ public partial class GoapAgent : MonoBehaviour
     {
         isActive = false;
         Debug.Log($"{name}: GOAP Agent deactivated");
-    }*/
+    }
 }

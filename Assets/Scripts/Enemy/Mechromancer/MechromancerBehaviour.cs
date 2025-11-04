@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,7 +14,8 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     [Header("Locations")]
     [SerializeField] Transform restingPosition;
-    [SerializeField] Transform hidingPosition;
+    [SerializeField] public Transform hidingPosition;
+    [SerializeField] Transform hidingPos;
 
     [Header("Player Reference")]
     [SerializeField] GameObject player;
@@ -23,9 +26,11 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
     [SerializeField] Transform[] spawnPoints;
 
     private Mechromancer mechromancer;
+    private AgentGoal resurrectGoal;
 
     private bool resurrectedPhase1 = false;
     private bool resurrectedPhase2 = false;
+    private bool isResurrecting = false;
 
     private GoapAgent agent;
 
@@ -135,9 +140,9 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .Build());
 
         actions.Add(new AgentAction.Builder("Resurrect Robots")
-            .WithStrategy(new ResurrectStrategy(GetComponent<GoapAgent>(), enemyPrefab, spawnPoints))
+            .WithStrategy(new ResurrectStrategy(GetComponent<GoapAgent>(), enemyPrefab, spawnPoints, hidingPos))
             .AddPrecondition(beliefs["AgentAtHidingPosition"])
-            .AddPrecondition(beliefs["CanResurrect"])
+            //.AddPrecondition(beliefs["CanResurrect"])
             .AddEffect(beliefs["HasResurrectedThisPhase"])
             .Build());
 
@@ -173,10 +178,12 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
             .WithDesiredEffect(beliefs["PlayerInAttackRange"])
             .Build());
 
-        goals.Add(new AgentGoal.Builder("Resurrect")
+        resurrectGoal = new AgentGoal.Builder("Resurrect")
             .WithPriority(5)
             .WithDesiredEffect(beliefs["HasResurrectedThisPhase"])
-            .Build());
+            .Build();
+
+        goals.Add(resurrectGoal);
 
         return goals;
     }
@@ -211,6 +218,46 @@ public class MechromancerBehaviour : MonoBehaviour, IGoapBehaviour
 
     public void TriggerResurrectionPhase()
     {
-        //GoapAgent.EnableOnlyThisGoal(resurrectGoal);
+        if (resurrectGoal == null)
+        {
+            Debug.Log("Resurrect goal not found");
+            return;
+        }
+        if (!isResurrecting)
+        {
+            isResurrecting = true;
+            Debug.Log("Trigger resurrect phase");
+
+            agent.ClearCurrentAction();
+            agent.EnableOnlyThisGoal(resurrectGoal);
+
+            if (Vector3.Distance(transform.position, hidingPosition.position) > 1f)
+            {
+                StartCoroutine(MoveToHidingAndResurrect());
+            }
+            else
+            {
+                agent.CalculatePlan();
+                isResurrecting = false;
+            }
+        }
+    }
+
+    private IEnumerator MoveToHidingAndResurrect()
+    {
+        var nav = GetComponent<NavMeshAgent>();
+        nav.SetDestination(hidingPosition.position);
+
+        while (Vector3.Distance(transform.position, hidingPosition.position) > 1f)
+        {
+            yield return null;
+        }
+
+        Debug.Log("Arrived at hidingPosition, now resurrecting");
+
+        agent.ClearCurrentAction();
+        agent.CalculatePlan();
+
+        isResurrecting = false;
     }
 }

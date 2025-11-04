@@ -17,6 +17,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private MechromancerBehaviour mechromancerBehaviour;
     [SerializeField] private Mechromancer mechromancer;
     [SerializeField] private ColliderTrigger arenaTrigger;
+    [SerializeField] private GoapAgent agent;
 
     private BossPhase currentPhase = BossPhase.Waiting;
     private float phaseTimer;
@@ -42,7 +43,7 @@ public class BattleSystem : MonoBehaviour
     {
         Debug.Log("Player has entered the arena");
         playerInArena = true;
-        //currentPhase = BossPhase.Cinematic;
+        currentPhase = BossPhase.Cinematic;
     }
 
     private void Start()
@@ -59,25 +60,36 @@ public class BattleSystem : MonoBehaviour
         switch (currentPhase)
         {
             case BossPhase.Waiting:
-                Debug.Log("Waiting for player to enter area");
+                Debug.Log("Waiting for player to enter arena");
                 if (playerInArena)
                 {
                     TransitionToPhase(BossPhase.Cinematic);
+                    Debug.Log("Transition to cinematic");
                 }
                 break;
 
             case BossPhase.Cinematic:
                 if (phaseTimer >= 5f) //Assuming cinematic lasts 5 seconds, change as needed
                 {
+                    Debug.Log("Cinematic over");
+                    StartBattle();
+                    agent.Activate();
                     TransitionToPhase(BossPhase.Phase1);
+                    Debug.Log("Transition to phase 1");
                 }
                 break;
 
             case BossPhase.Phase1:
-                if (mechromancerBehaviour.EvaluateResurrection())
+                if (mechromancer.currentHealth <= 75f)
                 {
                     TransitionToPhase(BossPhase.MinionWave1);
+                    Debug.Log("Transition to minion wave 1");
                 }
+                /*if (mechromancerBehaviour.EvaluateResurrection())
+                {
+                    TransitionToPhase(BossPhase.MinionWave1);
+                    Debug.Log("Transition to minion wave 1");
+                }*/
                 break;
 
             case BossPhase.MinionWave1:
@@ -85,21 +97,30 @@ public class BattleSystem : MonoBehaviour
                 if (phaseTimer >= 10f) //Assuming minion wave lasts 10 seconds, change as needed
                 {
                     TransitionToPhase(BossPhase.Phase2);
+                    Debug.Log("Transition to phase 2");
                 }
                 break;
 
             case BossPhase.Phase2:
-                if (mechromancerBehaviour.EvaluateResurrection())
+                agent.CalculatePlan();
+                if (mechromancer.currentHealth <= 50f)
                 {
                     TransitionToPhase(BossPhase.MinionWave2);
+                    Debug.Log("Transition to minion wave 2");
                 }
+                /*if (mechromancerBehaviour.EvaluateResurrection())
+                {
+                    TransitionToPhase(BossPhase.MinionWave2);
+                    Debug.Log("Transition to minion wave 2");
+                }*/
                 break;
 
             case BossPhase.MinionWave2:
                 mechromancerBehaviour.TriggerResurrectionPhase();
-                if (phaseTimer >= 10f) //Assuming minion wave lasts 10 seconds, change as needed
+                if (phaseTimer >= 10f && mechromancer.currentHealth <= 25f) //Assuming minion wave lasts 10 seconds, change as needed
                 {
                     TransitionToPhase(BossPhase.Rage);
+                    Debug.Log("Transition to rage");
                 }
                 break;
 
@@ -118,8 +139,8 @@ public class BattleSystem : MonoBehaviour
 
     private void StartBattle()
     {
-        Debug.Log("StartBattle");
         TransitionToPhase(BossPhase.Waiting);
+        Debug.Log("Start battle");
         //Unsure if needed
     }
 
@@ -127,6 +148,5 @@ public class BattleSystem : MonoBehaviour
     {
         currentPhase = nextPhase;
         phaseTimer = 0f;
-        Debug.Log("Start battle");
     }
 }
