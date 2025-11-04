@@ -17,6 +17,7 @@ public class TempGameManager : MonoBehaviour
         {
             upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
         }
+
         pauseActive = false;
     }
 
