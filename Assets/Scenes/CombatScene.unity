@@ -1737,11 +1737,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1831057824 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-  m_PrefabInstance: {fileID: 8551793984105625927}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1955632068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2796,14 +2791,6 @@ PrefabInstance:
       propertyPath: thirdPersonAimCamera
       value: 
       objectReference: {fileID: 8858950652833739274}
-    - target: {fileID: 2062997631589936748, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: maxLvl
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2062997631589936748, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: dashAngerLvl
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2816666703048487423, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: cam
       value: 
@@ -2824,86 +2811,10 @@ PrefabInstance:
       propertyPath: letterboxUI
       value: 
       objectReference: {fileID: 376110449}
-    - target: {fileID: 6408783954678075963, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: buffStackMaxTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: debugLogs
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: ringPrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: angerBurstFallbackDamage
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: angerBurstFallbackRadius
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: angerBurstFallbackImpulse
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: angerBurstFallbackKnockup
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: dashVFXPrefabs.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: considerLevelEvenIfDisabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'dashVFXPrefabs.Array.data[0]'
-      value: 
-      objectReference: {fileID: -2184219898442725862, guid: 824b120e6fa388144b943eb2370b1d00, type: 3}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'dashVFXPrefabs.Array.data[1]'
-      value: 
-      objectReference: {fileID: 6168484070074368671, guid: 3e278403eeb904e449e350053d195a89, type: 3}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'dashVFXPrefabs.Array.data[2]'
-      value: 
-      objectReference: {fileID: -3206770330070285140, guid: 9dbf189493bcccf438de5c02a71a58c5, type: 3}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'dashVFXPrefabs.Array.data[3]'
-      value: 
-      objectReference: {fileID: -4785813199635946150, guid: 7ed01cb17a31acf41b02e67bcd65a3ac, type: 3}
-    - target: {fileID: 7517454570625612806, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'dashVFXPrefabs.Array.data[4]'
-      value: 
-      objectReference: {fileID: -6459716116235446846, guid: cc2efd36f7b72d44098e151797c8731f, type: 3}
     - target: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
       objectReference: {fileID: 0}
-    - target: {fileID: 8481794007162226039, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: joyPrefab
-      value: 
-      objectReference: {fileID: 6263590293634479101, guid: c09f6bbfebb5fc5468811744805ab131, type: 3}
-    - target: {fileID: 8481794007162226039, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: fearPrefab
-      value: 
-      objectReference: {fileID: 74918710999626116, guid: 85cbbd952a10e9b42983db91dea6e6ae, type: 3}
-    - target: {fileID: 8481794007162226039, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: lovePrefab
-      value: 
-      objectReference: {fileID: 8128136487110415424, guid: 39eebcabca70bbd468949272b95737d2, type: 3}
-    - target: {fileID: 8481794007162226039, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: angerPrefab
-      value: 
-      objectReference: {fileID: 6131866537544226548, guid: db105c2bf2996f0419f7dec205552934, type: 3}
-    - target: {fileID: 8481794007162226039, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: sadnessPrefab
-      value: 
-      objectReference: {fileID: 3008295167795227030, guid: 2ca0e4b767183484b9a6b43d2e29b2d4, type: 3}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.98
@@ -2947,13 +2858,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8551793984105625998}
-    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8551793984105625996}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
 --- !u!4 &8551793984105625928 stripped
 Transform:
@@ -2965,7 +2870,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1721138619143970650, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831057824}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae8bd4d1a267e844691191409b62d844, type: 3}
@@ -2976,7 +2881,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831057824}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9272549f561b8d64890052f89be604ce, type: 3}
@@ -2987,60 +2892,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2062997631589936748, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 8551793984105625927}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831057824}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16ac80218e122ae48af297b0524eb61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeHandler
---- !u!114 &8551793984105625996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831057824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e824a126e44e7124989cceb659261ea0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JoyDashUpgrade
-  joyCritPrefab: {fileID: 4791582663665990050, guid: c09f6bbfebb5fc5468811744805ab131, type: 3}
-  chance:
-  - 0
-  - 0.4
-  - 0.6
-  radius:
-  - 0
-  - 3
-  - 3
-  duration:
-  - 0
-  - 2
-  - 2
-  spawnAtDashEnd: 1
-  yOffset: 0.02
---- !u!114 &8551793984105625998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831057824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b81b5f67249e178458b5eca7955280aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AngerDashUpgrade
-  upgradeLevel: 0
-  selectedEmotion: 0
-  autoSubscribeToDash: 0
-  aoePercent:
-  - 0
-  - 0.1
-  - 0.25
-  fireBurstPrefab: {fileID: 2040267038493676359, guid: db105c2bf2996f0419f7dec205552934, type: 3}
-  debugLogs: 1
 --- !u!1001 &8598416218367102006
 PrefabInstance:
   m_ObjectHideFlags: 0

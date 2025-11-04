@@ -848,15 +848,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.23955435
+      value: 0.98
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6266341
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.710459
+      value: -2.36
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1013,6 +1013,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2575761040196860491}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8241045106524681543}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9125517115147997594}
   m_SourcePrefab: {fileID: 100100000, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
 --- !u!95 &3385643053220842585 stripped
 Animator:
@@ -1044,6 +1050,7 @@ MonoBehaviour:
   verticalInput: 0
   horizontalInput: 0
   jumpInput: 0
+  advanceDialogueInput: 0
   b_Input: 0
   dodgeInput: 0
   aimInput: 0
@@ -1399,7 +1406,7 @@ MonoBehaviour:
   sadnessDash: {fileID: 0}
   loveDash: {fileID: 0}
   fearDash: {fileID: 0}
-  maxLvl: 2
+  maxLvl: 3
 --- !u!114 &7517454570625612806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1414,9 +1421,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DashRingSpawner
   dash: {fileID: 1735667703248446145}
   handler: {fileID: 2062997631589936748}
-  ringPrefab: {fileID: 5720126518462165007, guid: c056d6f8dced98d4d97ac65a037b6bb2, type: 3}
+  ringPrefab: {fileID: 0}
   ringLifetime: 4
   ringColor: {r: 1, g: 0.35, b: 0.1, a: 0.9}
+  dashVFXPrefabs:
+  - {fileID: -2184219898442725862, guid: 824b120e6fa388144b943eb2370b1d00, type: 3}
+  - {fileID: 6168484070074368671, guid: 3e278403eeb904e449e350053d195a89, type: 3}
+  - {fileID: -3206770330070285140, guid: 9dbf189493bcccf438de5c02a71a58c5, type: 3}
+  - {fileID: -4785813199635946150, guid: 7ed01cb17a31acf41b02e67bcd65a3ac, type: 3}
+  - {fileID: -6459716116235446846, guid: cc2efd36f7b72d44098e151797c8731f, type: 3}
+  currentDash: {fileID: 0}
+  vfxLifetime: 4
   angerBurstPrefab: {fileID: 2040267038493676359, guid: db105c2bf2996f0419f7dec205552934, type: 3}
   anger_aoePercent:
   - 0
@@ -1680,6 +1695,54 @@ MonoBehaviour:
   runStepInterval: 0.55
   sprintStepInterval: 0.25
   minimumMovementSpeed: 0.5
+--- !u!114 &8241045106524681543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b81b5f67249e178458b5eca7955280aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AngerDashUpgrade
+  upgradeLevel: 0
+  selectedEmotion: 0
+  autoSubscribeToDash: 0
+  aoePercent:
+  - 0
+  - 0.1
+  - 0.25
+  fireBurstPrefab: {fileID: 2040267038493676359, guid: db105c2bf2996f0419f7dec205552934, type: 3}
+  debugLogs: 1
+--- !u!114 &9125517115147997594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e824a126e44e7124989cceb659261ea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoyDashUpgrade
+  joyCritPrefab: {fileID: 4791582663665990050, guid: c09f6bbfebb5fc5468811744805ab131, type: 3}
+  chance:
+  - 0
+  - 0.4
+  - 0.6
+  radius:
+  - 0
+  - 3
+  - 3
+  duration:
+  - 0
+  - 2
+  - 2
+  spawnAtDashEnd: 1
+  yOffset: 0.02
 --- !u!4 &8654815397792618019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
