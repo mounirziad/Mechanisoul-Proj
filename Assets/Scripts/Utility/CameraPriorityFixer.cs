@@ -18,39 +18,60 @@ public class CameraPriorityFixer : MonoBehaviour
     public bool showDebugLogs = false;
 
     private LockOnSystem lockOnSystem;
-    private ThirdPersonAimCameraManager aimCameraManager;
+    private CameraManagerAdapter cameraAdapter;
     private InputManager inputManager;
+    private bool usingCustomCameraSystem = false;
 
     private void Awake()
     {
         lockOnSystem = GetComponent<LockOnSystem>();
-        aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
+        cameraAdapter = GetComponent<CameraManagerAdapter>();
         inputManager = GetComponent<InputManager>();
 
-        if (freeLookCamera == null)
+        if (cameraAdapter != null)
         {
-            GameObject freeLookObj = GameObject.Find("FreeLook Camera");
-            if (freeLookObj != null)
-                freeLookCamera = freeLookObj.GetComponent<CinemachineCamera>();
+            usingCustomCameraSystem = cameraAdapter.UsingCustomCameraSystem();
         }
 
-        if (lockOnCamera == null)
+        if (!usingCustomCameraSystem)
         {
-            GameObject lockOnObj = GameObject.Find("LockOnCamera");
-            if (lockOnObj != null)
-                lockOnCamera = lockOnObj.GetComponent<CinemachineCamera>();
-        }
+            if (freeLookCamera == null)
+            {
+                GameObject freeLookObj = GameObject.Find("FreeLook Camera");
+                if (freeLookObj != null)
+                    freeLookCamera = freeLookObj.GetComponent<CinemachineCamera>();
+            }
 
-        if (aimCamera == null)
+            if (lockOnCamera == null)
+            {
+                GameObject lockOnObj = GameObject.Find("LockOnCamera");
+                if (lockOnObj != null)
+                    lockOnCamera = lockOnObj.GetComponent<CinemachineCamera>();
+            }
+
+            if (aimCamera == null)
+            {
+                GameObject aimObj = GameObject.Find("AimCamera");
+                if (aimObj != null)
+                    aimCamera = aimObj.GetComponent<CinemachineCamera>();
+            }
+        }
+        else
         {
-            GameObject aimObj = GameObject.Find("AimCamera");
-            if (aimObj != null)
-                aimCamera = aimObj.GetComponent<CinemachineCamera>();
+            if (showDebugLogs)
+            {
+                Debug.Log("Custom camera system detected. CameraPriorityFixer will not manage Cinemachine priorities.");
+            }
         }
     }
 
     private void LateUpdate()
     {
+        if (usingCustomCameraSystem)
+        {
+            return;
+        }
+
         bool isLockedOn = lockOnSystem != null && lockOnSystem.IsLocked();
         bool isAiming = inputManager != null && inputManager.aimInput;
 

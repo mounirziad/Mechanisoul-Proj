@@ -481,6 +481,11 @@ public class LockOnSystem : MonoBehaviour
         return isLocked;
     }
 
+    public bool IsLockedOn()
+    {
+        return isLocked;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

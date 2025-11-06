@@ -95,6 +95,10 @@ public class PlayerManager : MonoBehaviour
     {
         inputManager.HandleAllInputs();
         HandleTimers();
+        
+        // Cache camera direction BEFORE FixedUpdate runs
+        // This prevents jitter when rotating camera while moving
+        playerLocomotion.CacheCameraDirection();
     }
 
     private void FixedUpdate()

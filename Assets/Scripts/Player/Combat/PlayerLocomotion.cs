@@ -100,6 +100,15 @@ public class PlayerLocomotion : MonoBehaviour
     
     private bool isPlayingFallingAnimation = false;
 
+
+    [Header("Camera Collision Sync")]
+    public float maxPlayerRotationDuringCollision = 30f;
+    
+    [Header("Camera Direction Cache")]
+    private Vector3 cachedCameraForward;
+    private Vector3 cachedCameraRight;
+    private float cachedCameraYaw;
+
     private void Awake()
     {
         animatorManager = GetComponent<AnimatorManager>();
@@ -125,6 +134,19 @@ public class PlayerLocomotion : MonoBehaviour
     public void RefreshReferences()
     {
         cameraObject = Camera.main != null ? Camera.main.transform : null;
+    }
+    
+    public void CacheCameraDirection()
+    {
+        if (cameraObject == null)
+        {
+            RefreshReferences();
+            if (cameraObject == null) return;
+        }
+        
+        cachedCameraYaw = cameraObject.eulerAngles.y;
+        cachedCameraForward = Quaternion.Euler(0, cachedCameraYaw, 0) * Vector3.forward;
+        cachedCameraRight = Quaternion.Euler(0, cachedCameraYaw, 0) * Vector3.right;
     }
     public void HandleAllMovement()
     {
@@ -225,20 +247,23 @@ public class PlayerLocomotion : MonoBehaviour
 
         Vector3 currentVelocity = playerRigidbody.linearVelocity;
 
-        // Allow limited movement during attack for more fluid combat
+        // Use cached camera directions instead of reading directly from camera
+        moveDirection = cachedCameraForward * inputManager.verticalInput;
+        moveDirection += cachedCameraRight * inputManager.horizontalInput;
+        moveDirection.Normalize();
+        moveDirection.y = 0;
+
         if (playerCombat != null && playerCombat.IsAttacking())
         {
-            // Instead of completely freezing, allow slow movement during attacks
             Vector3 limitedMovement = Vector3.zero;
             
-            // Only allow movement if not in lunge phase
             if (!isAttackingWithLunge)
             {
-                limitedMovement = cameraObject.forward * inputManager.verticalInput * 0.3f;
-                limitedMovement += cameraObject.right * inputManager.horizontalInput * 0.3f;
+                limitedMovement = cachedCameraForward * inputManager.verticalInput * 0.3f;
+                limitedMovement += cachedCameraRight * inputManager.horizontalInput * 0.3f;
                 limitedMovement.Normalize();
                 limitedMovement.y = 0;
-                limitedMovement *= walkingSpeed * 0.5f; // Slow movement during attacks
+                limitedMovement *= walkingSpeed * 0.5f;
             }
             
             Vector3 targetVelocity = new Vector3(limitedMovement.x, currentVelocity.y, limitedMovement.z);
@@ -246,11 +271,8 @@ public class PlayerLocomotion : MonoBehaviour
             return;
         }
 
-        // Calculate input-based direction
-        moveDirection = cameraObject.forward * inputManager.verticalInput;
-        moveDirection += cameraObject.right * inputManager.horizontalInput;
-        moveDirection.Normalize();
-        moveDirection.y = 0;
+        // Calculate input-based direction (already calculated above with cameraYaw)
+        // moveDirection is already set!
 
         if (moveDirection != Vector3.zero)
         {
@@ -278,23 +300,37 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleRotation()
     {
+        TargetedPlayerRotation targetedRotation = GetComponent<TargetedPlayerRotation>();
+
+        if (targetedRotation != null)
+        {
+            // TargetedPlayerRotation handles all rotation in LateUpdate
+            // Only handle special cases here (aiming, etc) if NOT locked
+            ZTargetingSystem zTarget = GetComponent<ZTargetingSystem>();
+            if (zTarget != null && zTarget.IsLocked)
+            {
+                return; // Let TargetedPlayerRotation handle it
+            }
+        }
+
         if (cameraObject == null) return;
         if (isJumping) { return; }
 
         Vector3 targetDirection = Vector3.zero;
         float currentRotationSpeed = rotationSpeed;
 
+        // Check if camera is in collision and limit player rotation accordingly
+        LockOnCamera lockOnCam = cameraObject.GetComponent<LockOnCamera>();
+        bool cameraInCollision = lockOnCam != null && lockOnCam.IsInCollision();
+
         // Priority 1: Lock-on system (highest priority)
         if (lockOnSystem != null && lockOnSystem.IsLocked() && lockOnSystem.currentLockTarget != null)
         {
-            // When locked on, player should ONLY face the target, no camera influence
             targetDirection = lockOnSystem.currentLockTarget.position - transform.position;
             targetDirection.y = 0;
 
-            // If target is too close or behind, use a more stable approach
             if (targetDirection.magnitude < 1f)
             {
-                // If target is very close, use the direction from previous frame or maintain current forward
                 targetDirection = transform.forward;
             }
             else
@@ -302,16 +338,31 @@ public class PlayerLocomotion : MonoBehaviour
                 targetDirection.Normalize();
             }
 
-            // Use faster rotation speed for more responsive lock-on
-            currentRotationSpeed = rotationSpeed * 2f;
+            // RESPONSIVE FIX: Limit rotation speed when camera is colliding
+            if (cameraInCollision)
+            {
+                currentRotationSpeed = rotationSpeed * 0.5f; // Slower rotation during collision
 
-            // Apply rotation immediately for locked state
+                // Additional: Clamp the rotation angle if needed
+                float angleToTarget = Vector3.Angle(transform.forward, targetDirection);
+                if (angleToTarget > maxPlayerRotationDuringCollision)
+                {
+                    // Use a more conservative approach during collision
+                    targetDirection = Vector3.RotateTowards(transform.forward, targetDirection,
+                        maxPlayerRotationDuringCollision * Mathf.Deg2Rad, 0f);
+                }
+            }
+            else
+            {
+                currentRotationSpeed = rotationSpeed * 2f;
+            }
+
             if (targetDirection != Vector3.zero)
             {
-                Quaternion lockOnRotation = Quaternion.LookRotation(targetDirection); // Renamed variable
+                Quaternion lockOnRotation = Quaternion.LookRotation(targetDirection);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lockOnRotation, currentRotationSpeed * Time.deltaTime);
             }
-            return; // CRITICAL: Return early to prevent other rotation logic from interfering
+            return;
         }
 
         // Only execute the following if NOT locked on
@@ -319,12 +370,32 @@ public class PlayerLocomotion : MonoBehaviour
         // Priority 2: Aiming system (medium priority)
         else if (inputManager.aimInput)
         {
-            // Get the aim camera manager
+            // Try to get custom camera controller first
+            CustomCameraController customCameraController = GetComponent<CustomCameraController>();
             ThirdPersonAimCameraManager aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
             
-            if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
+            // Use custom camera controller if available
+            if (customCameraController != null && customCameraController.IsAimCameraActive())
             {
-                // Use the aim camera's direction for player rotation
+                // Get the aim direction from the custom camera system
+                targetDirection = customCameraController.GetAimDirection();
+                targetDirection.y = 0;
+                
+                if (targetDirection.sqrMagnitude > 0.01f)
+                {
+                    targetDirection.Normalize();
+                }
+                else
+                {
+                    // Fallback to camera forward if aim direction is invalid
+                    targetDirection = cameraObject.forward;
+                    targetDirection.y = 0;
+                    targetDirection.Normalize();
+                }
+            }
+            else if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
+            {
+                // Use the aim camera manager's direction for player rotation
                 targetDirection = aimCameraManager.GetAimDirection();
                 
                 if (targetDirection == Vector3.zero)
@@ -343,27 +414,18 @@ public class PlayerLocomotion : MonoBehaviour
                 targetDirection.Normalize();
             }
 
-            // Reduce movement influence on rotation when aiming for more precise control
-            if (inputManager.moveAmount > 0.1f)
-            {
-                Vector3 movementDirection = cameraObject.forward * inputManager.verticalInput;
-                movementDirection += cameraObject.right * inputManager.horizontalInput;
-                movementDirection.y = 0;
-                movementDirection.Normalize();
-
-                // Reduced blend for more stable aiming (was 0.3f)
-                targetDirection = Vector3.Lerp(targetDirection, movementDirection, 0.1f);
-            }
-
-            // Reduced rotation speed when aiming for more precise control
-            currentRotationSpeed = rotationSpeed * 0.8f;
+            // Don't blend with movement direction when aiming - just face where you're aiming
+            // This ensures the player rotates to match the reticle position
+            
+            // Slightly increased rotation speed when aiming for responsive aiming
+            currentRotationSpeed = rotationSpeed * 1.2f;
         }
         // Priority 3: Normal free movement (lowest priority)
         else
         {
-            // Normal free movement rotation
-            targetDirection = cameraObject.forward * inputManager.verticalInput;
-            targetDirection += cameraObject.right * inputManager.horizontalInput;
+            // Normal free movement rotation - use cached camera directions
+            targetDirection = cachedCameraForward * inputManager.verticalInput;
+            targetDirection += cachedCameraRight * inputManager.horizontalInput;
             targetDirection.Normalize();
             targetDirection.y = 0;
 
@@ -375,7 +437,7 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, currentRotationSpeed * Time.deltaTime);
+        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, currentRotationSpeed * Time.fixedDeltaTime);
         transform.rotation = playerRotation;
     }
 
@@ -737,12 +799,12 @@ public class PlayerLocomotion : MonoBehaviour
                 playerCombat.CancelAttack(); // Cancel the current attack
         }
 
-        // Determine dodge direction based on input
+        // Determine dodge direction based on input - use cached camera directions
         if (inputManager.moveAmount > 0.1f)
         {
             // Dodge in current movement direction
-            dodgeDirection = cameraObject.forward * inputManager.verticalInput;
-            dodgeDirection += cameraObject.right * inputManager.horizontalInput;
+            dodgeDirection = cachedCameraForward * inputManager.verticalInput;
+            dodgeDirection += cachedCameraRight * inputManager.horizontalInput;
             dodgeDirection.y = 0;
             dodgeDirection.Normalize();
         }

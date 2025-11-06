@@ -92,6 +92,7 @@ public class PlayerCombat : MonoBehaviour
     private Animator anim;
     [SerializeField] Weapon weapon;
     private AttackAnimationManager attackAnimManager;
+    private CameraManagerAdapter cameraAdapter;
     
     [Header("Root Motion Settings")]
     [Tooltip("How to combine root motion with attack lunge movement")]
@@ -112,7 +113,12 @@ public class PlayerCombat : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         attackAnimManager = GetComponent<AttackAnimationManager>();
         
-        // Add AttackAnimationManager if it doesn't exist
+        cameraAdapter = GetComponent<CameraManagerAdapter>();
+        if (cameraAdapter == null)
+        {
+            cameraAdapter = gameObject.AddComponent<CameraManagerAdapter>();
+        }
+        
         if (attackAnimManager == null)
         {
             attackAnimManager = gameObject.AddComponent<AttackAnimationManager>();
@@ -305,13 +311,13 @@ public class PlayerCombat : MonoBehaviour
         Vector3 shootOrigin = shootPoint.position;
         Vector3 shootDirection;
         
-        if (aimTarget != Vector3.zero)
+        shootDirection = (aimTarget - shootOrigin).normalized;
+        
+        if (showAimDebug)
         {
-            shootDirection = (aimTarget - shootOrigin).normalized;
-        }
-        else
-        {
-            shootDirection = GetAccurateAimDirection();
+            Debug.Log($"Shoot Origin: {shootOrigin}, Aim Target: {aimTarget}, Direction: {shootDirection}");
+            Debug.DrawLine(shootOrigin, aimTarget, Color.yellow, 2f);
+            Debug.DrawRay(shootOrigin, shootDirection * 50f, Color.red, 2f);
         }
         
         float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
@@ -455,13 +461,10 @@ public class PlayerCombat : MonoBehaviour
 
     Vector3 GetAccurateAimDirection()
     {
-        // Try to get aim target from camera manager
-        var aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
-        if (aimCameraManager != null)
+        if (cameraAdapter != null)
         {
-            Vector3 aimTarget = aimCameraManager.GetAimTarget();
+            Vector3 aimTarget = cameraAdapter.GetAimTarget();
 
-            // If we have a valid aim target, calculate direction from shoot point to target
             if (aimTarget != Vector3.zero)
             {
                 Vector3 direction = (aimTarget - shootPoint.position).normalized;
@@ -469,43 +472,36 @@ public class PlayerCombat : MonoBehaviour
             }
         }
 
-        // Fallback: use camera's forward direction if aim camera is active
-        if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
+        if (cameraAdapter != null && cameraAdapter.IsAimCameraActive())
         {
-            Vector3 cameraDirection = aimCameraManager.GetAimDirection();
+            Vector3 cameraDirection = cameraAdapter.GetAimDirection();
             if (cameraDirection != Vector3.zero)
             {
                 return cameraDirection;
             }
         }
 
-        // Final fallback: use shoot point forward (including vertical component)
         return shootPoint.forward;
     }
 
     Vector3 GetCorrectedAimDirection()
     {
-        var aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
-        if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
+        if (cameraAdapter != null && cameraAdapter.IsAimCameraActive())
         {
-            Vector3 aimTarget = aimCameraManager.GetAimTarget();
+            Vector3 aimTarget = cameraAdapter.GetAimTarget();
             
             if (aimTarget != Vector3.zero)
             {
-                // Get the camera position
                 Vector3 cameraPos = GetCameraPosition();
                 
-                // Calculate what the "ideal" direction would be from camera to target
                 Vector3 idealDirection = (aimTarget - cameraPos).normalized;
                 
-                // Apply trajectory correction to compensate for shoot point offset
                 Vector3 correctedDirection = CalculateTrajectoryCorrection(shootPoint.position, cameraPos, aimTarget, idealDirection);
                 
                 return correctedDirection;
             }
         }
         
-        // Fallback to basic aim direction
         return GetAccurateAimDirection();
     }
 
@@ -531,18 +527,12 @@ public class PlayerCombat : MonoBehaviour
 
     Vector3 GetCameraPosition()
     {
-        var aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
-        if (aimCameraManager != null && aimCameraManager.thirdPersonAimCamera != null)
+        Camera mainCam = Camera.main;
+        if (mainCam != null)
         {
-            // Try to get the camera transform from the Cinemachine camera
-            Transform cameraTransform = aimCameraManager.thirdPersonAimCamera.transform;
-            if (cameraTransform != null)
-            {
-                return cameraTransform.position;
-            }
+            return mainCam.transform.position;
         }
         
-        // Fallback: estimate camera position
         return transform.position + Vector3.up * 1.6f;
     }
 
@@ -550,27 +540,21 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!useSpawnCorrection) return shootPoint.position;
 
-        var aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
-        if (aimCameraManager == null || !aimCameraManager.IsAimCameraActive()) return shootPoint.position;
+        if (cameraAdapter == null || !cameraAdapter.IsAimCameraActive()) return shootPoint.position;
 
-        Vector3 aimTarget = aimCameraManager.GetAimTarget();
+        Vector3 aimTarget = cameraAdapter.GetAimTarget();
         if (aimTarget == Vector3.zero) return shootPoint.position;
 
-        // Get camera position
         Vector3 cameraPos = GetCameraPosition();
 
-        // Calculate the ideal trajectory from camera to target
         Vector3 idealDirection = (aimTarget - cameraPos).normalized;
         
-        // Project the shoot point onto the ideal trajectory line
         Vector3 cameraToShoot = shootPoint.position - cameraPos;
         float projectionDistance = Vector3.Dot(cameraToShoot, idealDirection);
         Vector3 projectedPoint = cameraPos + idealDirection * projectionDistance;
         
-        // Calculate offset from shoot point to the projected ideal point
         Vector3 offset = projectedPoint - shootPoint.position;
         
-        // Limit the offset to prevent unrealistic corrections
         if (offset.magnitude > maxSpawnOffset)
         {
             offset = offset.normalized * maxSpawnOffset;
@@ -994,56 +978,79 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!showAimDebug || !isAiming || shootPoint == null) return;
 
-        var aimCameraManager = GetComponent<ThirdPersonAimCameraManager>();
-        if (aimCameraManager == null) return;
+        if (cameraAdapter == null) return;
 
-        Vector3 aimTarget = aimCameraManager.GetAimTarget();
+        Vector3 aimTarget = cameraAdapter.GetAimTarget();
         if (aimTarget == Vector3.zero) return;
 
-        // Draw crosshair target
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(aimTarget, 0.2f);
 
-        // Draw original shoot point
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(shootPoint.position, 0.1f);
 
-        // Draw corrected spawn position
         Vector3 correctedSpawn = GetCorrectedSpawnPosition();
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(correctedSpawn, 0.08f);
 
-        // Draw connection between original and corrected spawn
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(shootPoint.position, correctedSpawn);
 
-        // Draw corrected trajectory
         Gizmos.color = Color.green;
         Vector3 correctedDirection = GetCorrectedAimDirection();
         Gizmos.DrawLine(correctedSpawn, correctedSpawn + correctedDirection * 10f);
 
-        // Draw camera position
         Vector3 cameraPos = GetCameraPosition();
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(cameraPos, Vector3.one * 0.1f);
         
-        // Draw ideal camera-to-target line
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(cameraPos, aimTarget);
     }
 
     private Vector3 GetCameraCenterAimPoint()
     {
-        var cam = Camera.main;
-        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // reticle center
+        if (cameraAdapter != null)
+        {
+            Vector3 aimTarget = cameraAdapter.GetAimTarget();
+            if (aimTarget != Vector3.zero)
+            {
+                if (showAimDebug)
+                {
+                    Debug.Log($"Using CameraAdapter aim target: {aimTarget}");
+                }
+                return aimTarget;
+            }
+        }
+
+        Camera cam = Camera.main;
+        if (cam == null) 
+        {
+            if (showAimDebug)
+            {
+                Debug.LogWarning("Camera.main is null! Using shootPoint forward fallback.");
+            }
+            return shootPoint.position + shootPoint.forward * 10f;
+        }
+
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, hitscanLayerMask))
         {
+            if (showAimDebug)
+            {
+                Debug.Log($"Using Camera raycast aim target: {hit.point}");
+            }
             return hit.point;
         }
         else
         {
-            return ray.origin + ray.direction * 100f; // default distance
+            Vector3 fallbackTarget = ray.origin + ray.direction * 100f;
+            if (showAimDebug)
+            {
+                Debug.Log($"Using Camera forward fallback: {fallbackTarget}");
+            }
+            return fallbackTarget;
         }
     }
 }

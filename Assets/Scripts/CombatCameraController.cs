@@ -4,8 +4,11 @@ using Unity.Cinemachine;
 public class CombatCameraController : MonoBehaviour
 {
     [Header("Camera Settings")]
-    [Tooltip("The FreeLook camera to control")]
-    public CinemachineCamera freeLookCamera;
+    [Tooltip("The Cinemachine FreeLook camera to control (for Cinemachine setup)")]
+    public CinemachineCamera cinemachineFreeLookCamera;
+    
+    [Tooltip("The custom FreeLook camera to control (for custom setup)")]
+    public Camera customFreeLookCamera;
     
     [Header("FOV Settings")]
     [Tooltip("The default FOV value when not in combat")]
@@ -24,25 +27,38 @@ public class CombatCameraController : MonoBehaviour
 
     private void Awake()
     {
-        if (freeLookCamera == null)
+        if (cinemachineFreeLookCamera == null && customFreeLookCamera == null)
         {
-            freeLookCamera = GetComponent<CinemachineCamera>();
+            cinemachineFreeLookCamera = GetComponent<CinemachineCamera>();
+            if (cinemachineFreeLookCamera == null)
+            {
+                customFreeLookCamera = GetComponent<Camera>();
+            }
         }
         
-        if (freeLookCamera != null)
+        if (cinemachineFreeLookCamera != null)
         {
-            defaultFOV = freeLookCamera.Lens.FieldOfView;
+            defaultFOV = cinemachineFreeLookCamera.Lens.FieldOfView;
+            targetFOV = defaultFOV;
+        }
+        else if (customFreeLookCamera != null)
+        {
+            defaultFOV = customFreeLookCamera.fieldOfView;
             targetFOV = defaultFOV;
         }
     }
 
     private void LateUpdate()
     {
-        if (freeLookCamera != null && isInCombatZone)
+        if (cinemachineFreeLookCamera != null)
         {
-            LensSettings lens = freeLookCamera.Lens;
+            LensSettings lens = cinemachineFreeLookCamera.Lens;
             lens.FieldOfView = Mathf.Lerp(lens.FieldOfView, targetFOV, Time.deltaTime * fovTransitionSpeed);
-            freeLookCamera.Lens = lens;
+            cinemachineFreeLookCamera.Lens = lens;
+        }
+        else if (customFreeLookCamera != null)
+        {
+            customFreeLookCamera.fieldOfView = Mathf.Lerp(customFreeLookCamera.fieldOfView, targetFOV, Time.deltaTime * fovTransitionSpeed);
         }
     }
 

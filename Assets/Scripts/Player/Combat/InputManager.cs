@@ -60,8 +60,16 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerActions.Shoot.performed += i => shootInput = true;
             playerControls.PlayerActions.EnemyLockOn.performed += i =>
             {
-                if (GetComponent<LockOnSystem>() != null)
+                // Try new system first, fallback to old system
+                ZTargetingSystem zTargeting = GetComponent<ZTargetingSystem>();
+                if (zTargeting != null)
+                {
+                    zTargeting.ToggleLock();
+                }
+                else if (GetComponent<LockOnSystem>() != null)
+                {
                     GetComponent<LockOnSystem>().ToggleLock();
+                }
             };
         }
         playerControls.Enable();
