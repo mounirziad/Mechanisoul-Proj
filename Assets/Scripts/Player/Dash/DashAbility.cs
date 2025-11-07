@@ -24,6 +24,10 @@ public class DashAbility : MonoBehaviour
     public AnimationCurve dashEase = AnimationCurve.EaseInOut(0, 0, 1, 1);
     public float fallbackBodyLength = 2.0f;
 
+    [Header("Collision Detection")]
+    public LayerMask obstacleLayerMask = -1;
+    public float collisionCheckRadius = 0.5f;
+
     [Header("Debug")]
     public bool debugLogs = true;
 
@@ -82,7 +86,15 @@ public class DashAbility : MonoBehaviour
         return directionSource ? directionSource.forward : transform.forward;
     }
 
-    // smoothly dash in the given direction over the dash duration
+    bool CheckForObstacle(Vector3 currentPos, Vector3 step, float radius)
+    {
+        float distance = step.magnitude;
+        if (distance < 0.001f) return false;
+
+        Vector3 direction = step.normalized;
+        return Physics.SphereCast(currentPos, radius, direction, out _, distance, obstacleLayerMask, QueryTriggerInteraction.Ignore);
+    }
+
     IEnumerator DashRoutine(Vector3 direction)
     {
         isDashing = true;
@@ -93,6 +105,7 @@ public class DashAbility : MonoBehaviour
         if (capsule) bodyLen = Mathf.Max(0.25f, capsule.height);
 
         float totalDistance = bodyLen * dashDistanceInBodyLengths;
+        float checkRadius = collisionCheckRadius > 0 ? collisionCheckRadius : (capsule ? capsule.radius : 0.5f);
 
         float t = 0f;
         if (debugLogs) Debug.Log($"[DashAbility] DashRoutine begin. totalDistance={totalDistance} duration={dashDuration}", this);
@@ -107,6 +120,12 @@ public class DashAbility : MonoBehaviour
             float frac = dashEase.Evaluate(uMid) * (u1 - u0);
             float stepLen = (totalDistance / curveArea) * frac;
             Vector3 step = direction * stepLen;
+
+            if (CheckForObstacle(rb.position, step, checkRadius))
+            {
+                if (debugLogs) Debug.Log($"[DashAbility] Obstacle detected! Stopping dash early at {rb.position}", this);
+                break;
+            }
 
             rb.MovePosition(rb.position + step);
             SafeInvokeDashStep(rb.position);
