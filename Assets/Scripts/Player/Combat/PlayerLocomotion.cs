@@ -18,11 +18,13 @@ public class PlayerLocomotion : MonoBehaviour
 
     public float detectionradius = 0.2f;
     public float detectionheight = 4f;
+    public float strictGroundCheckDistance = 0.3f;
     public float capsuleHeight = 1.8f;
 
     public bool isJumping;
     public bool isSprinting;
     public bool isGrounded;
+    public bool isStrictlyGrounded;
 
     public float walkingSpeed;
     public float runningSpeed;
@@ -456,6 +458,8 @@ public class PlayerLocomotion : MonoBehaviour
             groundDetected = Physics.SphereCast(groundCheckPosition, detectionradius, Vector3.down, out RaycastHit hit, detectionheight, groundLayer);
         }
 
+        isStrictlyGrounded = Physics.SphereCast(groundCheckPosition, detectionradius, Vector3.down, out RaycastHit strictHit, strictGroundCheckDistance, groundLayer);
+
         if (groundDetected)
         {
             bool isValidLanding = !isGrounded &&
@@ -736,7 +740,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void HandleJumping()
     {
-        if (isGrounded && canJump && !isJumping)
+        if (isStrictlyGrounded && canJump && !isJumping)
         {
             animatorManager.animator.SetBool("isJumping", true);
             animatorManager.PlayTargetAnimation("Jump", false);

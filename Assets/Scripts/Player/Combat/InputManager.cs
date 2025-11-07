@@ -153,7 +153,7 @@ public class InputManager : MonoBehaviour
             jumpInput = false;
 
             // Only set buffer if we're actually able to jump
-            if (playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
+            if (playerLocomotion.isStrictlyGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
             {
                 jumpInputBuffer = jumpBufferTime;
             }
@@ -170,7 +170,7 @@ public class InputManager : MonoBehaviour
             jumpInputBuffer -= Time.deltaTime;
 
             // Try to jump while buffer is active
-            if (playerLocomotion.isGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
+            if (playerLocomotion.isStrictlyGrounded && playerLocomotion.canJump && !playerLocomotion.isJumping)
             {
                 jumpInputBuffer = 0f; // Consume the buffer
                 playerLocomotion.HandleJumping();
