@@ -12202,9 +12202,9 @@ GameObject:
   - component: {fileID: 1760355390}
   - component: {fileID: 1760355389}
   - component: {fileID: 1760355387}
+  - component: {fileID: 1760355393}
   - component: {fileID: 1760355385}
   - component: {fileID: 1760355383}
-  - component: {fileID: 1760355393}
   m_Layer: 0
   m_Name: Mechromancer
   m_TagString: Enemy
@@ -12381,12 +12381,30 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 8773057353799958730
   - rid: 8773057353799958858
+  - rid: 7722564160162890735
+  - rid: 7722564160162890736
   m_OriginalGraph: {fileID: -4384124896444259075, guid: ff5074776c24fa34c99d919d66152800, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
+    - rid: 7722564160162890735
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10576020996565751153
+          m_Value1: 9587200281160481982
+        Name: SelfTransform
+        m_Value: {fileID: 1760355392}
+    - rid: 7722564160162890736
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6113188123531088113
+          m_Value1: 15003614786582287490
+        Name: PlayerTransform
+        m_Value: {fileID: 747682008}
     - rid: 8773057353799958730
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -12401,7 +12419,7 @@ MonoBehaviour:
         GUID:
           m_Value0: 5962277687171588743
           m_Value1: 1755267819484322493
-        Name: Target
+        Name: Player
         m_Value: {fileID: 179717328}
 --- !u!1001 &1782854185
 PrefabInstance:
