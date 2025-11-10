@@ -8675,7 +8675,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1269423817
 Transform:
   m_ObjectHideFlags: 0
@@ -12367,6 +12367,7 @@ GameObject:
   - component: {fileID: 1760355389}
   - component: {fileID: 1760355387}
   - component: {fileID: 1760355393}
+  - component: {fileID: 1760355394}
   - component: {fileID: 1760355385}
   - component: {fileID: 1760355383}
   m_Layer: 0
@@ -12585,6 +12586,20 @@ MonoBehaviour:
           m_Value1: 1755267819484322493
         Name: Player
         m_Value: {fileID: 179717328}
+--- !u!114 &1760355394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760355382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff833143a74c1474fb67d8d3cf3bd69b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MechBehaviorController
+  graphAgent: {fileID: 1760355393}
+  colliderTrigger: {fileID: 1269423818}
 --- !u!1001 &1782854185
 PrefabInstance:
   m_ObjectHideFlags: 0
