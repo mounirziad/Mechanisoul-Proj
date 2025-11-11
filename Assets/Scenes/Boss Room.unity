@@ -695,6 +695,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1673786b56bb0344683c341754ddf673, type: 3}
   m_PrefabInstance: {fileID: 92395667}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &164496561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 164496562}
+  - component: {fileID: 164496564}
+  - component: {fileID: 164496563}
+  m_Layer: 0
+  m_Name: ArenaTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &164496562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164496561}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: -18.75}
+  m_LocalScale: {x: 8.499034, y: 6.90472, z: 0.2964831}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 990853133}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &164496563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164496561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c207f3b8e1356dd4aaf4a4966f002514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderTrigger
+  hasTriggered: 0
+--- !u!65 &164496564
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164496561}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &179717328 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
@@ -7800,7 +7867,7 @@ Transform:
   - {fileID: 1760355392}
   - {fileID: 233748058}
   - {fileID: 1482628266}
-  - {fileID: 1269423817}
+  - {fileID: 164496562}
   m_Father: {fileID: 1711530593}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1040236589
@@ -8658,72 +8725,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1760355392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1269423816
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1269423817}
-  - component: {fileID: 1269423819}
-  - component: {fileID: 1269423818}
-  m_Layer: 0
-  m_Name: ArenaTrigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1269423817
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1269423816}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: -18.75}
-  m_LocalScale: {x: 8.499034, y: 6.90472, z: 0.2964831}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 990853133}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1269423818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1269423816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c207f3b8e1356dd4aaf4a4966f002514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ColliderTrigger
---- !u!65 &1269423819
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1269423816}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1275005464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10792,7 +10793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BattleSystem
   mechromancerBehaviour: {fileID: 0}
   mechromancer: {fileID: 1760355385}
-  arenaTrigger: {fileID: 1269423818}
+  arenaTrigger: {fileID: 0}
   agent: {fileID: 0}
 --- !u!1 &1495611961
 GameObject:
@@ -12367,6 +12368,7 @@ GameObject:
   - component: {fileID: 1760355389}
   - component: {fileID: 1760355387}
   - component: {fileID: 1760355393}
+  - component: {fileID: 1760355394}
   - component: {fileID: 1760355385}
   - component: {fileID: 1760355383}
   m_Layer: 0
@@ -12585,6 +12587,20 @@ MonoBehaviour:
           m_Value1: 1755267819484322493
         Name: Player
         m_Value: {fileID: 179717328}
+--- !u!114 &1760355394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760355382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff833143a74c1474fb67d8d3cf3bd69b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MechBehaviorController
+  graphAgent: {fileID: 1760355393}
+  colliderTrigger: {fileID: 164496563}
 --- !u!1001 &1782854185
 PrefabInstance:
   m_ObjectHideFlags: 0
