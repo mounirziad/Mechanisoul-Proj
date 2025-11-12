@@ -16,7 +16,7 @@ public class AiAfterMeleeAttackState : AiState
 
     public void Enter(AiAgent agent)
     {
-        Debug.Log($"Entering {GetId()} state");
+        //Debug.Log($"Entering {GetId()} state");
         spawnPosition = agent.transform.position;
         hasReachedDestination = true;
         stateEnterTime = Time.time;

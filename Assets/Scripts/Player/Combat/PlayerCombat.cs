@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -35,17 +36,17 @@ public class PlayerCombat : MonoBehaviour
     [Header("Ranged Settings")]
     [Tooltip("Choose between projectile-based or instant hitscan shooting.")]
     public ShootingMode shootingMode = ShootingMode.Projectile;
-    
+
     [Header("Shared Ranged Settings")]
     [SerializeField] private Transform shootPoint;
     [SerializeField] private float weaponDamage = 10f;
     [Tooltip("Baseline shots per second (Joy multiplies this).")]
     public float baseFireRate = 2f;
     public bool rangedEnabled = true;
-    
+
     [Header("Projectile Settings")]
     [SerializeField] private GameObject projectilePrefab;
-    
+
     [Header("Hitscan Settings")]
     [SerializeField] private float hitscanRange = 100f;
     [SerializeField] private LayerMask hitscanLayerMask = -1;
@@ -53,12 +54,24 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject muzzleFlashPrefab;
     [SerializeField] private LineRenderer tracerLinePrefab;
     [SerializeField] private float tracerDuration = 0.1f;
-    
+
+    [Header("Ammo Settings")]
+    [SerializeField] int clipSize = 6;
+    [SerializeField] float reloadTime = 2f;
+    [SerializeField] float autoReloadDelay = 1f;
+    [SerializeField] float baseFireCooldown = 0.20f;
+
+    int ammoInClip;
+    bool isReloading;
+    float fireCooldown;       // computed from joyFireRateMultiplier
+    float lastFireInputTime;  // to detect "gun not in use"
+    private float lastShotTime = -999f;
+    Coroutine autoReloadCR;
+
     [Header("VFX Prefabs")]
     public GameObject angerExplosionPrefab;
     public GameObject joyExplosionPrefab;
 
-    private float lastShotTime = -999f;
     private RangedModifiers rangedMods;
 
     // Melee & input
@@ -69,11 +82,11 @@ public class PlayerCombat : MonoBehaviour
     private float minAnimationPlayTime = 0.4f;
     private float attackStartTime;
     private bool attackQueued = false;
-    
+
     [Header("Input Buffer Settings")]
     public float inputBufferTime = 0.3f;    // How long to buffer attack inputs
     private float lastAttackInputTime = -999f;
-    
+
     [Header("Animation Cancel Settings")]
     public float earlyComboWindow = 0.6f;   // When in animation you can start next combo (0.6 = 60% through)
     public float dodgeCancelWindow = 0.4f;  // When you can cancel attack with dodge (0.4 = 40% through)
@@ -93,11 +106,11 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] Weapon weapon;
     private AttackAnimationManager attackAnimManager;
     private CameraManagerAdapter cameraAdapter;
-    
+
     [Header("Root Motion Settings")]
     [Tooltip("How to combine root motion with attack lunge movement")]
     public RootMotionMode rootMotionMode = RootMotionMode.Hybrid;
-    
+
     [Tooltip("When using Additive mode, multiplier for extra lunge force")]
     [Range(0.1f, 2f)]
     public float additionalLungeMultiplier = 0.5f;
@@ -112,13 +125,13 @@ public class PlayerCombat : MonoBehaviour
         anim = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
         attackAnimManager = GetComponent<AttackAnimationManager>();
-        
+
         cameraAdapter = GetComponent<CameraManagerAdapter>();
         if (cameraAdapter == null)
         {
             cameraAdapter = gameObject.AddComponent<CameraManagerAdapter>();
         }
-        
+
         if (attackAnimManager == null)
         {
             attackAnimManager = gameObject.AddComponent<AttackAnimationManager>();
@@ -138,12 +151,14 @@ public class PlayerCombat : MonoBehaviour
             playerControls.PlayerActions.Attack.performed += OnAttackPerformed;
         }
         if (weapon != null) weapon.DisableTriggerBox();
-        
+
         // Ensure root motion is disabled initially
         if (anim != null)
         {
             anim.applyRootMotion = false;
         }
+
+        InitRangedGun();
     }
 
     void OnDisable()
@@ -161,21 +176,21 @@ public class PlayerCombat : MonoBehaviour
         ClearQueuedAttacksInAir();
         TrackGroundedState();
     }
-    
+
     void TrackGroundedState()
     {
         var playerLoco = GetComponent<PlayerLocomotion>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
-        
+
         // Reset air attack counter when landing
         if (isGrounded && !wasGroundedLastFrame)
         {
             currentAirAttackCount = 0;
         }
-        
+
         wasGroundedLastFrame = isGrounded;
     }
-    
+
     void ClearQueuedAttacksInAir()
     {
         if (attackQueued)
@@ -184,7 +199,7 @@ public class PlayerCombat : MonoBehaviour
             var playerMgr = GetComponent<PlayerManager>();
             bool isGrounded = playerLoco != null && playerLoco.isGrounded;
             bool isInteracting = playerMgr != null && playerMgr.isInteracting;
-            
+
             // Clear queued attacks when airborne (if air attacks disabled) or when interacting
             if (isInteracting || (!isGrounded && !allowAirAttacks))
             {
@@ -216,7 +231,7 @@ public class PlayerCombat : MonoBehaviour
             if (isAiming) StopAiming();
             return;
         }
-        
+
         if (inputManager.aimInput && !isAttacking && !isAiming) StartAiming();
         else if (isAiming && !inputManager.aimInput) StopAiming();
 
@@ -245,6 +260,8 @@ public class PlayerCombat : MonoBehaviour
         rangedMods = mods;
         if (rangedMods.joyFireRateMultiplier <= 0f) rangedMods.joyFireRateMultiplier = 1f;
         if (rangedMods.joyDamageMultiplier <= 0f) rangedMods.joyDamageMultiplier = 1f;
+        RecalcFireCooldown(mods.joyFireRateMultiplier);
+        LogGun($"SetRangedUpgrades applied: ammo={ammoInClip}/{clipSize}");
     }
 
     public void ToggleRanged(bool on)
@@ -263,11 +280,12 @@ public class PlayerCombat : MonoBehaviour
 
         if (shootingMode == ShootingMode.Projectile)
         {
-            ShootProjectile();
+            TryFireRanged();
         }
         else
         {
-            ShootHitscan();
+            // Route hitscan through ammo/reload as well
+            TryFireRanged();
         }
 
         lastShotTime = Time.time;
@@ -285,14 +303,14 @@ public class PlayerCombat : MonoBehaviour
         Vector3 spawnPosition = GetCorrectedSpawnPosition();
         var go = Instantiate(projectilePrefab, spawnPosition, shootPoint.rotation);
         var proj = go.GetComponent<PlayerProjectile>();
-        
+
         if (proj != null)
         {
             float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
             Vector3 correctedDirection = GetCorrectedAimDirection();
             proj.Initialize(correctedDirection, finalDamage, rangedMods, this);
         }
-        
+
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlayLaserSound();
@@ -310,16 +328,16 @@ public class PlayerCombat : MonoBehaviour
         Vector3 aimTarget = GetCameraCenterAimPoint();
         Vector3 shootOrigin = shootPoint.position;
         Vector3 shootDirection;
-        
+
         shootDirection = (aimTarget - shootOrigin).normalized;
-        
+
         if (showAimDebug)
         {
             Debug.Log($"Shoot Origin: {shootOrigin}, Aim Target: {aimTarget}, Direction: {shootDirection}");
             Debug.DrawLine(shootOrigin, aimTarget, Color.yellow, 2f);
             Debug.DrawRay(shootOrigin, shootDirection * 50f, Color.red, 2f);
         }
-        
+
         float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
 
         if (muzzleFlashPrefab != null)
@@ -327,7 +345,7 @@ public class PlayerCombat : MonoBehaviour
             var muzzle = Instantiate(muzzleFlashPrefab, shootOrigin, Quaternion.LookRotation(shootDirection));
             Destroy(muzzle, 0.1f);
         }
-        
+
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlayLaserSound();
@@ -444,7 +462,7 @@ public class PlayerCombat : MonoBehaviour
         if (aimCameraManager != null && aimCameraManager.IsAimCameraActive())
         {
             Vector3 aimTarget = aimCameraManager.GetAimTarget();
-            
+
             // Validate that the aim target is reasonable (not too close or at origin)
             if (aimTarget != Vector3.zero)
             {
@@ -455,7 +473,7 @@ public class PlayerCombat : MonoBehaviour
                 }
             }
         }
-        
+
         return Vector3.zero; // No valid target found
     }
 
@@ -489,19 +507,19 @@ public class PlayerCombat : MonoBehaviour
         if (cameraAdapter != null && cameraAdapter.IsAimCameraActive())
         {
             Vector3 aimTarget = cameraAdapter.GetAimTarget();
-            
+
             if (aimTarget != Vector3.zero)
             {
                 Vector3 cameraPos = GetCameraPosition();
-                
+
                 Vector3 idealDirection = (aimTarget - cameraPos).normalized;
-                
+
                 Vector3 correctedDirection = CalculateTrajectoryCorrection(shootPoint.position, cameraPos, aimTarget, idealDirection);
-                
+
                 return correctedDirection;
             }
         }
-        
+
         return GetAccurateAimDirection();
     }
 
@@ -509,19 +527,19 @@ public class PlayerCombat : MonoBehaviour
     {
         // Distance to target from camera
         float distanceToTarget = Vector3.Distance(cameraOrigin, target);
-        
+
         // Calculate a convergence point along the ideal trajectory
         // The closer the target, the more correction we need
         float convergenceDistance = Mathf.Min(distanceToTarget * 0.3f, 10f); // Converge within 30% of distance or 10m max
         Vector3 convergencePoint = cameraOrigin + idealDirection * convergenceDistance;
-        
+
         // Calculate direction from actual shoot point to convergence point
         Vector3 correctedDirection = (convergencePoint - shootOrigin).normalized;
-        
+
         // Blend between corrected direction (for close targets) and direct direction (for far targets)
         float blendFactor = Mathf.Clamp01(20f / distanceToTarget); // More correction for closer targets
         Vector3 directDirection = (target - shootOrigin).normalized;
-        
+
         return Vector3.Slerp(directDirection, correctedDirection, blendFactor).normalized;
     }
 
@@ -532,7 +550,7 @@ public class PlayerCombat : MonoBehaviour
         {
             return mainCam.transform.position;
         }
-        
+
         return transform.position + Vector3.up * 1.6f;
     }
 
@@ -548,19 +566,122 @@ public class PlayerCombat : MonoBehaviour
         Vector3 cameraPos = GetCameraPosition();
 
         Vector3 idealDirection = (aimTarget - cameraPos).normalized;
-        
+
         Vector3 cameraToShoot = shootPoint.position - cameraPos;
         float projectionDistance = Vector3.Dot(cameraToShoot, idealDirection);
         Vector3 projectedPoint = cameraPos + idealDirection * projectionDistance;
-        
+
         Vector3 offset = projectedPoint - shootPoint.position;
-        
+
         if (offset.magnitude > maxSpawnOffset)
         {
             offset = offset.normalized * maxSpawnOffset;
         }
-        
+
         return shootPoint.position + offset;
+    }
+
+
+    // ====== Ranged Ammo System with Debug Logs ======
+    void LogGun(string msg) { Debug.Log($"[RangedGun] {msg}"); }
+
+    void InitRangedGun()
+    {
+        ammoInClip = clipSize;
+        RecalcFireCooldown(1f);
+        LogGun($"Init clip={clipSize}, ammo={ammoInClip}/{clipSize}, fireCD={fireCooldown:0.00}s, reload={reloadTime:0.00}s");
+    }
+
+    void RecalcFireCooldown(float joyFireRateMultiplier)
+    {
+        float prev = fireCooldown;
+        fireCooldown = Mathf.Max(0.05f, baseFireCooldown / Mathf.Max(0.01f, joyFireRateMultiplier));
+        LogGun($"RecalcFireCooldown: joyFRx={joyFireRateMultiplier:0.00} -> cooldown {prev:0.00}s => {fireCooldown:0.00}s");
+    }
+
+    public void TryFireRanged()
+    {
+        lastFireInputTime = Time.time;
+
+        if (isReloading)
+        {
+            LogGun($"TryFireRanged blocked: reloading (ammo={ammoInClip}/{clipSize})");
+            return;
+        }
+
+        float sinceLast = Time.time - lastShotTime;
+        if (sinceLast < fireCooldown)
+        {
+            LogGun($"TryFireRanged blocked: cooldown {fireCooldown - sinceLast:0.00}s remaining");
+            return;
+        }
+
+        if (ammoInClip <= 0)
+        {
+            LogGun("Empty clip -> starting reload");
+            if (autoReloadCR == null) autoReloadCR = StartCoroutine(ReloadCR());
+            return;
+        }
+
+        // Fire using the selected shooting mode
+        if (shootingMode == ShootingMode.Projectile)
+        {
+            ShootProjectile();
+        }
+        else
+        {
+            ShootHitscan();
+        }
+
+        ammoInClip--;
+        lastShotTime = Time.time;
+        LogGun($"Fired. Ammo now {ammoInClip}/{clipSize}");
+
+        RestartIdleAutoReload();
+    }
+
+    void RestartIdleAutoReload()
+    {
+        if (autoReloadCR != null) { StopCoroutine(autoReloadCR); autoReloadCR = null; }
+        LogGun($"Idle auto-reload arming (delay={autoReloadDelay:0.00}s)");
+        autoReloadCR = StartCoroutine(IdleAutoReloadCR());
+    }
+
+    IEnumerator IdleAutoReloadCR()
+    {
+        float armedAt = Time.time;
+        yield return new WaitUntil(() => Time.time - lastFireInputTime >= autoReloadDelay);
+        float waited = Time.time - armedAt;
+
+        if (!isReloading && ammoInClip < clipSize)
+        {
+            LogGun($"Idle auto-reload triggered after {waited:0.00}s idle (ammo={ammoInClip}/{clipSize})");
+            yield return ReloadCR();
+        }
+        else
+        {
+            LogGun($"Idle auto-reload canceled (reloading={isReloading}, ammo={ammoInClip}/{clipSize})");
+        }
+        autoReloadCR = null;
+    }
+
+    public void ManualReload()
+    {
+        if (isReloading) { LogGun("ManualReload ignored: already reloading"); return; }
+        if (ammoInClip >= clipSize) { LogGun("ManualReload ignored: clip full"); return; }
+        if (autoReloadCR != null) { StopCoroutine(autoReloadCR); autoReloadCR = null; }
+        LogGun($"ManualReload started (ammo={ammoInClip}/{clipSize})");
+        StartCoroutine(ReloadCR());
+    }
+
+    IEnumerator ReloadCR()
+    {
+        isReloading = true;
+        LogGun($"Reload start (duration={reloadTime:0.00}s) ammo={ammoInClip}/{clipSize}");
+        yield return new WaitForSeconds(reloadTime);
+        ammoInClip = clipSize;
+        isReloading = false;
+        LogGun($"Reload complete -> ammo={ammoInClip}/{clipSize}");
     }
 
     // Melee (improved)
@@ -568,33 +689,33 @@ public class PlayerCombat : MonoBehaviour
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
         if (isDialogueActive) return;
-        
+
         if (isAiming) { inputManager.shootInput = true; return; }
-        
+
         lastAttackInputTime = Time.time;
-        
-        if (CanAttack()) 
+
+        if (CanAttack())
         {
             Attack();
         }
-        else if (isAttacking) 
+        else if (isAttacking)
         {
             // Buffer the attack input
             attackQueued = true;
         }
     }
 
-    bool CanAttack() 
+    bool CanAttack()
     {
         var playerLoco = GetComponent<PlayerLocomotion>();
         var playerMgr = GetComponent<PlayerManager>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
         bool isInteracting = playerMgr != null && playerMgr.isInteracting;
-        
+
         // Basic checks first (including interaction/landing check)
         if (isAttacking || isAiming || isInteracting || Time.time - lastComboEnd < 0.2f)
             return false;
-        
+
         // If grounded and not interacting, allow attacks
         if (isGrounded)
         {
@@ -604,13 +725,13 @@ public class PlayerCombat : MonoBehaviour
             }
             return true;
         }
-        
+
         // If in air, check if air attacks are allowed and within limit
         if (allowAirAttacks && currentAirAttackCount < maxAirAttacks)
         {
             return true;
         }
-        
+
         // Default: no attack allowed
         return false;
     }
@@ -624,22 +745,22 @@ public class PlayerCombat : MonoBehaviour
             attackQueued = false;
             return;
         }
-        
+
         if (!attackQueued || isAttacking) return;
-        
+
         // Ensure player can still attack (check grounded, air limits, and interaction state)
         var playerLoco = GetComponent<PlayerLocomotion>();
         var playerMgr = GetComponent<PlayerManager>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
         bool isInteracting = playerMgr != null && playerMgr.isInteracting;
-        
+
         // Cancel queued attack if player is interacting (landing, dodging, etc.)
         if (isInteracting)
         {
             attackQueued = false;
             return;
         }
-        
+
         if (!isGrounded)
         {
             if (!allowAirAttacks || currentAirAttackCount >= maxAirAttacks)
@@ -648,7 +769,7 @@ public class PlayerCombat : MonoBehaviour
                 return;
             }
         }
-        
+
         // Check if we're in the combo window
         if (Time.time - attackStartTime >= minAnimationPlayTime)
         {
@@ -658,7 +779,7 @@ public class PlayerCombat : MonoBehaviour
                 Attack();
             }
         }
-        
+
         // Clear old buffered inputs
         if (Time.time - lastAttackInputTime > inputBufferTime)
         {
@@ -690,19 +811,19 @@ public class PlayerCombat : MonoBehaviour
         {
             var playerMgr = GetComponent<PlayerManager>();
             CancelInvoke(nameof(EndCombo));
-            
+
             // Get the current attack data before setting the animator
             AttackSO currentAttackData = combo[comboCounter];
-            
+
             anim.runtimeAnimatorController = currentAttackData.animatorOV;
             anim.Play("Attack", 0, 0);
-            
+
             // Apply attack speed modifier using the dedicated manager with attack data
             if (attackAnimManager != null)
             {
                 attackAnimManager.ApplyAttackSpeedToAnimation(currentAttackData);
             }
-            
+
             weapon.damage = currentAttackData.damage * playerMgr.GetDamageMultiplier();
             //Debug.Log($"weapon.damage amount: {weapon.damage}");
 
@@ -711,7 +832,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 weapon.ResetHitSoundCooldown();
             }
-            
+
             // Play attack sound effect
             if (SoundManager.Instance != null)
             {
@@ -719,7 +840,7 @@ public class PlayerCombat : MonoBehaviour
             }
 
             SetAttackTarget();
-            
+
             // Track air attacks
             var playerLoco = GetComponent<PlayerLocomotion>();
             bool isGrounded = playerLoco != null && playerLoco.isGrounded;
@@ -727,7 +848,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 currentAirAttackCount++; // Increment air attack counter
             }
-            
+
             // Handle different root motion modes
             switch (rootMotionMode)
             {
@@ -736,20 +857,20 @@ public class PlayerCombat : MonoBehaviour
                     anim.applyRootMotion = false;
                     StartAttackMovement();
                     break;
-                    
+
                 case RootMotionMode.RootMotionOnly:
                     // Pure root motion - let animation drive movement completely
                     anim.applyRootMotion = true;
                     // Don't call StartAttackMovement()
                     break;
-                    
+
                 case RootMotionMode.Hybrid:
                     // Best of both worlds - root motion + reduced lunge
                     anim.applyRootMotion = true;
                     StartAttackMovementHybrid();
                     break;
             }
-            
+
             isAttacking = true;
             attackStartTime = Time.time;
             comboCounter++;
@@ -765,24 +886,24 @@ public class PlayerCombat : MonoBehaviour
         if (playerLoco != null)
         {
             Vector3 attackDirection = transform.forward;
-            
+
             // If we have a target, move towards it
             if (currentTarget != null)
             {
                 Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
                 directionToTarget.y = 0;
                 attackDirection = directionToTarget;
-                
+
                 // Rotate towards target for more dynamic combat
                 transform.rotation = Quaternion.LookRotation(attackDirection);
             }
-            
+
             // Get the correct attack data for the current attack
             int currentAttackIndex = comboCounter - 1;
             if (currentAttackIndex < 0) currentAttackIndex = combo.Count - 1;
-            
+
             AttackSO currentAttackData = combo[currentAttackIndex];
-            
+
             // Create a modified attack data for hybrid mode (reduced movement since root motion is also active)
             AttackSO hybridAttackData = ScriptableObject.CreateInstance<AttackSO>();
             hybridAttackData.moveDistance = currentAttackData.moveDistance * additionalLungeMultiplier;
@@ -790,11 +911,11 @@ public class PlayerCombat : MonoBehaviour
             hybridAttackData.moveDuration = currentAttackData.moveDuration;
             hybridAttackData.moveCurve = currentAttackData.moveCurve;
             hybridAttackData.rotateTowardsTarget = currentAttackData.rotateTowardsTarget;
-            
+
             // Force stop any existing attack movement and start new one
             playerLoco.ForceStopAttackLunge();
             playerLoco.StartAttackLunge(attackDirection, hybridAttackData);
-            
+
             Debug.Log($"Starting hybrid attack {currentAttackIndex} - Root Motion: ON, Extra Lunge: {hybridAttackData.moveDistance}");
         }
     }
@@ -805,29 +926,29 @@ public class PlayerCombat : MonoBehaviour
         if (playerLoco != null)
         {
             Vector3 attackDirection = transform.forward;
-            
+
             // If we have a target, move towards it
             if (currentTarget != null)
             {
                 Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
                 directionToTarget.y = 0;
                 attackDirection = directionToTarget;
-                
+
                 // Rotate towards target for more dynamic combat
                 transform.rotation = Quaternion.LookRotation(attackDirection);
             }
-            
+
             // Get the correct attack data for the current attack
             // comboCounter has already been incremented, so we need the previous index
             int currentAttackIndex = comboCounter - 1;
             if (currentAttackIndex < 0) currentAttackIndex = combo.Count - 1;
-            
+
             AttackSO currentAttackData = combo[currentAttackIndex];
-            
+
             // Force stop any existing attack movement and start new one
             playerLoco.ForceStopAttackLunge();
             playerLoco.StartAttackLunge(attackDirection, currentAttackData);
-            
+
             Debug.Log($"Starting attack {currentAttackIndex} with move distance: {currentAttackData.moveDistance}");
         }
     }
@@ -836,11 +957,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!isAttacking) return;
         float norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
-        
+
         // Allow early combo transitions for fluid combat
         if (Time.time - attackStartTime >= minAnimationPlayTime && norm >= earlyComboWindow)
         {
-            if (attackQueued) 
+            if (attackQueued)
             {
                 isAttacking = false; // Allow next attack to start
                 return;
@@ -855,19 +976,19 @@ public class PlayerCombat : MonoBehaviour
     void CompleteAttack()
     {
         isAttacking = false;
-        
+
         // Reset animator speed to normal when attack completes using the manager
         if (attackAnimManager != null)
         {
             attackAnimManager.ResetAnimationSpeed();
         }
-        
+
         // Disable root motion when attack completes (except for LungeOnly mode where it's already off)
         if (rootMotionMode != RootMotionMode.LungeOnly)
         {
             anim.applyRootMotion = false;
         }
-        
+
         // Stop attack movement when attack completes (unless combo continues)
         if (!attackQueued)
         {
@@ -878,7 +999,7 @@ public class PlayerCombat : MonoBehaviour
             }
             Invoke(nameof(EndCombo), 0.5f);
         }
-        
+
         currentTarget = null;
     }
 
@@ -886,7 +1007,7 @@ public class PlayerCombat : MonoBehaviour
     public bool CanDodgeCancel()
     {
         if (!isAttacking) return true;
-        
+
         float norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
         return norm >= dodgeCancelWindow;
     }
@@ -902,7 +1023,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 attackAnimManager.ResetAnimationSpeed();
             }
-            
+
             comboCounter = 0;
             lastComboEnd = Time.time;
             attackQueued = false;
@@ -912,27 +1033,27 @@ public class PlayerCombat : MonoBehaviour
     // Animation events
     public void OnAnimationEnableWeapon() { if (weapon != null) weapon.EnableTriggerBox(); }
     public void OnAnimationDisableWeapon() { if (weapon != null) weapon.DisableTriggerBox(); }
-    
-    public void CancelAttack() 
-    { 
-        isAttacking = false; 
-        attackQueued = false; 
-        
+
+    public void CancelAttack()
+    {
+        isAttacking = false;
+        attackQueued = false;
+
         // Reset animator speed to normal when canceling attack using the manager
         if (attackAnimManager != null)
         {
             attackAnimManager.ResetAnimationSpeed();
         }
-        
-        anim.Play("Idle"); 
+
+        anim.Play("Idle");
         currentTarget = null;
-        
+
         // Disable root motion when canceling attack (except for LungeOnly mode where it's already off)
         if (rootMotionMode != RootMotionMode.LungeOnly)
         {
             anim.applyRootMotion = false;
         }
-        
+
         // Stop any attack movement
         var playerLoco = GetComponent<PlayerLocomotion>();
         if (playerLoco != null)
@@ -940,13 +1061,13 @@ public class PlayerCombat : MonoBehaviour
             playerLoco.ForceStopAttackLunge();
         }
     }
-    
+
     // Public method to reset air attack counter (useful for abilities, special moves, etc.)
     public void ResetAirAttackCounter()
     {
         currentAirAttackCount = 0;
     }
-    
+
     // Public method to check current air attack status (useful for UI or other systems)
     public bool CanPerformAirAttack()
     {
@@ -954,15 +1075,15 @@ public class PlayerCombat : MonoBehaviour
         var playerMgr = GetComponent<PlayerManager>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
         bool isInteracting = playerMgr != null && playerMgr.isInteracting;
-        
+
         // Can't attack while interacting (landing, dodging, etc.)
         if (isInteracting) return false;
-        
+
         if (isGrounded) return true; // Always can attack when grounded and not interacting
-        
+
         return allowAirAttacks && currentAirAttackCount < maxAirAttacks;
     }
-    
+
     // Debug method to get air attack info
     public string GetAirAttackDebugInfo()
     {
@@ -970,7 +1091,7 @@ public class PlayerCombat : MonoBehaviour
         var playerMgr = GetComponent<PlayerManager>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
         bool isInteracting = playerMgr != null && playerMgr.isInteracting;
-        
+
         return $"Grounded: {isGrounded}, Interacting: {isInteracting}, Air Attacks: {currentAirAttackCount}/{maxAirAttacks}, Allow Air: {allowAirAttacks}";
     }
 
@@ -1003,7 +1124,7 @@ public class PlayerCombat : MonoBehaviour
         Vector3 cameraPos = GetCameraPosition();
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(cameraPos, Vector3.one * 0.1f);
-        
+
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(cameraPos, aimTarget);
     }
@@ -1024,7 +1145,7 @@ public class PlayerCombat : MonoBehaviour
         }
 
         Camera cam = Camera.main;
-        if (cam == null) 
+        if (cam == null)
         {
             if (showAimDebug)
             {
