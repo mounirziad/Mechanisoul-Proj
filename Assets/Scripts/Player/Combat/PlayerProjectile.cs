@@ -12,23 +12,32 @@ public class PlayerProjectile : MonoBehaviour
     private PlayerCombat owner;
     private Vector3 targetPosition;
     private bool hasTarget = false;
+    private float ignorePlayerCollisionTime = 0.1f;
+    private float spawnTime;
 
 
 
-    public void Initialize(Vector3 shootDirection, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null)
+    public void Initialize(Vector3 shootDirection, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null, float targetDistance = 0f)
     {
         direction = shootDirection.normalized;
         damage = projectileDamage;
         mods = rangedMods;
         owner = owningCombat;
+        spawnTime = Time.time;
         
-        // Align the projectile's rotation to the direction
         if (direction != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(direction);
         }
         
-        Destroy(gameObject, lifetime);
+        float calculatedLifetime = lifetime;
+        if (targetDistance > 0f)
+        {
+            calculatedLifetime = (targetDistance / speed) + 1f;
+            calculatedLifetime = Mathf.Max(calculatedLifetime, lifetime);
+        }
+        
+        Destroy(gameObject, calculatedLifetime);
     }
 
     public void InitializeWithTarget(Vector3 targetPos, float projectileDamage, RangedModifiers rangedMods, PlayerCombat owningCombat = null)
@@ -39,8 +48,8 @@ public class PlayerProjectile : MonoBehaviour
         damage = projectileDamage;
         mods = rangedMods;
         owner = owningCombat;
+        spawnTime = Time.time;
         
-        // Align the projectile's rotation to the direction
         if (direction != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(direction);
@@ -56,8 +65,16 @@ public class PlayerProjectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        float distanceTraveled = Vector3.Distance(transform.position, owner != null ? owner.transform.position : Vector3.zero);
+        Debug.Log($"[PlayerProjectile] Hit {other.gameObject.name} (Layer: {LayerMask.LayerToName(other.gameObject.layer)}) at distance: {distanceTraveled:F2}m");
+        
         if (other.CompareTag("Player"))
         {
+            if (Time.time - spawnTime < ignorePlayerCollisionTime)
+            {
+                Debug.Log($"[PlayerProjectile] Ignoring player collision (too soon after spawn)");
+                return;
+            }
             Destroy(gameObject);
             return;
         }

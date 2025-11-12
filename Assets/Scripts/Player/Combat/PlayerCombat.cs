@@ -308,7 +308,18 @@ public class PlayerCombat : MonoBehaviour
         {
             float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
             Vector3 correctedDirection = GetCorrectedAimDirection();
-            proj.Initialize(correctedDirection, finalDamage, rangedMods, this);
+            
+            float targetDistance = 0f;
+            if (cameraAdapter != null)
+            {
+                Vector3 aimTarget = cameraAdapter.GetAimTarget();
+                if (aimTarget != Vector3.zero)
+                {
+                    targetDistance = Vector3.Distance(spawnPosition, aimTarget);
+                }
+            }
+            
+            proj.Initialize(correctedDirection, finalDamage, rangedMods, this, targetDistance);
         }
 
         if (SoundManager.Instance != null)
@@ -327,15 +338,16 @@ public class PlayerCombat : MonoBehaviour
 
         Vector3 aimTarget = GetCameraCenterAimPoint();
         Vector3 shootOrigin = shootPoint.position;
-        Vector3 shootDirection;
-
-        shootDirection = (aimTarget - shootOrigin).normalized;
+        Vector3 shootDirection = (aimTarget - shootOrigin).normalized;
+        
+        float distanceToTarget = Vector3.Distance(shootOrigin, aimTarget);
+        float effectiveRange = Mathf.Max(hitscanRange, distanceToTarget + 10f);
 
         if (showAimDebug)
         {
-            Debug.Log($"Shoot Origin: {shootOrigin}, Aim Target: {aimTarget}, Direction: {shootDirection}");
+            Debug.Log($"Shoot Origin: {shootOrigin}, Aim Target: {aimTarget}, Direction: {shootDirection}, Range: {effectiveRange}");
             Debug.DrawLine(shootOrigin, aimTarget, Color.yellow, 2f);
-            Debug.DrawRay(shootOrigin, shootDirection * 50f, Color.red, 2f);
+            Debug.DrawRay(shootOrigin, shootDirection * effectiveRange, Color.red, 2f);
         }
 
         float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
@@ -353,20 +365,28 @@ public class PlayerCombat : MonoBehaviour
 
         RaycastHit hit;
         Vector3 hitPosition;
-        bool hitSomething = Physics.Raycast(shootOrigin, shootDirection, out hit, hitscanRange, hitscanLayerMask);
+        bool hitSomething = Physics.Raycast(shootOrigin, shootDirection, out hit, effectiveRange, hitscanLayerMask, QueryTriggerInteraction.Ignore);
 
         if (hitSomething)
         {
             hitPosition = hit.point;
+            float hitDistance = Vector3.Distance(shootOrigin, hitPosition);
+            
+            Debug.Log($"[Hitscan] Hit '{hit.collider.gameObject.name}' on layer '{LayerMask.LayerToName(hit.collider.gameObject.layer)}' at distance {hitDistance:F2}m (Target was {distanceToTarget:F2}m away)");
 
-            if (!hit.collider.CompareTag("Player"))
+            if (hit.collider.CompareTag("Player"))
+            {
+                Debug.LogWarning($"[Hitscan] Hit player's own collider! Skipping this hit.");
+                hitPosition = shootOrigin + shootDirection * effectiveRange;
+            }
+            else
             {
                 var enemyHealth = hit.collider.GetComponentInParent<BasicEnemyHealth>();
                 if (enemyHealth != null)
                 {
                     RangedHitscanHelper.Apply(
-                        weaponDamage,          // base per-shot damage (before joy dmg mult)
-                        rangedMods,            // from UpgradeHandler.SetRangedUpgrades
+                        weaponDamage,
+                        rangedMods,
                         enemyHealth,
                         hitPosition,
                         shootDirection,
@@ -389,7 +409,8 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
-            hitPosition = shootOrigin + shootDirection * hitscanRange;
+            hitPosition = shootOrigin + shootDirection * effectiveRange;
+            Debug.Log($"[Hitscan] No hit detected within range {effectiveRange:F2}m");
         }
 
         if (tracerLinePrefab != null)
@@ -485,7 +506,8 @@ public class PlayerCombat : MonoBehaviour
 
             if (aimTarget != Vector3.zero)
             {
-                Vector3 direction = (aimTarget - shootPoint.position).normalized;
+                Vector3 cameraPos = GetCameraPosition();
+                Vector3 direction = (aimTarget - cameraPos).normalized;
                 return direction;
             }
         }
@@ -511,12 +533,9 @@ public class PlayerCombat : MonoBehaviour
             if (aimTarget != Vector3.zero)
             {
                 Vector3 cameraPos = GetCameraPosition();
+                Vector3 cameraToTargetDirection = (aimTarget - cameraPos).normalized;
 
-                Vector3 idealDirection = (aimTarget - cameraPos).normalized;
-
-                Vector3 correctedDirection = CalculateTrajectoryCorrection(shootPoint.position, cameraPos, aimTarget, idealDirection);
-
-                return correctedDirection;
+                return cameraToTargetDirection;
             }
         }
 
@@ -1119,7 +1138,8 @@ public class PlayerCombat : MonoBehaviour
 
         Gizmos.color = Color.green;
         Vector3 correctedDirection = GetCorrectedAimDirection();
-        Gizmos.DrawLine(correctedSpawn, correctedSpawn + correctedDirection * 10f);
+        float distanceToTarget = Vector3.Distance(correctedSpawn, aimTarget);
+        Gizmos.DrawLine(correctedSpawn, correctedSpawn + correctedDirection * distanceToTarget);
 
         Vector3 cameraPos = GetCameraPosition();
         Gizmos.color = Color.cyan;

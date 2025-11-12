@@ -214,9 +214,13 @@ public class AimCamera : MonoBehaviour
     private void UpdateAimTarget()
     {
         Vector3 aimPoint;
-        
-        Ray aimRay = new Ray(transform.position, transform.forward);
-        
+
+        // Use desiredRotation instead of transform.forward for consistency
+        Vector3 rayOrigin = transform.position;
+        Vector3 rayDirection = desiredRotation * Vector3.forward;
+
+        Ray aimRay = new Ray(rayOrigin, rayDirection);
+
         if (Physics.Raycast(aimRay, out RaycastHit hit, aimDistance, aimLayers, QueryTriggerInteraction.Ignore))
         {
             aimPoint = hit.point;
@@ -228,7 +232,7 @@ public class AimCamera : MonoBehaviour
 
         instantAimPoint = aimPoint;
         currentAimPoint = Vector3.Lerp(currentAimPoint, aimPoint, aimTargetSmoothing * Time.deltaTime);
-        
+
         if (aimTarget != null)
         {
             aimTarget.position = currentAimPoint;

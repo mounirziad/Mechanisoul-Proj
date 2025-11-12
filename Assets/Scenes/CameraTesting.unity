@@ -285,7 +285,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2456110498022447776, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 1897033626}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 905370935}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 181d7c9f52fecd349bc050d7b3f68722, type: 3}
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7997716459771237118, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
   m_PrefabInstance: {fileID: 1897033626}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 905370935}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23189b3f3314228448d896351ffab1d6, type: 3}
@@ -312,6 +312,39 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7403686972293164597, guid: ec85ae9dba3393a4281897289889c64b, type: 3}
   m_PrefabInstance: {fileID: 381047621611564369}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &905370935 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+  m_PrefabInstance: {fileID: 1897033626}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &905370961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905370935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80e869f5f924eee48a9b742eb232450e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AimingSystemDebugger
+  playerCombat: {fileID: 0}
+  cameraAdapter: {fileID: 0}
+  shootPoint: {fileID: 0}
+  showDebugLines: 1
+  showDebugLogs: 0
+  crosshairLineColor:
+    r: 0
+    g: 1
+    b: 0
+    a: 1
+  shootLineColor:
+    r: 1
+    g: 0
+    b: 0
+    a: 1
+  debugLineDuration: 0.5
 --- !u!1001 &959754668
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1382,6 +1415,14 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 404719742}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: showAimDebug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131715302814231125, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: hitscanLayerMask.m_Bits
+      value: 951
+      objectReference: {fileID: 0}
     - target: {fileID: 3368849391516351207, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: crosshairObject
       value: 
@@ -1398,6 +1439,10 @@ PrefabInstance:
       propertyPath: zTargetingCamera
       value: 
       objectReference: {fileID: 404719745}
+    - target: {fileID: 7968741960594981455, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7997716459771237118, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: cameraTransform
       value: 
@@ -1453,7 +1498,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 905370961}
   m_SourcePrefab: {fileID: 100100000, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
 --- !u!1 &1900500300
 GameObject:
