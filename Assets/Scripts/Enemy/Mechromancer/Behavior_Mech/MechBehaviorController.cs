@@ -7,8 +7,10 @@ public class MechBehaviorController : MonoBehaviour
     public BehaviorGraphAgent graphAgent;
     public ColliderTrigger colliderTrigger;
 
-    public static event Action<MechBossPhases> OnPhaseChanged;
-    private MechBossPhases currentPhase = MechBossPhases.Intro;
+    public EventChannel phase1Channel;
+    public EventChannel phase2Channel;
+    public EventChannel rageChannel;
+    public EventChannel deathChannel;
 
     private bool isActive = false;
     private bool isPlayerInRange = false;
@@ -19,6 +21,12 @@ public class MechBehaviorController : MonoBehaviour
         {
             graphAgent = GetComponent<BehaviorGraphAgent>();
         }
+
+        //Get event channels from blackboard
+        graphAgent.BlackboardReference.GetVariableValue("Phase1", out phase1Channel);
+        graphAgent.BlackboardReference.GetVariableValue("Phase2", out phase2Channel);
+        graphAgent.BlackboardReference.GetVariableValue("Rage", out rageChannel);
+        graphAgent.BlackboardReference.GetVariableValue("Death", out deathChannel);
 
         graphAgent.BlackboardReference.SetVariableValue("isActive", false);
         graphAgent.BlackboardReference.SetVariableValue("isPlayerInRange", false);
@@ -36,7 +44,6 @@ public class MechBehaviorController : MonoBehaviour
         InRange(true);
 
         Debug.Log("Starting cinematic");
-        TransitionToPhase(MechBossPhases.Intro);
     }
 
     public void SetActive(bool active)
@@ -51,21 +58,27 @@ public class MechBehaviorController : MonoBehaviour
         graphAgent.BlackboardReference.SetVariableValue("isPlayerInRange", inRange);
     }
 
-    private void TransitionToPhase(MechBossPhases newPhase)
+    public void TriggerPhase(string phaseName)
     {
-        if (currentPhase == newPhase) return;
+        Debug.Log($"Mech entering {phaseName}");
 
-        currentPhase = newPhase;
-        Debug.Log("Boss transitioned to phase: " + currentPhase);
-        OnPhaseChanged?.Invoke(currentPhase);
+        switch (phaseName)
+        {
+            case "Phase1":
+                phase1Channel.SendEventMessage();
+                break;
+
+            case "Phase2":
+                phase2Channel.SendEventMessage();
+                break;
+
+            case "Rage":
+                rageChannel.SendEventMessage();
+                break;
+
+            case "Death":
+                deathChannel.SendEventMessage();
+                break;
+        }
     }
-}
-
-public enum MechBossPhases
-{
-    Intro,
-    Phase1,
-    Phase2,
-    Rage,
-    Death
 }

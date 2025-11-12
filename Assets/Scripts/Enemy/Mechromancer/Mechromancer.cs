@@ -4,16 +4,16 @@ using System;
 public class Mechromancer : Enemy, IDamage
 {
     [Header("Stats")]
-    //[SerializeField] public float maxHealth = 75f;
-    //[SerializeField] public float currentHealth;
     [SerializeField] private float damageProvider = 8f;
     
     Transform player;
-    public float rotationSpeed;
-    public GameObject blade;
     private bool attacking;
 
     public bool isDead = false;
+
+    private MechBehaviorController controller;
+    private bool phase2Triggered = false;
+    private bool rageTriggered = false;
 
     protected override void Awake()
     {
@@ -23,17 +23,29 @@ public class Mechromancer : Enemy, IDamage
 
     private void Start()
     {
+        controller = GetComponent<MechBehaviorController>();
         attacking = false;
     }
 
-    protected override void Update()
+    /*private void Update()
     {
-        base.Update();
-        if (attacking)
+        if (!phase2Triggered && currentHealth <= 50)
         {
-            blade.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+            phase2Triggered = true;
+            controller.TriggerPhase("Phase2");
         }
-    }
+
+        if (!rageTriggered && currentHealth <= 35)
+        {
+            rageTriggered = true;
+            controller.TriggerPhase("Rage");
+        }
+
+        if (currentHealth <= 0)
+        {
+            controller.TriggerPhase("Death");
+        }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
@@ -50,15 +62,6 @@ public class Mechromancer : Enemy, IDamage
             attacking = false;
         }
     }
-
-    /*private void OnTriggerStay(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            Vector3 targetPosition = new Vector3(other.transform.position.x, cannon.transform.position.y, other.transform.position.z);
-            Quaternion targetRotation = Quaternion.LookRotation(targetPosition - cannon.transform.position);
-        }
-    }*/
 
     public float GetDamage()
     {
