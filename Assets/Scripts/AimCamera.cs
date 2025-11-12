@@ -47,6 +47,7 @@ public class AimCamera : MonoBehaviour
     private Vector3 desiredPosition;
     private Quaternion desiredRotation;
     private Vector3 currentAimPoint;
+    private Vector3 instantAimPoint;
     private float currentShoulderOffsetScale = 1f;
 
     private void Awake()
@@ -225,6 +226,7 @@ public class AimCamera : MonoBehaviour
             aimPoint = aimRay.origin + aimRay.direction * aimDistance;
         }
 
+        instantAimPoint = aimPoint;
         currentAimPoint = Vector3.Lerp(currentAimPoint, aimPoint, aimTargetSmoothing * Time.deltaTime);
         
         if (aimTarget != null)
@@ -276,6 +278,11 @@ public class AimCamera : MonoBehaviour
     }
 
     public Vector3 GetAimTarget()
+    {
+        return instantAimPoint;
+    }
+
+    public Vector3 GetSmoothedAimTarget()
     {
         return currentAimPoint;
     }

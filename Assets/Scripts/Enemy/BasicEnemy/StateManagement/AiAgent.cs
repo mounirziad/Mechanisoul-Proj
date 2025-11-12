@@ -17,7 +17,6 @@ public class AiAgent : MonoBehaviour
     public Transform playertransform;
     public AiWeapons weapons;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ragdoll = GetComponent<Ragdoll>();
@@ -33,7 +32,16 @@ public class AiAgent : MonoBehaviour
         stateMachine.RegisterState(new AiMeleeAttackState());
         stateMachine.RegisterState(new AiAfterMeleeAttackState());
         stateMachine.ChangeState(initialState);
-        playertransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playertransform = player.transform;
+        }
+        else
+        {
+            Debug.LogWarning($"Player not found for AI Agent on {gameObject.name}. AI may not function correctly.");
+        }
     }
 
     // Update is called once per frame

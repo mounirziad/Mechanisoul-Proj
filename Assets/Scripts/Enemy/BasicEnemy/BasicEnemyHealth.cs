@@ -31,9 +31,12 @@ public class BasicEnemyHealth : Enemy
 
     public event System.Action OnDeath;
 
+    void OnDestroy()
+    {
+        CancelInvoke();
+        OnDeath = null;
+    }
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -199,16 +202,30 @@ public class BasicEnemyHealth : Enemy
 
     private void Die(Vector3 direction)
     {
-        if (OnDeath != null)
-            OnDeath.Invoke();
+        try
+        {
+            OnDeath?.Invoke();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"Exception in OnDeath event handlers: {e.Message}");
+        }
+        finally
+        {
+            OnDeath = null;
+        }
 
-        // Disable all hitboxes when enemy dies
         DisableHitBoxes();
 
-        AiDeathState deathState = agent.stateMachine.GetState(AiStateId.Death) as AiDeathState;
-        deathState.direction = direction;
-        agent.stateMachine.ChangeState(AiStateId.Death);
-
+        if (agent != null && agent.stateMachine != null)
+        {
+            AiDeathState deathState = agent.stateMachine.GetState(AiStateId.Death) as AiDeathState;
+            if (deathState != null)
+            {
+                deathState.direction = direction;
+                agent.stateMachine.ChangeState(AiStateId.Death);
+            }
+        }
     }
 
     private void DisableHitBoxes()

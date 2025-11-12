@@ -7,32 +7,48 @@ public class AiDeathState : AiState
     private const float FLASH_DELAY = 2f;
     private const float FLASH_DURATION = 1.5f;
     private const float FLASH_INTERVAL = 0.2f;
+    private Coroutine flashCoroutine;
 
     public void Enter(AiAgent agent)
     {
+        if (agent == null || agent.isDead) return;
+
         agent.isDead = true;
 
-        // Stop NavMeshAgent movement
         BasicEnemyLocomotion locomotion = agent.GetComponent<BasicEnemyLocomotion>();
         if (locomotion != null)
         {
             locomotion.DisableNavMeshAgent();
         }
 
-        // Disable hitboxes and make dead enemy non-collidable with player
         DisableHitBoxesAndCollision(agent);
 
-        agent.ragdoll.ActivateRagdoll();
-        direction.y = 1;
-        agent.ragdoll.ApplyForce(direction * agent.config.dieForce);
-        agent.weapons.DropWeapon();
+        if (agent.ragdoll != null)
+        {
+            agent.ragdoll.ActivateRagdoll();
+            direction.y = 1;
+            agent.ragdoll.ApplyForce(direction * agent.config.dieForce);
+        }
 
-        // Start flashing effect after a delay
-        agent.StartCoroutine(FlashAndDestroy(agent));
+        if (agent.weapons != null)
+        {
+            agent.weapons.DropWeapon();
+        }
+
+        if (flashCoroutine != null)
+        {
+            agent.StopCoroutine(flashCoroutine);
+        }
+        flashCoroutine = agent.StartCoroutine(FlashAndDestroy(agent));
     }
 
     public void Exit(AiAgent agent)
     {
+        if (agent != null && flashCoroutine != null)
+        {
+            agent.StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
     }
 
     public AiStateId GetId()
@@ -44,13 +60,14 @@ public class AiDeathState : AiState
     {
     }
 
-    /// <summary>Handles the flashing and destruction effect for dead enemies</summary>
     private IEnumerator FlashAndDestroy(AiAgent agent)
     {
-        // Wait before starting the flash effect
+        if (agent == null) yield break;
+
         yield return new WaitForSeconds(FLASH_DELAY);
 
-        // Get the renderer for flashing
+        if (agent == null || agent.gameObject == null) yield break;
+
         SkinnedMeshRenderer renderer = agent.skinnedMeshRenderer;
         if (renderer == null)
         {
@@ -62,47 +79,58 @@ public class AiDeathState : AiState
             float elapsedTime = 0f;
             bool isVisible = true;
 
-            // Flash the enemy for the specified duration
             while (elapsedTime < FLASH_DURATION)
             {
-                // Toggle visibility
+                if (renderer == null || agent == null) yield break;
+
                 isVisible = !isVisible;
                 renderer.enabled = isVisible;
 
-                // Wait for the flash interval
                 yield return new WaitForSeconds(FLASH_INTERVAL);
                 elapsedTime += FLASH_INTERVAL;
             }
 
-            // Ensure the renderer is disabled at the end
-            renderer.enabled = false;
+            if (renderer != null)
+            {
+                renderer.enabled = false;
+            }
         }
 
-        // Destroy the GameObject after flashing is complete
-        Object.Destroy(agent.gameObject);
+        if (agent != null && agent.gameObject != null)
+        {
+            Object.Destroy(agent.gameObject);
+        }
+
+        flashCoroutine = null;
     }
 
-    /// <summary>Disables hitboxes and makes dead enemy non-collidable with player</summary>
     private void DisableHitBoxesAndCollision(AiAgent agent)
     {
-        // Disable all HitBox components
+        if (agent == null) return;
+
         HitBox[] hitBoxes = agent.GetComponentsInChildren<HitBox>();
         foreach (HitBox hitBox in hitBoxes)
         {
-            hitBox.enabled = false;
+            if (hitBox != null)
+            {
+                hitBox.enabled = false;
+            }
         }
 
-        // Move dead enemy to "Ignore Raycast" layer so player can walk through
         SetLayerRecursively(agent.gameObject, LayerMask.NameToLayer("Ignore Raycast"));
     }
 
-    /// <summary>Sets the layer of the GameObject and all its children recursively</summary>
     private void SetLayerRecursively(GameObject obj, int layer)
     {
+        if (obj == null) return;
+
         obj.layer = layer;
         foreach (Transform child in obj.transform)
         {
-            SetLayerRecursively(child.gameObject, layer);
+            if (child != null)
+            {
+                SetLayerRecursively(child.gameObject, layer);
+            }
         }
     }
 }

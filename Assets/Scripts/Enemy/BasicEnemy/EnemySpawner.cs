@@ -1,13 +1,16 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    public GameObject enemyPrefab;      // The prefab to spawn
-    public Transform spawnPoint;        // Where to spawn enemies
-    public float respawnDelay = 2f;     // Time after death to respawn
+    public GameObject enemyPrefab;
+    public Transform spawnPoint;
+    public float respawnDelay = 2f;
 
     private GameObject currentEnemy;
+    private BasicEnemyHealth currentEnemyHealth;
+    private Coroutine respawnCoroutine;
 
     void Start()
     {
@@ -16,19 +19,62 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        currentEnemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-
-        // Listen for death
-        BasicEnemyHealth health = currentEnemy.GetComponent<BasicEnemyHealth>();
-        if (health != null)
+        if (currentEnemy != null)
         {
-            health.OnDeath += OnEnemyDeath;
+            UnsubscribeFromCurrentEnemy();
+            Destroy(currentEnemy);
+        }
+
+        currentEnemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        currentEnemyHealth = currentEnemy.GetComponent<BasicEnemyHealth>();
+
+        if (currentEnemyHealth != null)
+        {
+            currentEnemyHealth.OnDeath += OnEnemyDeath;
         }
     }
 
     void OnEnemyDeath()
     {
-        // Delay respawn
-        Invoke(nameof(SpawnEnemy), respawnDelay);
+        UnsubscribeFromCurrentEnemy();
+
+        if (respawnCoroutine != null)
+        {
+            StopCoroutine(respawnCoroutine);
+        }
+
+        respawnCoroutine = StartCoroutine(RespawnAfterDelay());
+    }
+
+    IEnumerator RespawnAfterDelay()
+    {
+        yield return new WaitForSeconds(respawnDelay);
+
+        if (this != null && gameObject != null && gameObject.activeInHierarchy)
+        {
+            SpawnEnemy();
+        }
+
+        respawnCoroutine = null;
+    }
+
+    void UnsubscribeFromCurrentEnemy()
+    {
+        if (currentEnemyHealth != null)
+        {
+            currentEnemyHealth.OnDeath -= OnEnemyDeath;
+            currentEnemyHealth = null;
+        }
+    }
+
+    void OnDestroy()
+    {
+        UnsubscribeFromCurrentEnemy();
+
+        if (respawnCoroutine != null)
+        {
+            StopCoroutine(respawnCoroutine);
+            respawnCoroutine = null;
+        }
     }
 }
