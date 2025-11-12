@@ -874,7 +874,7 @@ public class PlayerCombat : MonoBehaviour
                 case RootMotionMode.LungeOnly:
                     // Traditional system - no root motion, full lunge
                     anim.applyRootMotion = false;
-                    StartAttackMovement();
+                    StartAttackMovement(currentAttackData);
                     break;
 
                 case RootMotionMode.RootMotionOnly:
@@ -886,7 +886,7 @@ public class PlayerCombat : MonoBehaviour
                 case RootMotionMode.Hybrid:
                     // Best of both worlds - root motion + reduced lunge
                     anim.applyRootMotion = true;
-                    StartAttackMovementHybrid();
+                    StartAttackMovementHybrid(currentAttackData);
                     break;
             }
 
@@ -899,7 +899,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    void StartAttackMovementHybrid()
+    void StartAttackMovementHybrid(AttackSO attackData)
     {
         var playerLoco = GetComponent<PlayerLocomotion>();
         if (playerLoco != null)
@@ -917,29 +917,23 @@ public class PlayerCombat : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(attackDirection);
             }
 
-            // Get the correct attack data for the current attack
-            int currentAttackIndex = comboCounter - 1;
-            if (currentAttackIndex < 0) currentAttackIndex = combo.Count - 1;
-
-            AttackSO currentAttackData = combo[currentAttackIndex];
-
             // Create a modified attack data for hybrid mode (reduced movement since root motion is also active)
             AttackSO hybridAttackData = ScriptableObject.CreateInstance<AttackSO>();
-            hybridAttackData.moveDistance = currentAttackData.moveDistance * additionalLungeMultiplier;
-            hybridAttackData.moveSpeed = currentAttackData.moveSpeed * additionalLungeMultiplier;
-            hybridAttackData.moveDuration = currentAttackData.moveDuration;
-            hybridAttackData.moveCurve = currentAttackData.moveCurve;
-            hybridAttackData.rotateTowardsTarget = currentAttackData.rotateTowardsTarget;
+            hybridAttackData.moveDistance = attackData.moveDistance * additionalLungeMultiplier;
+            hybridAttackData.moveSpeed = attackData.moveSpeed * additionalLungeMultiplier;
+            hybridAttackData.moveDuration = attackData.moveDuration;
+            hybridAttackData.moveCurve = attackData.moveCurve;
+            hybridAttackData.rotateTowardsTarget = attackData.rotateTowardsTarget;
 
             // Force stop any existing attack movement and start new one
             playerLoco.ForceStopAttackLunge();
             playerLoco.StartAttackLunge(attackDirection, hybridAttackData);
 
-            Debug.Log($"Starting hybrid attack {currentAttackIndex} - Root Motion: ON, Extra Lunge: {hybridAttackData.moveDistance}");
+            Debug.Log($"<color=green>Starting hybrid combo attack - Root Motion: ON, Extra Lunge: {hybridAttackData.moveDistance}</color>");
         }
     }
 
-    void StartAttackMovement()
+    void StartAttackMovement(AttackSO attackData)
     {
         var playerLoco = GetComponent<PlayerLocomotion>();
         if (playerLoco != null)
@@ -957,18 +951,11 @@ public class PlayerCombat : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(attackDirection);
             }
 
-            // Get the correct attack data for the current attack
-            // comboCounter has already been incremented, so we need the previous index
-            int currentAttackIndex = comboCounter - 1;
-            if (currentAttackIndex < 0) currentAttackIndex = combo.Count - 1;
-
-            AttackSO currentAttackData = combo[currentAttackIndex];
-
             // Force stop any existing attack movement and start new one
             playerLoco.ForceStopAttackLunge();
-            playerLoco.StartAttackLunge(attackDirection, currentAttackData);
+            playerLoco.StartAttackLunge(attackDirection, attackData);
 
-            Debug.Log($"Starting attack {currentAttackIndex} with move distance: {currentAttackData.moveDistance}");
+            Debug.Log($"<color=green>Starting combo attack with move distance: {attackData.moveDistance}</color>");
         }
     }
 

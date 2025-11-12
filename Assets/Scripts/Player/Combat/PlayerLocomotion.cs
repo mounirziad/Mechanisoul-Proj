@@ -60,7 +60,6 @@ public class PlayerLocomotion : MonoBehaviour
     public float attackMoveDistance = 0.5f; // How far the attack pushes forward
     public float attackMoveSpeed = 5f;      // How fast the lunge is
     private bool isAttackingWithLunge = false;
-    private float attackMoveTimer = 0f;
     private Vector3 attackMoveDirection;
     private float attackMoveStartTime;
     private AttackSO currentAttackData;
@@ -159,14 +158,16 @@ public class PlayerLocomotion : MonoBehaviour
         HandleJumpCooldown();
         UpdateGroundCheckPosition();
 
-        if (playerManager.isInteracting && !isDodging)
-        {
-            return;
-        }
-
-        if (playerCombat != null && playerCombat.IsAttacking())
+        bool isCurrentlyAttacking = playerCombat != null && playerCombat.IsAttacking();
+        
+        if (isCurrentlyAttacking)
         {
             HandleAttackMovementLock();
+        }
+
+        if (playerManager.isInteracting && !isDodging && !isCurrentlyAttacking)
+        {
+            return;
         }
 
         HandleDodgeMovement(); 
@@ -183,58 +184,66 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleAttackMovementLock()
     {
-        // Apply smooth attack movement with proper curves
-        if (isAttackingWithLunge)
-        {
-            attackMoveTimer -= Time.deltaTime;
+        if (!isAttackingWithLunge || currentAttackData == null)
+            return;
             
-            if (attackMoveTimer > 0 && currentAttackData != null)
-            {
-                // Calculate progress through the attack movement
-                float elapsedTime = Time.time - attackMoveStartTime;
-                float progress = Mathf.Clamp01(elapsedTime / currentAttackData.moveDuration);
-                
-                // Use animation curve for smooth movement falloff
-                float curveValue = currentAttackData.moveCurve.Evaluate(progress);
-                float currentSpeed = currentAttackData.moveSpeed * curveValue;
-                
-                // Apply movement
-                Vector3 movement = attackMoveDirection * currentSpeed * Time.deltaTime;
-                playerRigidbody.MovePosition(transform.position + movement);
-            }
-            else
-            {
-                isAttackingWithLunge = false;
-                currentAttackData = null;
-            }
+        float elapsedTime = Time.time - attackMoveStartTime;
+        
+        if (elapsedTime < currentAttackData.moveDuration)
+        {
+            float progress = Mathf.Clamp01(elapsedTime / currentAttackData.moveDuration);
+            
+            float curveValue = currentAttackData.moveCurve.Evaluate(progress);
+            float currentSpeed = currentAttackData.moveSpeed * curveValue;
+            
+            Vector3 movement = attackMoveDirection * currentSpeed * Time.deltaTime;
+            playerRigidbody.MovePosition(transform.position + movement);
+            
+            Debug.Log($"Attack Movement - Progress: {progress:F2}, Speed: {currentSpeed:F2}, Movement: {movement.magnitude:F3}");
+        }
+        else
+        {
+            Debug.Log($"Attack movement completed - Elapsed: {elapsedTime:F2}s, Duration: {currentAttackData.moveDuration:F2}s");
+            isAttackingWithLunge = false;
+            currentAttackData = null;
         }
     }
 
     public void StartAttackLunge(Vector3 direction, AttackSO attackData)
     {
-        if (attackData == null) return;
+        if (attackData == null)
+        {
+            Debug.LogWarning("StartAttackLunge called with null attackData!");
+            return;
+        }
         
-        // Always reset the attack lunge state for new attacks
+        if (direction == Vector3.zero)
+        {
+            Debug.LogWarning("StartAttackLunge called with zero direction - using transform.forward");
+            direction = transform.forward;
+        }
+        
         isAttackingWithLunge = true;
         attackMoveDirection = direction.normalized;
-        attackMoveTimer = attackData.moveDuration;
         attackMoveStartTime = Time.time;
         currentAttackData = attackData;
         originalMoveDistance = attackData.moveDistance;
         
-        // Instantly snap to face attack direction for responsive feel
         if (attackData.rotateTowardsTarget && direction != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(direction);
         }
         
-        Debug.Log($"Started attack lunge: Distance={attackData.moveDistance}, Speed={attackData.moveSpeed}, Duration={attackData.moveDuration}");
+        Debug.Log($"<color=cyan>Started attack lunge - Distance: {attackData.moveDistance}, Speed: {attackData.moveSpeed}, Duration: {attackData.moveDuration}, Direction: {direction}</color>");
     }
 
     public void ForceStopAttackLunge()
     {
+        if (isAttackingWithLunge)
+        {
+            Debug.Log("<color=yellow>Force stopped attack lunge</color>");
+        }
         isAttackingWithLunge = false;
-        attackMoveTimer = 0f;
         currentAttackData = null;
     }
 
