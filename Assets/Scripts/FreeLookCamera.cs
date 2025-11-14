@@ -58,6 +58,8 @@ public class FreeLookCamera : MonoBehaviour
     {
         currentDistance = defaultDistance;
         
+        FindPlayerIfNeeded();
+        
         if (target != null)
         {
             Vector3 angles = transform.eulerAngles;
@@ -77,6 +79,19 @@ public class FreeLookCamera : MonoBehaviour
         if (collisionHandler != null)
         {
             collisionHandler.InitializeDistance(currentDistance);
+        }
+    }
+    
+    private void FindPlayerIfNeeded()
+    {
+        if (target == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                target = player.transform;
+                Debug.Log($"FreeLookCamera automatically found player: {player.name}");
+            }
         }
     }
 
@@ -170,6 +185,11 @@ public class FreeLookCamera : MonoBehaviour
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
+        
+        if (target != null && playerInputManager == null)
+        {
+            playerInputManager = target.GetComponent<InputManager>();
+        }
     }
 
     public void SetDistance(float distance)

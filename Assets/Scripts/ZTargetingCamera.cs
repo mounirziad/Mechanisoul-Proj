@@ -54,12 +54,7 @@ public class ZTargetingCamera : MonoBehaviour
     
     private void Awake()
     {
-        if (playerTarget == null)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-                playerTarget = player.transform;
-        }
+        FindPlayerIfNeeded();
         
         if (zTargeting == null && playerTarget != null)
         {
@@ -74,6 +69,34 @@ public class ZTargetingCamera : MonoBehaviour
         currentDistance = defaultDistance;
         currentPosition = transform.position;
         currentRotation = transform.rotation;
+    }
+    
+    private void FindPlayerIfNeeded()
+    {
+        if (playerTarget == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playerTarget = player.transform;
+                Debug.Log($"ZTargetingCamera automatically found player: {player.name}");
+            }
+        }
+    }
+    
+    public void SetTarget(Transform newTarget)
+    {
+        playerTarget = newTarget;
+        
+        if (playerTarget != null && zTargeting == null)
+        {
+            zTargeting = playerTarget.GetComponent<ZTargetingSystem>();
+        }
+        
+        if (playerTarget != null && inputManager == null)
+        {
+            inputManager = playerTarget.GetComponent<InputManager>();
+        }
     }
     
     private void Start()

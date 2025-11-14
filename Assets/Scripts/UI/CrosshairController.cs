@@ -17,41 +17,27 @@ public class CrosshairController : MonoBehaviour
     
     void Start()
     {
-        if (playerCombat == null)
-        {
-            playerCombat = FindObjectOfType<PlayerCombat>();
-        }
+        FindReferencesIfNeeded();
         
-        if (cameraAdapter == null)
+        if (crosshairObject != null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
+            canvasGroup = crosshairObject.GetComponent<CanvasGroup>();
+            if (canvasGroup == null && fadeInOut)
             {
-                cameraAdapter = player.GetComponent<CameraManagerAdapter>();
-                if (cameraAdapter == null)
-                {
-                    cameraAdapter = player.AddComponent<CameraManagerAdapter>();
-                }
+                canvasGroup = crosshairObject.AddComponent<CanvasGroup>();
             }
+            
+            SetCrosshairVisibility(false, true);
         }
-        
-        if (crosshairObject == null)
-        {
-            crosshairObject = transform.GetChild(0).gameObject;
-        }
-        
-        canvasGroup = crosshairObject.GetComponent<CanvasGroup>();
-        if (canvasGroup == null && fadeInOut)
-        {
-            canvasGroup = crosshairObject.AddComponent<CanvasGroup>();
-        }
-        
-        SetCrosshairVisibility(false, true);
     }
     
     void Update()
     {
-        if (playerCombat == null) return;
+        if (playerCombat == null)
+        {
+            FindReferencesIfNeeded();
+            return;
+        }
         
         bool shouldBeVisible = playerCombat.isAiming;
         
@@ -76,8 +62,36 @@ public class CrosshairController : MonoBehaviour
         }
     }
     
+    private void FindReferencesIfNeeded()
+    {
+        if (playerCombat == null)
+        {
+            playerCombat = FindAnyObjectByType<PlayerCombat>();
+        }
+        
+        if (cameraAdapter == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                cameraAdapter = player.GetComponent<CameraManagerAdapter>();
+                if (cameraAdapter == null)
+                {
+                    cameraAdapter = player.AddComponent<CameraManagerAdapter>();
+                }
+            }
+        }
+        
+        if (crosshairObject == null && transform.childCount > 0)
+        {
+            crosshairObject = transform.GetChild(0).gameObject;
+        }
+    }
+    
     private void SetCrosshairVisibility(bool visible, bool immediate = false)
     {
+        if (crosshairObject == null) return;
+        
         isVisible = visible;
         
         if (immediate)

@@ -82,14 +82,7 @@ public class LockOnCamera : MonoBehaviour
     }
     private void Start()
     {
-        if (target == null)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                target = player.transform;
-            }
-        }
+        FindPlayerIfNeeded();
 
         if (lockOnSystem == null && target != null)
         {
@@ -104,6 +97,34 @@ public class LockOnCamera : MonoBehaviour
         }
 
         unlockRotation = transform.rotation;
+    }
+    
+    private void FindPlayerIfNeeded()
+    {
+        if (target == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                target = player.transform;
+                Debug.Log($"LockOnCamera automatically found player: {player.name}");
+            }
+        }
+    }
+    
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+        
+        if (target != null && lockOnSystem == null)
+        {
+            lockOnSystem = target.GetComponent<LockOnSystem>();
+        }
+        
+        if (target != null && playerInputManager == null)
+        {
+            playerInputManager = target.GetComponent<InputManager>();
+        }
     }
 
     private void ReadInput()

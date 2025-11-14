@@ -8,12 +8,23 @@ public class CustomCameraController : MonoBehaviour
     [SerializeField] private LockOnCamera lockOnCamera;
     [SerializeField] private ZTargetingCamera zTargetingCamera;
 
+    [Header("Camera Priorities")]
+    [SerializeField] private int freeLookPriority = 10;
+    [SerializeField] private int aimPriority = 20;
+    [SerializeField] private int lockOnPriority = 30;
+    [SerializeField] private int inactivePriority = 0;
+
     [Header("Transition Settings")]
     [SerializeField] private float transitionSpeed = 8f;
 
     private InputManager inputManager;
     private LockOnSystem lockOnSystem;
     private ZTargetingSystem zTargetingSystem;
+    
+    private Camera freeLookCameraComponent;
+    private Camera aimCameraComponent;
+    private Camera lockOnCameraComponent;
+    private Camera zTargetingCameraComponent;
     
     private bool isAimMode = false;
     private bool isLockOnMode = false;
@@ -24,25 +35,84 @@ public class CustomCameraController : MonoBehaviour
         lockOnSystem = GetComponent<LockOnSystem>();
         zTargetingSystem = GetComponent<ZTargetingSystem>();
 
+        FindCamerasIfNeeded();
+        CacheCameraComponents();
+    }
+    
+    private void FindCamerasIfNeeded()
+    {
         if (freeLookCamera == null)
         {
-            freeLookCamera = FindObjectOfType<FreeLookCamera>();
+            freeLookCamera = FindAnyObjectByType<FreeLookCamera>();
         }
 
         if (aimCamera == null)
         {
-            aimCamera = FindObjectOfType<AimCamera>();
+            aimCamera = FindAnyObjectByType<AimCamera>();
         }
 
         if (lockOnCamera == null)
         {
-            lockOnCamera = FindObjectOfType<LockOnCamera>();
+            lockOnCamera = FindAnyObjectByType<LockOnCamera>();
         }
 
         if (zTargetingCamera == null)
         {
-            zTargetingCamera = FindObjectOfType<ZTargetingCamera>();
+            zTargetingCamera = FindAnyObjectByType<ZTargetingCamera>();
         }
+    }
+    
+    private void CacheCameraComponents()
+    {
+        if (freeLookCamera != null)
+        {
+            freeLookCameraComponent = freeLookCamera.GetComponent<Camera>();
+        }
+
+        if (aimCamera != null)
+        {
+            aimCameraComponent = aimCamera.GetComponent<Camera>();
+        }
+
+        if (lockOnCamera != null)
+        {
+            lockOnCameraComponent = lockOnCamera.GetComponent<Camera>();
+        }
+
+        if (zTargetingCamera != null)
+        {
+            zTargetingCameraComponent = zTargetingCamera.GetComponent<Camera>();
+        }
+    }
+    
+    public void RefreshCameraReferences()
+    {
+        FindCamerasIfNeeded();
+        CacheCameraComponents();
+        
+        Transform playerTransform = transform;
+        
+        if (freeLookCamera != null)
+        {
+            freeLookCamera.SetTarget(playerTransform);
+        }
+        
+        if (aimCamera != null)
+        {
+            aimCamera.SetTarget(playerTransform);
+        }
+        
+        if (lockOnCamera != null)
+        {
+            lockOnCamera.SetTarget(playerTransform);
+        }
+        
+        if (zTargetingCamera != null)
+        {
+            zTargetingCamera.SetTarget(playerTransform);
+        }
+        
+        Debug.Log("CustomCameraController: Camera references refreshed.");
     }
 
     private void Start()
@@ -97,43 +167,41 @@ public class CustomCameraController : MonoBehaviour
         isAimMode = (mode == CameraMode.Aim);
         isLockOnMode = (mode == CameraMode.LockOn);
 
-        if (freeLookCamera != null)
+        if (freeLookCameraComponent != null)
         {
-            freeLookCamera.gameObject.SetActive(mode == CameraMode.FreeLook);
+            freeLookCameraComponent.depth = (mode == CameraMode.FreeLook) ? freeLookPriority : inactivePriority;
         }
 
-        if (aimCamera != null)
+        if (aimCameraComponent != null)
         {
-            aimCamera.gameObject.SetActive(mode == CameraMode.Aim);
+            aimCameraComponent.depth = (mode == CameraMode.Aim) ? aimPriority : inactivePriority;
         }
 
-        // Activate the appropriate lock-on camera
         // Prefer ZTargetingCamera if it exists, otherwise use old LockOnCamera
         if (mode == CameraMode.LockOn)
         {
-            if (zTargetingCamera != null)
+            if (zTargetingCameraComponent != null)
             {
-                zTargetingCamera.gameObject.SetActive(true);
-                if (lockOnCamera != null && lockOnCamera.gameObject != zTargetingCamera.gameObject)
+                zTargetingCameraComponent.depth = lockOnPriority;
+                if (lockOnCameraComponent != null && lockOnCameraComponent != zTargetingCameraComponent)
                 {
-                    lockOnCamera.gameObject.SetActive(false);
+                    lockOnCameraComponent.depth = inactivePriority;
                 }
             }
-            else if (lockOnCamera != null)
+            else if (lockOnCameraComponent != null)
             {
-                lockOnCamera.gameObject.SetActive(true);
+                lockOnCameraComponent.depth = lockOnPriority;
             }
         }
         else
         {
-            // Disable both lock-on cameras when not in lock mode
-            if (zTargetingCamera != null)
+            if (zTargetingCameraComponent != null)
             {
-                zTargetingCamera.gameObject.SetActive(false);
+                zTargetingCameraComponent.depth = inactivePriority;
             }
-            if (lockOnCamera != null && (zTargetingCamera == null || lockOnCamera.gameObject != zTargetingCamera.gameObject))
+            if (lockOnCameraComponent != null && (zTargetingCameraComponent == null || lockOnCameraComponent != zTargetingCameraComponent))
             {
-                lockOnCamera.gameObject.SetActive(false);
+                lockOnCameraComponent.depth = inactivePriority;
             }
         }
     }

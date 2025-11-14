@@ -72,6 +72,8 @@ public class AimCamera : MonoBehaviour
 
     private void Start()
     {
+        FindPlayerIfNeeded();
+        
         if (target != null)
         {
             Vector3 angles = transform.eulerAngles;
@@ -103,6 +105,19 @@ public class AimCamera : MonoBehaviour
         if (collisionHandler != null)
         {
             collisionHandler.InitializeDistance(cameraDistance);
+        }
+    }
+    
+    private void FindPlayerIfNeeded()
+    {
+        if (target == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                target = player.transform;
+                Debug.Log($"AimCamera automatically found player: {player.name}");
+            }
         }
     }
 
@@ -275,6 +290,7 @@ public class AimCamera : MonoBehaviour
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
+        
         if (playerInputManager == null && target != null)
         {
             playerInputManager = target.GetComponent<InputManager>();
