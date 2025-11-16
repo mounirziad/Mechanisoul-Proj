@@ -7404,17 +7404,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db855835d355deb4480153217856b57b, type: 3}
---- !u!114 &874030545 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-  m_PrefabInstance: {fileID: 747682007}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179717328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9272549f561b8d64890052f89be604ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LockOnSystem
 --- !u!1 &879034334
 GameObject:
   m_ObjectHideFlags: 0
@@ -12408,8 +12397,6 @@ MonoBehaviour:
   maxHealth: 75
   currentHealth: 0
   damageProvider: 8
-  rotationSpeed: 2
-  blade: {fileID: 1499782181}
   isDead: 0
 --- !u!195 &1760355387
 NavMeshAgent:
@@ -12601,6 +12588,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MechBehaviorController
   graphAgent: {fileID: 1760355393}
   colliderTrigger: {fileID: 164496563}
+  phase1Channel: {fileID: 11400000, guid: e9ad0336a8d16274b900d851d5ebccb0, type: 2}
+  phase2Channel: {fileID: 11400000, guid: d326fc01d2968874e9e67b221a6f1d1c, type: 2}
+  rageChannel: {fileID: 11400000, guid: 7504ce9d4e133d44aa6f95f83ee30b32, type: 2}
+  deathChannel: {fileID: 11400000, guid: d5f7ed910ddfc264a8ef9ecc77e4917d, type: 2}
 --- !u!1001 &1782854185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13593,7 +13584,7 @@ PrefabInstance:
     - target: {fileID: 7218271566273683039, guid: 582902f25090e924fbca9253af378363, type: 3}
       propertyPath: lockOnSystem
       value: 
-      objectReference: {fileID: 874030545}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

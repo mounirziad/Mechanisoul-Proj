@@ -18,13 +18,6 @@ public class MechBehaviorController : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(InitializeChannels());
-    }
-
-    private IEnumerator InitializeChannels()
-    {
-        yield return null;
-
         if (graphAgent == null)
         {
             graphAgent = GetComponent<BehaviorGraphAgent>();
@@ -48,6 +41,13 @@ public class MechBehaviorController : MonoBehaviour
         InRange(true);
 
         Debug.Log("Starting cinematic");
+        StartCoroutine(DelayedPhase1());
+    }
+
+    private IEnumerator DelayedPhase1()
+    {
+        yield return new WaitForSeconds(0.1f);
+        TriggerPhase("Phase1");
     }
 
     public void SetActive(bool active)
