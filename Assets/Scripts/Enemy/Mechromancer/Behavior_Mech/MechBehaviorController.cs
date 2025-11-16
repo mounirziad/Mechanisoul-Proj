@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Behavior;
 using System;
+using System.Collections;
 
 public class MechBehaviorController : MonoBehaviour
 {
@@ -17,16 +18,19 @@ public class MechBehaviorController : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(InitializeChannels());
+    }
+
+    private IEnumerator InitializeChannels()
+    {
+        yield return null;
+
         if (graphAgent == null)
         {
             graphAgent = GetComponent<BehaviorGraphAgent>();
         }
 
-        //Get event channels from blackboard
-        graphAgent.BlackboardReference.GetVariableValue("Phase1", out phase1Channel);
-        graphAgent.BlackboardReference.GetVariableValue("Phase2", out phase2Channel);
-        graphAgent.BlackboardReference.GetVariableValue("Rage", out rageChannel);
-        graphAgent.BlackboardReference.GetVariableValue("Death", out deathChannel);
+        Debug.Log($"Channels: {phase1Channel}, {phase2Channel}, {rageChannel}, {deathChannel}");
 
         graphAgent.BlackboardReference.SetVariableValue("isActive", false);
         graphAgent.BlackboardReference.SetVariableValue("isPlayerInRange", false);
