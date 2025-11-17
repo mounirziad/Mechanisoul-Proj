@@ -425,6 +425,10 @@ public class PlayerLocomotion : MonoBehaviour
                 targetDirection.Normalize();
             }
 
+            // Apply 75-degree Y rotation offset to align aiming animation properly
+            Quaternion aimingOffset = Quaternion.Euler(0f, 75f, 0f);
+            targetDirection = aimingOffset * targetDirection;
+            
             // Don't blend with movement direction when aiming - just face where you're aiming
             // This ensures the player rotates to match the reticle position
             
