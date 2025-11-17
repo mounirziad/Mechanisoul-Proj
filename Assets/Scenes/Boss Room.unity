@@ -17061,6 +17061,7 @@ GameObject:
   - component: {fileID: 1760355391}
   - component: {fileID: 1760355390}
   - component: {fileID: 1760355389}
+  - component: {fileID: 1760355395}
   - component: {fileID: 1760355387}
   - component: {fileID: 1760355393}
   - component: {fileID: 1760355394}
@@ -17095,7 +17096,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1760355382}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ebf2a444543b52478e387c53cf2fd1e, type: 3}
   m_Name: 
@@ -17298,6 +17299,28 @@ MonoBehaviour:
   phase2Channel: {fileID: 11400000, guid: d326fc01d2968874e9e67b221a6f1d1c, type: 2}
   rageChannel: {fileID: 11400000, guid: 7504ce9d4e133d44aa6f95f83ee30b32, type: 2}
   deathChannel: {fileID: 11400000, guid: d5f7ed910ddfc264a8ef9ecc77e4917d, type: 2}
+--- !u!95 &1760355395
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760355382}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1782854185
 PrefabInstance:
   m_ObjectHideFlags: 0

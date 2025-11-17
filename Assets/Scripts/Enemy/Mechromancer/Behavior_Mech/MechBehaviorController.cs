@@ -85,4 +85,9 @@ public class MechBehaviorController : MonoBehaviour
                 break;
         }
     }
+
+    public void SetBlackboardBool(string key, bool value)
+    {
+        graphAgent.BlackboardReference.SetVariableValue(key, value);
+    }
 }

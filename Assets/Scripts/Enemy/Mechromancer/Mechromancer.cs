@@ -3,70 +3,105 @@ using System;
 
 public class Mechromancer : Enemy, IDamage
 {
-    [Header("Stats")]
-    [SerializeField] private float damageProvider = 8f;
-    
-    Transform player;
-    private bool attacking;
+    [Header("Damage")]
+    [SerializeField] private float combo1Damage = 8f;
+    [SerializeField] private float combo2Damage = 9f;
+    [SerializeField] private float combo3Damage = 13f;
+
+    [Header("Hitboxes")]
+    [SerializeField] private Collider[] comboHitboxes;
+    //0 = combo1, 1 = combo2, 2 = combo3
 
     public bool isDead = false;
 
     private MechBehaviorController controller;
-    private bool phase2Triggered = false;
-    private bool rageTriggered = false;
+    private MechAnimationController animationController;
 
     protected override void Awake()
     {
         base.Awake();
-        player = GameObject.FindWithTag("Player").transform;
     }
 
     private void Start()
     {
         controller = GetComponent<MechBehaviorController>();
-        attacking = false;
+        animationController = GetComponent<MechAnimationController>();
+
+        //Hitboxes start disabled
+        foreach (var hitbox in comboHitboxes)
+        {
+            hitbox.enabled = false;
+        }
     }
 
-    /*private void Update()
+    //Behavior graph to animator
+    public void TriggerAttack(string triggerName)
     {
-        if (!phase2Triggered && currentHealth <= 50)
-        {
-            phase2Triggered = true;
-            controller.TriggerPhase("Phase2");
-        }
+        animationController.SetTrigger(triggerName);
+    }
 
-        if (!rageTriggered && currentHealth <= 35)
-        {
-            rageTriggered = true;
-            controller.TriggerPhase("Rage");
-        }
+    //Animations to behavior graph
+    public void OnComboHit()
+    {
+        controller.SetBlackboardBool("comboLanded", true);
+    }
 
-        if (currentHealth <= 0)
+    public void OnAttackAnimationFinished()
+    {
+        controller.SetBlackboardBool("attackFinished", true);
+    }
+
+    public void EnableHitbox(int index)
+    {
+        if (index >= 0 && index < comboHitboxes.Length)
         {
-            controller.TriggerPhase("Death");
+            comboHitboxes[index].enabled = true;
         }
-    }*/
+    }
+
+    public void DisableHitbox(int index)
+    {
+        if (index >= 0 && index < comboHitboxes.Length)
+        {
+            comboHitboxes[index].enabled = false;
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            attacking = true;
-        }
+        if (!other.CompareTag("Player")) return;
+
+        int hitboxIndex = GetHitboxIndex(other);
+        if (hitboxIndex == -1) return; //not a combo hitbox
+
+        float damage = GetDamageForCombo(hitboxIndex);
+        other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+
+        OnComboHit();
     }
 
-    private void OnTriggerExit(Collider other)
+    private int GetHitboxIndex(Collider collider)
     {
-        if (other.CompareTag("Player"))
+        for (int i = 0; i < comboHitboxes.Length; i++)
         {
-            attacking = false;
+            if (comboHitboxes[i] == collider) return i;
         }
+        return -1;
     }
 
-    public float GetDamage()
+    private float GetDamageForCombo(int index)
     {
-        return damageProvider;
+        return index switch
+        {
+            0 => combo1Damage,
+            1 => combo2Damage,
+            2 => combo3Damage,
+            _ => 0f
+        };
     }
+
+    //Damage
+    public float GetDamage() => combo1Damage;
 
     public void TakeDamage(float damage)
     {
