@@ -41,9 +41,13 @@ public class EnemyStun : MonoBehaviour
     {
         if (seconds <= 0f) return;
         if (health != null && health.currentHealth <= 0) return;
+
         if (c != null) StopCoroutine(c);
         c = StartCoroutine(StunCR(seconds));
+
+        StatusEffectUtility.ApplyStatus(this, StatusEffectType.Fear, seconds);
     }
+
 
     IEnumerator StunCR(float t)
     {

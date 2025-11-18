@@ -47,10 +47,13 @@ public class WeaknessZone : MonoBehaviour
         object[] payload = new object[] { weaknessPercent, seconds };
         for (int i = 0; i < hits.Length; i++)
         {
-            // If enemy implements its own handler:
             hits[i].SendMessage("AddWeakness", payload, SendMessageOptions.DontRequireReceiver);
+
+            // Sadness icon for "weakened" enemies
+            StatusEffectUtility.ApplyStatus(hits[i], StatusEffectType.Sadness, seconds);
         }
     }
+
 
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()

@@ -50,13 +50,20 @@ public class EnemySlowStacks : MonoBehaviour
     public void ApplyStackingSlow(float slowPerStack, int maxStacks)
     {
         if (health != null && health.currentHealth <= 0) return;
+
         perStack = Mathf.Max(0f, slowPerStack);
         cap = Mathf.Max(1, maxStacks);
         stacks = Mathf.Clamp(stacks + 1, 1, cap);
         lastAppliedTime = Time.time;
+
         if (loop == null) loop = StartCoroutine(SlowLoop());
         ApplyNow();
+
+        // show Sadness icon roughly for the decay period, refreshed on each new stack
+        float statusDuration = stackDecayDelay + checkInterval * 2f;
+        StatusEffectUtility.ApplyStatus(this, StatusEffectType.Sadness, statusDuration);
     }
+
 
     IEnumerator SlowLoop()
     {

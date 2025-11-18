@@ -46,12 +46,13 @@ public class FearZone : MonoBehaviour
         object[] payload = new object[] { fearSeconds, (fearSource ? fearSource.position : transform.position) };
         for (int i = 0; i < hits.Length; i++)
         {
-            // TODO
-            // Enemy should implement a handler like:
-            // void AddFear(float seconds, Vector3 fromPos)
             hits[i].SendMessage("AddFear", payload, SendMessageOptions.DontRequireReceiver);
+
+            // also show Fear icon for the same duration
+            StatusEffectUtility.ApplyStatus(hits[i], StatusEffectType.Fear, fearSeconds);
         }
     }
+
 
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()

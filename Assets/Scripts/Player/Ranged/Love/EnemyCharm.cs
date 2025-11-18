@@ -46,10 +46,14 @@ public class EnemyCharm : MonoBehaviour
     {
         if (seconds <= 0f) return;
         if (health != null && health.currentHealth <= 0) return;
+
         CharmFocus = focus;
         if (c != null) StopCoroutine(c);
         c = StartCoroutine(CharmCR(seconds));
+
+        StatusEffectUtility.ApplyStatus(this, StatusEffectType.Love, seconds);
     }
+
 
     IEnumerator CharmCR(float t)
     {
