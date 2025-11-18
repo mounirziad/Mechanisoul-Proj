@@ -14,6 +14,8 @@ public class Mechromancer : Enemy, IDamage
 
     public bool isDead = false;
 
+    [Header("References")]
+    [SerializeField] private Resurrection resurrection;
     private MechBehaviorController controller;
     private MechAnimationController animationController;
 

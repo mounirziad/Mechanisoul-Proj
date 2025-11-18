@@ -306,7 +306,7 @@ public class LightningAttackStrategy : IActionStrategy
         if (lightningFired) return;
 
         lightningFired = true;
-        lightningController.CastLightning(targetPosition);
+        //lightningController.CastLightning(targetPosition);
         Debug.Log("Lightning casted toward {targetPosition}");
     }
 
