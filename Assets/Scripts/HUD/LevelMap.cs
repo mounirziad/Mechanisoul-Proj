@@ -4,22 +4,39 @@ public class Room
 {
     public string Name { get; }
     public string Description { get; set; }
-    public bool cleared;
+    public bool Cleared;
+
+    GameObject roomObject;
+    SpriteRenderer roomRenderer;
+
+    public Sprite hiddenSprite;
+    public Sprite inRoomSprite;
+    public Sprite clearedSprite;
+    public Sprite currentSprite;
 
     public Room(string name, string description = "")
     {
         Name = name;
         Description = description;
-        cleared = false;
+        Cleared = false;
+        currentSprite = hiddenSprite;
+    }
+
+    public void CreateGameObject()
+    {
+        roomObject = new GameObject(Name, typeof(SpriteRenderer));
+        roomRenderer = roomObject.GetComponent<SpriteRenderer>();
+        roomRenderer.sprite = currentSprite;
     }
 
     public override string ToString() => Name;
 
-    public void ClearRoom() => cleared = true;
+    public void ClearRoom() => Cleared = true;
 }
 
 public class LevelMap : MonoBehaviour
 {
+
     //temporary room names, replace with actual rooms later
     private static readonly Room[,] Rooms =
             {
@@ -28,9 +45,30 @@ public class LevelMap : MonoBehaviour
                 {new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") }
             };
 
-    string currentRoom;
-    
-    public void EnterRoom(string name) => currentRoom = name;
+    Room currentRoom;
+
+    private void Start()
+    {
+        foreach (var room in Rooms)
+        {
+            room.CreateGameObject();
+        }
+    }
+
+    public void EnterRoom(string name)
+    {
+        currentRoom.currentSprite = currentRoom.clearedSprite;
+
+        foreach (Room room in Rooms)
+        {
+            if (room.Name == name)
+            {
+                currentRoom = room;
+                room.currentSprite = room.inRoomSprite;
+                break;
+            }
+        }
+    }
 
     void UpdateUI()
     {
