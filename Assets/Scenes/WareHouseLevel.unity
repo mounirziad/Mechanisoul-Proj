@@ -17642,6 +17642,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -2.272
       objectReference: {fileID: 0}
+    - target: {fileID: 1791782477498988076, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2465396818809258404, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.49
@@ -17686,17 +17690,40 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConveyorMachine
       objectReference: {fileID: 0}
+    - target: {fileID: 2989556674260458270, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3028880515149150935, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3070045387567917670, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.092
+      objectReference: {fileID: 0}
+    - target: {fileID: 3328095653018886069, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3533560134432455316, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.153
       objectReference: {fileID: 0}
+    - target: {fileID: 4908565354166570756, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494724128643623545, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2465396818809258404, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1694077828}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2989556674260458270, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
       insertIndex: -1
@@ -17780,7 +17807,7 @@ MonoBehaviour:
   scrollSpeed: 0.5
   scrollDirection: {x: 0, y: 1}
   moveObjects: 1
-  conveyorForce: 50
+  conveyorForce: 25
   movementDirection: {x: 0, y: 0, z: 1}
   affectedLayers:
     serializedVersion: 2
@@ -40892,6 +40919,58 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1694077827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1694077828}
+  - component: {fileID: 1694077829}
+  m_Layer: 10
+  m_Name: EnemySpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1694077828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694077827}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.39, z: -1.41}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 965619594}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1694077829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694077827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3ed990685957b46aff4666d2ae2b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  enemyPrefab: {fileID: 3782171841442537842, guid: de37ee94ac1de524e82e3dde797336b8, type: 3}
+  spawnPoint: {fileID: 1694077828}
+  spawnInterval: 5
+  maxActiveEnemies: 3
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  autoStart: 1
 --- !u!1 &1700899354 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c9bd3a4701f5dc47b61a68e6ecd2673, type: 3}
