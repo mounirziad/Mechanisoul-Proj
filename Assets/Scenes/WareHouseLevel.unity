@@ -17704,6 +17704,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2989556674260458270, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
       insertIndex: -1
       addedObject: {fileID: 965619592}
+    - targetCorrespondingSourceObject: {fileID: 3328095653018886069, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 965619596}
   m_SourcePrefab: {fileID: 100100000, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
 --- !u!1 &965619591 stripped
 GameObject:
@@ -17757,6 +17760,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2465396818809258404, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
   m_PrefabInstance: {fileID: 965619590}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &965619595 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3328095653018886069, guid: 4ed098a4ac47ad04b8f7a86f96170303, type: 3}
+  m_PrefabInstance: {fileID: 965619590}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &965619596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965619595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 549b407ad5f215847b8098d76e33a815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  scrollSpeed: 0.5
+  scrollDirection: {x: 0, y: 1}
+  moveObjects: 1
+  conveyorForce: 50
+  movementDirection: {x: 0, y: 0, z: 1}
+  affectedLayers:
+    serializedVersion: 2
+    m_Bits: 704
 --- !u!1001 &971586650
 PrefabInstance:
   m_ObjectHideFlags: 0
