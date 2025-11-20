@@ -42,7 +42,7 @@ public class LightningController : MonoBehaviour
 
         if (strike != null)
         {
-            strike.Initialize(targetPosition);
+            strike.Initialize(targetPosition, this);
         }
 
         Debug.Log($"Lightning cast toward ground at {targetPosition}");
@@ -82,7 +82,7 @@ public class LightningController : MonoBehaviour
         if (activeLightning != null)
             Destroy(activeLightning);
 
-        isAttacking = false;
+        //isAttacking = false;
         Debug.Log("Lightning stopped");
     }
 }

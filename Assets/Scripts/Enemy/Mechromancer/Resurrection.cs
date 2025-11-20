@@ -13,7 +13,6 @@ public class Resurrection : MonoBehaviour
 
     private bool hasStarted = false;
     private bool isMovingToHiding = false;
-    public bool hasResurrected;
 
     private Mechromancer mech;
     private NavMeshAgent agent;
@@ -26,13 +25,30 @@ public class Resurrection : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    public bool HasResurrected
+    {
+        get
+        {
+            bool value = false;
+            var graph = GetComponent<BehaviorGraphAgent>().BlackboardReference;
+            graph.GetVariableValue("alreadyResurrected", out value);
+            return value;
+        }
+        set
+        {
+            var graph = GetComponent<BehaviorGraphAgent>().BlackboardReference;
+            graph.SetVariableValue("alreadyResurrected", value);
+        }
+    }
+
     public void StartResurrection()
     {
-        if (hasResurrected || IsResurrectionActive) return;
+        if (HasResurrected || IsResurrectionActive) return;
+
         StartCoroutine(ResurrectionRoutine());
 
-        var graphAgent = GetComponent<BehaviorGraphAgent>();
-        graphAgent.BlackboardReference.SetVariableValue("alreadyResurrected", true);
+        HasResurrected = true;
+        Debug.Log("StartResurrection() called");
     }
 
     private IEnumerator ResurrectionRoutine()
@@ -48,7 +64,8 @@ public class Resurrection : MonoBehaviour
         }
 
         SpawnMinions();
-        hasResurrected = true;
+
+        HasResurrected = true;
         IsResurrectionActive = false;
     }
 
@@ -76,7 +93,7 @@ public class Resurrection : MonoBehaviour
         }
 
         SpawnMinions();
-        hasResurrected = true;
+        HasResurrected = true;
     }
 
     private void SpawnMinions()

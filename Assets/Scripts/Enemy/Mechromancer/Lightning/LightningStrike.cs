@@ -13,12 +13,11 @@ public class LightningStrike : MonoBehaviour
 
     private LightningController controller;
 
-    public void Initialize(Vector3 target)
+    public void Initialize(Vector3 target, LightningController controllerRef)
     {
         targetPosition = target;
+        controller = controllerRef;
         hasTarget = true;
-
-        controller = GetComponent<LightningController>();
     }
 
     private void Update()
