@@ -6,13 +6,12 @@ using UnityEngine.VFX;
 public class LightningController : MonoBehaviour
 {
     [Header("Lightning")]
-    [SerializeField] private GameObject lightning;
+    [SerializeField] private GameObject lightningPrefab;
     [SerializeField] private float lightningDuration = 1.5f;
     [SerializeField] private Transform lightningOrigin;
 
     private GameObject activeLightning;
     private bool isAttacking;
-    private PlayerHealth health;
 
     public BlackboardReference blackboard;
 
@@ -38,7 +37,7 @@ public class LightningController : MonoBehaviour
             targetPosition = hit.point;
         }
 
-        activeLightning = Instantiate(lightning, lightningOrigin.position, Quaternion.identity);
+        activeLightning = Instantiate(lightningPrefab, lightningOrigin.position, Quaternion.identity);
         LightningStrike strike = activeLightning.GetComponent<LightningStrike>();
 
         if (strike != null)
@@ -48,13 +47,14 @@ public class LightningController : MonoBehaviour
 
         Debug.Log($"Lightning cast toward ground at {targetPosition}");
 
-        StartCoroutine(ApplyAoEDamage(targetPosition, 3f, 8f));
+        StartCoroutine(ApplyAoEDamage(targetPosition, radius, damage));
+
         Invoke(nameof(StopLightning), lightningDuration);
     }
 
     private IEnumerator ApplyAoEDamage(Vector3 center, float radius, float damage)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.25f);
 
         Collider[] hits = Physics.OverlapSphere(center, radius);
         foreach (Collider hit in hits)
@@ -62,7 +62,7 @@ public class LightningController : MonoBehaviour
             IDamage damageable = hit.GetComponent<IDamage>();
             if (damageable != null)
             {
-                health.TakeDamage(damage);
+                damageable.TakeDamage(damage);
                 Debug.Log($"Lightning hit {hit.name} for {damage} damage");
             }
         }
@@ -70,21 +70,19 @@ public class LightningController : MonoBehaviour
         blackboard.SetVariableValue("LightningFinished", true);
     }
 
+    public void OnStrike(Vector3 hitPos)
+    {
+        Debug.Log("Lightning reached ground at " + hitPos);
+
+        StartCoroutine(ApplyAoEDamage(hitPos, 3f, 15f));
+    }
+
     public void StopLightning()
     {
-        if (!isAttacking) return;
-
         if (activeLightning != null)
-        {
             Destroy(activeLightning);
-        }
 
         isAttacking = false;
         Debug.Log("Lightning stopped");
-
-        if (blackboard != null)
-        {
-            blackboard.SetVariableValue("LightningFinished", true);
-        }
     }
 }

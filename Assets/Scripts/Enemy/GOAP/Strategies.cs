@@ -231,9 +231,9 @@ public class AttackStrategy : IActionStrategy
 
         if (playerHealth != null)
         {
-            float damage = damageProvider != null ? damageProvider.GetDamage() : 8f;
-            playerHealth.TakeDamage(damage);
-            Debug.Log($"Boss dealt {damage} damage to the player");
+            //float damage = damageProvider != null ? damageProvider.GetDamage() : 8f;
+            //playerHealth.TakeDamage(damage);
+            //Debug.Log($"Boss dealt {damage} damage to the player");
         }
     }
 }

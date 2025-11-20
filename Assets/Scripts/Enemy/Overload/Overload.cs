@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Overload : MonoBehaviour, IDamage
+public class Overload : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] public float maxHealth = 75f;
@@ -12,9 +12,4 @@ public class Overload : MonoBehaviour, IDamage
     private bool attacking;
 
     private bool isDead = false;
-
-    public float GetDamage()
-    {
-        return damageProvider;
-    }
 }
