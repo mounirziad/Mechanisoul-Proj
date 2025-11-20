@@ -67,14 +67,15 @@ public partial class TriggerLightningAction : Action
         controller = Agent.Value.GetComponent<LightningController>();
         if (controller == null) return Status.Failure;
 
+        var blackboard = Agent.Value.GetComponent<BehaviorGraphAgent>().BlackboardReference;
+        blackboard.SetVariableValue("LightningFinished", false);
+
         GameObject player = GameObject.FindWithTag("Player");
         if (player == null) return Status.Failure;
 
-        Vector3 playerPos = player.transform.position;
+        controller.CastLightningAtGround(player.transform.position, AoERadius, Damage);
 
-        controller.CastLightningAtGround(playerPos, AoERadius, Damage);
-
-        return Status.Success;
+        return Status.Running;
     }
 
     protected override Status OnUpdate()
@@ -106,13 +107,30 @@ public partial class TriggerResurrectionAction : Action
 
     protected override Status OnStart()
     {
-        if (Agent?.Value == null) return Status.Failure;
+        Debug.Log("TriggerResurrectionAction: OnStart()");
+
+        if (Agent?.Value == null)
+        {
+            Debug.LogError("TriggerResurrectionAction: Agent is NULL");
+            return Status.Failure;
+        }
 
         resurrection = Agent.Value.GetComponent<Resurrection>();
-        if (resurrection == null) return Status.Failure;
+        if (resurrection == null)
+        {
+            Debug.LogError("TriggerResurrectionAction: No Resurrection component found on Agent");
+            return Status.Failure;
+        }
 
-        if (resurrection.hasResurrected) return Status.Failure;
+        Debug.Log("TriggerResurrectionAction: HasResurrected = " + resurrection.HasResurrected);
 
+        if (resurrection.HasResurrected)
+        {
+            Debug.LogWarning("TriggerResurrectionAction: Already resurrected is FAILING");
+            return Status.Failure;
+        }
+
+        Debug.Log("TriggerResurrectionAction: Calling StartResurrection()");
         resurrection.StartResurrection();
         return Status.Running;
     }
@@ -121,4 +139,16 @@ public partial class TriggerResurrectionAction : Action
     {
         return resurrection.IsResurrectionActive ? Status.Running : Status.Success;
     }
+}
+
+[Serializable, GeneratePropertyBag]
+[NodeDescription(
+    name: "Trigger Lunge",
+    story: "[Agent] lunges",
+    category: "Action",
+    id: "lunge-action-node"
+)]
+public partial class TriggerLungeAction : Action
+{
+    [SerializeReference] public BlackboardVariable<GameObject> Agent;
 }

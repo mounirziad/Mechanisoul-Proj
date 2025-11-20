@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Unity.Behavior;
 
 public class Mechromancer : Enemy, IDamage
 {
@@ -16,6 +17,7 @@ public class Mechromancer : Enemy, IDamage
 
     [Header("References")]
     [SerializeField] private Resurrection resurrection;
+    private LightningController lightningController;
     private MechBehaviorController controller;
     private MechAnimationController animationController;
 
@@ -28,6 +30,12 @@ public class Mechromancer : Enemy, IDamage
     {
         controller = GetComponent<MechBehaviorController>();
         animationController = GetComponent<MechAnimationController>();
+
+        lightningController = GetComponent<LightningController>();
+        if (lightningController != null)
+        {
+            lightningController.blackboard = GetComponent<BehaviorGraphAgent>().BlackboardReference;
+        }
 
         //Hitboxes start disabled
         foreach (var hitbox in comboHitboxes)

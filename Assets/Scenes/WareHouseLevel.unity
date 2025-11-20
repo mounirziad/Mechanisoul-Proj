@@ -14195,8 +14195,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 3.4074254, z: 3.04245}
-  m_Center: {x: 0, y: 0.63996047, z: -0.32957458}
+  m_Size: {x: 1.5905037, y: 3.4074254, z: 3.04245}
+  m_Center: {x: 0.29525185, y: 0.6399605, z: -0.32957458}
 --- !u!4 &776999281
 Transform:
   m_ObjectHideFlags: 0
@@ -43876,6 +43876,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 139457244}
     m_Modifications:
+    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.56
+      objectReference: {fileID: 0}
     - target: {fileID: 2600768064997901748, guid: fc65da8bbbbd9b549add8c4d38a46a20, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.64
@@ -43947,14 +43955,6 @@ PrefabInstance:
     - target: {fileID: 3974615403890720388, guid: fc65da8bbbbd9b549add8c4d38a46a20, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.56
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -46100,6 +46100,10 @@ PrefabInstance:
     - target: {fileID: 8044136694768696624, guid: fe398110079c6744d8f9e9224222ce8d, type: 3}
       propertyPath: playerTarget
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8044136694768696624, guid: fe398110079c6744d8f9e9224222ce8d, type: 3}
+      propertyPath: enableCollisionHandling
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1699648444830670716, guid: fe398110079c6744d8f9e9224222ce8d, type: 3}
