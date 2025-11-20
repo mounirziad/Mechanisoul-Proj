@@ -89,6 +89,14 @@ public class PlayerLocomotion : MonoBehaviour
     public float maxSlopeAngle = 45f;
     public bool isOnSlope = false;
     private Vector3 slopeNormal = Vector3.up;
+    
+    [Header("Air Control Settings")]
+    public float airControlMultiplier = 0.3f;
+    public float airControlResponsiveness = 2f;
+    public PhysicsMaterial airbornePhysicsMaterial;
+    public PhysicsMaterial groundedPhysicsMaterial;
+    private PhysicsMaterial frictionlessMaterial;
+    private PhysicsMaterial normalMaterial;
 
     [Header("Ground Check Reparenting")]
     private Transform originalGroundCheckParent;
@@ -131,10 +139,43 @@ public class PlayerLocomotion : MonoBehaviour
             originalGroundCheckParent = groundCheck.parent;
             originalGroundCheckLocalPosition = groundCheck.localPosition;
         }
+        
+        CreatePhysicsMaterials();
     }
     public void RefreshReferences()
     {
         cameraObject = Camera.main != null ? Camera.main.transform : null;
+    }
+    
+    private void CreatePhysicsMaterials()
+    {
+        if (airbornePhysicsMaterial == null)
+        {
+            frictionlessMaterial = new PhysicsMaterial("PlayerAirborne");
+            frictionlessMaterial.dynamicFriction = 0f;
+            frictionlessMaterial.staticFriction = 0f;
+            frictionlessMaterial.bounciness = 0f;
+            frictionlessMaterial.frictionCombine = PhysicsMaterialCombine.Minimum;
+            frictionlessMaterial.bounceCombine = PhysicsMaterialCombine.Minimum;
+        }
+        else
+        {
+            frictionlessMaterial = airbornePhysicsMaterial;
+        }
+        
+        if (groundedPhysicsMaterial == null)
+        {
+            normalMaterial = new PhysicsMaterial("PlayerGrounded");
+            normalMaterial.dynamicFriction = 0.6f;
+            normalMaterial.staticFriction = 0.6f;
+            normalMaterial.bounciness = 0f;
+            normalMaterial.frictionCombine = PhysicsMaterialCombine.Average;
+            normalMaterial.bounceCombine = PhysicsMaterialCombine.Minimum;
+        }
+        else
+        {
+            normalMaterial = groundedPhysicsMaterial;
+        }
     }
     
     public void CacheCameraDirection()
@@ -145,9 +186,15 @@ public class PlayerLocomotion : MonoBehaviour
             if (cameraObject == null) return;
         }
         
+        cachedCameraForward = cameraObject.forward;
+        cachedCameraForward.y = 0;
+        cachedCameraForward.Normalize();
+        
+        cachedCameraRight = cameraObject.right;
+        cachedCameraRight.y = 0;
+        cachedCameraRight.Normalize();
+        
         cachedCameraYaw = cameraObject.eulerAngles.y;
-        cachedCameraForward = Quaternion.Euler(0, cachedCameraYaw, 0) * Vector3.forward;
-        cachedCameraRight = Quaternion.Euler(0, cachedCameraYaw, 0) * Vector3.right;
     }
     public void HandleAllMovement()
     {
@@ -253,59 +300,155 @@ public class PlayerLocomotion : MonoBehaviour
     private void HandleMovement()
     {
         if (cameraObject == null) return;
-
         if (isJumping) { return; }
 
         Vector3 currentVelocity = playerRigidbody.linearVelocity;
+        
+        if (!isGrounded)
+        {
+            HandleAirControl(currentVelocity);
+            return;
+        }
 
-        // Use cached camera directions instead of reading directly from camera
-        moveDirection = cachedCameraForward * inputManager.verticalInput;
-        moveDirection += cachedCameraRight * inputManager.horizontalInput;
-        moveDirection.Normalize();
+        ZTargetingSystem zTarget = GetComponent<ZTargetingSystem>();
+        bool isZTargetLocked = zTarget != null && zTarget.IsLocked;
+
+        Vector3 movementForward, movementRight;
+
+        if (isZTargetLocked && zTarget.CurrentTarget != null)
+        {
+            // TARGET-RELATIVE MOVEMENT: Most intuitive for lock-on combat
+            Vector3 toTarget = zTarget.CurrentTarget.position - transform.position;
+            toTarget.y = 0;
+
+            if (toTarget.sqrMagnitude > 0.01f)
+            {
+                movementForward = toTarget.normalized;
+                movementRight = Vector3.Cross(Vector3.up, movementForward).normalized;
+            }
+            else
+            {
+                // Fallback to camera-relative if target is too close
+                movementForward = cameraObject.forward;
+                movementForward.y = 0;
+                movementForward.Normalize();
+                movementRight = cameraObject.right;
+                movementRight.y = 0;
+                movementRight.Normalize();
+            }
+
+        }
+        else
+        {
+            // NORMAL CAMERA-RELATIVE MOVEMENT
+            movementForward = cachedCameraForward;
+            movementRight = cachedCameraRight;
+
+            
+        }
+
+        // Calculate movement direction from input
+        moveDirection = (movementForward * inputManager.verticalInput) + (movementRight * inputManager.horizontalInput);
+
+        // Normalize only if we have significant input to prevent weak diagonal movement
+        if (moveDirection.sqrMagnitude > 0.01f)
+        {
+            moveDirection.Normalize();
+        }
         moveDirection.y = 0;
 
+
+        // Handle movement during attacks
         if (playerCombat != null && playerCombat.IsAttacking())
         {
             Vector3 limitedMovement = Vector3.zero;
-            
+
             if (!isAttackingWithLunge)
             {
-                limitedMovement = cachedCameraForward * inputManager.verticalInput * 0.3f;
-                limitedMovement += cachedCameraRight * inputManager.horizontalInput * 0.3f;
-                limitedMovement.Normalize();
+                limitedMovement = movementForward * inputManager.verticalInput * 0.3f;
+                limitedMovement += movementRight * inputManager.horizontalInput * 0.3f;
+                if (limitedMovement.sqrMagnitude > 0.01f)
+                {
+                    limitedMovement.Normalize();
+                }
                 limitedMovement.y = 0;
                 limitedMovement *= walkingSpeed * 0.5f;
             }
-            
+
             Vector3 targetVelocity = new Vector3(limitedMovement.x, currentVelocity.y, limitedMovement.z);
             playerRigidbody.linearVelocity = targetVelocity;
             return;
         }
 
-        // Calculate input-based direction (already calculated above with cameraYaw)
-        // moveDirection is already set!
-
+        // Store last movement direction for dodging
         if (moveDirection != Vector3.zero)
         {
             lastMovementDirection = moveDirection;
         }
 
-        // Apply speed depending on state
+        // Apply speed based on movement type
+        float currentSpeed = walkingSpeed;
         if (isSprinting)
         {
-            moveDirection *= sprintingSpeed;
+            currentSpeed = sprintingSpeed;
         }
         else if (inputManager.moveAmount >= 0.5f)
         {
-            moveDirection *= runningSpeed;
+            currentSpeed = runningSpeed;
+        }
+
+        // Apply final movement
+        Vector3 finalMovement = moveDirection * currentSpeed;
+        Vector3 finalTargetVelocity = new Vector3(finalMovement.x, currentVelocity.y, finalMovement.z);
+        playerRigidbody.linearVelocity = finalTargetVelocity;
+    }
+
+    private void HandleAirControl(Vector3 currentVelocity)
+    {
+        if (cameraObject == null) return;
+
+        ZTargetingSystem zTarget = GetComponent<ZTargetingSystem>();
+        bool isZTargetLocked = zTarget != null && zTarget.IsLocked;
+
+        Vector3 movementForward, movementRight;
+
+        if (isZTargetLocked && zTarget.CurrentTarget != null)
+        {
+            Vector3 toTarget = zTarget.CurrentTarget.position - transform.position;
+            toTarget.y = 0;
+
+            if (toTarget.sqrMagnitude > 0.01f)
+            {
+                movementForward = toTarget.normalized;
+                movementRight = Vector3.Cross(Vector3.up, movementForward).normalized;
+            }
+            else
+            {
+                movementForward = cachedCameraForward;
+                movementRight = cachedCameraRight;
+            }
         }
         else
         {
-            moveDirection *= walkingSpeed;
+            movementForward = cachedCameraForward;
+            movementRight = cachedCameraRight;
         }
 
-        Vector3 finalTargetVelocity = new Vector3(moveDirection.x, currentVelocity.y, moveDirection.z);
-        playerRigidbody.linearVelocity = finalTargetVelocity;
+        Vector3 airMoveDirection = (movementForward * inputManager.verticalInput) + (movementRight * inputManager.horizontalInput);
+
+        if (airMoveDirection.sqrMagnitude > 0.01f)
+        {
+            airMoveDirection.Normalize();
+        }
+        airMoveDirection.y = 0;
+
+        float airSpeed = walkingSpeed * airControlMultiplier;
+        Vector3 targetHorizontalVelocity = airMoveDirection * airSpeed;
+        Vector3 currentHorizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
+        
+        Vector3 newHorizontalVelocity = Vector3.Lerp(currentHorizontalVelocity, targetHorizontalVelocity, Time.deltaTime * airControlResponsiveness);
+        
+        playerRigidbody.linearVelocity = new Vector3(newHorizontalVelocity.x, currentVelocity.y, newHorizontalVelocity.z);
     }
 
 
@@ -475,6 +618,11 @@ public class PlayerLocomotion : MonoBehaviour
 
         if (groundDetected)
         {
+            if (playerCapsule != null && playerCapsule.material != normalMaterial)
+            {
+                playerCapsule.material = normalMaterial;
+            }
+            
             bool isValidLanding = !isGrounded &&
                                  !isJumping &&
                                  playerRigidbody.linearVelocity.y <= 0f &&
@@ -537,6 +685,11 @@ public class PlayerLocomotion : MonoBehaviour
         }
         else
         {
+            if (playerCapsule != null && playerCapsule.material != frictionlessMaterial)
+            {
+                playerCapsule.material = frictionlessMaterial;
+            }
+            
             timeSinceGrounded += Time.deltaTime;
             
             if (timeSinceGrounded > coyoteTime)

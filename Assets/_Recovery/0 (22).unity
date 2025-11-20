@@ -2265,9 +2265,20 @@ MonoBehaviour:
     loopSequence: 0
   useCustomLines: 1
   customDialogueLines:
-  - text: The computer terminal on the wall there will let you choose which emotions
-      you want to apply to your dash, ranged, and melee attacks.
+  - text: Attack the dummy
     displayDuration: 4
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+  - text: (WIP)
+    displayDuration: 5
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+  - text: (WIP)
+    displayDuration: 5
     speakerName: 
     voiceClip: {fileID: 0}
     autoAdvance: 0
@@ -2297,8 +2308,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 12.3, y: 6.01, z: 2.0660763}
-  m_Center: {x: 0.13999987, y: 0, z: 2.5719619}
+  m_Size: {x: 12.3, y: 6.01, z: 7.21}
+  m_Center: {x: 0.14, y: 0, z: 0}
 --- !u!4 &238740860
 Transform:
   m_ObjectHideFlags: 0
@@ -2308,7 +2319,7 @@ Transform:
   m_GameObject: {fileID: 238740857}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.68, y: 0.87482, z: 2.82}
+  m_LocalPosition: {x: 0.19057, y: 0.87482, z: 3.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9328,102 +9339,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1590990623
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1590990626}
-  - component: {fileID: 1590990625}
-  - component: {fileID: 1590990624}
-  m_Layer: 0
-  m_Name: TutorialRoom1Detection2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1590990624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1590990623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 683e5954582d7cb4db3db24e51b082d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoomDetection
-  roomDialogue:
-    lines: []
-    loopSequence: 0
-  useCustomLines: 1
-  customDialogueLines:
-  - text: "Okay now let\u2019s try some combat. Attack that training dummy"
-    displayDuration: 4
-    speakerName: 
-    voiceClip: {fileID: 0}
-    autoAdvance: 0
-    waitForInput: 1
-  - text: Melee attack using X (Controller) or LMB (Keyboard)
-    displayDuration: 5
-    speakerName: 
-    voiceClip: {fileID: 0}
-    autoAdvance: 0
-    waitForInput: 1
-  - text: Aim by holding down left trigger or RMB and attack using right trigger
-      or LMB
-    displayDuration: 5
-    speakerName: 
-    voiceClip: {fileID: 0}
-    autoAdvance: 0
-    waitForInput: 1
-  triggerOnce: 1
-  requiresTag: 1
-  requiredTag: Player
-  doorToOpen: {fileID: 85074530}
-  openDoorAfterDialogue: 1
-  showDebugLogs: 1
---- !u!65 &1590990625
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1590990623}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 12.3, y: 6.01, z: 1.4527917}
-  m_Center: {x: 0.13999987, y: 0, z: -2.8786042}
---- !u!4 &1590990626
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1590990623}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.43, y: 0.87482, z: 11.13}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1596652024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10441,14 +10356,6 @@ PrefabInstance:
       propertyPath: crosshairObject
       value: 
       objectReference: {fileID: 2020271854}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: airbornePhysicsMaterial
-      value: 
-      objectReference: {fileID: 13400000, guid: 465b278272c29ee49bb93e89e92dfcdf, type: 2}
-    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: groundedPhysicsMaterial
-      value: 
-      objectReference: {fileID: 13400000, guid: 2854f18c90b17ab44a66398ce2e47068, type: 2}
     - target: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: freeLookCam
       value: 
@@ -10495,7 +10402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.36040527
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalPosition.y
@@ -10503,11 +10410,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.423971
+      value: 12.19
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalRotation.x
@@ -10515,7 +10422,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalRotation.z
@@ -10527,7 +10434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8654815397792618019, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11778,7 +11685,7 @@ Transform:
   m_GameObject: {fileID: 2091272283}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19057, y: 0.87482, z: 16.01}
+  m_LocalPosition: {x: 0.19057, y: 0.87482, z: 12.4972}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11801,19 +11708,19 @@ MonoBehaviour:
     loopSequence: 0
   useCustomLines: 1
   customDialogueLines:
-  - text: Alright Talos, practice moving around here and try out your dash ability.
+  - text: Tutorial room
     displayDuration: 4
     speakerName: 
     voiceClip: {fileID: 0}
     autoAdvance: 0
     waitForInput: 1
-  - text: (Use left stick or WASD to move
+  - text: (WIP)
     displayDuration: 5
     speakerName: 
     voiceClip: {fileID: 0}
     autoAdvance: 0
     waitForInput: 1
-  - text: Use B (Controller) or X (Keyboard) to dash
+  - text: (WIP)
     displayDuration: 5
     speakerName: 
     voiceClip: {fileID: 0}
@@ -12061,7 +11968,6 @@ SceneRoots:
   - {fileID: 1655817228}
   - {fileID: 1953547965}
   - {fileID: 2091272285}
-  - {fileID: 1590990626}
   - {fileID: 238740860}
   - {fileID: 1399311285}
   - {fileID: 459326904}
