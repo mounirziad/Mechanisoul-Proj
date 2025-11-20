@@ -19,23 +19,47 @@ public class Room
         Name = name;
         Description = description;
         Cleared = false;
-        currentSprite = hiddenSprite;
     }
 
     public void CreateGameObject()
     {
         roomObject = new GameObject(Name, typeof(SpriteRenderer));
         roomRenderer = roomObject.GetComponent<SpriteRenderer>();
-        roomRenderer.sprite = currentSprite;
+    }
+
+    public void SetParent(GameObject parent)
+    {
+        roomObject.transform.SetParent(parent.transform);
+        roomObject.transform.position = parent.transform.position;
+    }
+
+    public void Translate(float x, float y)
+    {
+        roomObject.transform.Translate(new Vector3(x * 100, y * 100, 0));
+        roomObject.transform.localScale = Vector3.one * 40;
+    }
+
+    public void SetSprites(Sprite hiddenSprite, Sprite inRoomSprite, Sprite clearedSprite)
+    {
+        this.hiddenSprite = hiddenSprite;
+        this.inRoomSprite = inRoomSprite;
+        this.clearedSprite = clearedSprite;
+        currentSprite = hiddenSprite;
+        UpdateSprite();
     }
 
     public override string ToString() => Name;
 
     public void ClearRoom() => Cleared = true;
+
+    public void UpdateSprite() => roomRenderer.sprite = currentSprite;
 }
 
 public class LevelMap : MonoBehaviour
 {
+    public Sprite hiddenSprite;
+    public Sprite inRoomSprite;
+    public Sprite clearedSprite;
 
     //temporary room names, replace with actual rooms later
     private static readonly Room[,] Rooms =
@@ -46,12 +70,21 @@ public class LevelMap : MonoBehaviour
             };
 
     Room currentRoom;
+    GameObject mapObject;
 
     private void Start()
     {
-        foreach (var room in Rooms)
+        mapObject = gameObject;
+
+        for (int i = 0; i < Rooms.GetLength(0); i++)
         {
-            room.CreateGameObject();
+            for (int j = 0; j < Rooms.GetLength(1); j++)
+            {
+                Rooms[i, j].CreateGameObject();
+                Rooms[i, j].SetParent(mapObject);
+                Rooms[i, j].Translate(i, j);
+                Rooms[i, j].SetSprites(hiddenSprite, inRoomSprite, clearedSprite);
+            }
         }
     }
 
@@ -65,6 +98,7 @@ public class LevelMap : MonoBehaviour
             {
                 currentRoom = room;
                 room.currentSprite = room.inRoomSprite;
+                room.UpdateSprite();
                 break;
             }
         }
