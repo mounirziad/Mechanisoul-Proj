@@ -1062,6 +1062,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3868314815578285688, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3868314815578285688, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3868314815578285688, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3868314815578285688, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.7
       objectReference: {fileID: 0}
@@ -1112,6 +1124,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4531979640735857858, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 847295078}
+    - targetCorrespondingSourceObject: {fileID: 4531979640735857858, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 847295079}
   m_SourcePrefab: {fileID: 100100000, guid: f4e3fea96d55c90439f26bebf4540abe, type: 3}
 --- !u!1001 &86674223
 PrefabInstance:
@@ -1495,8 +1510,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1513,7 +1528,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -2560,8 +2575,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2578,7 +2593,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -3749,7 +3764,7 @@ MonoBehaviour:
   typewriterSpeed: 0.05
   shadowOffset: {x: 3, y: -3}
   shadowColor: {r: 0, g: 0, b: 0, a: 0.8}
-  maxCharactersPerChunk: 120
+  maxCharactersPerChunk: 300
   autoChunkLongText: 1
   chunkPauseDuration: 0.5
   useJumpToAdvance: 1
@@ -5029,12 +5044,26 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.3874524, y: 0.3750559, z: 0.67414695}
-  m_Center: {x: -0.00854969, y: 0.002428472, z: -0.16292655}
+  m_Size: {x: 0.7991125, y: 0.3750559, z: 1.0119202}
+  m_Center: {x: 0.0074801445, y: 0.002428472, z: 0.005960107}
+--- !u!114 &847295079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847295076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd7ac3835b194394babea8563267ed2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Terminal
+  inRange: 0
+  upgradeUIScript: {fileID: 159613055}
 --- !u!1 &848524561 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5293755435241859024, guid: 3db68c689116c3b4c9c91b956aa3fd06, type: 3}

@@ -1,21 +1,52 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Collider))]
 
 public class Terminal : MonoBehaviour
 {
     [SerializeField] bool inRange;
+    [SerializeField] UpgradeUIScript upgradeUIScript;
+    private bool upgradeUIActive = false;
+    private bool pauseActive = false;
 
-    private void Awake() => inRange = false;
-
-    private void Update()
+    void Awake()
     {
-        if (inRange)
+        if (upgradeUIScript != null && upgradeUIScript.pauseMenu != null)
         {
-            //show visual ui for terminal "press e to open terminal"
-            //Debug.Log("in terminal range");
+            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+        }
 
-            //if interact key is pressed, open terminal
+        inRange = false;
+    }
+
+    public void OnUIActivate(InputAction.CallbackContext context)
+    {
+        if (context.performed && upgradeUIActive == false && inRange)
+        {
+            if (upgradeUIScript != null)
+            {
+                upgradeUIScript.skillMenu.style.display = DisplayStyle.Flex;
+                upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+                upgradeUIActive = true;
+                pauseActive = false;
+
+                UnityEngine.Cursor.visible = true;
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+            }
+        }
+        else if (context.performed && upgradeUIActive == true)
+        {
+            if (upgradeUIScript != null)
+            {
+                upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+                upgradeUIActive = false;
+
+                UnityEngine.Cursor.visible = false;
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
     private void OnTriggerEnter(Collider other) => inRange = other.CompareTag("Player") ? true : false;

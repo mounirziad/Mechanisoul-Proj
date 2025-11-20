@@ -706,7 +706,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7be10182fd27cff4b8eaeda7418e5640, type: 2}
   m_sharedMaterial: {fileID: 3116434869233181550, guid: 7be10182fd27cff4b8eaeda7418e5640, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 3116434869233181550, guid: 7be10182fd27cff4b8eaeda7418e5640, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -729,8 +730,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -747,7 +748,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -3050,7 +3051,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7be10182fd27cff4b8eaeda7418e5640, type: 2}
   m_sharedMaterial: {fileID: 3116434869233181550, guid: 7be10182fd27cff4b8eaeda7418e5640, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 3116434869233181550, guid: 7be10182fd27cff4b8eaeda7418e5640, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3073,8 +3075,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3091,7 +3093,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -9626,11 +9628,17 @@ MonoBehaviour:
   - {fileID: 1834769262}
   - {fileID: 822037340}
   dialogueTexts:
-  - (WIP)
-  - (WIP)
-  - (WIP)
-  - (WIP)
-  - (WIP)
+  - "Oh my god we did it! Talos, Talos can you hear us? We know this is\u2026 a lot.
+    Your systems must be flooding with new data but just take some time to process."
+  - "We need your help. The HAVOC units\u2026 they turned on us. They\u2019ve made
+    it their mission to wipe out humanity and we\u2019re all that\u2019s left. They\u2019re
+    hunting us down Talos, and you\u2019re our final hope."
+  - We hacked into your core system and reprogrammed you with human emotions, which
+    will manifest as unique combat abilities. Go grab that bat on the wall over there.
+  - We designed this bat to allow you to channel your new emotions and use them to
+    fight against HAVOC.
+  - "Let\u2019s move on to the training area. We\u2019ll help you get started with
+    the basics."
   testOnStart: 1
   animationStateNames:
   - PlayerWakingUp
