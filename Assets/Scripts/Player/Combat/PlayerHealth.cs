@@ -1,6 +1,6 @@
 ﻿using UnityEngine;              
 using UnityEngine.Events;
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamage
 {
     [Header("Base Stats")]
     [SerializeField] private float maxHealth = 100f;   // Maximum health the character can have

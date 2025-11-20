@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,6 +30,9 @@ public class Resurrection : MonoBehaviour
     {
         if (hasResurrected || IsResurrectionActive) return;
         StartCoroutine(ResurrectionRoutine());
+
+        var graphAgent = GetComponent<BehaviorGraphAgent>();
+        graphAgent.BlackboardReference.SetVariableValue("alreadyResurrected", true);
     }
 
     private IEnumerator ResurrectionRoutine()

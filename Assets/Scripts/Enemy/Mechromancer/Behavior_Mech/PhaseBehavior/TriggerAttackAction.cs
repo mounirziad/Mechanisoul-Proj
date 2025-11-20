@@ -80,7 +80,9 @@ public partial class TriggerLightningAction : Action
     protected override Status OnUpdate()
     {
         //Completes immediately, AoE is handled separately
-        return Status.Success;
+        bool finished = false;
+        Agent.Value.GetComponent<BehaviorGraphAgent>().BlackboardReference.GetVariableValue("LightningFinished", out finished);
+        return finished ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()
@@ -104,6 +106,11 @@ public partial class TriggerResurrectionAction : Action
 
     protected override Status OnStart()
     {
+        if (Agent?.Value == null) return Status.Failure;
+
+        resurrection = Agent.Value.GetComponent<Resurrection>();
+        if (resurrection == null) return Status.Failure;
+
         if (resurrection.hasResurrected) return Status.Failure;
 
         resurrection.StartResurrection();

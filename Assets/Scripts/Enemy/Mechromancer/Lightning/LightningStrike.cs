@@ -8,13 +8,17 @@ public class LightningStrike : MonoBehaviour
     [SerializeField] private float hitRadius = 1.5f;
 
     private Vector3 targetPosition;
-    private bool hasTarget;
+    private bool hasTarget = false;
     private float lifetime;
+
+    private LightningController controller;
 
     public void Initialize(Vector3 target)
     {
         targetPosition = target;
         hasTarget = true;
+
+        controller = GetComponent<LightningController>();
     }
 
     private void Update()
@@ -25,7 +29,7 @@ public class LightningStrike : MonoBehaviour
 
         if (lifetime > maxLifetime)
         {
-            Destroy(gameObject);
+            NotifyHit();
             return;
         }
 
@@ -33,27 +37,17 @@ public class LightningStrike : MonoBehaviour
 
         if (Vector3.Distance(transform.position, targetPosition) < hitRadius)
         {
-            LightningDamage();
+            NotifyHit();
         }
     }
 
-    private void LightningDamage()
+    private void NotifyHit()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, hitRadius);
-        foreach (Collider hit in hits)
+        if (controller != null)
         {
-            if (hit.CompareTag("Player"))
-            {
-                PlayerHealth health = hit.GetComponent<PlayerHealth>();
-                if (health != null)
-                {
-                    health.TakeDamage(15f);
-                    Debug.Log("Player hit by lightning");
-                }
-            }
+            controller.OnStrike(targetPosition);
         }
 
-        //Play sound or impact VFX
         Destroy(gameObject);
     }
 }
