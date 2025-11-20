@@ -145,9 +145,15 @@ public class PlayerLocomotion : MonoBehaviour
             if (cameraObject == null) return;
         }
         
+        cachedCameraForward = cameraObject.forward;
+        cachedCameraForward.y = 0;
+        cachedCameraForward.Normalize();
+        
+        cachedCameraRight = cameraObject.right;
+        cachedCameraRight.y = 0;
+        cachedCameraRight.Normalize();
+        
         cachedCameraYaw = cameraObject.eulerAngles.y;
-        cachedCameraForward = Quaternion.Euler(0, cachedCameraYaw, 0) * Vector3.forward;
-        cachedCameraRight = Quaternion.Euler(0, cachedCameraYaw, 0) * Vector3.right;
     }
     public void HandleAllMovement()
     {
@@ -253,58 +259,100 @@ public class PlayerLocomotion : MonoBehaviour
     private void HandleMovement()
     {
         if (cameraObject == null) return;
-
         if (isJumping) { return; }
 
         Vector3 currentVelocity = playerRigidbody.linearVelocity;
 
-        // Use cached camera directions instead of reading directly from camera
-        moveDirection = cachedCameraForward * inputManager.verticalInput;
-        moveDirection += cachedCameraRight * inputManager.horizontalInput;
-        moveDirection.Normalize();
+        ZTargetingSystem zTarget = GetComponent<ZTargetingSystem>();
+        bool isZTargetLocked = zTarget != null && zTarget.IsLocked;
+
+        Vector3 movementForward, movementRight;
+
+        if (isZTargetLocked && zTarget.CurrentTarget != null)
+        {
+            // TARGET-RELATIVE MOVEMENT: Most intuitive for lock-on combat
+            Vector3 toTarget = zTarget.CurrentTarget.position - transform.position;
+            toTarget.y = 0;
+
+            if (toTarget.sqrMagnitude > 0.01f)
+            {
+                movementForward = toTarget.normalized;
+                movementRight = Vector3.Cross(Vector3.up, movementForward).normalized;
+            }
+            else
+            {
+                // Fallback to camera-relative if target is too close
+                movementForward = cameraObject.forward;
+                movementForward.y = 0;
+                movementForward.Normalize();
+                movementRight = cameraObject.right;
+                movementRight.y = 0;
+                movementRight.Normalize();
+            }
+
+        }
+        else
+        {
+            // NORMAL CAMERA-RELATIVE MOVEMENT
+            movementForward = cachedCameraForward;
+            movementRight = cachedCameraRight;
+
+            
+        }
+
+        // Calculate movement direction from input
+        moveDirection = (movementForward * inputManager.verticalInput) + (movementRight * inputManager.horizontalInput);
+
+        // Normalize only if we have significant input to prevent weak diagonal movement
+        if (moveDirection.sqrMagnitude > 0.01f)
+        {
+            moveDirection.Normalize();
+        }
         moveDirection.y = 0;
 
+
+        // Handle movement during attacks
         if (playerCombat != null && playerCombat.IsAttacking())
         {
             Vector3 limitedMovement = Vector3.zero;
-            
+
             if (!isAttackingWithLunge)
             {
-                limitedMovement = cachedCameraForward * inputManager.verticalInput * 0.3f;
-                limitedMovement += cachedCameraRight * inputManager.horizontalInput * 0.3f;
-                limitedMovement.Normalize();
+                limitedMovement = movementForward * inputManager.verticalInput * 0.3f;
+                limitedMovement += movementRight * inputManager.horizontalInput * 0.3f;
+                if (limitedMovement.sqrMagnitude > 0.01f)
+                {
+                    limitedMovement.Normalize();
+                }
                 limitedMovement.y = 0;
                 limitedMovement *= walkingSpeed * 0.5f;
             }
-            
+
             Vector3 targetVelocity = new Vector3(limitedMovement.x, currentVelocity.y, limitedMovement.z);
             playerRigidbody.linearVelocity = targetVelocity;
             return;
         }
 
-        // Calculate input-based direction (already calculated above with cameraYaw)
-        // moveDirection is already set!
-
+        // Store last movement direction for dodging
         if (moveDirection != Vector3.zero)
         {
             lastMovementDirection = moveDirection;
         }
 
-        // Apply speed depending on state
+        // Apply speed based on movement type
+        float currentSpeed = walkingSpeed;
         if (isSprinting)
         {
-            moveDirection *= sprintingSpeed;
+            currentSpeed = sprintingSpeed;
         }
         else if (inputManager.moveAmount >= 0.5f)
         {
-            moveDirection *= runningSpeed;
-        }
-        else
-        {
-            moveDirection *= walkingSpeed;
+            currentSpeed = runningSpeed;
         }
 
-        Vector3 finalTargetVelocity = new Vector3(moveDirection.x, currentVelocity.y, moveDirection.z);
+        // Apply final movement
+        Vector3 finalMovement = moveDirection * currentSpeed;
+        Vector3 finalTargetVelocity = new Vector3(finalMovement.x, currentVelocity.y, finalMovement.z);
         playerRigidbody.linearVelocity = finalTargetVelocity;
     }
 

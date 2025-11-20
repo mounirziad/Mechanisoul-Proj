@@ -70,4 +70,14 @@ public class ZTargetingAdapter : MonoBehaviour
     {
         return zTargeting != null ? zTargeting.CurrentTarget : null;
     }
+    
+    public void SetLetterboxUI(LockOnLetterbox newLetterbox)
+    {
+        letterboxUI = newLetterbox;
+    }
+    
+    public LockOnLetterbox GetLetterboxUI()
+    {
+        return letterboxUI;
+    }
 }

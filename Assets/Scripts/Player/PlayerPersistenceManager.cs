@@ -152,7 +152,38 @@ public class PlayerPersistenceManager : MonoBehaviour
             cameraController.RefreshCameraReferences();
         }
         
+        UpdateLetterboxReference();
+        
         Debug.Log("Cameras notified of player reference.");
+    }
+    
+    private void UpdateLetterboxReference()
+    {
+        if (playerTransform == null)
+            return;
+        
+        LockOnLetterbox letterbox = FindAnyObjectByType<LockOnLetterbox>();
+        
+        if (letterbox != null)
+        {
+            ZTargetingAdapter zAdapter = playerTransform.GetComponent<ZTargetingAdapter>();
+            if (zAdapter != null)
+            {
+                zAdapter.SetLetterboxUI(letterbox);
+                Debug.Log($"Updated ZTargetingAdapter letterbox reference to: {letterbox.name}");
+            }
+            
+            LockOnSystem lockOnSystem = playerTransform.GetComponent<LockOnSystem>();
+            if (lockOnSystem != null && lockOnSystem.letterboxUI == null)
+            {
+                lockOnSystem.letterboxUI = letterbox;
+                Debug.Log($"Updated LockOnSystem letterbox reference to: {letterbox.name}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"No LockOnLetterbox found in scene: {SceneManager.GetActiveScene().name}");
+        }
     }
     
     public Transform GetPlayerTransform()
