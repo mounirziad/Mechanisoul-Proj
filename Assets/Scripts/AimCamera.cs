@@ -12,6 +12,7 @@ public class AimCamera : MonoBehaviour
     [SerializeField] private InputManager playerInputManager;
     [SerializeField] private bool useMouseDelta = true;
     [SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private float gamepadSensitivity = 100f;
 
     [Header("Camera Position")]
     [SerializeField] private Vector3 shoulderOffset = new Vector3(0.6f, 0f, 0f);
@@ -131,6 +132,11 @@ public class AimCamera : MonoBehaviour
         if (useMouseDelta)
         {
             lookInput = playerInputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
+            
+            if (Gamepad.current != null && playerInputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
+            {
+                lookInput *= gamepadSensitivity * Time.deltaTime;
+            }
         }
         else
         {

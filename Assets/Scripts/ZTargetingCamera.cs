@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ZTargetingCamera : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class ZTargetingCamera : MonoBehaviour
     [SerializeField] private InputManager inputManager;
     [SerializeField] private bool useMouseInput = true;
     [SerializeField] private float mouseSensitivity = 0.15f;
+    [SerializeField] private float gamepadSensitivity = 100f;
     
     [Header("Collision")]
     [SerializeField] private CameraCollisionHandler collisionHandler;
@@ -148,6 +150,11 @@ public class ZTargetingCamera : MonoBehaviour
         if (useMouseInput)
         {
             lookInput = inputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
+            
+            if (Gamepad.current != null && inputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
+            {
+                lookInput *= gamepadSensitivity * Time.deltaTime;
+            }
         }
         else
         {

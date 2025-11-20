@@ -11,6 +11,7 @@ public class FreeLookCamera : MonoBehaviour
     [SerializeField] private InputManager playerInputManager;
     [SerializeField] private bool useMouseDelta = true;
     [SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private float gamepadSensitivity = 100f;
 
     [Header("Orbit Settings")]
     [SerializeField] private float orbitSensitivity = 2f;
@@ -115,6 +116,11 @@ public class FreeLookCamera : MonoBehaviour
         if (useMouseDelta)
         {
             lookInput = playerInputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
+            
+            if (Gamepad.current != null && playerInputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
+            {
+                lookInput *= gamepadSensitivity * Time.deltaTime;
+            }
         }
         else
         {

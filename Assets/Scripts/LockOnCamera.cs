@@ -28,6 +28,7 @@ public class LockOnCamera : MonoBehaviour
     [SerializeField] private InputManager playerInputManager;
     [SerializeField] private bool useMouseDelta = true;
     [SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private float gamepadSensitivity = 100f;
 
     [Header("Smoothing")]
     [SerializeField] private float positionSmoothing = 12f;
@@ -138,6 +139,11 @@ public class LockOnCamera : MonoBehaviour
         if (useMouseDelta)
         {
             lookInput = playerInputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
+            
+            if (Gamepad.current != null && playerInputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
+            {
+                lookInput *= gamepadSensitivity * Time.deltaTime;
+            }
         }
         else
         {
