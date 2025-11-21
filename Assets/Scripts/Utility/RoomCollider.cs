@@ -14,7 +14,7 @@ public class RoomCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.tag);
+        //Debug.Log($"Room Collider Tag: {other.gameObject.tag}");
         if (other.gameObject.CompareTag("Player")) 
             levelMap.EnterRoom(roomName);
     }

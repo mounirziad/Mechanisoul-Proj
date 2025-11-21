@@ -91,7 +91,7 @@ public class LevelMap : MonoBehaviour
 
     public void EnterRoom(string name)
     {
-        currentRoom.currentSprite = currentRoom.clearedSprite;
+        if (currentRoom != null) currentRoom.currentSprite = currentRoom.clearedSprite;
 
         foreach (Room room in Rooms)
         {
