@@ -42,7 +42,7 @@ public class BasicEnemyHealth : Enemy
         navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (navAgent != null)
         {
-            baseSpeed = navAgent.speed; // save original speed
+            baseSpeed = navAgent.speed;
         }
 
         agent = GetComponent<AiAgent>();
@@ -92,7 +92,19 @@ public class BasicEnemyHealth : Enemy
         blinkTimer -= Time.deltaTime;
         float lerp = Mathf.Clamp01(blinkTimer / blinkDuration);
         float intensity = (lerp * blinkIntesnity) + 1.0f;
-        agent.skinnedMeshRenderer.material.color = Color.white * intensity;
+        
+        if (agent.skinnedMeshRenderer != null)
+        {
+            agent.skinnedMeshRenderer.material.color = Color.white * intensity;
+        }
+        else
+        {
+            MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer meshRenderer in meshRenderers)
+            {
+                meshRenderer.material.color = Color.white * intensity;
+            }
+        }
 
         //Debug.Log($"current speed: {navAgent.speed}");
 
