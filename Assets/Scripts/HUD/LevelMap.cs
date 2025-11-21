@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Room
 {
@@ -7,7 +8,7 @@ public class Room
     public bool Cleared;
 
     GameObject roomObject;
-    SpriteRenderer roomRenderer;
+    Image roomImage;
 
     public Sprite hiddenSprite;
     public Sprite inRoomSprite;
@@ -23,8 +24,8 @@ public class Room
 
     public void CreateGameObject()
     {
-        roomObject = new GameObject(Name, typeof(SpriteRenderer));
-        roomRenderer = roomObject.GetComponent<SpriteRenderer>();
+        roomObject = new GameObject(Name, typeof(Image));
+        roomImage = roomObject.GetComponent<Image>();
     }
 
     public void SetParent(GameObject parent)
@@ -36,7 +37,7 @@ public class Room
     public void Translate(float x, float y)
     {
         roomObject.transform.Translate(new Vector3(x * 100, y * 100, 0));
-        roomObject.transform.localScale = Vector3.one * 40;
+        roomObject.transform.localScale = Vector3.one;
     }
 
     public void SetSprites(Sprite hiddenSprite, Sprite inRoomSprite, Sprite clearedSprite)
@@ -52,7 +53,7 @@ public class Room
 
     public void ClearRoom() => Cleared = true;
 
-    public void UpdateSprite() => roomRenderer.sprite = currentSprite;
+    public void UpdateSprite() => roomImage.sprite = currentSprite;
 }
 
 public class LevelMap : MonoBehaviour
@@ -94,7 +95,7 @@ public class LevelMap : MonoBehaviour
 
         foreach (Room room in Rooms)
         {
-            if (room.Name == name)
+            if (room.Name.Equals(name))
             {
                 currentRoom = room;
                 room.currentSprite = room.inRoomSprite;
