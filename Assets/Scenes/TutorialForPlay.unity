@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 76230541}
   - component: {fileID: 76230540}
   - component: {fileID: 76230539}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Door (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1319,7 +1319,7 @@ GameObject:
   - component: {fileID: 94716524}
   - component: {fileID: 94716523}
   - component: {fileID: 94716522}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6987,7 +6987,7 @@ GameObject:
   - component: {fileID: 1163911658}
   - component: {fileID: 1163911657}
   - component: {fileID: 1163911656}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9210,7 +9210,7 @@ GameObject:
   - component: {fileID: 1525021210}
   - component: {fileID: 1525021209}
   - component: {fileID: 1525021208}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10726,6 +10726,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2020271854}
     - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: airbornePhysicsMaterial
       value: 
       objectReference: {fileID: 13400000, guid: 465b278272c29ee49bb93e89e92dfcdf, type: 2}
@@ -11735,7 +11739,7 @@ GameObject:
   - component: {fileID: 2014835346}
   - component: {fileID: 2014835345}
   - component: {fileID: 2014835344}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
