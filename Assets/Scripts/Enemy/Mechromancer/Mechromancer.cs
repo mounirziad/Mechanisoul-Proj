@@ -28,6 +28,22 @@ public class Mechromancer : Enemy, IDamage
 
     private void Start()
     {
+        var player = GameObject.FindWithTag("Player");
+
+        if (player == null)
+        {
+            Debug.LogError("Player not found in scene");
+            return;
+        }
+
+        var agent = GetComponent<BehaviorGraphAgent>();
+        var blackboard = agent.BlackboardReference;
+
+        blackboard.SetVariableValue("Player", player);
+        blackboard.SetVariableValue("PlayerTransform", player.transform);
+
+        Debug.Log("Blackboard has set player to: " + player.name);
+
         controller = GetComponent<MechBehaviorController>();
         animationController = GetComponent<MechAnimationController>();
 
