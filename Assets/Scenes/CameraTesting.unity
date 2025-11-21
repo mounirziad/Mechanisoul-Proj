@@ -1085,7 +1085,7 @@ GameObject:
   - component: {fileID: 1723926449}
   - component: {fileID: 1723926448}
   - component: {fileID: 1723926447}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1212,6 +1212,14 @@ PrefabInstance:
       propertyPath: crosshairObject
       value: 
       objectReference: {fileID: 616964640}
+    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: detectionheight
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075091244792251662, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7209598748099297257, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: aimCamera
       value: 
@@ -1436,7 +1444,7 @@ GameObject:
   - component: {fileID: 2087325002}
   - component: {fileID: 2087325001}
   - component: {fileID: 2087325000}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plane (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
