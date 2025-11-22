@@ -91,8 +91,12 @@ public class PlayerLocomotion : MonoBehaviour
     private Vector3 slopeNormal = Vector3.up;
     
     [Header("Air Control Settings")]
-    public float airControlMultiplier = 0.3f;
-    public float airControlResponsiveness = 2f;
+    public float airControlMultiplier = 0.6f;
+    public float airControlResponsiveness = 5f;
+    public float minimumAirMoveSpeed = 3f;
+    public bool preserveMomentumOnJump = true;
+    public float momentumPreservation = 0.5f;
+    public float maxAirSpeed = 8f;
     public PhysicsMaterial airbornePhysicsMaterial;
     public PhysicsMaterial groundedPhysicsMaterial;
     private PhysicsMaterial frictionlessMaterial;
@@ -436,17 +440,37 @@ public class PlayerLocomotion : MonoBehaviour
 
         Vector3 airMoveDirection = (movementForward * inputManager.verticalInput) + (movementRight * inputManager.horizontalInput);
 
-        if (airMoveDirection.sqrMagnitude > 0.01f)
+        bool hasInput = airMoveDirection.sqrMagnitude > 0.01f;
+        
+        if (hasInput)
         {
             airMoveDirection.Normalize();
         }
         airMoveDirection.y = 0;
 
-        float airSpeed = walkingSpeed * airControlMultiplier;
-        Vector3 targetHorizontalVelocity = airMoveDirection * airSpeed;
         Vector3 currentHorizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
+        Vector3 targetHorizontalVelocity;
+        
+        if (hasInput)
+        {
+            float airSpeed = Mathf.Max(walkingSpeed * airControlMultiplier, minimumAirMoveSpeed);
+            targetHorizontalVelocity = airMoveDirection * airSpeed;
+        }
+        else if (preserveMomentumOnJump)
+        {
+            targetHorizontalVelocity = currentHorizontalVelocity * momentumPreservation;
+        }
+        else
+        {
+            targetHorizontalVelocity = Vector3.zero;
+        }
         
         Vector3 newHorizontalVelocity = Vector3.Lerp(currentHorizontalVelocity, targetHorizontalVelocity, Time.deltaTime * airControlResponsiveness);
+        
+        if (newHorizontalVelocity.magnitude > maxAirSpeed)
+        {
+            newHorizontalVelocity = newHorizontalVelocity.normalized * maxAirSpeed;
+        }
         
         playerRigidbody.linearVelocity = new Vector3(newHorizontalVelocity.x, currentVelocity.y, newHorizontalVelocity.z);
     }
