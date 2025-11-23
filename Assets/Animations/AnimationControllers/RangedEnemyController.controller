@@ -257,7 +257,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BasicEnemyController
+  m_Name: RangedEnemyController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Speed
@@ -324,7 +324,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: WeaponLayer
     m_StateMachine: {fileID: 857803507074393726}
-    m_Mask: {fileID: 0}
+    m_Mask: {fileID: 31900000, guid: 2ce9d0f9e7dcade44b741993e3acfef7, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
@@ -719,7 +719,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 2dffbbd6a002bef479bded64c368ee6b, type: 2}
+    m_Motion: {fileID: 7400000, guid: 35e4bc180d676c64baeb00f980d3cdc7, type: 2}
     m_Threshold: 1.7462299e-11
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
