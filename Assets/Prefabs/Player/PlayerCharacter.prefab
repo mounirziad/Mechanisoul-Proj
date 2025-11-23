@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   damage: 5
   attackRange: 0
-  hitVFX: {fileID: 7849176156349135997, guid: 6da7708ac09b6394db4e425b83360f11, type: 3}
+  hitVFX: {fileID: 7849176156349135997, guid: d32875d8f3de2ca4eb78ca4170c13aeb, type: 3}
   cam: {fileID: 0}
   upgradeHandler: {fileID: 0}
   hitSoundCooldown: 0.2
@@ -1927,6 +1927,7 @@ MonoBehaviour:
   fearImpact: {fileID: 7849176156349135997, guid: 9697469dfd329e94e84af33230686494, type: 3}
   sadnessImpact: {fileID: 7849176156349135997, guid: b764b6c1eaf4eb84da4de7f09dabbb4c, type: 3}
   loveImpact: {fileID: 7849176156349135997, guid: 376a4a461d37d504ab52a312f8614604, type: 3}
+  baseImpact: {fileID: 7849176156349135997, guid: d32875d8f3de2ca4eb78ca4170c13aeb, type: 3}
   aoeAmount: 0
   slowAmount: 4
   slowLength: 10
@@ -1989,6 +1990,14 @@ MonoBehaviour:
   coyoteTime: 0.15
   maxSlopeAngle: 45
   isOnSlope: 0
+  airControlMultiplier: 0.6
+  airControlResponsiveness: 5
+  minimumAirMoveSpeed: 3
+  preserveMomentumOnJump: 1
+  momentumPreservation: 0.5
+  maxAirSpeed: 8
+  airbornePhysicsMaterial: {fileID: 0}
+  groundedPhysicsMaterial: {fileID: 0}
   footBone: {fileID: 0}
   footGroundCheckOffset: 0
   useFootTrackingDuringJump: 0

@@ -62,6 +62,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject fearImpact;
     [SerializeField] private GameObject sadnessImpact;
     [SerializeField] private GameObject loveImpact;
+    [SerializeField] private GameObject baseImpact;
     Weapon weapon;
     Emotions selectedMeleeEmotion;
 
