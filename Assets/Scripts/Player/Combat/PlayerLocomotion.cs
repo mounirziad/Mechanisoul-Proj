@@ -978,6 +978,9 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void HandleDodge()
     {
+        if (DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying)
+            return;
+            
         if (isDodging || !canDodge || !isGrounded || playerManager.isInteracting)
             return;
 

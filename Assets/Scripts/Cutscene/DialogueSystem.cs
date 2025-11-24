@@ -53,6 +53,7 @@ public class DialogueSystem : MonoBehaviour
 
     private Coroutine currentDialogueCoroutine;
     private bool isDisplaying = false;
+    private bool isSequenceActive = false;
     private bool waitingForInput = false;
     private bool canAdvance = false;
     private List<string> currentTextChunks = new List<string>();
@@ -223,6 +224,7 @@ public class DialogueSystem : MonoBehaviour
         }
 
         isDisplaying = false;
+        isSequenceActive = false;
         waitingForInput = false;
         canAdvance = false;
         advancePressedThisFrame = false;
@@ -259,6 +261,7 @@ public class DialogueSystem : MonoBehaviour
 
         currentSequence = sequence;
         currentSequenceIndex = 0;
+        isSequenceActive = true;
         currentDialogueCoroutine = StartCoroutine(DisplaySequenceCoroutine());
     }
 
@@ -269,6 +272,7 @@ public class DialogueSystem : MonoBehaviour
             lines = lines,
             loopSequence = loop
         };
+        isSequenceActive = true;
         ShowDialogueSequence(sequence);
     }
 
@@ -368,6 +372,8 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator DisplaySequenceCoroutine()
     {
+        isSequenceActive = true;
+        
         do
         {
             for (currentSequenceIndex = 0; currentSequenceIndex < currentSequence.lines.Length; currentSequenceIndex++)
@@ -381,6 +387,8 @@ public class DialogueSystem : MonoBehaviour
             }
         }
         while (currentSequence.loopSequence);
+        
+        isSequenceActive = false;
     }
 
     private List<string> ChunkText(string text)
@@ -477,6 +485,6 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    public bool IsDisplaying => isDisplaying;
+    public bool IsDisplaying => isDisplaying || isSequenceActive;
     public bool IsWaitingForInput => waitingForInput;
 }

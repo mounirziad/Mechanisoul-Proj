@@ -13,9 +13,13 @@ public class DashAbility : MonoBehaviour
     [Header("Hook-ins")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform directionSource; // optional, for debugging later if needed
+    [SerializeField] private PlayerLocomotion playerLocomotion;
 
     [Header("Input System")]
     public InputActionReference dashAction;
+    
+    [Header("Grounded Requirement")]
+    public bool requireGrounded = true;
 
     [Header("Dash Tuning")]
     public float dashDistanceInBodyLengths = 3.5f;
@@ -38,6 +42,7 @@ public class DashAbility : MonoBehaviour
     void Awake()
     {
         if (!rb) rb = GetComponent<Rigidbody>();
+        if (!playerLocomotion) playerLocomotion = GetComponent<PlayerLocomotion>();
         curveArea = ApproxCurveArea(dashEase, 200);
         if (curveArea < 1e-3f) curveArea = 1f;
         if (!directionSource) directionSource = transform;
@@ -73,6 +78,19 @@ public class DashAbility : MonoBehaviour
             if (debugLogs) Debug.Log($"[DashAbility] TryDash ignored. isDashing={isDashing} cooldown={dashOnCooldown}", this);
             return;
         }
+        
+        if (DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying)
+        {
+            if (debugLogs) Debug.Log("[DashAbility] TryDash ignored. Dialogue is active.", this);
+            return;
+        }
+        
+        if (requireGrounded && playerLocomotion != null && !playerLocomotion.isGrounded)
+        {
+            if (debugLogs) Debug.Log("[DashAbility] TryDash ignored. Player is not grounded.", this);
+            return;
+        }
+        
         Vector3 dir = GetDashDirection();
         if (dir.sqrMagnitude < 0.0001f) dir = directionSource.forward;
         if (debugLogs) Debug.Log($"[DashAbility] TryDash start. dir={dir}", this);
@@ -92,7 +110,18 @@ public class DashAbility : MonoBehaviour
         if (distance < 0.001f) return false;
 
         Vector3 direction = step.normalized;
-        return Physics.SphereCast(currentPos, radius, direction, out _, distance, obstacleLayerMask, QueryTriggerInteraction.Ignore);
+        
+        if (Physics.SphereCast(currentPos, radius, direction, out _, distance, obstacleLayerMask, QueryTriggerInteraction.Ignore))
+        {
+            return true;
+        }
+        
+        if (Physics.Raycast(currentPos, direction, distance, obstacleLayerMask, QueryTriggerInteraction.Ignore))
+        {
+            return true;
+        }
+        
+        return false;
     }
 
     IEnumerator DashRoutine(Vector3 direction)

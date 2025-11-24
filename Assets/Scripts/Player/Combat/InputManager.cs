@@ -123,6 +123,15 @@ public class InputManager : MonoBehaviour
 
     private void HandleMovementInput()
     {
+        if (DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying)
+        {
+            verticalInput = 0f;
+            horizontalInput = 0f;
+            moveAmount = 0f;
+            animatorManager.UpdateAnimatorValues(0, 0f, false);
+            return;
+        }
+        
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
 
@@ -147,6 +156,13 @@ public class InputManager : MonoBehaviour
 
     private void HandleJumpingInput()
     {
+        if (DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying)
+        {
+            jumpInput = false;
+            jumpInputBuffer = 0f;
+            return;
+        }
+        
         // Set buffer when jump is pressed
         if (jumpInput)
         {

@@ -16,12 +16,17 @@ public class MeshTrail : MonoBehaviour
     [Header("Input References")]
     private PlayerControls playerControls;
 
+    [Header("Grounded Requirement")]
+    public bool requireGrounded = true;
+    private PlayerLocomotion playerLocomotion;
+
     private SkinnedMeshRenderer[] skinnedMeshRenderers;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         playerControls = new PlayerControls();
+        playerLocomotion = GetComponent<PlayerLocomotion>();
     }
 
     private void OnEnable()
@@ -38,6 +43,16 @@ public class MeshTrail : MonoBehaviour
 
     private void OnDodge(InputAction.CallbackContext context)
     {
+        if (DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying)
+        {
+            return;
+        }
+        
+        if (requireGrounded && playerLocomotion != null && !playerLocomotion.isGrounded)
+        {
+            return;
+        }
+        
         if (!isTrailActive)
         {
             isTrailActive = true;
