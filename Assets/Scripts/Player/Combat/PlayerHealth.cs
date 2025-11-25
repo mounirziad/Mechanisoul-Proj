@@ -35,16 +35,6 @@ public class PlayerHealth : MonoBehaviour, IDamage
         }
     }
 
-    //Added by Alyssa
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Blade"))
-        {
-            currentHealth -= 8;
-            Debug.Log("Player hit");
-        }
-    }
-
     public void TakeDamage(float amount)
     {
         if (isInvulnerable || amount <= 0) return;   // Ignore if invulnerable or damage is 0/negative

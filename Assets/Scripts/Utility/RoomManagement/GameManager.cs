@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool persistAcrossScenes = true;
     
     private GameObject currentPlayer;
+
+    public GameObject loseScreen;
     
     private void Awake()
     {
@@ -106,5 +108,18 @@ public class GameManager : MonoBehaviour
     public Transform GetPlayerTransform()
     {
         return currentPlayer != null ? currentPlayer.transform : null;
+    }
+
+    public void TriggerLoseState()
+    {
+        Debug.Log("Player lost");
+        Time.timeScale = 0f;
+        loseScreen.SetActive(true);
+    }
+
+    public void Respawn()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
