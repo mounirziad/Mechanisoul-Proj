@@ -6,15 +6,17 @@ public class Weapon : MonoBehaviour
     public float damage;
     public float attackRange;
 
+    [Header("Melee VFX Settings")]
     [SerializeField] private GameObject hitVFX;
+    [SerializeField] private GameObject slashTrailObject;
+    private ParticleSystem slashTrailPS;
+
     private BoxCollider triggerBox;
 
     public Camera cam;
 
     PlayerManager playerManager;
     [SerializeField] UpgradeHandler upgradeHandler;
-
-
     
     [Header("Audio Settings")]
     [SerializeField] private float hitSoundCooldown = 0.2f;
@@ -42,6 +44,7 @@ public class Weapon : MonoBehaviour
     {
         playerManager = transform.root.gameObject.GetComponent<PlayerManager>();
         triggerBox = GetComponent<BoxCollider>();
+        slashTrailPS = slashTrailObject.GetComponent<ParticleSystem>();
         triggerBox.isTrigger = true; // make sure it's set as a trigger
 
         // Initialize hit tracker
@@ -251,8 +254,26 @@ public class Weapon : MonoBehaviour
         }
     }
     
-    public void SetVFX(GameObject vfxPrefab)
+    public void SetVFX(GameObject vfxPrefab, Material slashTrailMat)
     {
         hitVFX = vfxPrefab;
+        slashTrailPS.GetComponent<ParticleSystemRenderer>().material = slashTrailMat;
+        slashTrailPS.GetComponent<ParticleSystemRenderer>().trailMaterial = slashTrailMat;
+    }
+
+    public void EnableSlashTrail()
+    {
+        if (slashTrailObject != null)
+        {
+            slashTrailObject.SetActive(true);
+        }
+    }
+
+    public void DisableSlashTrail()
+    {
+        if (slashTrailObject != null)
+        {
+            slashTrailObject.SetActive(false);
+        }
     }
 }

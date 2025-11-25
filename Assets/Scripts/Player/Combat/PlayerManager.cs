@@ -63,6 +63,15 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject sadnessImpact;
     [SerializeField] private GameObject loveImpact;
     [SerializeField] private GameObject baseImpact;
+
+    [Header("Melee Trail VFX References")]
+    [SerializeField] private Material angerTrailMat;
+    [SerializeField] private Material joyTrailMat;
+    [SerializeField] private Material fearTrailMat;
+    [SerializeField] private Material sadnessTrailMat;
+    [SerializeField] private Material loveTrailMat;
+    [SerializeField] private Material baseTrailMat;
+
     Weapon weapon;
     Emotions selectedMeleeEmotion;
 
@@ -87,6 +96,7 @@ public class PlayerManager : MonoBehaviour
         weapon = GetComponentInChildren<Weapon>();
         if (!dash) dash = GetComponent<DashAbility>();
         comboUpgrades = GetComponent<ComboUpgrades>();
+        weapon.DisableSlashTrail();
 
         //Alyssa update for Transform
         player = this.transform;
@@ -231,23 +241,34 @@ public class PlayerManager : MonoBehaviour
     }
 
 
-    #region VFX Method
+    #region Melee VFX Methods
     public void SetMeleeEmotion(Emotions emotion)
     {
         selectedMeleeEmotion = emotion;
         switch (emotion)
         {
-            case Emotions.Joy: weapon.SetVFX(joyImpact); break;
-            case Emotions.Anger: weapon.SetVFX(angerImpact); break;
-            case Emotions.Sadness: weapon.SetVFX(sadnessImpact); break;
-            case Emotions.Fear: weapon.SetVFX(fearImpact); break;
-            case Emotions.Love: weapon.SetVFX(loveImpact); break;
+            case Emotions.Joy: weapon.SetVFX(joyImpact, joyTrailMat); break;
+            case Emotions.Anger: weapon.SetVFX(angerImpact, angerTrailMat); break;
+            case Emotions.Sadness: weapon.SetVFX(sadnessImpact, sadnessTrailMat); break;
+            case Emotions.Fear: weapon.SetVFX(fearImpact, fearTrailMat); break;
+            case Emotions.Love: weapon.SetVFX(loveImpact, loveTrailMat); break;
             case Emotions.None:
-                weapon.SetVFX(joyImpact); break;
+                weapon.SetVFX(baseImpact, baseTrailMat); break;
             default:
-                weapon.SetVFX(joyImpact); break;
+                weapon.SetVFX(baseImpact, baseTrailMat); break;
         }
     }
+
+    public void EnableSlashTrail()
+    {
+        weapon.EnableSlashTrail();
+    }
+
+    public void DisableSlashTrail()
+    {
+        weapon.DisableSlashTrail();
+    }
+
     #endregion
 
 
