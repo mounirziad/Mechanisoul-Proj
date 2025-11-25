@@ -16,7 +16,7 @@ MonoBehaviour:
   damage: 10
   moveDistance: 2
   moveSpeed: 8
-  moveDuration: 0.3
+  moveDuration: 0.7125
   moveCurve:
     serializedVersion: 2
     m_Curve:
@@ -43,3 +43,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   rotateTowardsTarget: 1
   rotationSpeed: 720
+  baseAnimationSpeed: 1
+  affectedByAttackSpeedUpgrades: 1
+  attackTypeTags:
+  - Normal

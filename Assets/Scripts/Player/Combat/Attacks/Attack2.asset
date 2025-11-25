@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackSO
   animatorOV: {fileID: 22100000, guid: 18c43dec304716e4c81d29d475f17e97, type: 2}
   damage: 8
-  moveDistance: 2
+  moveDistance: 4
   moveSpeed: 8
-  moveDuration: 0.3
+  moveDuration: 1.6226
   moveCurve:
     serializedVersion: 2
     m_Curve:
@@ -43,3 +43,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   rotateTowardsTarget: 1
   rotationSpeed: 720
+  baseAnimationSpeed: 1
+  affectedByAttackSpeedUpgrades: 1
+  attackTypeTags:
+  - Normal

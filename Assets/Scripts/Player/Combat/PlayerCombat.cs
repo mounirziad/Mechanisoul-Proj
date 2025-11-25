@@ -119,6 +119,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float aimAssistAngle = 30f;
     [SerializeField] private LayerMask enemyLayer;
     [HideInInspector] public Transform currentTarget;
+    private AttackSO currentAttackData;
 
     void Awake()
     {
@@ -832,7 +833,7 @@ public class PlayerCombat : MonoBehaviour
             CancelInvoke(nameof(EndCombo));
 
             // Get the current attack data before setting the animator
-            AttackSO currentAttackData = combo[comboCounter];
+            currentAttackData = combo[comboCounter];
 
             anim.runtimeAnimatorController = currentAttackData.animatorOV;
             anim.Play("Attack", 0, 0);
@@ -872,21 +873,15 @@ public class PlayerCombat : MonoBehaviour
             switch (rootMotionMode)
             {
                 case RootMotionMode.LungeOnly:
-                    // Traditional system - no root motion, full lunge
                     anim.applyRootMotion = false;
-                    StartAttackMovement(currentAttackData);
                     break;
 
                 case RootMotionMode.RootMotionOnly:
-                    // Pure root motion - let animation drive movement completely
                     anim.applyRootMotion = true;
-                    // Don't call StartAttackMovement()
                     break;
 
                 case RootMotionMode.Hybrid:
-                    // Best of both worlds - root motion + reduced lunge
                     anim.applyRootMotion = true;
-                    StartAttackMovementHybrid(currentAttackData);
                     break;
             }
 
@@ -896,66 +891,6 @@ public class PlayerCombat : MonoBehaviour
             lastClickedTime = Time.time;
             attackQueued = false;
             if (comboCounter >= combo.Count) comboCounter = 0;
-        }
-    }
-
-    void StartAttackMovementHybrid(AttackSO attackData)
-    {
-        var playerLoco = GetComponent<PlayerLocomotion>();
-        if (playerLoco != null)
-        {
-            Vector3 attackDirection = transform.forward;
-
-            // If we have a target, move towards it
-            if (currentTarget != null)
-            {
-                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
-                directionToTarget.y = 0;
-                attackDirection = directionToTarget;
-
-                // Rotate towards target for more dynamic combat
-                transform.rotation = Quaternion.LookRotation(attackDirection);
-            }
-
-            // Create a modified attack data for hybrid mode (reduced movement since root motion is also active)
-            AttackSO hybridAttackData = ScriptableObject.CreateInstance<AttackSO>();
-            hybridAttackData.moveDistance = attackData.moveDistance * additionalLungeMultiplier;
-            hybridAttackData.moveSpeed = attackData.moveSpeed * additionalLungeMultiplier;
-            hybridAttackData.moveDuration = attackData.moveDuration;
-            hybridAttackData.moveCurve = attackData.moveCurve;
-            hybridAttackData.rotateTowardsTarget = attackData.rotateTowardsTarget;
-
-            // Force stop any existing attack movement and start new one
-            playerLoco.ForceStopAttackLunge();
-            playerLoco.StartAttackLunge(attackDirection, hybridAttackData);
-
-            Debug.Log($"<color=green>Starting hybrid combo attack - Root Motion: ON, Extra Lunge: {hybridAttackData.moveDistance}</color>");
-        }
-    }
-
-    void StartAttackMovement(AttackSO attackData)
-    {
-        var playerLoco = GetComponent<PlayerLocomotion>();
-        if (playerLoco != null)
-        {
-            Vector3 attackDirection = transform.forward;
-
-            // If we have a target, move towards it
-            if (currentTarget != null)
-            {
-                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
-                directionToTarget.y = 0;
-                attackDirection = directionToTarget;
-
-                // Rotate towards target for more dynamic combat
-                transform.rotation = Quaternion.LookRotation(attackDirection);
-            }
-
-            // Force stop any existing attack movement and start new one
-            playerLoco.ForceStopAttackLunge();
-            playerLoco.StartAttackLunge(attackDirection, attackData);
-
-            Debug.Log($"<color=green>Starting combo attack with move distance: {attackData.moveDistance}</color>");
         }
     }
 
@@ -969,12 +904,13 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackQueued)
             {
-                isAttacking = false; // Allow next attack to start
+                isAttacking = false;
                 return;
             }
         }
 
         // Complete attack when animation is nearly finished
+        // NOTE: Don't clear currentAttackData here - let animation events handle it
         if (norm > 0.95f && anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
             CompleteAttack();
     }
@@ -995,14 +931,9 @@ public class PlayerCombat : MonoBehaviour
             anim.applyRootMotion = false;
         }
 
-        // Stop attack movement when attack completes (unless combo continues)
+        // End combo if no attack is queued
         if (!attackQueued)
         {
-            var playerLoco = GetComponent<PlayerLocomotion>();
-            if (playerLoco != null)
-            {
-                playerLoco.ForceStopAttackLunge();
-            }
             Invoke(nameof(EndCombo), 0.5f);
         }
 
@@ -1033,12 +964,67 @@ public class PlayerCombat : MonoBehaviour
             comboCounter = 0;
             lastComboEnd = Time.time;
             attackQueued = false;
+            currentAttackData = null;
         }
     }
 
     // Animation events
     public void OnAnimationEnableWeapon() { if (weapon != null) weapon.EnableTriggerBox(); }
     public void OnAnimationDisableWeapon() { if (weapon != null) weapon.DisableTriggerBox(); }
+
+    public void StartAttackLunge()
+    {
+        if (!isAttacking && currentAttackData == null)
+        {
+            Debug.LogWarning($"<color=orange>[AnimEvent] StartAttackLunge called after attack ended. This is a timing issue - animation event fires too late.</color>");
+            return;
+        }
+
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        if (playerLoco != null && currentAttackData != null)
+        {
+            Vector3 attackDirection = transform.forward;
+
+            if (currentTarget != null)
+            {
+                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
+                directionToTarget.y = 0;
+                attackDirection = directionToTarget;
+                transform.rotation = Quaternion.LookRotation(attackDirection);
+            }
+
+            AttackSO lungeData = currentAttackData;
+            if (rootMotionMode == RootMotionMode.Hybrid)
+            {
+                AttackSO hybridData = ScriptableObject.CreateInstance<AttackSO>();
+                hybridData.moveDistance = currentAttackData.moveDistance * additionalLungeMultiplier;
+                hybridData.moveSpeed = currentAttackData.moveSpeed * additionalLungeMultiplier;
+                hybridData.moveCurve = currentAttackData.moveCurve;
+                hybridData.rotateTowardsTarget = currentAttackData.rotateTowardsTarget;
+                lungeData = hybridData;
+            }
+
+            playerLoco.StartAttackLungeEvent(attackDirection, lungeData);
+        }
+        else
+        {
+            Debug.LogWarning($"<color=orange>[AnimEvent] StartAttackLunge failed - PlayerLoco: {playerLoco != null}, CurrentAttackData: {currentAttackData != null}, IsAttacking: {isAttacking}</color>");
+        }
+    }
+
+    public void StopAttackLunge()
+    {
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        if (playerLoco != null)
+        {
+            playerLoco.StopAttackLungeEvent();
+        }
+
+        if (!attackQueued)
+        {
+            currentAttackData = null;
+        }
+    }
 
     public void CancelAttack()
     {
@@ -1053,6 +1039,7 @@ public class PlayerCombat : MonoBehaviour
 
         anim.Play("Idle");
         currentTarget = null;
+        currentAttackData = null;
 
         // Disable root motion when canceling attack (except for LungeOnly mode where it's already off)
         if (rootMotionMode != RootMotionMode.LungeOnly)

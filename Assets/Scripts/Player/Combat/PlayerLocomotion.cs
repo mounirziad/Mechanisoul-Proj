@@ -64,6 +64,10 @@ public class PlayerLocomotion : MonoBehaviour
     private float attackMoveStartTime;
     private AttackSO currentAttackData;
     private float originalMoveDistance;
+    private float lungeStartTime = -999f;
+    private int lungeCallCount = 0;
+    private Vector3 lungeStartPosition;
+    private float totalDistanceMoved = 0f;
 
     LockOnSystem lockOnSystem;
 
@@ -237,65 +241,86 @@ public class PlayerLocomotion : MonoBehaviour
     {
         if (!isAttackingWithLunge || currentAttackData == null)
             return;
-            
-        float elapsedTime = Time.time - attackMoveStartTime;
-        
-        if (elapsedTime < currentAttackData.moveDuration)
-        {
-            float progress = Mathf.Clamp01(elapsedTime / currentAttackData.moveDuration);
-            
-            float curveValue = currentAttackData.moveCurve.Evaluate(progress);
-            float currentSpeed = currentAttackData.moveSpeed * curveValue;
-            
-            Vector3 movement = attackMoveDirection * currentSpeed * Time.deltaTime;
-            playerRigidbody.MovePosition(transform.position + movement);
-            
-            Debug.Log($"Attack Movement - Progress: {progress:F2}, Speed: {currentSpeed:F2}, Movement: {movement.magnitude:F3}");
-        }
-        else
-        {
-            Debug.Log($"Attack movement completed - Elapsed: {elapsedTime:F2}s, Duration: {currentAttackData.moveDuration:F2}s");
-            isAttackingWithLunge = false;
-            currentAttackData = null;
-        }
-    }
 
-    public void StartAttackLunge(Vector3 direction, AttackSO attackData)
-    {
-        if (attackData == null)
+        float elapsedTime = Time.time - lungeStartTime;
+        float lungeDuration = currentAttackData.moveDuration;
+        
+        if (elapsedTime >= lungeDuration || totalDistanceMoved >= currentAttackData.moveDistance)
         {
-            Debug.LogWarning("StartAttackLunge called with null attackData!");
+            isAttackingWithLunge = false;
             return;
         }
+
+        float normalizedTime = Mathf.Clamp01(elapsedTime / lungeDuration);
+        float curveValue = currentAttackData.moveCurve.Evaluate(normalizedTime);
         
-        if (direction == Vector3.zero)
-        {
-            Debug.LogWarning("StartAttackLunge called with zero direction - using transform.forward");
-            direction = transform.forward;
-        }
+        float speedThisFrame = currentAttackData.moveSpeed * curveValue;
+        float distanceThisFrame = speedThisFrame * Time.deltaTime;
         
-        isAttackingWithLunge = true;
-        attackMoveDirection = direction.normalized;
-        attackMoveStartTime = Time.time;
-        currentAttackData = attackData;
-        originalMoveDistance = attackData.moveDistance;
+        float remainingDistance = currentAttackData.moveDistance - totalDistanceMoved;
+        distanceThisFrame = Mathf.Min(distanceThisFrame, remainingDistance);
         
-        if (attackData.rotateTowardsTarget && direction != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(direction);
-        }
+        Vector3 movement = attackMoveDirection * distanceThisFrame;
+        playerRigidbody.MovePosition(transform.position + movement);
         
-        Debug.Log($"<color=cyan>Started attack lunge - Distance: {attackData.moveDistance}, Speed: {attackData.moveSpeed}, Duration: {attackData.moveDuration}, Direction: {direction}</color>");
+        totalDistanceMoved += distanceThisFrame;
     }
 
     public void ForceStopAttackLunge()
     {
-        if (isAttackingWithLunge)
-        {
-            Debug.Log("<color=yellow>Force stopped attack lunge</color>");
-        }
         isAttackingWithLunge = false;
         currentAttackData = null;
+    }
+
+    public void StartAttackLungeEvent(Vector3 direction, AttackSO attackData)
+    {
+        if (attackData == null)
+        {
+            Debug.LogWarning("StartAttackLungeEvent called with null attackData!");
+            return;
+        }
+
+        if (direction == Vector3.zero)
+        {
+            direction = transform.forward;
+        }
+
+        if (isAttackingWithLunge)
+        {
+            Debug.LogWarning($"<color=yellow>[AnimEvent] StartAttackLunge called while already lunging! Time since last start: {Time.time - lungeStartTime:F2}s</color>");
+        }
+
+        isAttackingWithLunge = true;
+        attackMoveDirection = direction.normalized;
+        currentAttackData = attackData;
+        lungeStartTime = Time.time;
+        lungeCallCount++;
+        lungeStartPosition = transform.position;
+        totalDistanceMoved = 0f;
+
+        if (attackData.rotateTowardsTarget && direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+
+        Debug.Log($"<color=cyan>[AnimEvent #{lungeCallCount}] Started attack lunge - Distance: {attackData.moveDistance}, Speed: {attackData.moveSpeed}, Duration: {attackData.moveDuration:F2}s</color>");
+    }
+
+    public void StopAttackLungeEvent()
+    {
+        float lungeDuration = Time.time - lungeStartTime;
+        
+        if (!isAttackingWithLunge)
+        {
+            Debug.LogWarning($"<color=yellow>[AnimEvent] StopAttackLunge called but no active lunge! Last lunge was {lungeDuration:F2}s ago</color>");
+            return;
+        }
+
+        isAttackingWithLunge = false;
+        currentAttackData = null;
+        Debug.Log($"<color=cyan>[AnimEvent #{lungeCallCount}] Stopped attack lunge after {lungeDuration:F2}s - Moved {totalDistanceMoved:F2} units</color>");
+        
+        totalDistanceMoved = 0f;
     }
 
 
