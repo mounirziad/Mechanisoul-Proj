@@ -16,10 +16,11 @@ public class Mechromancer : Enemy, IDamage
     public bool isDead = false;
 
     [Header("References")]
-    [SerializeField] private Resurrection resurrection;
+    private Resurrection resurrection;
     private LightningController lightningController;
     private MechBehaviorController controller;
     private MechAnimationController animationController;
+    private MechLunge lunge;
 
     protected override void Awake()
     {
