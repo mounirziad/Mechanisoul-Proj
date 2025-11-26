@@ -8,6 +8,8 @@ public class AnimatorManager : MonoBehaviour
     int horizontal;
     int vertical;
     int isAimingHash;
+    private int takeDamageHash;
+
 
     private void Awake()
     {
@@ -17,7 +19,13 @@ public class AnimatorManager : MonoBehaviour
         horizontal = Animator.StringToHash("Horizontal");
         vertical = Animator.StringToHash("Vertical");
         isAimingHash = Animator.StringToHash("IsAiming"); // Add this
+        takeDamageHash = Animator.StringToHash("TakeDamage");
 
+    }
+
+    public void PlayTakeDamageAnimation()
+    {
+        animator.SetTrigger(takeDamageHash);
     }
 
     public void PlayTargetAnimation(string targetAnimation, bool isInteracting)

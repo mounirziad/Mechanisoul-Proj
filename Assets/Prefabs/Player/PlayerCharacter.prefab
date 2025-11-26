@@ -1937,6 +1937,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8169544978896782191}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4729004815288480322}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1076486570098892923}
   m_SourcePrefab: {fileID: 100100000, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}
 --- !u!95 &3385643053220842585 stripped
 Animator:
@@ -2052,9 +2058,9 @@ MonoBehaviour:
   rayCastHeightOffset: 0.5
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 1
   detectionradius: 0.04
-  detectionheight: 1
+  detectionheight: 0.4
   strictGroundCheckDistance: 0.3
   capsuleHeight: 0.02
   isJumping: 0
@@ -2737,6 +2743,72 @@ MonoBehaviour:
   letterboxUI: {fileID: 0}
   updateCombatTarget: 1
   controlLetterbox: 1
+--- !u!114 &4729004815288480322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95226c2c04155be42a20024f1e14a158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetReticleUI
+  targetingSystem: {fileID: 7997716459771237118}
+  mainCamera: {fileID: 0}
+  uiCanvas: {fileID: 0}
+  reticleImage: {fileID: 0}
+  reticleSprite: {fileID: 21300000, guid: daeecddce1c03ed479b9d09fe562ba8c, type: 3}
+  reticleSize: 64
+  reticleColor: {r: 1, g: 1, b: 1, a: 1}
+  targetOffset: {x: 0, y: 1, z: 0}
+  smoothSpeed: 10
+  enablePulse: 1
+  pulseSpeed: 2
+  pulseMinScale: 0.9
+  pulseMaxScale: 1.1
+  fadeInSpeed: 5
+  fadeOutSpeed: 8
+--- !u!114 &1076486570098892923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311327224774184089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93ce0b5d63f4bc4b9c228887fd1e64b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlashEffect
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.3
+  flashIntensity: 5
+  flashCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &8654815397792618019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b84f54f8cde910c4ea164cd74521ef9c, type: 3}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;              
+using UnityEngine;              
 using UnityEngine.Events;
 public class PlayerHealth : MonoBehaviour, IDamage
 {
@@ -18,11 +18,16 @@ public class PlayerHealth : MonoBehaviour, IDamage
     public UnityEvent onDeath;                      // Event triggered once health reaches 0
     public UnityEvent<float> onDamageTaken;         // Event triggered when damage is applied (passes amount)
     public UnityEvent<float> onHealed;              // Event triggered when healing happens (passes amount)
+    
+    private AnimatorManager animatorManager;
+    private DamageFlashEffect damageFlashEffect;
 
     private void Awake()
     {
-        currentHealth = maxHealth;                                // Start with full health
-        onHealthChanged?.Invoke(currentHealth, maxHealth);        // Notify listeners of initial health state
+        currentHealth = maxHealth;
+        onHealthChanged?.Invoke(currentHealth, maxHealth);
+        animatorManager = GetComponent<AnimatorManager>();
+        damageFlashEffect = GetComponent<DamageFlashEffect>();
     }
 
     private void Update()
@@ -42,9 +47,19 @@ public class PlayerHealth : MonoBehaviour, IDamage
         currentHealth -= amount;                     // Subtract the damage amount
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Keep health between 0 and max
 
-        lastDamageTime = Time.time;                  // Reset damage timer (used for regen delay)
+        lastDamageTime = Time.time;
 
-        onDamageTaken?.Invoke(amount);               // Notify listeners that damage was taken
+        if (animatorManager != null)
+        {
+            animatorManager.PlayTakeDamageAnimation();
+        }
+
+        if (damageFlashEffect != null)
+        {
+            damageFlashEffect.Flash();
+        }
+
+        onDamageTaken?.Invoke(amount);
         onHealthChanged?.Invoke(currentHealth, maxHealth); // Update UI or other systems
 
         if (currentHealth <= 0) Die();               // If no health left → trigger death

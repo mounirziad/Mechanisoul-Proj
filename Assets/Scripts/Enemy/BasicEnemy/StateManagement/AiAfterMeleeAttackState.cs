@@ -40,14 +40,29 @@ public class AiAfterMeleeAttackState : AiState
         if (agent.isDead)
             return;
 
-        // Check if we've been in this state long enough
+        if (agent.playertransform != null)
+        {
+            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
+            
+            if (distanceToPlayer <= agent.config.meleeAttackRange)
+            {
+                agent.stateMachine.ChangeState(AiStateId.MeleeAttack);
+                return;
+            }
+            
+            if (distanceToPlayer <= agent.config.maxSightDistance)
+            {
+                agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
+                return;
+            }
+        }
+
         if (Time.time >= stateEnterTime + stateDuration)
         {
             agent.stateMachine.ChangeState(AiStateId.Idle);
             return;
         }
 
-        // Just patrol normally, but ignore player detection
         Patrol(agent);
     }
 
