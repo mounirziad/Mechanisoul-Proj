@@ -425,6 +425,7 @@ public class UpgradeUIScript : MonoBehaviour
     // ====== Pause Menu Buttons ======
     private void OnResumeClicked()
     {
+        pauseMenu.style.display = DisplayStyle.None;
         Debug.Log("Resume Button Clicked!");
     }
     private void OnOptionsClicked()
