@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
     
     private AnimatorManager animatorManager;
     private DamageFlashEffect damageFlashEffect;
+    private PlayerRagdoll playerRagdoll;
 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
         onHealthChanged?.Invoke(currentHealth, maxHealth);
         animatorManager = GetComponent<AnimatorManager>();
         damageFlashEffect = GetComponent<DamageFlashEffect>();
+        playerRagdoll = GetComponent<PlayerRagdoll>();
     }
 
     private void Update()
@@ -80,8 +82,12 @@ public class PlayerHealth : MonoBehaviour, IDamage
 
     public void Die()
     {
-        onDeath?.Invoke();                           // Trigger death event (listeners handle respawn, effects, etc.)
-        // Optional: disable movement, play animation, ragdoll, etc.
+        if (playerRagdoll != null)
+        {
+            playerRagdoll.ActivateRagdoll();
+        }
+
+        onDeath?.Invoke();
     }
 
     public void SetMaxHealth(float newMax, bool fullHeal = true)
