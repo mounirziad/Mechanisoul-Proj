@@ -7508,6 +7508,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6235264399502866694, guid: fe398110079c6744d8f9e9224222ce8d, type: 3}
   m_PrefabInstance: {fileID: 1848360593}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &1848360596 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 6436078687876512231, guid: fe398110079c6744d8f9e9224222ce8d, type: 3}
+  m_PrefabInstance: {fileID: 1848360593}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &1848360597 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4560692018960125809, guid: fe398110079c6744d8f9e9224222ce8d, type: 3}
+  m_PrefabInstance: {fileID: 1848360593}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1879859505 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
@@ -7577,6 +7587,14 @@ PrefabInstance:
       propertyPath: groundedPhysicsMaterial
       value: 
       objectReference: {fileID: 13400000, guid: 2854f18c90b17ab44a66398ce2e47068, type: 2}
+    - target: {fileID: 4729004815288480322, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: uiCanvas
+      value: 
+      objectReference: {fileID: 1848360597}
+    - target: {fileID: 4729004815288480322, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1848360596}
     - target: {fileID: 5574407087911019312, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: freeLookCam
       value: 
