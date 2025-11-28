@@ -163,6 +163,15 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
         {
             combatCameraController.ExitCombatZone();
         }
+
+        if (doorToDisable != null)
+        {
+            DoorOutline doorOutline = doorToDisable.GetComponent<DoorOutline>();
+            if (doorOutline != null)
+            {
+                doorOutline.EnableOutline();
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
