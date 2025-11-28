@@ -122,11 +122,19 @@ public class RoomDetection : MonoBehaviour
         
         if (doorToOpen != null)
         {
-            doorToOpen.SetActive(false);
-            
-            if (showDebugLogs)
+            Animator doorAnimator = doorToOpen.GetComponent<Animator>();
+            if (doorAnimator != null)
             {
-                Debug.Log($"Door opened: {doorToOpen.name}");
+                doorAnimator.SetBool("IsDoorOpen", true);
+                
+                if (showDebugLogs)
+                {
+                    Debug.Log($"Door animation triggered: {doorToOpen.name}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"No Animator found on door: {doorToOpen.name}");
             }
         }
     }

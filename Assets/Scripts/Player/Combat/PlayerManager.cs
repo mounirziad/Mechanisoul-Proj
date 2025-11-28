@@ -104,16 +104,18 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
+        if (playerHealth != null && playerHealth.isDead) return;
+        
         inputManager.HandleAllInputs();
         HandleTimers();
         
-        // Cache camera direction BEFORE FixedUpdate runs
-        // This prevents jitter when rotating camera while moving
         playerLocomotion.CacheCameraDirection();
     }
 
     private void FixedUpdate()
     {
+        if (playerHealth != null && playerHealth.isDead) return;
+        
         playerLocomotion.HandleAllMovement();
     }
 

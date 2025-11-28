@@ -19,6 +19,8 @@ public class PlayerHealth : MonoBehaviour, IDamage
     public UnityEvent<float> onDamageTaken;         // Event triggered when damage is applied (passes amount)
     public UnityEvent<float> onHealed;              // Event triggered when healing happens (passes amount)
     
+    public bool isDead { get; private set; }
+    
     private AnimatorManager animatorManager;
     private DamageFlashEffect damageFlashEffect;
     private PlayerRagdoll playerRagdoll;
@@ -26,6 +28,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
     private void Awake()
     {
         currentHealth = maxHealth;
+        isDead = false;
         onHealthChanged?.Invoke(currentHealth, maxHealth);
         animatorManager = GetComponent<AnimatorManager>();
         damageFlashEffect = GetComponent<DamageFlashEffect>();
@@ -82,6 +85,8 @@ public class PlayerHealth : MonoBehaviour, IDamage
 
     public void Die()
     {
+        isDead = true;
+        
         if (playerRagdoll != null)
         {
             playerRagdoll.ActivateRagdoll();
@@ -107,5 +112,10 @@ public class PlayerHealth : MonoBehaviour, IDamage
     public float GetMaxHealth()
     {
         return maxHealth;
+    }
+
+    public void Revive()
+    {
+        isDead = false;
     }
 }
