@@ -5,7 +5,7 @@ using UnityEngine;
 public class RoomTriggerEnemyDetector : MonoBehaviour
 {
     [Header("Room Configuration")]
-    [Tooltip("The doors to disable when all enemies are defeated")]
+    [Tooltip("The door to open when all enemies are defeated")]
     public GameObject doorToDisable;
 
     [Tooltip("Tag to identify enemies (default: Enemy)")]
@@ -19,7 +19,7 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
     public List<GameObject> manualEnemyList = new List<GameObject>();
 
     [Header("Door Behavior")]
-    [Tooltip("Enable doors at start (they'll be disabled when enemies are defeated)")]
+    [Tooltip("Enable doors at start (they'll open when enemies are defeated)")]
     public bool enableDoorsAtStart = true;
 
     [Header("Combat Camera")]
@@ -146,9 +146,17 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
     {
         if (doorToDisable != null)
         {
-            doorToDisable.SetActive(false);
-            roomCleared = true;
-            Debug.Log($"Room {gameObject.name} cleared! Doors {doorToDisable.name} have been disabled.");
+            Animator doorAnimator = doorToDisable.GetComponent<Animator>();
+            if (doorAnimator != null)
+            {
+                doorAnimator.SetBool("IsDoorOpen", true);
+                roomCleared = true;
+                Debug.Log($"Room {gameObject.name} cleared! Door {doorToDisable.name} animation triggered.");
+            }
+            else
+            {
+                Debug.LogWarning($"No Animator found on door: {doorToDisable.name}");
+            }
         }
 
         if (combatCameraController != null && playerInRoom)

@@ -52,19 +52,28 @@ public class TargetReticleUI : MonoBehaviour
     {
         if (uiCanvas == null)
         {
-            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
-            foreach (Canvas canvas in canvases)
+            GameObject targetingCanvasObj = GameObject.Find("ZTargetingTarget");
+            if (targetingCanvasObj != null)
             {
-                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                uiCanvas = targetingCanvasObj.GetComponent<Canvas>();
+            }
+            
+            if (uiCanvas == null)
+            {
+                Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+                foreach (Canvas canvas in canvases)
                 {
-                    uiCanvas = canvas;
-                    break;
+                    if (canvas.renderMode == RenderMode.ScreenSpaceOverlay && canvas.name == "ZTargetingTarget")
+                    {
+                        uiCanvas = canvas;
+                        break;
+                    }
                 }
             }
             
             if (uiCanvas == null)
             {
-                GameObject canvasObj = new GameObject("ReticleCanvas");
+                GameObject canvasObj = new GameObject("ZTargetingTarget");
                 uiCanvas = canvasObj.AddComponent<Canvas>();
                 uiCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 uiCanvas.sortingOrder = 100;
@@ -75,30 +84,51 @@ public class TargetReticleUI : MonoBehaviour
         
         if (reticleImage == null)
         {
-            GameObject reticleObj = new GameObject("TargetReticle");
-            reticleObj.transform.SetParent(uiCanvas.transform, false);
+            GameObject existingReticle = GameObject.Find("TargetReticle");
+            if (existingReticle != null && existingReticle.transform.parent == uiCanvas.transform)
+            {
+                reticleImage = existingReticle.GetComponent<Image>();
+                reticleRectTransform = existingReticle.GetComponent<RectTransform>();
+                canvasGroup = existingReticle.GetComponent<CanvasGroup>();
+            }
             
-            reticleImage = reticleObj.AddComponent<Image>();
-            reticleImage.raycastTarget = false;
-            
-            reticleRectTransform = reticleObj.GetComponent<RectTransform>();
-            reticleRectTransform.sizeDelta = new Vector2(reticleSize, reticleSize);
-            reticleRectTransform.anchorMin = Vector2.zero;
-            reticleRectTransform.anchorMax = Vector2.zero;
-            reticleRectTransform.pivot = new Vector2(0.5f, 0.5f);
-            
-            canvasGroup = reticleObj.AddComponent<CanvasGroup>();
-            canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = false;
-            canvasGroup.interactable = false;
+            if (reticleImage == null)
+            {
+                GameObject reticleObj = new GameObject("TargetReticle");
+                reticleObj.transform.SetParent(uiCanvas.transform, false);
+                
+                reticleImage = reticleObj.AddComponent<Image>();
+                reticleImage.raycastTarget = false;
+                
+                reticleRectTransform = reticleObj.GetComponent<RectTransform>();
+                reticleRectTransform.sizeDelta = new Vector2(reticleSize, reticleSize);
+                reticleRectTransform.anchorMin = Vector2.zero;
+                reticleRectTransform.anchorMax = Vector2.zero;
+                reticleRectTransform.pivot = new Vector2(0.5f, 0.5f);
+                
+                canvasGroup = reticleObj.AddComponent<CanvasGroup>();
+                canvasGroup.alpha = 0f;
+                canvasGroup.blocksRaycasts = false;
+                canvasGroup.interactable = false;
+            }
+        }
+        else
+        {
+            if (reticleRectTransform == null)
+                reticleRectTransform = reticleImage.GetComponent<RectTransform>();
+            if (canvasGroup == null)
+                canvasGroup = reticleImage.GetComponent<CanvasGroup>();
         }
         
-        if (reticleSprite != null)
+        if (reticleSprite != null && reticleImage != null)
         {
             reticleImage.sprite = reticleSprite;
         }
         
-        reticleImage.color = reticleColor;
+        if (reticleImage != null)
+        {
+            reticleImage.color = reticleColor;
+        }
     }
     
     private void OnEnable()
@@ -117,8 +147,32 @@ public class TargetReticleUI : MonoBehaviour
         }
     }
     
+    private void ValidateReferences()
+    {
+        if (mainCamera == null)
+        {
+            GameObject lockOnCameraObj = GameObject.Find("Lock-On-CameraCollision");
+            if (lockOnCameraObj != null)
+            {
+                mainCamera = lockOnCameraObj.GetComponent<Camera>();
+            }
+            
+            if (mainCamera == null)
+            {
+                mainCamera = Camera.main;
+            }
+        }
+        
+        if (uiCanvas == null || reticleImage == null || reticleRectTransform == null || canvasGroup == null)
+        {
+            SetupReticleUI();
+        }
+    }
+    
     private void Update()
     {
+        ValidateReferences();
+        
         if (targetingSystem == null || mainCamera == null || reticleImage == null)
             return;
         
