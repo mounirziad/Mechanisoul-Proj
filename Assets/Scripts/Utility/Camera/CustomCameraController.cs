@@ -127,6 +127,17 @@ public class CustomCameraController : MonoBehaviour
             return;
         }
 
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
+        
+        if (isDialogueActive)
+        {
+            if (isAimMode || isLockOnMode)
+            {
+                SetCameraMode(CameraMode.FreeLook);
+            }
+            return;
+        }
+
         // Check new Z-Targeting system first, fallback to old system
         bool lockActive = (zTargetingSystem != null && zTargetingSystem.IsLocked) ||
                          (lockOnSystem != null && lockOnSystem.IsLockedOn());

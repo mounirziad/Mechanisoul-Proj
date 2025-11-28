@@ -49,6 +49,9 @@ public class AiMeleeAttackState : AiState
         if (agent.isDead)
             return;
 
+        if (PlayerHealth.IsPlayerDead)
+            return;
+
         BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
         if (health != null && health.IsStunned())
             return;
@@ -66,10 +69,8 @@ public class AiMeleeAttackState : AiState
             return;
         }
 
-        // If we're attacking, just handle rotation and wait for coroutine to complete
         if (isAttacking)
         {
-            // During attack commitment, just rotate towards player but don't chase
             Vector3 directionToPlayer = (player.position - agent.transform.position).normalized;
             directionToPlayer.y = 0;
             if (directionToPlayer != Vector3.zero)
@@ -77,16 +78,14 @@ public class AiMeleeAttackState : AiState
                 Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
                 agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
             }
-            return; // Skip the rest of Update during attack
+            return;
         }
 
-        // Only check for new attacks when not currently attacking
         if (!isAttacking && Time.time >= lastAttackTime + agent.config.meleeAttackCooldown)
         {
             StartAttack(agent);
         }
 
-        // Normal rotation when not attacking
         Vector3 directionToPlayerNormal = (player.position - agent.transform.position).normalized;
         directionToPlayerNormal.y = 0;
         if (directionToPlayerNormal != Vector3.zero)

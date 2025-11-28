@@ -21,6 +21,8 @@ public class PlayerHealth : MonoBehaviour, IDamage
     
     public bool isDead { get; private set; }
     
+    public static bool IsPlayerDead { get; private set; } = false;
+    
     private AnimatorManager animatorManager;
     private DamageFlashEffect damageFlashEffect;
     private PlayerRagdoll playerRagdoll;
@@ -29,6 +31,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
     {
         currentHealth = maxHealth;
         isDead = false;
+        IsPlayerDead = false;
         onHealthChanged?.Invoke(currentHealth, maxHealth);
         animatorManager = GetComponent<AnimatorManager>();
         damageFlashEffect = GetComponent<DamageFlashEffect>();
@@ -86,6 +89,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
     public void Die()
     {
         isDead = true;
+        IsPlayerDead = true;
         
         if (playerRagdoll != null)
         {
@@ -117,5 +121,6 @@ public class PlayerHealth : MonoBehaviour, IDamage
     public void Revive()
     {
         isDead = false;
+        IsPlayerDead = false;
     }
 }

@@ -153,6 +153,14 @@ public class ThirdPersonAimCameraManager : MonoBehaviour
     {
         if (playerCombat == null || inputManager == null) return;
         
+        bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
+        
+        if (isDialogueActive)
+        {
+            SetCameraMode(false);
+            return;
+        }
+        
         LockOnSystem lockOnSystem = GetComponent<LockOnSystem>();
         
         if (lockOnSystem != null && lockOnSystem.IsLocked())

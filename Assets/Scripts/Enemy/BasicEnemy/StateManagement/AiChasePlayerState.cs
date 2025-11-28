@@ -28,16 +28,16 @@ public class AiChasePlayerState : AiState
 
         if (!agent.enabled) return;
 
-        // Get health/status
+        if (PlayerHealth.IsPlayerDead)
+            return;
+
         BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
         if (health != null)
         {
-            // If stunned, skip movement completely
             if (health.IsStunned())
                 return;
         }
 
-        // Only update navigation if NavMeshAgent is enabled
         if (agent.navMeshAgent != null && agent.navMeshAgent.enabled)
         {
             timer -= Time.deltaTime;
