@@ -16,6 +16,7 @@ public class DialogueLine
     public AudioClip voiceClip;
     public bool autoAdvance = true;
     public bool waitForInput = false;
+    public bool useItalics = false;
 }
 
 [System.Serializable]
@@ -32,6 +33,7 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI shadowText;
     [SerializeField] private CanvasGroup dialogueCanvasGroup;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private GameObject continueIndicator;
 
     [Header("Animation Settings")]
     [SerializeField] private float typewriterSpeed = 0.05f;
@@ -47,6 +49,7 @@ public class DialogueSystem : MonoBehaviour
 
     [Header("Input Settings")]
     [SerializeField] private bool useJumpToAdvance = true;
+    private string inputDevice = "Keyboard";
 
     private PlayerControls playerControls;
     private bool advancePressedThisFrame = false; // RENAMED: from jumpPressedThisFrame
@@ -56,6 +59,7 @@ public class DialogueSystem : MonoBehaviour
     private bool isSequenceActive = false;
     private bool waitingForInput = false;
     private bool canAdvance = false;
+    private bool isTextRunning = false;
     private List<string> currentTextChunks = new List<string>();
     private int currentChunkIndex = 0;
     private DialogueSequence currentSequence;
@@ -92,9 +96,9 @@ public class DialogueSystem : MonoBehaviour
         if (duplicate.shadowText != null) shadowText = duplicate.shadowText;
         if (duplicate.dialogueCanvasGroup != null) dialogueCanvasGroup = duplicate.dialogueCanvasGroup;
         if (duplicate.audioSource != null) audioSource = duplicate.audioSource;
-        
+
         SetupShadowText();
-        
+
         if (dialogueCanvasGroup != null)
         {
             dialogueCanvasGroup.alpha = 0f;
@@ -104,7 +108,7 @@ public class DialogueSystem : MonoBehaviour
     private void FindAndLinkUIReferences()
     {
         DialogueSystem[] allDialogueSystems = FindObjectsOfType<DialogueSystem>(true);
-        
+
         foreach (DialogueSystem ds in allDialogueSystems)
         {
             if (ds != this && ds.dialogueCanvasGroup != null)
@@ -113,28 +117,42 @@ public class DialogueSystem : MonoBehaviour
                 shadowText = ds.shadowText;
                 dialogueCanvasGroup = ds.dialogueCanvasGroup;
                 audioSource = ds.audioSource;
-                
+
                 SetupShadowText();
-                
+
                 if (dialogueCanvasGroup != null)
                 {
                     dialogueCanvasGroup.alpha = 0f;
                 }
-                
+
                 if (ds.gameObject != this.gameObject)
                 {
                     Destroy(ds.gameObject);
                 }
-                
+
                 break;
             }
         }
     }
 
+    private string GetCurrentInputDevice()
+    {
+        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+        {
+            return "Gamepad";
+        }
+        else if (Keyboard.current != null && Mouse.current != null)
+        {
+            return "Keyboard";
+        }
+
+        return inputDevice;
+    }
+
     private void Start()
     {
         SetupShadowText();
-        
+
         if (dialogueCanvasGroup != null)
         {
             dialogueCanvasGroup.alpha = 0f;
@@ -172,7 +190,7 @@ public class DialogueSystem : MonoBehaviour
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
-        
+
         if (playerControls != null)
         {
             playerControls.PlayerActions.AdvanceDialogue.performed -= OnAdvancePressed;
@@ -183,10 +201,7 @@ public class DialogueSystem : MonoBehaviour
 
     private void OnAdvancePressed(UnityEngine.InputSystem.InputAction.CallbackContext context) // RENAMED
     {
-        if (waitingForInput)
-        {
-            advancePressedThisFrame = true;
-        }
+        advancePressedThisFrame = true;
     }
 
     private void Update()
@@ -199,7 +214,7 @@ public class DialogueSystem : MonoBehaviour
         }
 
         // NEW: Alternative input method through InputManager
-        if (waitingForInput && !advancePressedThisFrame)
+        if (!advancePressedThisFrame)
         {
             InputManager inputManager = FindObjectOfType<InputManager>();
             if (inputManager != null && inputManager.GetAdvanceDialogueInput())
@@ -208,7 +223,7 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        if (waitingForInput && advancePressedThisFrame)
+        if (waitingForInput && advancePressedThisFrame && !isTextRunning)
         {
             advancePressedThisFrame = false;
             AdvanceDialogue();
@@ -222,12 +237,14 @@ public class DialogueSystem : MonoBehaviour
             StopCoroutine(currentDialogueCoroutine);
             currentDialogueCoroutine = null;
         }
+        HideContinueIndicator();
 
         isDisplaying = false;
         isSequenceActive = false;
         waitingForInput = false;
         canAdvance = false;
         advancePressedThisFrame = false;
+        isTextRunning = false;
     }
 
     public void ShowDialogue(DialogueLine dialogueLine)
@@ -280,6 +297,7 @@ public class DialogueSystem : MonoBehaviour
     {
         if (!canAdvance) return;
 
+        HideContinueIndicator();
         waitingForInput = false;
         canAdvance = false;
     }
@@ -290,6 +308,8 @@ public class DialogueSystem : MonoBehaviour
         {
             StopCoroutine(currentDialogueCoroutine);
         }
+
+        HideContinueIndicator();
 
         if (dialogueCanvasGroup != null)
         {
@@ -306,6 +326,13 @@ public class DialogueSystem : MonoBehaviour
     private IEnumerator DisplaySingleDialogueCoroutine(DialogueLine dialogueLine)
     {
         isDisplaying = true;
+
+        dialogueLine.text = SetInputPlaceholders(dialogueLine.text);
+
+        if (dialogueLine.useItalics)
+        {
+            dialogueLine.text = "<i>" + dialogueLine.text + "</i>";
+        }
 
         if (autoChunkLongText)
         {
@@ -373,7 +400,7 @@ public class DialogueSystem : MonoBehaviour
     private IEnumerator DisplaySequenceCoroutine()
     {
         isSequenceActive = true;
-        
+
         do
         {
             for (currentSequenceIndex = 0; currentSequenceIndex < currentSequence.lines.Length; currentSequenceIndex++)
@@ -387,7 +414,7 @@ public class DialogueSystem : MonoBehaviour
             }
         }
         while (currentSequence.loopSequence);
-        
+
         isSequenceActive = false;
     }
 
@@ -473,15 +500,88 @@ public class DialogueSystem : MonoBehaviour
 
     private IEnumerator TypewriterEffect(string text)
     {
-        dialogueText.text = "";
-        shadowText.text = "";
+        HideContinueIndicator();
+        dialogueText.text = text;
+        shadowText.text = text;
 
-        for (int i = 0; i <= text.Length; i++)
+        dialogueText.ForceMeshUpdate();
+        shadowText.ForceMeshUpdate();
+
+        int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+
+        dialogueText.maxVisibleCharacters = 0;
+        shadowText.maxVisibleCharacters = 0;
+
+        isTextRunning = true;
+
+        for (int i = 0; i <= totalVisibleCharacters; i++)
         {
-            string currentText = text.Substring(0, i);
-            dialogueText.text = currentText;
-            shadowText.text = currentText;
+            if (advancePressedThisFrame)
+            {
+                dialogueText.maxVisibleCharacters = totalVisibleCharacters;
+                shadowText.maxVisibleCharacters = totalVisibleCharacters;
+                advancePressedThisFrame = false;
+                isTextRunning = false;
+                ShowContinueIndicator();
+                yield break;
+            }
+
+            dialogueText.maxVisibleCharacters = i;
+            shadowText.maxVisibleCharacters = i;
+
             yield return new WaitForSeconds(typewriterSpeed);
+        }
+
+        dialogueText.maxVisibleCharacters = totalVisibleCharacters;
+        shadowText.maxVisibleCharacters = totalVisibleCharacters;
+
+        isTextRunning = false;
+
+        ShowContinueIndicator();
+
+    }
+
+    private string SetInputPlaceholders(string text)
+    {
+        inputDevice = GetCurrentInputDevice();
+
+        if (inputDevice == "Gamepad")
+        {
+            text = text.Replace("{MOVE}", "LEFT STICK");
+            text = text.Replace("{DASH}", "B");
+            text = text.Replace("{JUMP}", "A");
+            text = text.Replace("{ATTACK}", "X");
+            text = text.Replace("{AIM}", "LEFT TRIGGER");
+            text = text.Replace("{RANGE}", "RIGHT TRIGGER");
+            text = text.Replace("{LOCK_ON}", "RIGHT CLICK");
+        }
+        else
+        {
+            text = text.Replace("{MOVE}", "WASD");
+            text = text.Replace("{DASH}", "X");
+            text = text.Replace("{JUMP}", "SPACE");
+            text = text.Replace("{ATTACK}", "LEFT MOUSE BUTTON");
+            text = text.Replace("{AIM}", "RIGHT MOUSE BUTTON");
+            text = text.Replace("{RANGE}", "LEFT MOUSE BUTTON");
+            text = text.Replace("{LOCK_ON}", "TAB");
+        }
+
+        return text;
+    }
+
+    private void ShowContinueIndicator()
+    {
+        if (continueIndicator != null)
+        {
+            continueIndicator.SetActive(true);
+        }
+    }
+
+    private void HideContinueIndicator()
+    {
+        if (continueIndicator != null)
+        {
+            continueIndicator.SetActive(false);
         }
     }
 

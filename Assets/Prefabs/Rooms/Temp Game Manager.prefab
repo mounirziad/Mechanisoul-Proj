@@ -91,51 +91,15 @@ MonoBehaviour:
     m_ActionId: b786834c-06c2-47b4-ba44-77234f8fbddc
     m_ActionName: 'Player Actions/Shoot[/Mouse/leftButton]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2180440214418068658}
-        m_TargetAssemblyTypeName: TempGameManager, Assembly-CSharp
-        m_MethodName: OnCombatScene
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: f8f5336f-bece-4b01-87b9-c2dd468765cc
     m_ActionName: 'Temp/Combat Scene[/Keyboard/p]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2180440214418068658}
-        m_TargetAssemblyTypeName: TempGameManager, Assembly-CSharp
-        m_MethodName: OnArtScene
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: a17b5e0a-7c3c-4921-80db-c4509cbd3431
     m_ActionName: 'Temp/Art Scene[/Keyboard/o]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2180440214418068658}
-        m_TargetAssemblyTypeName: TempGameManager, Assembly-CSharp
-        m_MethodName: OnWarehouseScene
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 3440fd6b-091a-45ad-8d52-8e74b00e61e3
     m_ActionName: 'Temp/Warehouse[/Keyboard/i]'
   - m_PersistentCalls:
@@ -179,9 +143,25 @@ MonoBehaviour:
     m_ActionId: e9b2e18d-12ba-4bdc-84bf-85fa285f5eab
     m_ActionName: 'Player Actions/AdvanceDialogue[/Keyboard/space]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2180440214418068658}
+        m_TargetAssemblyTypeName: TempGameManager, Assembly-CSharp
+        m_MethodName: OnUIActivate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 7d41604c-b20a-4f52-b36e-b4e1a1317f28
     m_ActionName: 'Player Actions/EnemyLockOn[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 777f8fa9-cf89-4986-ad74-8afadd47e48e
+    m_ActionName: 'Player Movement/Look[/Mouse/delta,/DualShock4GamepadHID/rightStick/up,/DualShock4GamepadHID/rightStick/down,/DualShock4GamepadHID/rightStick/left,/DualShock4GamepadHID/rightStick/right]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Temp
