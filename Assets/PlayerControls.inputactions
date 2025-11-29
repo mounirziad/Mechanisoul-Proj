@@ -556,130 +556,152 @@
             ]
         },
         {
-            "name": "Temp",
-            "id": "a2698494-8f9d-4a9d-8683-d6d71adcf17d",
+            "name": "Interactable UI",
+            "id": "073d2ba3-65e1-4ac6-a154-d5396b07081b",
             "actions": [
                 {
-                    "name": "Combat Scene",
+                    "name": "PauseMenu",
                     "type": "Button",
-                    "id": "f8f5336f-bece-4b01-87b9-c2dd468765cc",
+                    "id": "9f136843-452b-4065-8aa2-c3b376691758",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Art Scene",
+                    "name": "UpgradeUI",
                     "type": "Button",
-                    "id": "a17b5e0a-7c3c-4921-80db-c4509cbd3431",
+                    "id": "23e0188a-06d2-4c95-beed-31a65c29e77e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Warehouse",
+                    "name": "Interact",
                     "type": "Button",
-                    "id": "3440fd6b-091a-45ad-8d52-8e74b00e61e3",
+                    "id": "aaee8b0d-8c52-4042-84f6-306160a7276c",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Exit",
-                    "type": "Button",
-                    "id": "6d8b9a49-9077-4d9a-bf11-1eed90540129",
-                    "expectedControlType": "",
+                    "name": "Navigate",
+                    "type": "Value",
+                    "id": "eac751f5-dfd4-4569-8442-bd45f8c9cfb7",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
-                    "name": "UI Activate",
+                    "name": "Submit",
                     "type": "Button",
-                    "id": "6a0c35d0-ce4a-4a77-b11f-df320a163d5c",
+                    "id": "69784df0-29b9-4148-9037-f5ced4c547f1",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "c2162766-4a8b-4d53-b861-1ffd91938480",
-                    "path": "<Keyboard>/p",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Combat Scene",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4d33a62e-9a06-40e8-8d14-6f42a0a51e23",
-                    "path": "<Keyboard>/o",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Art Scene",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d7f0c7e4-954b-4b82-b086-1b4e8a01c381",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Warehouse",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "526e22bb-49b8-45ee-8828-76ebbf073fca",
+                    "id": "891d4bd0-4c5e-4644-975d-5e656d6ea3f3",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit",
+                    "action": "PauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "cb655e8b-0065-4568-ac19-7f7225b65027",
+                    "id": "0fd88b0d-287f-4ad3-b2ab-f3134e1ba46b",
                     "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit",
+                    "action": "PauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "80783744-8d66-4282-8188-a219b9dafcc0",
+                    "id": "f1ccce64-9742-47cd-934d-5573e7e2d32f",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UpgradeUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7101964d-1caa-45d9-ba82-73d1cd7fa5b7",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UpgradeUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9cfda54-7b05-4eb6-b6d4-559c10a4d745",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "UI Activate",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "dfea4eb8-8fc7-4f5a-9700-2b4079dd20c2",
+                    "id": "c92f986c-16da-4b89-9816-b18321cbccf3",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "UI Activate",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "76417c52-033f-45df-980c-40eeefbb1d59",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "addb4b97-5a03-4400-bcab-6e92602b4898",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c6a6c0a-5c59-42eb-a579-fa03d3f1254a",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

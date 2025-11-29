@@ -8,45 +8,44 @@ using UnityEngine.UIElements;
 public class Terminal : MonoBehaviour
 {
     [SerializeField] bool inRange;
-    [SerializeField] UpgradeUIScript upgradeUIScript;
-    private bool upgradeUIActive = false;
-    private bool pauseActive = false;
+    [SerializeField] InteractableUI interactableUI;
+    private PlayerControls playerControls;
 
     void Awake()
     {
-        if (upgradeUIScript != null && upgradeUIScript.pauseMenu != null)
+        if (interactableUI == null)
         {
-            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+            interactableUI = FindObjectOfType<InteractableUI>();
         }
-
+        
         inRange = false;
     }
 
-    public void OnUIActivate(InputAction.CallbackContext context)
+    void OnEnable()
     {
-        if (context.performed && upgradeUIActive == false && inRange)
+        if (playerControls == null)
         {
-            if (upgradeUIScript != null)
-            {
-                upgradeUIScript.skillMenu.style.display = DisplayStyle.Flex;
-                upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
-                upgradeUIActive = true;
-                pauseActive = false;
-
-                UnityEngine.Cursor.visible = true;
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
-            }
+            playerControls = new PlayerControls();
+            playerControls.InteractableUI.Interact.performed += OnInteract;
         }
-        else if (context.performed && upgradeUIActive == true)
-        {
-            if (upgradeUIScript != null)
-            {
-                upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
-                upgradeUIActive = false;
+        
+        playerControls.Enable();
+    }
 
-                UnityEngine.Cursor.visible = false;
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            }
+    void OnDisable()
+    {
+        if (playerControls != null)
+        {
+            playerControls.InteractableUI.Interact.performed -= OnInteract;
+            playerControls.Disable();
+        }
+    }
+
+    private void OnInteract(InputAction.CallbackContext context)
+    {
+        if (inRange && interactableUI != null)
+        {
+            interactableUI.ToggleUpgradeUI();
         }
     }
     private void OnTriggerEnter(Collider other) => inRange = other.CompareTag("Player") ? true : false;

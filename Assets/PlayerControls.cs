@@ -642,130 +642,152 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Temp"",
-            ""id"": ""a2698494-8f9d-4a9d-8683-d6d71adcf17d"",
+            ""name"": ""Interactable UI"",
+            ""id"": ""073d2ba3-65e1-4ac6-a154-d5396b07081b"",
             ""actions"": [
                 {
-                    ""name"": ""Combat Scene"",
+                    ""name"": ""PauseMenu"",
                     ""type"": ""Button"",
-                    ""id"": ""f8f5336f-bece-4b01-87b9-c2dd468765cc"",
+                    ""id"": ""9f136843-452b-4065-8aa2-c3b376691758"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Art Scene"",
+                    ""name"": ""UpgradeUI"",
                     ""type"": ""Button"",
-                    ""id"": ""a17b5e0a-7c3c-4921-80db-c4509cbd3431"",
+                    ""id"": ""23e0188a-06d2-4c95-beed-31a65c29e77e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Warehouse"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
-                    ""id"": ""3440fd6b-091a-45ad-8d52-8e74b00e61e3"",
+                    ""id"": ""aaee8b0d-8c52-4042-84f6-306160a7276c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Exit"",
-                    ""type"": ""Button"",
-                    ""id"": ""6d8b9a49-9077-4d9a-bf11-1eed90540129"",
-                    ""expectedControlType"": """",
+                    ""name"": ""Navigate"",
+                    ""type"": ""Value"",
+                    ""id"": ""eac751f5-dfd4-4569-8442-bd45f8c9cfb7"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""UI Activate"",
+                    ""name"": ""Submit"",
                     ""type"": ""Button"",
-                    ""id"": ""6a0c35d0-ce4a-4a77-b11f-df320a163d5c"",
+                    ""id"": ""69784df0-29b9-4148-9037-f5ced4c547f1"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""c2162766-4a8b-4d53-b861-1ffd91938480"",
-                    ""path"": ""<Keyboard>/p"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Combat Scene"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4d33a62e-9a06-40e8-8d14-6f42a0a51e23"",
-                    ""path"": ""<Keyboard>/o"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Art Scene"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d7f0c7e4-954b-4b82-b086-1b4e8a01c381"",
-                    ""path"": ""<Keyboard>/i"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Warehouse"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""526e22bb-49b8-45ee-8828-76ebbf073fca"",
+                    ""id"": ""891d4bd0-4c5e-4644-975d-5e656d6ea3f3"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Exit"",
+                    ""action"": ""PauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cb655e8b-0065-4568-ac19-7f7225b65027"",
+                    ""id"": ""0fd88b0d-287f-4ad3-b2ab-f3134e1ba46b"",
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Exit"",
+                    ""action"": ""PauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""80783744-8d66-4282-8188-a219b9dafcc0"",
+                    ""id"": ""f1ccce64-9742-47cd-934d-5573e7e2d32f"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpgradeUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7101964d-1caa-45d9-ba82-73d1cd7fa5b7"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpgradeUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9cfda54-7b05-4eb6-b6d4-559c10a4d745"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""UI Activate"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dfea4eb8-8fc7-4f5a-9700-2b4079dd20c2"",
+                    ""id"": ""c92f986c-16da-4b89-9816-b18321cbccf3"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""UI Activate"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76417c52-033f-45df-980c-40eeefbb1d59"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""addb4b97-5a03-4400-bcab-6e92602b4898"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c6a6c0a-5c59-42eb-a579-fa03d3f1254a"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -790,20 +812,20 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_RangedAim = m_PlayerActions.FindAction("RangedAim", throwIfNotFound: true);
         m_PlayerActions_Shoot = m_PlayerActions.FindAction("Shoot", throwIfNotFound: true);
         m_PlayerActions_EnemyLockOn = m_PlayerActions.FindAction("EnemyLockOn", throwIfNotFound: true);
-        // Temp
-        m_Temp = asset.FindActionMap("Temp", throwIfNotFound: true);
-        m_Temp_CombatScene = m_Temp.FindAction("Combat Scene", throwIfNotFound: true);
-        m_Temp_ArtScene = m_Temp.FindAction("Art Scene", throwIfNotFound: true);
-        m_Temp_Warehouse = m_Temp.FindAction("Warehouse", throwIfNotFound: true);
-        m_Temp_Exit = m_Temp.FindAction("Exit", throwIfNotFound: true);
-        m_Temp_UIActivate = m_Temp.FindAction("UI Activate", throwIfNotFound: true);
+        // Interactable UI
+        m_InteractableUI = asset.FindActionMap("Interactable UI", throwIfNotFound: true);
+        m_InteractableUI_PauseMenu = m_InteractableUI.FindAction("PauseMenu", throwIfNotFound: true);
+        m_InteractableUI_UpgradeUI = m_InteractableUI.FindAction("UpgradeUI", throwIfNotFound: true);
+        m_InteractableUI_Interact = m_InteractableUI.FindAction("Interact", throwIfNotFound: true);
+        m_InteractableUI_Navigate = m_InteractableUI.FindAction("Navigate", throwIfNotFound: true);
+        m_InteractableUI_Submit = m_InteractableUI.FindAction("Submit", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_PlayerMovement.enabled, "This will cause a leak and performance issues, PlayerControls.PlayerMovement.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PlayerActions.enabled, "This will cause a leak and performance issues, PlayerControls.PlayerActions.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_Temp.enabled, "This will cause a leak and performance issues, PlayerControls.Temp.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_InteractableUI.enabled, "This will cause a leak and performance issues, PlayerControls.InteractableUI.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1178,49 +1200,49 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// </summary>
     public PlayerActionsActions @PlayerActions => new PlayerActionsActions(this);
 
-    // Temp
-    private readonly InputActionMap m_Temp;
-    private List<ITempActions> m_TempActionsCallbackInterfaces = new List<ITempActions>();
-    private readonly InputAction m_Temp_CombatScene;
-    private readonly InputAction m_Temp_ArtScene;
-    private readonly InputAction m_Temp_Warehouse;
-    private readonly InputAction m_Temp_Exit;
-    private readonly InputAction m_Temp_UIActivate;
+    // Interactable UI
+    private readonly InputActionMap m_InteractableUI;
+    private List<IInteractableUIActions> m_InteractableUIActionsCallbackInterfaces = new List<IInteractableUIActions>();
+    private readonly InputAction m_InteractableUI_PauseMenu;
+    private readonly InputAction m_InteractableUI_UpgradeUI;
+    private readonly InputAction m_InteractableUI_Interact;
+    private readonly InputAction m_InteractableUI_Navigate;
+    private readonly InputAction m_InteractableUI_Submit;
     /// <summary>
-    /// Provides access to input actions defined in input action map "Temp".
+    /// Provides access to input actions defined in input action map "Interactable UI".
     /// </summary>
-    public struct TempActions
+    public struct InteractableUIActions
     {
         private @PlayerControls m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public TempActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InteractableUIActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Temp/CombatScene".
+        /// Provides access to the underlying input action "InteractableUI/PauseMenu".
         /// </summary>
-        public InputAction @CombatScene => m_Wrapper.m_Temp_CombatScene;
+        public InputAction @PauseMenu => m_Wrapper.m_InteractableUI_PauseMenu;
         /// <summary>
-        /// Provides access to the underlying input action "Temp/ArtScene".
+        /// Provides access to the underlying input action "InteractableUI/UpgradeUI".
         /// </summary>
-        public InputAction @ArtScene => m_Wrapper.m_Temp_ArtScene;
+        public InputAction @UpgradeUI => m_Wrapper.m_InteractableUI_UpgradeUI;
         /// <summary>
-        /// Provides access to the underlying input action "Temp/Warehouse".
+        /// Provides access to the underlying input action "InteractableUI/Interact".
         /// </summary>
-        public InputAction @Warehouse => m_Wrapper.m_Temp_Warehouse;
+        public InputAction @Interact => m_Wrapper.m_InteractableUI_Interact;
         /// <summary>
-        /// Provides access to the underlying input action "Temp/Exit".
+        /// Provides access to the underlying input action "InteractableUI/Navigate".
         /// </summary>
-        public InputAction @Exit => m_Wrapper.m_Temp_Exit;
+        public InputAction @Navigate => m_Wrapper.m_InteractableUI_Navigate;
         /// <summary>
-        /// Provides access to the underlying input action "Temp/UIActivate".
+        /// Provides access to the underlying input action "InteractableUI/Submit".
         /// </summary>
-        public InputAction @UIActivate => m_Wrapper.m_Temp_UIActivate;
+        public InputAction @Submit => m_Wrapper.m_InteractableUI_Submit;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Temp; }
+        public InputActionMap Get() { return m_Wrapper.m_InteractableUI; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -1228,9 +1250,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="TempActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="InteractableUIActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(TempActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(InteractableUIActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -1238,26 +1260,26 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="TempActions" />
-        public void AddCallbacks(ITempActions instance)
+        /// <seealso cref="InteractableUIActions" />
+        public void AddCallbacks(IInteractableUIActions instance)
         {
-            if (instance == null || m_Wrapper.m_TempActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_TempActionsCallbackInterfaces.Add(instance);
-            @CombatScene.started += instance.OnCombatScene;
-            @CombatScene.performed += instance.OnCombatScene;
-            @CombatScene.canceled += instance.OnCombatScene;
-            @ArtScene.started += instance.OnArtScene;
-            @ArtScene.performed += instance.OnArtScene;
-            @ArtScene.canceled += instance.OnArtScene;
-            @Warehouse.started += instance.OnWarehouse;
-            @Warehouse.performed += instance.OnWarehouse;
-            @Warehouse.canceled += instance.OnWarehouse;
-            @Exit.started += instance.OnExit;
-            @Exit.performed += instance.OnExit;
-            @Exit.canceled += instance.OnExit;
-            @UIActivate.started += instance.OnUIActivate;
-            @UIActivate.performed += instance.OnUIActivate;
-            @UIActivate.canceled += instance.OnUIActivate;
+            if (instance == null || m_Wrapper.m_InteractableUIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InteractableUIActionsCallbackInterfaces.Add(instance);
+            @PauseMenu.started += instance.OnPauseMenu;
+            @PauseMenu.performed += instance.OnPauseMenu;
+            @PauseMenu.canceled += instance.OnPauseMenu;
+            @UpgradeUI.started += instance.OnUpgradeUI;
+            @UpgradeUI.performed += instance.OnUpgradeUI;
+            @UpgradeUI.canceled += instance.OnUpgradeUI;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @Navigate.started += instance.OnNavigate;
+            @Navigate.performed += instance.OnNavigate;
+            @Navigate.canceled += instance.OnNavigate;
+            @Submit.started += instance.OnSubmit;
+            @Submit.performed += instance.OnSubmit;
+            @Submit.canceled += instance.OnSubmit;
         }
 
         /// <summary>
@@ -1266,33 +1288,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="TempActions" />
-        private void UnregisterCallbacks(ITempActions instance)
+        /// <seealso cref="InteractableUIActions" />
+        private void UnregisterCallbacks(IInteractableUIActions instance)
         {
-            @CombatScene.started -= instance.OnCombatScene;
-            @CombatScene.performed -= instance.OnCombatScene;
-            @CombatScene.canceled -= instance.OnCombatScene;
-            @ArtScene.started -= instance.OnArtScene;
-            @ArtScene.performed -= instance.OnArtScene;
-            @ArtScene.canceled -= instance.OnArtScene;
-            @Warehouse.started -= instance.OnWarehouse;
-            @Warehouse.performed -= instance.OnWarehouse;
-            @Warehouse.canceled -= instance.OnWarehouse;
-            @Exit.started -= instance.OnExit;
-            @Exit.performed -= instance.OnExit;
-            @Exit.canceled -= instance.OnExit;
-            @UIActivate.started -= instance.OnUIActivate;
-            @UIActivate.performed -= instance.OnUIActivate;
-            @UIActivate.canceled -= instance.OnUIActivate;
+            @PauseMenu.started -= instance.OnPauseMenu;
+            @PauseMenu.performed -= instance.OnPauseMenu;
+            @PauseMenu.canceled -= instance.OnPauseMenu;
+            @UpgradeUI.started -= instance.OnUpgradeUI;
+            @UpgradeUI.performed -= instance.OnUpgradeUI;
+            @UpgradeUI.canceled -= instance.OnUpgradeUI;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @Navigate.started -= instance.OnNavigate;
+            @Navigate.performed -= instance.OnNavigate;
+            @Navigate.canceled -= instance.OnNavigate;
+            @Submit.started -= instance.OnSubmit;
+            @Submit.performed -= instance.OnSubmit;
+            @Submit.canceled -= instance.OnSubmit;
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TempActions.UnregisterCallbacks(ITempActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="InteractableUIActions.UnregisterCallbacks(IInteractableUIActions)" />.
         /// </summary>
-        /// <seealso cref="TempActions.UnregisterCallbacks(ITempActions)" />
-        public void RemoveCallbacks(ITempActions instance)
+        /// <seealso cref="InteractableUIActions.UnregisterCallbacks(IInteractableUIActions)" />
+        public void RemoveCallbacks(IInteractableUIActions instance)
         {
-            if (m_Wrapper.m_TempActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_InteractableUIActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -1302,21 +1324,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="TempActions.AddCallbacks(ITempActions)" />
-        /// <seealso cref="TempActions.RemoveCallbacks(ITempActions)" />
-        /// <seealso cref="TempActions.UnregisterCallbacks(ITempActions)" />
-        public void SetCallbacks(ITempActions instance)
+        /// <seealso cref="InteractableUIActions.AddCallbacks(IInteractableUIActions)" />
+        /// <seealso cref="InteractableUIActions.RemoveCallbacks(IInteractableUIActions)" />
+        /// <seealso cref="InteractableUIActions.UnregisterCallbacks(IInteractableUIActions)" />
+        public void SetCallbacks(IInteractableUIActions instance)
         {
-            foreach (var item in m_Wrapper.m_TempActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_InteractableUIActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_TempActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_InteractableUIActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="TempActions" /> instance referencing this action map.
+    /// Provides a new <see cref="InteractableUIActions" /> instance referencing this action map.
     /// </summary>
-    public TempActions @Temp => new TempActions(this);
+    public InteractableUIActions @InteractableUI => new InteractableUIActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player Movement" which allows adding and removing callbacks.
     /// </summary>
@@ -1418,46 +1440,46 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnEnemyLockOn(InputAction.CallbackContext context);
     }
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Temp" which allows adding and removing callbacks.
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Interactable UI" which allows adding and removing callbacks.
     /// </summary>
-    /// <seealso cref="TempActions.AddCallbacks(ITempActions)" />
-    /// <seealso cref="TempActions.RemoveCallbacks(ITempActions)" />
-    public interface ITempActions
+    /// <seealso cref="InteractableUIActions.AddCallbacks(IInteractableUIActions)" />
+    /// <seealso cref="InteractableUIActions.RemoveCallbacks(IInteractableUIActions)" />
+    public interface IInteractableUIActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Combat Scene" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "PauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCombatScene(InputAction.CallbackContext context);
+        void OnPauseMenu(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Art Scene" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "UpgradeUI" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnArtScene(InputAction.CallbackContext context);
+        void OnUpgradeUI(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Warehouse" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnWarehouse(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnExit(InputAction.CallbackContext context);
+        void OnNavigate(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "UI Activate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUIActivate(InputAction.CallbackContext context);
+        void OnSubmit(InputAction.CallbackContext context);
     }
 }
