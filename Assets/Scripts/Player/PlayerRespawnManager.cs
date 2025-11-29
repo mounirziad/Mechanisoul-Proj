@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerRespawnManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class PlayerRespawnManager : MonoBehaviour
     [Header("Respawn Settings")]
     [SerializeField] private float respawnHealth = 100f;
     [SerializeField] private bool resetVelocity = true;
+    [SerializeField] private float sceneTransitionDelay = 1f;
 
     private GameObject player;
     private PlayerHealth playerHealth;
@@ -67,119 +69,76 @@ public class PlayerRespawnManager : MonoBehaviour
             yield break;
         }
 
-        GameObject spawnPoint = FindNearestSpawnPoint();
-        
-        if (spawnPoint == null)
+        yield return new WaitForSeconds(sceneTransitionDelay);
+
+        if (GameProgressionManager.Instance != null)
         {
-            Debug.LogError("PlayerRespawnManager: No spawn point found in current scene!");
-            yield break;
+            string respawnScene = GameProgressionManager.Instance.GetRespawnScene();
+            Debug.Log($"PlayerRespawnManager: Loading respawn scene: {respawnScene}");
+            
+            ResetPlayerState();
+            
+            SceneManager.sceneLoaded += OnRespawnSceneLoaded;
+            SceneManager.LoadScene(respawnScene);
         }
+        else
+        {
+            Debug.LogError("PlayerRespawnManager: GameProgressionManager.Instance is null! Cannot determine respawn scene.");
+        }
+    }
 
-        SpawnPoint spawnPointScript = spawnPoint.GetComponent<SpawnPoint>();
-        Vector3 spawnPosition = spawnPointScript != null ? spawnPointScript.GetSpawnPosition() : spawnPoint.transform.position;
-        Quaternion spawnRotation = spawnPointScript != null ? spawnPointScript.GetSpawnRotation() : spawnPoint.transform.rotation;
+    private void OnRespawnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= OnRespawnSceneLoaded;
+        StartCoroutine(FullyResetPlayerAfterSceneLoad());
+    }
 
-        Debug.Log($"Player current position: {player.transform.position}");
-        Debug.Log($"Target spawn position: {spawnPosition}");
+    private IEnumerator FullyResetPlayerAfterSceneLoad()
+    {
+        yield return new WaitForEndOfFrame();
+        
+        FindPlayer();
+        
+        if (player != null)
+        {
+            ResetPlayerState();
+            Debug.Log("PlayerRespawnManager: Player fully reset after scene load");
+        }
+    }
+
+    private void ResetPlayerState()
+    {
+        if (playerHealth != null)
+        {
+            playerHealth.Revive();
+            playerHealth.Heal(respawnHealth);
+        }
 
         if (playerRagdoll != null)
         {
             playerRagdoll.DeactivateRagdoll();
         }
 
-        yield return null;
-
-        CharacterController characterController = player.GetComponent<CharacterController>();
-        if (characterController != null)
+        if (PersistentDeathUI.Instance != null)
         {
-            characterController.enabled = false;
+            PersistentDeathUI.Instance.gameObject.SetActive(false);
         }
 
         if (playerRigidbody != null)
         {
-            playerRigidbody.isKinematic = true;
             playerRigidbody.linearVelocity = Vector3.zero;
             playerRigidbody.angularVelocity = Vector3.zero;
         }
 
-        player.transform.position = spawnPosition;
-        player.transform.rotation = spawnRotation;
-
-        yield return new WaitForFixedUpdate();
-
-        if (characterController != null)
-        {
-            characterController.enabled = true;
-        }
-
-        if (playerRigidbody != null && !resetVelocity)
-        {
-            playerRigidbody.isKinematic = false;
-        }
-        else if (playerRigidbody != null)
-        {
-            playerRigidbody.isKinematic = false;
-        }
-
         if (playerLocomotion != null)
         {
+            playerLocomotion.enabled = true;
             playerLocomotion.inAirTimer = 0f;
             playerLocomotion.isGrounded = true;
             playerLocomotion.isJumping = false;
         }
 
-        if (playerHealth != null)
-        {
-            playerHealth.Heal(respawnHealth);
-        }
-
-        yield return null;
-
-        Debug.Log($"Player respawned at {spawnPoint.name} - Position: {spawnPosition}");
-        Debug.Log($"Player actual position after respawn: {player.transform.position}");
-    }
-
-    private GameObject FindNearestSpawnPoint()
-    {
-        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("PlayerSpawn");
-        
-        Debug.Log($"PlayerRespawnManager: Found {spawnPoints.Length} spawn points with 'PlayerSpawn' tag");
-        
-        if (spawnPoints.Length == 0)
-        {
-            return null;
-        }
-
-        GameObject defaultSpawn = null;
-        GameObject nearestSpawn = null;
-        float nearestDistance = float.MaxValue;
-
-        foreach (GameObject spawnPoint in spawnPoints)
-        {
-            SpawnPoint spawnScript = spawnPoint.GetComponent<SpawnPoint>();
-            
-            Debug.Log($"Checking spawn point: {spawnPoint.name} at position {spawnPoint.transform.position}");
-            
-            if (spawnScript != null && spawnScript.IsDefaultSpawn())
-            {
-                defaultSpawn = spawnPoint;
-                Debug.Log($"Found default spawn: {spawnPoint.name}");
-            }
-
-            if (player != null)
-            {
-                float distance = Vector3.Distance(player.transform.position, spawnPoint.transform.position);
-                if (distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearestSpawn = spawnPoint;
-                }
-            }
-        }
-
-        GameObject selectedSpawn = defaultSpawn != null ? defaultSpawn : nearestSpawn;
-        Debug.Log($"Selected spawn point: {(selectedSpawn != null ? selectedSpawn.name : "NULL")}");
-        
-        return selectedSpawn;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

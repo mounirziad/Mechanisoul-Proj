@@ -74,6 +74,38 @@ public class PlayerPersistenceManager : MonoBehaviour
         
         MoveToSpawnPoint();
         NotifyCameras();
+        EnsurePlayerIsAlive();
+    }
+    
+    private void EnsurePlayerIsAlive()
+    {
+        if (playerTransform == null)
+        {
+            return;
+        }
+
+        PlayerHealth playerHealth = playerTransform.GetComponent<PlayerHealth>();
+        if (playerHealth != null && playerHealth.isDead)
+        {
+            playerHealth.Revive();
+            playerHealth.Heal(100f);
+        }
+
+        PlayerRagdoll playerRagdoll = playerTransform.GetComponent<PlayerRagdoll>();
+        if (playerRagdoll != null)
+        {
+            playerRagdoll.DeactivateRagdoll();
+        }
+
+        if (PersistentDeathUI.Instance != null)
+        {
+            PersistentDeathUI.Instance.gameObject.SetActive(false);
+        }
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        
+        Debug.Log("PlayerPersistenceManager: Ensured player is alive and ready");
     }
     
     private void MoveToSpawnPoint()
