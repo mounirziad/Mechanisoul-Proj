@@ -6,7 +6,6 @@ public class InteractableUI : MonoBehaviour
 {
     [SerializeField] UpgradeUIScript upgradeUIScript;
     [SerializeField] InputManager playerInputManager;
-    [SerializeField] UIControllerNavigation controllerNavigation;
 
     private bool pauseActive = false;
     private bool upgradeUIActive = false;
@@ -22,11 +21,6 @@ public class InteractableUI : MonoBehaviour
         if (playerInputManager == null)
         {
             playerInputManager = FindObjectOfType<InputManager>();
-        }
-
-        if (controllerNavigation == null)
-        {
-            controllerNavigation = GetComponent<UIControllerNavigation>();
         }
 
         if (upgradeUIScript != null && upgradeUIScript.pauseMenu != null)
@@ -90,11 +84,6 @@ public class InteractableUI : MonoBehaviour
                 SetCursorState(true);
                 SetPlayerInputActive(false);
                 Time.timeScale = 0f;
-
-                if (controllerNavigation != null)
-                {
-                    controllerNavigation.InitializePauseMenuNavigation();
-                }
             }
         }
         else
@@ -107,11 +96,6 @@ public class InteractableUI : MonoBehaviour
                 SetCursorState(false);
                 SetPlayerInputActive(true);
                 Time.timeScale = 1f;
-
-                if (controllerNavigation != null)
-                {
-                    controllerNavigation.ClearFocus();
-                }
             }
         }
     }
@@ -129,11 +113,6 @@ public class InteractableUI : MonoBehaviour
 
                 SetCursorState(true);
                 SetPlayerInputActive(false);
-
-                if (controllerNavigation != null)
-                {
-                    controllerNavigation.InitializeSkillTreeNavigation();
-                }
             }
         }
         else
@@ -145,11 +124,6 @@ public class InteractableUI : MonoBehaviour
 
                 SetCursorState(false);
                 SetPlayerInputActive(true);
-
-                if (controllerNavigation != null)
-                {
-                    controllerNavigation.ClearFocus();
-                }
             }
         }
     }
