@@ -28004,6 +28004,7 @@ GameObject:
   - component: {fileID: 361696111}
   - component: {fileID: 361696110}
   - component: {fileID: 361696109}
+  - component: {fileID: 361696112}
   m_Layer: 10
   m_Name: Oil (4)
   m_TagString: Untagged
@@ -28041,7 +28042,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -28103,6 +28104,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 361696107}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &361696112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361696107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3977656b2cc84e4c925d831b5748c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOnContact
 --- !u!1001 &361881063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58101,6 +58114,7 @@ GameObject:
   - component: {fileID: 724213986}
   - component: {fileID: 724213985}
   - component: {fileID: 724213984}
+  - component: {fileID: 724213987}
   m_Layer: 10
   m_Name: Oil
   m_TagString: Untagged
@@ -58138,7 +58152,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -58200,6 +58214,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724213982}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &724213987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724213982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3977656b2cc84e4c925d831b5748c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOnContact
 --- !u!1 &728399940
 GameObject:
   m_ObjectHideFlags: 0
@@ -111723,6 +111749,7 @@ GameObject:
   - component: {fileID: 1529550066}
   - component: {fileID: 1529550065}
   - component: {fileID: 1529550064}
+  - component: {fileID: 1529550067}
   m_Layer: 10
   m_Name: Oil (2)
   m_TagString: Untagged
@@ -111760,7 +111787,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -111822,6 +111849,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529550062}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1529550067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529550062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3977656b2cc84e4c925d831b5748c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOnContact
 --- !u!1001 &1529738131
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -112063,6 +112102,7 @@ GameObject:
   - component: {fileID: 1539521294}
   - component: {fileID: 1539521293}
   - component: {fileID: 1539521292}
+  - component: {fileID: 1539521295}
   m_Layer: 10
   m_Name: Oil (3)
   m_TagString: Untagged
@@ -112100,7 +112140,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -112162,6 +112202,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1539521290}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1539521295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539521290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3977656b2cc84e4c925d831b5748c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOnContact
 --- !u!1001 &1541897909
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116743,6 +116795,7 @@ GameObject:
   - component: {fileID: 1671487226}
   - component: {fileID: 1671487225}
   - component: {fileID: 1671487224}
+  - component: {fileID: 1671487227}
   m_Layer: 10
   m_Name: Oil (5)
   m_TagString: Untagged
@@ -116780,7 +116833,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -116842,6 +116895,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671487222}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1671487227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671487222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3977656b2cc84e4c925d831b5748c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOnContact
 --- !u!1 &1672736949
 GameObject:
   m_ObjectHideFlags: 0
