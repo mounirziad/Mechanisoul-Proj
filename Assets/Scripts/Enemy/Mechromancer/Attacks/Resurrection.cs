@@ -46,8 +46,6 @@ public class Resurrection : MonoBehaviour
         if (HasResurrected || IsResurrectionActive) return;
 
         StartCoroutine(ResurrectionRoutine());
-
-        HasResurrected = true;
         Debug.Log("StartResurrection() called");
     }
 
@@ -67,6 +65,8 @@ public class Resurrection : MonoBehaviour
 
         HasResurrected = true;
         IsResurrectionActive = false;
+
+        Debug.Log("Resurrection complete");
     }
 
     private IEnumerator MoveToHidingCoroutine()

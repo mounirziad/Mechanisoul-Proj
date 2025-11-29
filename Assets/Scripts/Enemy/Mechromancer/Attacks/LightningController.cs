@@ -68,6 +68,7 @@ public class LightningController : MonoBehaviour
         }
 
         blackboard.SetVariableValue("LightningFinished", true);
+        isAttacking = false;
     }
 
     public void OnStrike(Vector3 hitPos)

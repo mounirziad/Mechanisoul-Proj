@@ -13,6 +13,9 @@ public class MechBehaviorController : MonoBehaviour
     public EventChannel rageChannel;
     public EventChannel deathChannel;
 
+    //public Transform player;
+    //public Transform mech;
+
     private bool isActive = false;
     private bool isPlayerInRange = false;
 
@@ -32,6 +35,12 @@ public class MechBehaviorController : MonoBehaviour
         {
             colliderTrigger.OnPlayerEnterTrigger += HandlePlayerEnterTrigger;
         }
+    }
+
+    private void Update()
+    {
+        //float distanceToPlayer = Vector3.Distance(mech.position, player.position);
+        //Debug.Log("Distance to player: " + distanceToPlayer);
     }
 
     private void HandlePlayerEnterTrigger(object sender, EventArgs e)
