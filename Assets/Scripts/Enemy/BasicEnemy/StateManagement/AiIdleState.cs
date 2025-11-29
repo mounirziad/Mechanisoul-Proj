@@ -48,6 +48,13 @@ public class AiIdleState : AiState
 
     private bool CheckForPlayer(AiAgent agent)
     {
+
+        // CRITICAL SAFETY CHECK: If playertransform is missing, stop immediately.
+        if (agent.playertransform == null)
+        {
+            return false;
+        }
+
         // ADD COOLDOWN CHECK - ignore player for a period after attacking
         if (Time.time < lastAttackTime + agent.config.meleeAttackCooldown)
         {
