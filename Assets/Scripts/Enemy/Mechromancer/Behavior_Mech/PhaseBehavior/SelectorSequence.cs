@@ -6,8 +6,7 @@ using UnityEngine;
 using Composite = Unity.Behavior.Composite;
 using Unity.Properties;
 using System.Reflection;
-using System.Linq;
-using NUnit.Framework.Internal.Filters;
+using System.Collections.Generic;
 
 
 //Code uses reflection (non-public and public) to find child call methods. Avoids compile time mismatches that caused errors with previous script
@@ -28,6 +27,8 @@ public partial class SelectorSequence : Composite
     MethodInfo? childStartMethod = null;
     MethodInfo? childUpdateMethod = null;
     MethodInfo? childEndMethod = null;
+
+    private readonly Dictionary<string, MethodInfo> methodCache = new();
 
     void EnsureChildMethods()
     {
@@ -59,32 +60,20 @@ public partial class SelectorSequence : Composite
     {
         foreach (var name in candidateNames)
         {
-            var methods = t.GetMethods(flags).Where(m => string.Equals(m.Name, name, StringComparison.OrdinalIgnoreCase));
-
-            foreach (var m in methods)
+            if (!methodCache.TryGetValue(name, out var cachedMethod))
             {
-                var pars = m.GetParameters();
+                var methods = t.GetMethods(flags);
+                cachedMethod = Array.Find(methods, m => string.Equals(m.Name, name, StringComparison.OrdinalIgnoreCase));
+                methodCache[name] = cachedMethod;
+            }
 
-                if (pars.Length == 1)
-                {
-                    //prefer int param or something assignable from int
-                    var pType = pars[0].ParameterType;
-                    if (pType == typeof(int) || pType == typeof(System.Int32))
-                        return m;
-
-                    //prefer node/composite.unity.behavior.node parameter
-                    if (typeof(Unity.Behavior.Node).IsAssignableFrom(pType) || pType.Name.ToLower().Contains("node"))
-                        return m;
-
-                    //allow object fallback
-                    if (pType == typeof(object))
-                        return m;
-                }
+            if (cachedMethod != null)
+            {
+                return cachedMethod;
             }
         }
-
         return null;
-    }
+    }   
 
     object InvokeChildMethod(MethodInfo method, int childIndex)
     {
@@ -124,6 +113,12 @@ public partial class SelectorSequence : Composite
 
         while (currentIndex < Children.Count)
         {
+            if (currentIndex >= Children.Count)
+            {
+                Debug.LogWarning("Current index exceeds the number of children");
+                return Status.Failure;
+            }
+
             var currentChild = Children[currentIndex];
 
             bool resurrectionInProgress = false;
