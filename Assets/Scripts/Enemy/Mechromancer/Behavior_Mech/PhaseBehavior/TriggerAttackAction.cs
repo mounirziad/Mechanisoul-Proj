@@ -51,7 +51,7 @@ public partial class TriggerAttackAction : Action
     category: "Action",
     id: "lightning-action-node"
 )]
-public partial class TriggerLightningAction : Action
+public partial class TriggerLightningAction : Action, IAttackCondition
 {
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
@@ -59,16 +59,28 @@ public partial class TriggerLightningAction : Action
     [SerializeField] public float Damage = 15f;
 
     private LightningController controller;
+    private BehaviorGraphAgent bgAgent;
+
+    public bool CanRun()
+    {
+        if (Agent?.Value == null) return false;
+
+        bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
+
+        bool finished = true;
+        bgAgent.BlackboardReference.GetVariableValue("LightningFinished", out finished);
+
+        return finished;
+    }
 
     protected override Status OnStart()
     {
         if (Agent?.Value == null) return Status.Failure;
 
         controller = Agent.Value.GetComponent<LightningController>();
-        if (controller == null) return Status.Failure;
+        bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
 
-        var blackboard = Agent.Value.GetComponent<BehaviorGraphAgent>().BlackboardReference;
-        blackboard.SetVariableValue("LightningFinished", false);
+        bgAgent.BlackboardReference.SetVariableValue("LightningFinished", false);
 
         GameObject player = GameObject.FindWithTag("Player");
         if (player == null) return Status.Failure;
@@ -82,7 +94,8 @@ public partial class TriggerLightningAction : Action
     {
         //Completes immediately, AoE is handled separately
         bool finished = false;
-        Agent.Value.GetComponent<BehaviorGraphAgent>().BlackboardReference.GetVariableValue("LightningFinished", out finished);
+        bgAgent.BlackboardReference.GetVariableValue("LightningFinished", out finished);
+
         return finished ? Status.Success : Status.Running;
     }
 
@@ -99,38 +112,24 @@ public partial class TriggerLightningAction : Action
     category: "Action",
     id: "resurrect-action-node"
 )]
-public partial class TriggerResurrectionAction : Action
+public partial class TriggerResurrectionAction : Action, IAttackCondition
 {
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
     private Resurrection resurrection;
 
-    protected override Status OnStart()
+    public bool CanRun()
     {
-        Debug.Log("TriggerResurrectionAction: OnStart()");
-
-        if (Agent?.Value == null)
-        {
-            Debug.LogError("TriggerResurrectionAction: Agent is NULL");
-            return Status.Failure;
-        }
+        if (Agent?.Value == null) return false;
 
         resurrection = Agent.Value.GetComponent<Resurrection>();
-        if (resurrection == null)
-        {
-            Debug.LogError("TriggerResurrectionAction: No Resurrection component found on Agent");
-            return Status.Failure;
-        }
+        if (resurrection == null) return false;
 
-        Debug.Log("TriggerResurrectionAction: HasResurrected = " + resurrection.HasResurrected);
+        return !resurrection.HasResurrected;
+    }
 
-        if (resurrection.HasResurrected)
-        {
-            Debug.LogWarning("TriggerResurrectionAction: Already resurrected is FAILING");
-            return Status.Failure;
-        }
-
-        Debug.Log("TriggerResurrectionAction: Calling StartResurrection()");
+    protected override Status OnStart()
+    {
         resurrection.StartResurrection();
         return Status.Running;
     }
@@ -148,7 +147,54 @@ public partial class TriggerResurrectionAction : Action
     category: "Action",
     id: "lunge-action-node"
 )]
-public partial class TriggerLungeAction : Action
+public partial class TriggerLungeAction : Action, IAttackCondition
 {
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
+
+    [SerializeField] public float MaxRange = 6f;
+    [SerializeField] public float LungeDuration = 0.75f;
+
+    private MechLunge lunge;
+    private Transform player;
+    private float timer;
+
+    public bool CanRun()
+    {
+        if (Agent?.Value == null) return false;
+
+        GameObject mech = Agent.Value;
+        var bgAgent = mech.GetComponent<BehaviorGraphAgent>();
+
+        bgAgent.BlackboardReference.GetVariableValue("PlayerTransform", out player);
+        if (player == null) return false;
+
+        float distance = Vector3.Distance(mech.transform.position, player.position);
+        return distance < MaxRange; //attacks only in range
+    }
+
+    protected override Status OnStart()
+    {
+        timer = 0f;
+
+        if (Agent?.Value == null) return Status.Failure;
+
+        lunge = Agent.Value.GetComponent<MechLunge>();
+        if (lunge == null) return Status.Failure;
+
+        lunge.LungeAttack();
+
+        return Status.Running;
+    }
+
+    protected override Status OnUpdate()
+    {
+        timer += Time.deltaTime;
+
+        if (timer >= LungeDuration)
+        {
+            return Status.Success;
+        }
+
+        return Status.Running;
+    }
 }

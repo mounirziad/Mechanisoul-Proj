@@ -35,7 +35,7 @@ public class MechLunge : MonoBehaviour
         }
     }
 
-    void LungeAttack()
+    public void LungeAttack()
     {
         //animator.SetTrigger("Lunge");
 
