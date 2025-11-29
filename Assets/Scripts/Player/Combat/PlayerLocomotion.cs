@@ -7,6 +7,7 @@ public class PlayerLocomotion : MonoBehaviour
     AnimatorManager animatorManager;
 
     Vector3 moveDirection;
+    public Vector3 MoveInputDirection => moveDirection;
     Transform cameraObject;
     Rigidbody playerRigidbody;
 

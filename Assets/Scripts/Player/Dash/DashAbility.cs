@@ -99,10 +99,19 @@ public class DashAbility : MonoBehaviour
 
     Vector3 GetDashDirection()
     {
-        Vector3 v = rb ? rb.linearVelocity : Vector3.zero;
-        if (v.sqrMagnitude > 0.01f) return new Vector3(v.x, 0f, v.z).normalized;
+        if (playerLocomotion != null)
+        {
+            Vector3 moveDir = playerLocomotion.MoveInputDirection;
+            moveDir.y = 0f;
+
+            if (moveDir.sqrMagnitude > 0.01f)
+                return moveDir.normalized;
+        }
+
         return directionSource ? directionSource.forward : transform.forward;
     }
+
+
 
     bool CheckForObstacle(Vector3 currentPos, Vector3 step, float radius)
     {
