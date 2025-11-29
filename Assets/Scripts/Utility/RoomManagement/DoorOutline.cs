@@ -4,15 +4,25 @@ using UnityEngine;
 public class DoorOutline : MonoBehaviour
 {
     [SerializeField] private Material outlineMaterial;
-    [SerializeField] private Color outlineColor = Color.green;
-    [SerializeField] private float outlineThickness = 0.02f;
     [SerializeField] private List<MeshRenderer> doorRenderers = new List<MeshRenderer>();
     private List<Material[]> originalMaterials = new List<Material[]>();
     private bool outlineEnabled;
     
     void Awake()
     {
+        if (doorRenderers.Count == 0)
+        {
+            GetRenderers();
+        }
+        
         SaveOriginalMaterials();
+    }
+
+    private void GetRenderers()
+    {
+        doorRenderers.Clear();
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        doorRenderers.AddRange(renderers);
     }
 
     private void SaveOriginalMaterials()
@@ -44,8 +54,6 @@ public class DoorOutline : MonoBehaviour
             }
 
             Material outlineInstance = new Material(outlineMaterial);
-            outlineInstance.SetColor("_Outline_Color", outlineColor);
-            outlineInstance.SetFloat("_Outline_Thickness", outlineThickness);
             
             newMaterials[currentMaterials.Length] = outlineInstance;
             doorRenderers[i].materials = newMaterials;

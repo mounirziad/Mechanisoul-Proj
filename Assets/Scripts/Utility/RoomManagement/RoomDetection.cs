@@ -126,6 +126,7 @@ public class RoomDetection : MonoBehaviour
             if (doorAnimator != null)
             {
                 doorAnimator.SetBool("IsDoorOpen", true);
+                doorToOpen.GetComponent<DoorOutline>().EnableOutline();
                 
                 if (showDebugLogs)
                 {
