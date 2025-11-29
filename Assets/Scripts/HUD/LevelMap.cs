@@ -6,6 +6,7 @@ public class Room
     public string Name { get; }
     public string Description { get; set; }
     public bool Cleared;
+    public bool Empty;
 
     GameObject roomObject;
     Image roomImage;
@@ -22,26 +23,38 @@ public class Room
         Cleared = false;
     }
 
+    public Room(bool empty)
+    {
+        Empty = empty;
+        Name = "";
+    }
+
+
+
     public void CreateGameObject()
     {
+        if (Empty) { return; }
         roomObject = new GameObject(Name, typeof(Image));
         roomImage = roomObject.GetComponent<Image>();
     }
 
     public void SetParent(GameObject parent)
     {
+        if (Empty) { return; }
         roomObject.transform.SetParent(parent.transform);
         roomObject.transform.position = parent.transform.position;
     }
 
     public void Translate(float x, float y)
     {
+        if (Empty) { return; }
         roomObject.transform.Translate(new Vector3(x * 100, y * 100, 0));
         roomObject.transform.localScale = Vector3.one;
     }
 
     public void SetSprites(Sprite hiddenSprite, Sprite inRoomSprite, Sprite clearedSprite)
     {
+        if (Empty) { return; }
         this.hiddenSprite = hiddenSprite;
         this.inRoomSprite = inRoomSprite;
         this.clearedSprite = clearedSprite;
@@ -65,9 +78,9 @@ public class LevelMap : MonoBehaviour
     //temporary room names, replace with actual rooms later
     private static readonly Room[,] Rooms =
             {
-                { new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") },
-                {new Room("Forest"), new Room("West of House"), new Room("Behind House") },
-                {new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") }
+                { new Room(true), new Room(true), new Room(true) },
+                {new Room("Room 1"), new Room("Room 2"), new Room("Room 3") },
+                {new Room(true), new Room(true), new Room(true) }
             };
 
     Room currentRoom;
@@ -91,7 +104,11 @@ public class LevelMap : MonoBehaviour
 
     public void EnterRoom(string name)
     {
-        if (currentRoom != null) currentRoom.currentSprite = currentRoom.clearedSprite;
+        if (currentRoom != null)
+        {
+            currentRoom.currentSprite = currentRoom.clearedSprite;
+            currentRoom.UpdateSprite();
+        }
 
         foreach (Room room in Rooms)
         {
@@ -103,14 +120,5 @@ public class LevelMap : MonoBehaviour
                 break;
             }
         }
-    }
-
-    void UpdateUI()
-    {
-        //change ui to reflect new status
-
-        //rooms cleared
-
-        //current room
     }
 }

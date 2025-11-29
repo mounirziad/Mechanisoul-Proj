@@ -8,7 +8,7 @@ public class RoomCollider : MonoBehaviour
 
     private void Start()
     {
-        levelMap = GameObject.Find("Map").GetComponent<LevelMap>();
+        levelMap = GameObject.Find("map").GetComponent<LevelMap>();
     }
 
 
