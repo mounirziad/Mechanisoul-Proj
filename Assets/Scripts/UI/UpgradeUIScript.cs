@@ -88,8 +88,9 @@ public class UpgradeUIScript : MonoBehaviour
     [SerializeField] private Button fearDash2;
     [SerializeField] private Button fearDash3;
 
-    [Header("Purchase Button")]
+    [Header("Other Buttons")]
     [SerializeField] private Button purchaseButton;
+    [SerializeField] private Button closeButton;
 
     [Header("Tabs")]
     [SerializeField] private Button upgradeTab;
@@ -178,6 +179,7 @@ public class UpgradeUIScript : MonoBehaviour
         if (angerDash3 != null) angerDash3.onClick.AddListener(OnAngerDash3Clicked);
 
         if (purchaseButton != null) purchaseButton.onClick.AddListener(OnPurchaseClicked);
+        if (closeButton != null) closeButton.onClick.AddListener(OnCloseButtonClicked);
 
         if (upgradeTab != null) upgradeTab.onClick.AddListener(() =>
         {
@@ -260,6 +262,7 @@ public class UpgradeUIScript : MonoBehaviour
         if (angerDash3 != null) angerDash3.onClick.RemoveListener(OnAngerDash3Clicked);
 
         if (purchaseButton != null) purchaseButton.onClick.RemoveListener(OnPurchaseClicked);
+        if (closeButton != null) closeButton.onClick.RemoveListener(OnCloseButtonClicked);
     }
 
     // ====== HELPERS: drive levels via handler Up/Down (no direct setters needed) ======
@@ -675,4 +678,10 @@ public class UpgradeUIScript : MonoBehaviour
         currentlySelectedButton = button;
         currentlySelectedButton.SetSelected(true);
     }
+
+    private void OnCloseButtonClicked()
+    {
+        GetComponentInParent<InteractableUI>().ToggleUpgradeUI();
+    }
+
 }

@@ -58,7 +58,7 @@ public class PauseMenuUI : MonoBehaviour
     {
         if (pauseMenu != null)
         {
-            pauseMenu.SetActive(false);
+            GetComponentInParent<InteractableUI>().TogglePauseMenu();
         }
         Debug.Log("Resume Button Clicked!");
     }

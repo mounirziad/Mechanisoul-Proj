@@ -46,7 +46,7 @@ public class ZTargetingCamera : MonoBehaviour
     [SerializeField] private InputManager inputManager;
     [SerializeField] private bool useMouseInput = true;
     [SerializeField] private float mouseSensitivity = 0.15f;
-    [SerializeField] private float gamepadSensitivity = 100f;
+    [SerializeField] private float gamepadSensitivity = 2500f;
     
     [Header("Collision")]
     [SerializeField] private CameraCollisionHandler collisionHandler;
