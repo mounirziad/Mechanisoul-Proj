@@ -1205,6 +1205,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""bdfc845f-a8a6-4faf-b577-628174912dea"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1405,6 +1414,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51ade2ef-4218-43a7-8daf-86ae540fb580"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1446,6 +1466,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_InteractableUI_Interact = m_InteractableUI.FindAction("Interact", throwIfNotFound: true);
         m_InteractableUI_Navigate = m_InteractableUI.FindAction("Navigate", throwIfNotFound: true);
         m_InteractableUI_Submit = m_InteractableUI.FindAction("Submit", throwIfNotFound: true);
+        m_InteractableUI_Cancel = m_InteractableUI.FindAction("Cancel", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -2031,6 +2052,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_InteractableUI_Interact;
     private readonly InputAction m_InteractableUI_Navigate;
     private readonly InputAction m_InteractableUI_Submit;
+    private readonly InputAction m_InteractableUI_Cancel;
     /// <summary>
     /// Provides access to input actions defined in input action map "Interactable UI".
     /// </summary>
@@ -2062,6 +2084,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "InteractableUI/Submit".
         /// </summary>
         public InputAction @Submit => m_Wrapper.m_InteractableUI_Submit;
+        /// <summary>
+        /// Provides access to the underlying input action "InteractableUI/Cancel".
+        /// </summary>
+        public InputAction @Cancel => m_Wrapper.m_InteractableUI_Cancel;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2103,6 +2129,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Submit.started += instance.OnSubmit;
             @Submit.performed += instance.OnSubmit;
             @Submit.canceled += instance.OnSubmit;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
         }
 
         /// <summary>
@@ -2129,6 +2158,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Submit.started -= instance.OnSubmit;
             @Submit.performed -= instance.OnSubmit;
             @Submit.canceled -= instance.OnSubmit;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
         }
 
         /// <summary>
@@ -2382,5 +2414,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSubmit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCancel(InputAction.CallbackContext context);
     }
 }
