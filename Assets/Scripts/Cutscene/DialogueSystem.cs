@@ -554,6 +554,8 @@ public class DialogueSystem : MonoBehaviour
             text = text.Replace("{AIM}", "LEFT TRIGGER");
             text = text.Replace("{RANGE}", "RIGHT TRIGGER");
             text = text.Replace("{LOCK_ON}", "RIGHT CLICK");
+            text = text.Replace("{SKILLTREE}", "SELECT");
+            text = text.Replace("{INTERACT}", "Y");
         }
         else
         {
@@ -563,7 +565,9 @@ public class DialogueSystem : MonoBehaviour
             text = text.Replace("{ATTACK}", "LEFT MOUSE BUTTON");
             text = text.Replace("{AIM}", "RIGHT MOUSE BUTTON");
             text = text.Replace("{RANGE}", "LEFT MOUSE BUTTON");
-            text = text.Replace("{LOCK_ON}", "TAB");
+            text = text.Replace("{LOCK_ON}", "R");
+            text = text.Replace("{SKILLTREE}", "TAB");
+            text = text.Replace("{INTERACT}", "E");
         }
 
         return text;

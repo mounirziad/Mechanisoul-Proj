@@ -43,8 +43,8 @@ public class PauseMenuUI : MonoBehaviour
         if (sensitivitySlider != null)
         {
             sensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
-            sensitivitySlider.minValue = 0.1f;
-            sensitivitySlider.maxValue = 5f;
+            sensitivitySlider.minValue = 0.5f;
+            sensitivitySlider.maxValue = 1.5f;
         }
     }
 
