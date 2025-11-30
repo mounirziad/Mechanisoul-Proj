@@ -28,7 +28,7 @@ public class AiFindWeaponState : AiState
         return AiStateId.FindWeapon;
     }
 
-    public void Update(AiAgent agent) 
+    public void Update(AiAgent agent)
     {
         WeaponPickup pickup = FindClosestWeapon(agent);
         if (pickup == null)
@@ -42,15 +42,17 @@ public class AiFindWeaponState : AiState
             agent.weapons.ActivateWeapon();
         }
 
-        if (agent.weapons.HasWeapon() && agent.playertransform != null)
+        Transform target = agent.GetCurrentTarget();
+        if (agent.weapons.HasWeapon() && target != null)
         {
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
-            if (distanceToPlayer < 15f)
+            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+            if (distanceToTarget < 15f)
             {
                 agent.stateMachine.ChangeState(AiStateId.Attack);
             }
         }
     }
+
 
     private WeaponPickup FindClosestWeapon(AiAgent agent)
     {

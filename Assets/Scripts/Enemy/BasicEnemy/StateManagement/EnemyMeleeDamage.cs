@@ -3,18 +3,13 @@ using UnityEngine;
 public class EnemyMeleeDamage : MonoBehaviour
 {
     [Header("Melee Settings")]
-    public LayerMask playerLayer;
+    public LayerMask playerLayer; 
 
-    private Transform playerTransform;
     private AiAgent agent;
 
     private void Start()
     {
         agent = GetComponent<AiAgent>();
-        if (agent != null)
-        {
-            playerTransform = agent.playertransform;
-        }
     }
 
     public void DealMeleeDamage()
@@ -22,25 +17,32 @@ public class EnemyMeleeDamage : MonoBehaviour
         if (agent == null || agent.config == null)
             return;
 
-        if (playerTransform == null)
-        {
-            playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-            if (playerTransform == null) return;
-        }
+        Transform target = agent.GetCurrentTarget();
+        if (target == null)
+            return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-        
-        if (distanceToPlayer <= agent.config.meleeAttackRange)
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        if (distanceToTarget <= agent.config.meleeAttackRange)
         {
-            Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-            float dotProduct = Vector3.Dot(transform.forward, directionToPlayer);
-            
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+            float dotProduct = Vector3.Dot(transform.forward, directionToTarget);
+
             if (dotProduct > 0.5f)
             {
-                PlayerHealth playerHealth = playerTransform.GetComponent<PlayerHealth>();
+                // try player first
+                PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
                 if (playerHealth != null)
                 {
                     playerHealth.TakeDamage(agent.config.meleeDamage);
+                    return;
+                }
+
+                // if not player, try enemy
+                BasicEnemyHealth enemyHealth = target.GetComponent<BasicEnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    Vector3 knockDir = (enemyHealth.transform.position - transform.position).normalized;
+                    enemyHealth.TakeDamage(agent.config.meleeDamage, knockDir);
                 }
             }
         }

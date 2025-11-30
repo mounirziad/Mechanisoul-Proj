@@ -40,17 +40,18 @@ public class AiAfterMeleeAttackState : AiState
         if (agent.isDead)
             return;
 
-        if (agent.playertransform != null)
+        Transform target = agent.GetCurrentTarget();
+        if (target != null)
         {
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
-            
-            if (distanceToPlayer <= agent.config.meleeAttackRange)
+            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+
+            if (distanceToTarget <= agent.config.meleeAttackRange)
             {
                 agent.stateMachine.ChangeState(AiStateId.MeleeAttack);
                 return;
             }
-            
-            if (distanceToPlayer <= agent.config.maxSightDistance)
+
+            if (distanceToTarget <= agent.config.maxSightDistance)
             {
                 agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
                 return;
@@ -65,6 +66,7 @@ public class AiAfterMeleeAttackState : AiState
 
         Patrol(agent);
     }
+
 
     public void Exit(AiAgent agent)
     {

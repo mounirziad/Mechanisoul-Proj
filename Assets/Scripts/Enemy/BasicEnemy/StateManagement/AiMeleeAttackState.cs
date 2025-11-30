@@ -56,8 +56,9 @@ public class AiMeleeAttackState : AiState
         if (health != null && health.IsStunned())
             return;
 
-        Transform player = agent.playertransform;
-        if (player == null)
+        // was Transform player, now target for charm
+        Transform target = agent.GetCurrentTarget();
+        if (target == null)
         {
             agent.stateMachine.ChangeState(AiStateId.Idle);
             return;
@@ -71,11 +72,11 @@ public class AiMeleeAttackState : AiState
 
         if (isAttacking)
         {
-            Vector3 directionToPlayer = (player.position - agent.transform.position).normalized;
-            directionToPlayer.y = 0;
-            if (directionToPlayer != Vector3.zero)
+            Vector3 directionToTarget = (target.position - agent.transform.position).normalized;
+            directionToTarget.y = 0;
+            if (directionToTarget != Vector3.zero)
             {
-                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+                Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
                 agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
             }
             return;
@@ -86,14 +87,15 @@ public class AiMeleeAttackState : AiState
             StartAttack(agent);
         }
 
-        Vector3 directionToPlayerNormal = (player.position - agent.transform.position).normalized;
-        directionToPlayerNormal.y = 0;
-        if (directionToPlayerNormal != Vector3.zero)
+        Vector3 directionToTargetNormal = (target.position - agent.transform.position).normalized;
+        directionToTargetNormal.y = 0;
+        if (directionToTargetNormal != Vector3.zero)
         {
-            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayerNormal);
+            Quaternion lookRotation = Quaternion.LookRotation(directionToTargetNormal);
             agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, Time.deltaTime * 8f);
         }
     }
+
 
     public void Exit(AiAgent agent)
     {

@@ -62,17 +62,18 @@ public class AiAttackState : AiState
             return;
         }
 
-        Transform player = agent.playertransform;
-        if (player == null) return;
+        Transform target = agent.GetCurrentTarget();
+        if (target == null)
+            return;
 
-        float distanceToPlayer = Vector3.Distance(agent.transform.position, player.position);
-        if (distanceToPlayer > 15f) 
+        float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+        if (distanceToTarget > 15f)
         {
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
             return;
         }
 
-        Vector3 dir = (player.position - agent.transform.position).normalized;
+        Vector3 dir = (target.position - agent.transform.position).normalized;
         dir.y = 0;
         Quaternion lookRot = Quaternion.LookRotation(dir);
         agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRot, Time.deltaTime * 5f);
@@ -80,7 +81,7 @@ public class AiAttackState : AiState
         RaycastWeapon weapon = agent.weapons.CurrentWeapon;
         if (weapon != null && weapon.firePoint != null)
         {
-            Vector3 aimDir = (player.position + Vector3.up * 1.5f) - weapon.firePoint.position;
+            Vector3 aimDir = (target.position + Vector3.up * 1.5f) - weapon.firePoint.position;
             weapon.firePoint.rotation = Quaternion.Lerp(
                 weapon.firePoint.rotation,
                 Quaternion.LookRotation(aimDir),

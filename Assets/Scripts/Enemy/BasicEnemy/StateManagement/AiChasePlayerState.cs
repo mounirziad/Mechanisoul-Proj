@@ -26,33 +26,32 @@ public class AiChasePlayerState : AiState
         if (agent.isDead)
             return;
 
-        if (!agent.enabled) return;
+        if (!agent.enabled)
+            return;
 
         if (PlayerHealth.IsPlayerDead)
             return;
 
-        if (agent.playertransform == null)
+        Transform target = agent.GetCurrentTarget();
+        if (target == null)
         {
             agent.stateMachine.ChangeState(AiStateId.Idle);
             return;
         }
 
         BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
-        if (health != null)
-        {
-            if (health.IsStunned())
-                return;
-        }
+        if (health != null && health.IsStunned())
+            return;
 
         if (agent.navMeshAgent != null && agent.navMeshAgent.enabled)
         {
             timer -= Time.deltaTime;
             if (timer < 0.0f)
             {
-                float sqdistance = (agent.playertransform.position - agent.navMeshAgent.destination).sqrMagnitude;
+                float sqdistance = (target.position - agent.navMeshAgent.destination).sqrMagnitude;
                 if (sqdistance > agent.config.maxDistance * agent.config.maxDistance)
                 {
-                    agent.navMeshAgent.destination = agent.playertransform.position;
+                    agent.navMeshAgent.destination = target.position;
                 }
                 timer = agent.config.maxTime;
             }
@@ -60,8 +59,8 @@ public class AiChasePlayerState : AiState
 
         if (agent.weapons.HasWeapon())
         {
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
-            if (distanceToPlayer < 15f)
+            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+            if (distanceToTarget < 15f)
             {
                 agent.stateMachine.ChangeState(AiStateId.Attack);
                 return;
@@ -69,14 +68,15 @@ public class AiChasePlayerState : AiState
         }
         else
         {
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
-            if (distanceToPlayer < agent.config.meleeAttackRange)
+            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+            if (distanceToTarget < agent.config.meleeAttackRange)
             {
                 agent.stateMachine.ChangeState(AiStateId.MeleeAttack);
                 return;
             }
         }
     }
+
 
     public void Exit(AiAgent agent)
     {

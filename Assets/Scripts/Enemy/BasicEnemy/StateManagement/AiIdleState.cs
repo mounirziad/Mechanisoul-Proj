@@ -48,29 +48,27 @@ public class AiIdleState : AiState
 
     private bool CheckForPlayer(AiAgent agent)
     {
-
-        // CRITICAL SAFETY CHECK: If playertransform is missing, stop immediately.
-        if (agent.playertransform == null)
+        Transform target = agent.GetCurrentTarget();
+        if (target == null)
         {
             return false;
         }
 
-        // ADD COOLDOWN CHECK - ignore player for a period after attacking
         if (Time.time < lastAttackTime + agent.config.meleeAttackCooldown)
         {
-            return false; // Still in cooldown, ignore player
+            return false;
         }
 
-        Vector3 playerDirection = agent.playertransform.position - agent.transform.position;
-        if (playerDirection.magnitude > agent.config.maxSightDistance)
+        Vector3 targetDirection = target.position - agent.transform.position;
+        if (targetDirection.magnitude > agent.config.maxSightDistance)
         {
             return false;
         }
 
         Vector3 agentDirection = agent.transform.forward;
-        playerDirection.Normalize();
+        targetDirection.Normalize();
 
-        float dotProduct = Vector3.Dot(playerDirection, agentDirection);
+        float dotProduct = Vector3.Dot(targetDirection, agentDirection);
         if (dotProduct > -0.707f)
         {
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
@@ -79,8 +77,8 @@ public class AiIdleState : AiState
 
         if (agent.weapons.HasWeapon())
         {
-            float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
-            if (distanceToPlayer < 15f)
+            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+            if (distanceToTarget < 15f)
             {
                 agent.stateMachine.ChangeState(AiStateId.Attack);
                 return true;
@@ -89,6 +87,7 @@ public class AiIdleState : AiState
 
         return false;
     }
+
 
     private void Patrol(AiAgent agent)
     {

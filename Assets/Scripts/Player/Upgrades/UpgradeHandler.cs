@@ -64,13 +64,50 @@ public class UpgradeHandler : MonoBehaviour
 
     void FillTables()
     {
-        float fr = 1f, dmg = 1f;
-        for (int i = 0; i <= maxLvl; i++) { joyFireRateMult[i] = fr; fr += 0.15f; joyDamageMult[i] = dmg; dmg += 0.10f; }
-        for (int i = 0; i <= maxLvl; i++) angerAOEPercent[i] = 0.05f * i;
-        for (int i = 0; i <= maxLvl; i++) { sadMaxStacks[i] = 3 + i; sadSlowPerStack[i] = 0.05f + 0.01f * i; }
-        for (int i = 0; i <= maxLvl; i++) { loveCharmChance[i] = Mathf.Min(0.25f + 0.03f * i, 0.40f); loveCharmDur[i] = 2.5f + 0.5f * i; }
-        for (int i = 0; i <= maxLvl; i++) { fearStunDur[i] = 1.0f + 0.5f * i; fearStunAoe[i] = (i < 2) ? 0f : (2.0f + 0.25f * i); }
+        // index 0 = no upgrade
+        joyFireRateMult[0] = 1f;
+        joyDamageMult[0] = 1f;
+
+        angerAOEPercent[0] = 0f;
+
+        sadMaxStacks[0] = 0;
+        sadSlowPerStack[0] = 0f;
+
+        loveCharmChance[0] = 0f;
+        loveCharmDur[0] = 0f;
+
+        fearStunDur[0] = 0f;
+        fearStunAoe[0] = 0f;
+
+        // fill from 1 to maxLvl
+        float fr = 1f;
+        float dmg = 1f;
+
+        for (int i = 1; i <= maxLvl; i++)
+        {
+            // joy
+            fr += 0.15f;
+            dmg += 0.10f;
+            joyFireRateMult[i] = fr;
+            joyDamageMult[i] = dmg;
+
+            // anger
+            angerAOEPercent[i] = 0.05f * i;
+
+            // sadness
+            sadMaxStacks[i] = 3 + i;
+            sadSlowPerStack[i] = 0.05f + 0.01f * i;
+
+            // love
+            loveCharmChance[i] = Mathf.Min(0.25f + 0.03f * i, 0.40f);
+            loveCharmDur[i] = 2.5f + 0.5f * i;
+
+            // fear
+            fearStunDur[i] = 1.0f + 0.5f * i;
+            fearStunAoe[i] = (i < 2) ? 0f : (2.0f + 0.25f * i);
+        }
     }
+
 
     int ClampUp(int v) => Mathf.Clamp(v + 1, 0, maxLvl);
     int ClampDown(int v) => Mathf.Clamp(v - 1, 0, maxLvl);

@@ -17,13 +17,17 @@ public class AiAgent : MonoBehaviour
     public Transform playertransform;
     public AiWeapons weapons;
 
+    EnemyCharm enemyCharm;
+
     void Start()
     {
         ragdoll = GetComponent<Ragdoll>();
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         weapons = GetComponent<AiWeapons>();
-        
+
+        enemyCharm = GetComponent<EnemyCharm>();
+
         FindPlayer();
         
         stateMachine = new AiStateMachine(this);
@@ -61,5 +65,19 @@ public class AiAgent : MonoBehaviour
                 Debug.LogWarning($"Player not found for AI Agent on {gameObject.name}. AI may not function correctly.");
             }
         }
+    }
+
+    public Transform GetCurrentTarget()
+    {
+        // if charmed, try to get enemy focus
+        if (enemyCharm != null && enemyCharm.ShouldIgnorePlayerAndFightEnemies())
+        {
+            Transform focus = enemyCharm.GetCharmAttackTarget(transform);
+            if (focus != null)
+                return focus;
+        }
+
+        // fallback to player
+        return playertransform;
     }
 }
