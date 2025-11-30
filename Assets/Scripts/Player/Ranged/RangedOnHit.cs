@@ -42,6 +42,9 @@ public class RangedOnHit : MonoBehaviour
             {
                 slow.ApplyStackingSlow(mods.sadnessSlowPerStack, mods.sadnessMaxStacks);
                 RangedDebug.Log($"[ranged] sadness stack -> {slow.CurrentStacks} at {(slow.CurrentSpeedMultiplier * 100f):0}% speed");
+
+                // Use whatever duration matches slow decay
+                StatusEffectUtility.ApplyStatus(other, StatusEffectType.Sadness, 3f);
             }
         }
 
@@ -53,6 +56,8 @@ public class RangedOnHit : MonoBehaviour
             {
                 charm.ApplyCharm(mods.loveCharmDuration);
                 RangedDebug.Log($"[ranged] love charm for {mods.loveCharmDuration:0.0}s");
+
+                StatusEffectUtility.ApplyStatus(other, StatusEffectType.Love, mods.loveCharmDuration);
             }
             else
             {
@@ -68,6 +73,8 @@ public class RangedOnHit : MonoBehaviour
             {
                 stun.ApplyStun(mods.fearStunDuration);
                 RangedDebug.Log($"[ranged] fear stun for {mods.fearStunDuration:0.00}s");
+
+                StatusEffectUtility.ApplyStatus(other, StatusEffectType.Fear, mods.fearStunDuration);
             }
             else
             {
@@ -77,6 +84,7 @@ public class RangedOnHit : MonoBehaviour
 
         Destroy(gameObject);
     }
+
 
     void DoAngerExplosion(Vector3 pos)
     {
