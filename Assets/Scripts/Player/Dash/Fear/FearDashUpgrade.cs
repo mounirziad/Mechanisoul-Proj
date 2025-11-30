@@ -18,7 +18,11 @@ public class FearDashUpgrade : DashUpgradeBase
     protected override void HandleDashFinished(Vector3 start, Vector3 end)
     {
         if (upgradeLevel <= 0) return;
-        var fz = Spawn(fearZonePrefab, end);
-        if (fz != null) fz.Configure(seconds[upgradeLevel], radius[upgradeLevel], transform);
+        if (!fearZonePrefab) return;
+
+        var fz = Spawn(fearZonePrefab, start);
+        if (fz != null)
+            fz.Configure(seconds[upgradeLevel], radius[upgradeLevel], transform);
     }
+
 }

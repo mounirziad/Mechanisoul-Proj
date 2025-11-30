@@ -19,7 +19,11 @@ public class LoveDashUpgrade : DashUpgradeBase
     protected override void HandleDashFinished(Vector3 start, Vector3 end)
     {
         if (upgradeLevel <= 0) return;
-        var wz = Spawn(weaknessZonePrefab, end);
-        if (wz != null) wz.Configure(weaknessPercent[upgradeLevel], duration[upgradeLevel], radius[upgradeLevel]);
+        if (!weaknessZonePrefab) return;
+
+        var wz = Spawn(weaknessZonePrefab, start);
+        if (wz != null)
+            wz.Configure(weaknessPercent[upgradeLevel], duration[upgradeLevel], radius[upgradeLevel]);
     }
+
 }

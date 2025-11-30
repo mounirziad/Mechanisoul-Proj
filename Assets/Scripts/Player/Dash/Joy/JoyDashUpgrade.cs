@@ -57,17 +57,15 @@ public class JoyDashUpgrade : MonoBehaviour
     {
         if (_level <= 0 || !joyCritPrefab) return;
 
-        // resolve values
         float ch = chance[Mathf.Clamp(_level, 0, chance.Length - 1)];
         float rad = radius[Mathf.Clamp(_level, 0, radius.Length - 1)];
         float life = duration[Mathf.Clamp(_level, 0, duration.Length - 1)];
 
-        // spawn position
-        Vector3 pos = spawnAtDashEnd ? endPos : transform.position;
+        Vector3 pos = startPos;
         pos.y += yOffset;
 
-        // spawn and configure aura
         var zone = Instantiate(joyCritPrefab, pos, Quaternion.identity);
         zone.Configure(ch, rad, life);
     }
+
 }
