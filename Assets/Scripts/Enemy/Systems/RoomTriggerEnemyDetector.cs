@@ -146,16 +146,26 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
     {
         if (doorToDisable != null)
         {
-            Animator doorAnimator = doorToDisable.GetComponent<Animator>();
-            if (doorAnimator != null)
+            DoorNavMeshControl doorControl = doorToDisable.GetComponent<DoorNavMeshControl>();
+            if (doorControl != null)
             {
-                doorAnimator.SetBool("IsDoorOpen", true);
+                doorControl.OpenDoor();
                 roomCleared = true;
-                Debug.Log($"Room {gameObject.name} cleared! Door {doorToDisable.name} animation triggered.");
+                Debug.Log($"Room {gameObject.name} cleared! Door {doorToDisable.name} opened via DoorNavMeshControl.");
             }
             else
             {
-                Debug.LogWarning($"No Animator found on door: {doorToDisable.name}");
+                Animator doorAnimator = doorToDisable.GetComponent<Animator>();
+                if (doorAnimator != null)
+                {
+                    doorAnimator.SetBool("IsDoorOpen", true);
+                    roomCleared = true;
+                    Debug.Log($"Room {gameObject.name} cleared! Door {doorToDisable.name} animation triggered.");
+                }
+                else
+                {
+                    Debug.LogWarning($"No DoorNavMeshControl or Animator found on door: {doorToDisable.name}");
+                }
             }
         }
 

@@ -4,8 +4,8 @@ using UnityEngine.AI;
 public class EnemySeparation : MonoBehaviour
 {
     [Header("Separation Settings")]
-    [SerializeField] private float separationRadius = 2.0f;
-    [SerializeField] private float separationForce = 1.5f;
+    [SerializeField] private float separationRadius = 3.5f;
+    [SerializeField] private float separationForce = 5.0f;
     [SerializeField] private LayerMask enemyLayer;
     
     private NavMeshAgent navMeshAgent;
@@ -60,6 +60,9 @@ public class EnemySeparation : MonoBehaviour
         {
             if (other.gameObject == gameObject)
                 continue;
+            
+            if (!other.CompareTag("Enemy"))
+                continue;
                 
             NavMeshAgent otherAgent = other.GetComponent<NavMeshAgent>();
             if (otherAgent == null || !otherAgent.enabled)
@@ -72,7 +75,8 @@ public class EnemySeparation : MonoBehaviour
             {
                 directionAway.y = 0;
                 directionAway.Normalize();
-                separation += directionAway / distance;
+                float weight = 1.0f - (distance / separationRadius);
+                separation += directionAway * weight;
                 count++;
             }
         }

@@ -1542,6 +1542,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -1551,10 +1555,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 51227785}
+      addedObject: {fileID: 51227784}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 51227784}
+      addedObject: {fileID: 51227785}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &51227782 stripped
 Transform:
@@ -1593,11 +1597,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &54897793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18423,6 +18427,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -18432,10 +18440,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 274117772}
+      addedObject: {fileID: 274117771}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 274117771}
+      addedObject: {fileID: 274117772}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &274117769 stripped
 Transform:
@@ -18474,11 +18482,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &277306894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43827,6 +43835,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -43836,10 +43848,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 466303589}
+      addedObject: {fileID: 466303588}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 466303588}
+      addedObject: {fileID: 466303589}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &466303586 stripped
 Transform:
@@ -43878,11 +43890,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &468903943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44025,10 +44037,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 469388839}
+    - targetCorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 469388836}
+    - targetCorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 469388838}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &469388833 stripped
 Transform:
@@ -44040,6 +44066,61 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 469388832}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &469388835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 469388832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &469388836
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469388835}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.60400003, y: 1.0550001, z: 0.112}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.60400003, y: 0.001, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!1 &469388837 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 469388832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &469388838
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469388837}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.634, y: 1.057, z: 0.09}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.634, y: -0.039, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &469388839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469388834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1001 &470909132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44791,6 +44872,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -44800,10 +44885,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 498632899}
+      addedObject: {fileID: 498632898}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 498632898}
+      addedObject: {fileID: 498632899}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &498632896 stripped
 Transform:
@@ -44842,11 +44927,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &499477264
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47263,6 +47348,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -47272,10 +47361,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 557857680}
+      addedObject: {fileID: 557857679}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 557857679}
+      addedObject: {fileID: 557857680}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &557857677 stripped
 Transform:
@@ -47314,11 +47403,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1 &559107749
 GameObject:
   m_ObjectHideFlags: 0
@@ -63472,6 +63561,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4811509208239971775, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -63996,6 +64101,184 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 817338153}
   m_Mesh: {fileID: 7405963946975378994, guid: e7684f37e34636247bbc9f39783ae401, type: 3}
+--- !u!43 &818955899
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: pb_Mesh-103240(Clone)
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 36
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 24
+    localAABB:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 000001000200000002000300040005000600040006000700080009000a0008000a000b000c000d000e000c000e000f00100011001200100012001300140015001600140016001700
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 24
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 24
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 40
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 1152
+    _typelessdata: 0000003f000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf00000000000000000000003f0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf000000000000803f000000bf0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f0000803f000000bf000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f000000000000003f0000003f0000003f000000000000803f00000000000080bf0000000000000000000080bf00000000000000000000003f0000003f000000bf000000000000803f00000000000080bf0000000000000000000080bf000000000000803f000000bf0000003f000000bf000000000000803f00000000000080bf0000000000000000000080bf0000803f0000803f000000bf0000003f0000003f000000000000803f00000000000080bf0000000000000000000080bf0000803f000000000000003f0000003f000000bf0000000000000000000080bf000080bf0000000000000000000080bf00000000000000000000003f000000bf000000bf0000000000000000000080bf000080bf0000000000000000000080bf000000000000803f000000bf000000bf000000bf0000000000000000000080bf000080bf0000000000000000000080bf0000803f0000803f000000bf0000003f000000bf0000000000000000000080bf000080bf0000000000000000000080bf0000803f000000000000003f000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf00000000000000000000003f000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf000000000000803f000000bf000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf0000803f0000803f000000bf000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf0000803f00000000000000bf000000bf0000003f000080bf00000000000000000000000000000000000080bf000080bf0000000000000000000000bf0000003f0000003f000080bf00000000000000000000000000000000000080bf000080bf000000000000803f000000bf0000003f000000bf000080bf00000000000000000000000000000000000080bf000080bf0000803f0000803f000000bf000000bf000000bf000080bf00000000000000000000000000000000000080bf000080bf0000803f000000000000003f000000bf000000bf0000803f000000000000000000000000000000000000803f000080bf00000000000000000000003f0000003f000000bf0000803f000000000000000000000000000000000000803f000080bf000000000000803f0000003f0000003f0000003f0000803f000000000000000000000000000000000000803f000080bf0000803f0000803f0000003f000000bf0000003f0000803f000000000000000000000000000000000000803f000080bf0000803f00000000
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0
 --- !u!1001 &819188386
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102978,184 +103261,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934766205}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!43 &935804195
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-103240
-  serializedVersion: 12
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 36
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 24
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 000001000200000002000300040005000600040006000700080009000a0008000a000b000c000d000e000c000e000f00100011001200100012001300140015001600140016001700
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 24
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 24
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 40
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 1152
-    _typelessdata: 0000003f000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf00000000000000000000003f0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf000000000000803f000000bf0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f0000803f000000bf000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f000000000000003f0000003f0000003f000000000000803f00000000000080bf0000000000000000000080bf00000000000000000000003f0000003f000000bf000000000000803f00000000000080bf0000000000000000000080bf000000000000803f000000bf0000003f000000bf000000000000803f00000000000080bf0000000000000000000080bf0000803f0000803f000000bf0000003f0000003f000000000000803f00000000000080bf0000000000000000000080bf0000803f000000000000003f0000003f000000bf0000000000000000000080bf000080bf0000000000000000000080bf00000000000000000000003f000000bf000000bf0000000000000000000080bf000080bf0000000000000000000080bf000000000000803f000000bf000000bf000000bf0000000000000000000080bf000080bf0000000000000000000080bf0000803f0000803f000000bf0000003f000000bf0000000000000000000080bf000080bf0000000000000000000080bf0000803f000000000000003f000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf00000000000000000000003f000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf000000000000803f000000bf000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf0000803f0000803f000000bf000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf0000803f00000000000000bf000000bf0000003f000080bf00000000000000000000000000000000000080bf000080bf0000000000000000000000bf0000003f0000003f000080bf00000000000000000000000000000000000080bf000080bf000000000000803f000000bf0000003f000000bf000080bf00000000000000000000000000000000000080bf000080bf0000803f0000803f000000bf000000bf000000bf000080bf00000000000000000000000000000000000080bf000080bf0000803f000000000000003f000000bf000000bf0000803f000000000000000000000000000000000000803f000080bf00000000000000000000003f0000003f000000bf0000803f000000000000000000000000000000000000803f000080bf000000000000803f0000003f0000003f0000003f0000803f000000000000000000000000000000000000803f000080bf0000803f0000803f0000003f000000bf0000003f0000803f000000000000000000000000000000000000803f000080bf0000803f00000000
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
-  m_MeshLodInfo:
-    serializedVersion: 2
-    m_LodSelectionCurve:
-      serializedVersion: 1
-      m_LodSlope: 0
-      m_LodBias: 0
-    m_NumLevels: 1
-    m_SubMeshes:
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
 --- !u!1001 &938720301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103571,6 +103676,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -103580,10 +103689,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 944756908}
+      addedObject: {fileID: 944756907}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 944756907}
+      addedObject: {fileID: 944756908}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &944756905 stripped
 Transform:
@@ -103622,11 +103731,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &949849353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105929,6 +106038,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6432719, y: 0.34821323, z: 2.9202325}
   m_Center: {x: 0, y: 0, z: -1.4601163}
+--- !u!1 &1034736236 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1647122672}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1035284831
 GameObject:
   m_ObjectHideFlags: 0
@@ -107527,10 +107641,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7816556208795750476, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -107578,11 +107697,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &1095890642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110536,6 +110655,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -110545,10 +110668,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1174135103}
+      addedObject: {fileID: 1174135102}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1174135102}
+      addedObject: {fileID: 1174135103}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &1174135100 stripped
 Transform:
@@ -110587,11 +110710,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &1182975962
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113861,10 +113984,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1283213133}
+    - targetCorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1283213130}
+    - targetCorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1283213132}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &1283213127 stripped
 Transform:
@@ -113876,6 +114013,61 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 1283213126}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1283213129 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1283213126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1283213130
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283213129}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.60400003, y: 1.0550001, z: 0.112}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.60400003, y: 0.001, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!1 &1283213131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1283213126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1283213132
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283213131}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.634, y: 1.057, z: 0.09}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.634, y: -0.039, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &1283213133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283213128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1001 &1288182262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134968,10 +135160,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1372533592}
+    - targetCorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1372533589}
+    - targetCorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1372533591}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &1372533586 stripped
 Transform:
@@ -134983,6 +135189,61 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 1372533585}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1372533588 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1372533585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1372533589
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372533588}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.60400003, y: 1.0550001, z: 0.112}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.60400003, y: 0.001, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!1 &1372533590 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1372533585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1372533591
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372533590}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.634, y: 1.057, z: 0.09}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.634, y: -0.039, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &1372533592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372533587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1 &1373470850
 GameObject:
   m_ObjectHideFlags: 0
@@ -137959,6 +138220,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -137968,10 +138233,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1447572132}
+      addedObject: {fileID: 1447572131}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1447572131}
+      addedObject: {fileID: 1447572132}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &1447572129 stripped
 Transform:
@@ -138010,11 +138275,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &1447820091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -153540,6 +153805,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -153549,10 +153818,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1452975286}
+      addedObject: {fileID: 1452975285}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1452975285}
+      addedObject: {fileID: 1452975286}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &1452975283 stripped
 Transform:
@@ -153591,11 +153860,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &1455808431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155376,6 +155645,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -155385,10 +155658,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1521033519}
+      addedObject: {fileID: 1521033518}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1521033518}
+      addedObject: {fileID: 1521033519}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &1521033516 stripped
 Transform:
@@ -155427,11 +155700,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &1523940765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155737,10 +156010,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7816556208795750476, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -155788,11 +156066,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &1531102885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -160128,16 +160406,93 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      propertyPath: m_Size.z
+      value: 0.52960044
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      propertyPath: m_Center.z
+      value: 0.23520014
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4765856154178736851, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1647122678}
+    - targetCorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1647122675}
+    - targetCorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1647122677}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &1647122673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 617409097813262784, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 1647122672}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1647122674 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5899951712599802106, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1647122672}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1647122675
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647122674}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.60400003, y: 1.0550001, z: 0.112}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.60400003, y: 0.001, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!1 &1647122676 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4953070151292891093, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1647122672}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1647122677
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647122676}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.634, y: 1.057, z: 0.09}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.634, y: -0.039, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &1647122678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034736236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1001 &1647913483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171108,6 +171463,7 @@ GameObject:
   - component: {fileID: 1931696238}
   - component: {fileID: 1931696237}
   - component: {fileID: 1931696236}
+  - component: {fileID: 1931696241}
   m_Layer: 0
   m_Name: Black Background for door
   m_TagString: Untagged
@@ -171326,7 +171682,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
-  m_Mesh: {fileID: 935804195}
+  m_Mesh: {fileID: 818955899}
   m_VersionIndex: 4
   m_IsSelectable: 1
   m_SelectedFaces: 
@@ -171408,7 +171764,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1931696235}
-  m_Mesh: {fileID: 935804195}
+  m_Mesh: {fileID: 818955899}
 --- !u!4 &1931696240
 Transform:
   m_ObjectHideFlags: 0
@@ -171424,6 +171780,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 348938615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1931696241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931696235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b03c27a5c5a20947a4b93f625080318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelTransfer
+  sceneName: Boss Room Cutscene
+  loadNextScene: 1
+  loadDelay: 0
 --- !u!1001 &1933751773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -175353,6 +175724,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973909149712606529, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_ObstacleAvoidanceType
       value: 4
       objectReference: {fileID: 0}
@@ -175362,10 +175737,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2056646061}
+      addedObject: {fileID: 2056646060}
     - targetCorrespondingSourceObject: {fileID: 3782171841442537842, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2056646060}
+      addedObject: {fileID: 2056646061}
   m_SourcePrefab: {fileID: 100100000, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
 --- !u!4 &2056646058 stripped
 Transform:
@@ -175404,11 +175779,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d22a08ec0b764a240adb5aa5636c80ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySeparation
-  separationRadius: 2
-  separationForce: 1.5
+  separationRadius: 3.5
+  separationForce: 5
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!1001 &2057958813
 PrefabInstance:
   m_ObjectHideFlags: 0

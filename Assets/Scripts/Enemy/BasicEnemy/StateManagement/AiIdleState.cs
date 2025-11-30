@@ -65,6 +65,11 @@ public class AiIdleState : AiState
             return false;
         }
 
+        if (!HasLineOfSight(agent, target))
+        {
+            return false;
+        }
+
         Vector3 agentDirection = agent.transform.forward;
         targetDirection.Normalize();
 
@@ -86,6 +91,25 @@ public class AiIdleState : AiState
         }
 
         return false;
+    }
+
+    private bool HasLineOfSight(AiAgent agent, Transform target)
+    {
+        Vector3 origin = agent.transform.position + Vector3.up * 1.5f;
+        Vector3 targetPos = target.position + Vector3.up * 1.5f;
+        Vector3 direction = targetPos - origin;
+        float distance = direction.magnitude;
+
+        LayerMask obstacleMask = LayerMask.GetMask("Default", "Floors");
+        
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, distance, obstacleMask, QueryTriggerInteraction.Ignore))
+        {
+            Debug.DrawRay(origin, direction.normalized * hit.distance, Color.red, 0.5f);
+            return false;
+        }
+
+        Debug.DrawRay(origin, direction.normalized * distance, Color.green, 0.5f);
+        return true;
     }
 
 

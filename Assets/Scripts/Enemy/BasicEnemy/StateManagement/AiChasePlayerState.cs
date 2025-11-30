@@ -4,6 +4,8 @@ using UnityEngine.AI;
 public class AiChasePlayerState : AiState
 {
     float timer = 0.0f;
+    float lostSightTimer = 0.0f;
+    const float LOST_SIGHT_TIMEOUT = 3.0f;
 
     public AiStateId GetId()
     {
@@ -14,7 +16,8 @@ public class AiChasePlayerState : AiState
     {
         Debug.Log($"Entering {GetId()} state");
 
-        // Ensure NavMeshAgent is enabled when entering chase state
+        lostSightTimer = 0.0f;
+
         if (agent.navMeshAgent != null && !agent.navMeshAgent.enabled)
         {
             agent.navMeshAgent.enabled = true;
@@ -33,14 +36,12 @@ public class AiChasePlayerState : AiState
         if (health != null && health.IsStunned())
             return;
 
-        // pick chase target: charmed enemy or player
         Transform target = null;
         EnemyCharm charm = agent.GetComponent<EnemyCharm>();
 
         if (charm != null && charm.ShouldIgnorePlayerAndFightEnemies())
         {
             target = charm.GetCharmAttackTarget(agent.transform);
-            // if charmed but no enemy found, just idle instead of chasing the player
             if (target == null)
                 return;
         }
@@ -51,6 +52,31 @@ public class AiChasePlayerState : AiState
 
         if (target == null)
             return;
+
+        float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+
+        if (distanceToTarget > agent.config.maxSightDistance)
+        {
+            agent.stateMachine.ChangeState(AiStateId.Idle);
+            return;
+        }
+
+        bool hasLineOfSight = HasLineOfSight(agent, target);
+        
+        if (!hasLineOfSight)
+        {
+            lostSightTimer += Time.deltaTime;
+            
+            if (lostSightTimer >= LOST_SIGHT_TIMEOUT)
+            {
+                agent.stateMachine.ChangeState(AiStateId.Idle);
+                return;
+            }
+        }
+        else
+        {
+            lostSightTimer = 0.0f;
+        }
 
         if (agent.navMeshAgent != null && agent.navMeshAgent.enabled)
         {
@@ -74,11 +100,9 @@ public class AiChasePlayerState : AiState
             }
         }
 
-        float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
-
         if (agent.weapons.HasWeapon())
         {
-            if (distanceToTarget < 15f)
+            if (distanceToTarget < 15f && hasLineOfSight)
             {
                 agent.stateMachine.ChangeState(AiStateId.Attack);
                 return;
@@ -86,12 +110,31 @@ public class AiChasePlayerState : AiState
         }
         else
         {
-            if (distanceToTarget < agent.config.meleeAttackRange)
+            if (distanceToTarget < agent.config.meleeAttackRange && hasLineOfSight)
             {
                 agent.stateMachine.ChangeState(AiStateId.MeleeAttack);
                 return;
             }
         }
+    }
+
+    private bool HasLineOfSight(AiAgent agent, Transform target)
+    {
+        Vector3 origin = agent.transform.position + Vector3.up * 1.5f;
+        Vector3 targetPos = target.position + Vector3.up * 1.5f;
+        Vector3 direction = targetPos - origin;
+        float distance = direction.magnitude;
+
+        LayerMask obstacleMask = LayerMask.GetMask("Default", "Floors");
+        
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hit, distance, obstacleMask, QueryTriggerInteraction.Ignore))
+        {
+            Debug.DrawRay(origin, direction.normalized * hit.distance, Color.red, 0.5f);
+            return false;
+        }
+
+        Debug.DrawRay(origin, direction.normalized * distance, Color.green, 0.5f);
+        return true;
     }
 
 
