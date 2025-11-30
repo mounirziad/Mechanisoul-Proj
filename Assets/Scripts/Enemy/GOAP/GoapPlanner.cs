@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -109,6 +110,16 @@ public class Node
         RequiredEffects = new HashSet<AgentBelief>(effects);
         Leaves = new List<Node>();
         Cost = cost;
+    }
+
+    public static implicit operator Node(Unity.Behavior.Node v)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal Unity.Behavior.Node.Status Tick()
+    {
+        throw new NotImplementedException();
     }
 }
 
