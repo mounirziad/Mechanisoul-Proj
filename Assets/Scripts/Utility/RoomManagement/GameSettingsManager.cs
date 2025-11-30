@@ -23,7 +23,7 @@ public class GameSettingsManager : MonoBehaviour
     [Range(0f, 1f)]
     public float masterVolume = 1f;
     [Range(0.1f, 5f)]
-    public float mouseSensitivity = 1f;
+    public float Sensitivity = 1f;
 
     private const string VOLUME_KEY = "MasterVolume";
     private const string SENSITIVITY_KEY = "MouseSensitivity";
@@ -74,7 +74,7 @@ public class GameSettingsManager : MonoBehaviour
 
     public void SetSensitivity(float sensitivity)
     {
-        mouseSensitivity = Mathf.Clamp(sensitivity, 0.1f, 5f);
+        Sensitivity = Mathf.Clamp(sensitivity, 0.1f, 5f);
         ApplySensitivityToAllCameras();
         SaveSettings();
     }
@@ -103,7 +103,7 @@ public class GameSettingsManager : MonoBehaviour
         {
             if (cam != null)
             {
-                cam.SetSensitivity(mouseSensitivity);
+                cam.SetSensitivity(Sensitivity);
             }
         }
 
@@ -113,7 +113,7 @@ public class GameSettingsManager : MonoBehaviour
         {
             if (cam != null)
             {
-                cam.SetSensitivity(mouseSensitivity);
+                cam.SetSensitivity(Sensitivity);
             }
         }
 
@@ -123,7 +123,7 @@ public class GameSettingsManager : MonoBehaviour
         {
             if (cam != null)
             {
-                cam.SetSensitivity(mouseSensitivity);
+                cam.SetSensitivity(Sensitivity);
             }
         }
     }
@@ -138,13 +138,13 @@ public class GameSettingsManager : MonoBehaviour
     public void SaveSettings()
     {
         PlayerPrefs.SetFloat(VOLUME_KEY, masterVolume);
-        PlayerPrefs.SetFloat(SENSITIVITY_KEY, mouseSensitivity);
+        PlayerPrefs.SetFloat(SENSITIVITY_KEY, Sensitivity);
         PlayerPrefs.Save();
     }
 
     public void LoadSettings()
     {
         masterVolume = PlayerPrefs.GetFloat(VOLUME_KEY, 1f);
-        mouseSensitivity = PlayerPrefs.GetFloat(SENSITIVITY_KEY, 1f);
+        Sensitivity = PlayerPrefs.GetFloat(SENSITIVITY_KEY, 1f);
     }
 }

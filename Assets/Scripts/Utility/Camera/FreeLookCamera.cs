@@ -221,7 +221,7 @@ public class FreeLookCamera : MonoBehaviour
     public void SetSensitivity(float multiplier)
     {
         mouseSensitivity = 0.1f * multiplier;
-        gamepadSensitivity = 100f * multiplier;
+        gamepadSensitivity =2500f * multiplier;
     }
 
 }

@@ -596,6 +596,12 @@ public class ZTargetingCamera : MonoBehaviour
     {
         return zTargeting != null ? zTargeting.CurrentTarget : null;
     }
+
+    public void SetSensitivity(float multiplier)
+    {
+        mouseSensitivity = 0.1f * multiplier;
+        gamepadSensitivity = 2500f * multiplier;
+    }
     
     private void OnDrawGizmos()
     {
