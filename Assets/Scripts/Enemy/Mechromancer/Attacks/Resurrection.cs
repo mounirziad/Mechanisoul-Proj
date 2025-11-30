@@ -8,7 +8,6 @@ public class Resurrection : MonoBehaviour
     [Header("Resurrection Settings")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private Transform hidingPos;
     [SerializeField] private float resurrectionTime = 5f;
 
     private bool hasStarted = false;
@@ -67,19 +66,6 @@ public class Resurrection : MonoBehaviour
         IsResurrectionActive = false;
 
         Debug.Log("Resurrection complete");
-    }
-
-    private IEnumerator MoveToHidingCoroutine()
-    {
-        agent.SetDestination(hidingPos.position);
-
-        while (Vector3.Distance(transform.position, hidingPos.position) > 1f)
-        {
-            yield return null;
-        }
-
-        isMovingToHiding = false;
-        yield return StartCoroutine(ResurrectionTimer());
     }
 
     private IEnumerator ResurrectionTimer()

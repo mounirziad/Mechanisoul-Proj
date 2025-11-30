@@ -116,16 +116,21 @@ public partial class WeightedSelector : Composite
 
     private float GetDistanceToPlayer()
     {
-        var player = GameObject.FindWithTag("Player");
-        var agent = Agent != null && Agent.Value != null ? Agent.Value : null;
-
-        if (player == null || agent == null)
+        //var self = BlackboardReference.GetVariable<GameObject>("Self");
+        if (Agent == null || Agent.Value == null)
         {
-            Debug.LogError("Player/Agent is null");
-            return 9999f;
+            Debug.LogError("Agent is not assigned in the blackboard");
+            return float.MaxValue;
         }
 
-        return Vector3.Distance(agent.transform.position, player.transform.position);  
+        var player = GameObject.FindWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("Player gameobject not found");
+            return float.MaxValue;
+        }
+
+        return Vector3.Distance(Agent.Value.transform.position, player.transform.position);
     }
 }
 
