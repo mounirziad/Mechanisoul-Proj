@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bdb99fc037dc3a6428f2c0caf05dfc2f
+guid: c5584d57f62e0f94faa4454d28b1dc26
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,18 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: m_scaffoldingbody
-    second: {fileID: 2100000, guid: 0f7842130c827a8488db7815435a7ef4, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: m_scaffoldingmesh
-    second: {fileID: 2100000, guid: 7c0cff1e7b0c4ee4cba99d3b90607e23, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: m_scaffoldingrailing
-    second: {fileID: 2100000, guid: c2a87d7042d37144c9f8e476b534e49c, type: 2}
+      name: standardSurface1
+    second: {fileID: 2100000, guid: 0ef2dee0b644c654e86d98dae5a94a03, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -86,8 +76,8 @@ ModelImporter:
     useFileScale: 1
     strictVertexDataChecks: 0
   tangentSpace:
-    normalSmoothAngle: 60
-    normalImportMode: 0
+    normalSmoothAngle: 90
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
