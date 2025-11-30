@@ -16,7 +16,7 @@ public class AiFindWeaponState : AiState
         }
         else
         {
-            Debug.LogWarning("No available weapons found — returning to Idle.");
+            Debug.LogWarning("No available weapons found ï¿½ returning to Idle.");
             agent.stateMachine.ChangeState(AiStateId.Idle); // <-- push back to Idle
         }
     }
@@ -42,7 +42,7 @@ public class AiFindWeaponState : AiState
             agent.weapons.ActivateWeapon();
         }
 
-        if (agent.weapons.HasWeapon())
+        if (agent.weapons.HasWeapon() && agent.playertransform != null)
         {
             float distanceToPlayer = Vector3.Distance(agent.transform.position, agent.playertransform.position);
             if (distanceToPlayer < 15f)

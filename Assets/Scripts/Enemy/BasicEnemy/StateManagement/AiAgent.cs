@@ -23,6 +23,9 @@ public class AiAgent : MonoBehaviour
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         weapons = GetComponent<AiWeapons>();
+        
+        FindPlayer();
+        
         stateMachine = new AiStateMachine(this);
         stateMachine.RegisterState(new AiChasePlayerState());
         stateMachine.RegisterState(new AiDeathState());
@@ -32,23 +35,31 @@ public class AiAgent : MonoBehaviour
         stateMachine.RegisterState(new AiMeleeAttackState());
         stateMachine.RegisterState(new AiAfterMeleeAttackState());
         stateMachine.ChangeState(initialState);
-
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playertransform = player.transform;
-        }
-        else
-        {
-            Debug.LogWarning($"Player not found for AI Agent on {gameObject.name}. AI may not function correctly.");
-        }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (playertransform == null)
+        {
+            FindPlayer();
+        }
+        
         stateMachine.Update();
     }
 
-   
+    private void FindPlayer()
+    {
+        if (playertransform == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                playertransform = player.transform;
+            }
+            else
+            {
+                Debug.LogWarning($"Player not found for AI Agent on {gameObject.name}. AI may not function correctly.");
+            }
+        }
+    }
 }
