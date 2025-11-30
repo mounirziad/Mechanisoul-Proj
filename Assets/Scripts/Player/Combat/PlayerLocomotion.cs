@@ -26,6 +26,7 @@ public class PlayerLocomotion : MonoBehaviour
     public bool isSprinting;
     public bool isGrounded;
     public bool isStrictlyGrounded;
+    public bool isLanding;
 
     public float walkingSpeed;
     public float runningSpeed;
@@ -682,6 +683,9 @@ public class PlayerLocomotion : MonoBehaviour
             {
                 Debug.Log($"LANDING - isGrounded:{isGrounded}, isJumping:{isJumping}, velocity.y:{playerRigidbody.linearVelocity.y}, inAirTimer:{inAirTimer}");
                 
+                // Set landing flag
+                isLanding = true;
+                
                 // Check if player is moving when landing
                 bool isMovingOnLanding = inputManager.moveAmount > 0.1f;
                 
@@ -697,6 +701,7 @@ public class PlayerLocomotion : MonoBehaviour
                     // CrossFade to Empty state with very short transition
                     animatorManager.animator.CrossFade("Empty", 0.05f, 1);
                     playerManager.isInteracting = false;
+                    isLanding = false;
                 }
                 else
                 {
@@ -1099,5 +1104,9 @@ public class PlayerLocomotion : MonoBehaviour
         rotationSpeed = baseRotationSpeed * speed;
     }
 
-
+    public void OnLandingComplete()
+    {
+        isLanding = false;
+        Debug.Log("Landing animation complete - attacks now allowed");
+    }
 }

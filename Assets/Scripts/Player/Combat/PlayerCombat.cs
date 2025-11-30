@@ -712,6 +712,13 @@ public class PlayerCombat : MonoBehaviour
 
         if (isAiming) { inputManager.shootInput = true; return; }
 
+        // Block attack input during landing (similar to jumping)
+        var playerLoco = GetComponent<PlayerLocomotion>();
+        if (playerLoco != null && playerLoco.isLanding)
+        {
+            return;
+        }
+
         lastAttackInputTime = Time.time;
 
         if (CanAttack())
@@ -731,6 +738,11 @@ public class PlayerCombat : MonoBehaviour
         var playerMgr = GetComponent<PlayerManager>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
         bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+        bool isLanding = playerLoco != null && playerLoco.isLanding;
+
+        // Block attacks during landing (similar to jumping)
+        if (isLanding)
+            return false;
 
         // Basic checks first (including interaction/landing check)
         if (isAttacking || isAiming || isInteracting || Time.time - lastComboEnd < 0.2f)
@@ -739,9 +751,11 @@ public class PlayerCombat : MonoBehaviour
         // If grounded and not interacting, allow attacks
         if (isGrounded)
         {
-            if (!wasGroundedLastFrame) // Just landed
+            // Just landed - block attacks during landing transition
+            if (!wasGroundedLastFrame)
             {
-                currentAirAttackCount = 0; // Reset air attack counter on landing
+                currentAirAttackCount = 0;
+                return false;
             }
             return true;
         }
@@ -773,9 +787,24 @@ public class PlayerCombat : MonoBehaviour
         var playerMgr = GetComponent<PlayerManager>();
         bool isGrounded = playerLoco != null && playerLoco.isGrounded;
         bool isInteracting = playerMgr != null && playerMgr.isInteracting;
+        bool isLanding = playerLoco != null && playerLoco.isLanding;
+
+        // Cancel queued attack if player is landing
+        if (isLanding)
+        {
+            attackQueued = false;
+            return;
+        }
 
         // Cancel queued attack if player is interacting (landing, dodging, etc.)
         if (isInteracting)
+        {
+            attackQueued = false;
+            return;
+        }
+
+        // Cancel queued attack if player just landed
+        if (isGrounded && !wasGroundedLastFrame)
         {
             attackQueued = false;
             return;
@@ -785,7 +814,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (!allowAirAttacks || currentAirAttackCount >= maxAirAttacks)
             {
-                attackQueued = false; // Cancel queued attack if air attacks disabled or limit reached
+                attackQueued = false;
                 return;
             }
         }
@@ -827,6 +856,14 @@ public class PlayerCombat : MonoBehaviour
 
     void Attack()
     {
+        // Double-check we can actually attack (prevents attack during landing)
+        if (!CanAttack())
+        {
+            Debug.LogWarning("<color=yellow>Attack() called but CanAttack() is false - blocking attack.</color>");
+            attackQueued = false;
+            return;
+        }
+
         if (comboCounter < combo.Count && combo[comboCounter] != null)
         {
             var playerMgr = GetComponent<PlayerManager>();
@@ -845,7 +882,6 @@ public class PlayerCombat : MonoBehaviour
             }
 
             weapon.damage = currentAttackData.damage * playerMgr.GetDamageMultiplier();
-            //Debug.Log($"weapon.damage amount: {weapon.damage}");
 
             // Reset weapon hit sound cooldown for new attack
             if (weapon != null)
@@ -866,7 +902,7 @@ public class PlayerCombat : MonoBehaviour
             bool isGrounded = playerLoco != null && playerLoco.isGrounded;
             if (!isGrounded)
             {
-                currentAirAttackCount++; // Increment air attack counter
+                currentAirAttackCount++;
             }
 
             // Handle different root motion modes
@@ -981,6 +1017,21 @@ public class PlayerCombat : MonoBehaviour
         }
 
         var playerLoco = GetComponent<PlayerLocomotion>();
+        
+        // Block lunge during landing
+        if (playerLoco != null && playerLoco.isLanding)
+        {
+            Debug.LogWarning($"<color=orange>[AnimEvent] StartAttackLunge blocked - player is landing.</color>");
+            return;
+        }
+        
+        // Block lunge during landing transition
+        if (playerLoco != null && playerLoco.isGrounded && !wasGroundedLastFrame)
+        {
+            Debug.LogWarning($"<color=orange>[AnimEvent] StartAttackLunge blocked - player just landed.</color>");
+            return;
+        }
+
         if (playerLoco != null && currentAttackData != null)
         {
             Vector3 attackDirection = transform.forward;

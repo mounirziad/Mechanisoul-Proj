@@ -10,6 +10,8 @@ public class PlayerRespawnManager : MonoBehaviour
     [SerializeField] private float respawnHealth = 100f;
     [SerializeField] private bool resetVelocity = true;
     [SerializeField] private float sceneTransitionDelay = 1f;
+    [SerializeField] private float fadeOutDuration = 1f;
+    [SerializeField] private float fadeInDuration = 1f;
 
     private GameObject player;
     private PlayerHealth playerHealth;
@@ -69,7 +71,17 @@ public class PlayerRespawnManager : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(sceneTransitionDelay);
+        FadingScript fadingScript = FindFadingScript();
+        
+        if (fadingScript != null)
+        {
+            fadingScript.FadeOut();
+            yield return new WaitForSeconds(fadeOutDuration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(sceneTransitionDelay);
+        }
 
         if (GameProgressionManager.Instance != null)
         {
@@ -103,6 +115,14 @@ public class PlayerRespawnManager : MonoBehaviour
         {
             ResetPlayerState();
             Debug.Log("PlayerRespawnManager: Player fully reset after scene load");
+        }
+        
+        FadingScript fadingScript = FindFadingScript();
+        
+        if (fadingScript != null)
+        {
+            yield return new WaitForSeconds(0.1f);
+            fadingScript.FadeIn();
         }
     }
 
@@ -140,5 +160,17 @@ public class PlayerRespawnManager : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+    
+    private FadingScript FindFadingScript()
+    {
+        FadingScript fadingScript = FindFirstObjectByType<FadingScript>();
+        
+        if (fadingScript == null)
+        {
+            Debug.LogWarning("PlayerRespawnManager: FadingScript not found in the current scene. Make sure each scene has a FadingCanvas.");
+        }
+        
+        return fadingScript;
     }
 }

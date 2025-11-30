@@ -4,18 +4,25 @@ public class RoomCollider : MonoBehaviour
 {
     public string roomName;
 
-    LevelMap levelMap;
-
-    private void Start()
-    {
-        levelMap = GameObject.Find("map").GetComponent<LevelMap>();
-    }
-
+    private LevelMap levelMap;
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log($"Room Collider Tag: {other.gameObject.tag}");
-        if (other.gameObject.CompareTag("Player")) 
-            levelMap.EnterRoom(roomName);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (levelMap == null)
+            {
+                levelMap = FindObjectOfType<LevelMap>();
+            }
+
+            if (levelMap != null)
+            {
+                levelMap.EnterRoom(roomName);
+            }
+            else
+            {
+                Debug.LogWarning($"RoomCollider '{roomName}': LevelMap not found. Make sure GameUI prefab is loaded.");
+            }
+        }
     }
 }

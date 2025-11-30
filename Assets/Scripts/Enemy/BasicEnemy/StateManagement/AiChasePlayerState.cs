@@ -60,7 +60,15 @@ public class AiChasePlayerState : AiState
                 float sqdistance = (target.position - agent.navMeshAgent.destination).sqrMagnitude;
                 if (sqdistance > agent.config.maxDistance * agent.config.maxDistance)
                 {
-                    agent.navMeshAgent.destination = target.position;
+                    Vector3 destination = target.position;
+                    
+                    EnemySeparation separation = agent.GetComponent<EnemySeparation>();
+                    if (separation != null)
+                    {
+                        destination = separation.GetDestinationWithSeparation(destination);
+                    }
+                    
+                    agent.navMeshAgent.destination = destination;
                 }
                 timer = agent.config.maxTime;
             }
