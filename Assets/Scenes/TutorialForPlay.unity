@@ -2466,23 +2466,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3423670821347665231, guid: 4212e6ddd4075cd4382b6d046266ea05, type: 3}
   m_PrefabInstance: {fileID: 424830034}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &244045890 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4742364060064815278, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
-  m_PrefabInstance: {fileID: 1473670298}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &244045896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244045890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a949469ce6e971544989c399e9776fe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PersistentUpgradeHolder
 --- !u!1 &248885886 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
@@ -13953,7 +13936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8920615273029483256, guid: 11cdc2e7d5bb3734eb7e9b772ed1e3b8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15215,10 +15198,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1137871715542617537, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: m_text
-      value: Upgrade
-      objectReference: {fileID: 0}
     - target: {fileID: 1370978267330543038, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15258,10 +15237,6 @@ PrefabInstance:
     - target: {fileID: 1448914544264004101, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1566047211859223934, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.description
-      value: Increase the size of the area. by
       objectReference: {fileID: 0}
     - target: {fileID: 1764979727187696719, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15382,14 +15357,6 @@ PrefabInstance:
     - target: {fileID: 3251884054132413139, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3378732139023999434, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.description
-      value: Increase chance to crit enemies to 60%.
-      objectReference: {fileID: 0}
-    - target: {fileID: 3378732139023999434, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.upgradeName
-      value: JOY++
       objectReference: {fileID: 0}
     - target: {fileID: 3584269402526911145, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15567,14 +15534,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6620599756454313602, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.description
-      value: Deal damage to enemies
-      objectReference: {fileID: 0}
-    - target: {fileID: 6620599756454313602, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.upgradeName
-      value: ANGER++
-      objectReference: {fileID: 0}
     - target: {fileID: 6933004629850783673, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15590,14 +15549,6 @@ PrefabInstance:
     - target: {fileID: 6933004629850783673, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7022842239192959819, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.description
-      value: Knock back enemies in an area.
-      objectReference: {fileID: 0}
-    - target: {fileID: 7022842239192959819, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.upgradeName
-      value: ANGER
       objectReference: {fileID: 0}
     - target: {fileID: 7023699435560440162, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15646,19 +15597,6 @@ PrefabInstance:
     - target: {fileID: 7207312765587026333, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7459008608375222958, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.description
-      value: Creates crit zone at dash start for 2 seconds. Enemies within the zone
-        have a 40% chance to take critical damage.
-      objectReference: {fileID: 0}
-    - target: {fileID: 7472421059965818000, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.description
-      value: Knock enemies back farther.
-      objectReference: {fileID: 0}
-    - target: {fileID: 7472421059965818000, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: upgradeData.upgradeName
-      value: ANGER+
       objectReference: {fileID: 0}
     - target: {fileID: 7753597069907556038, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15755,26 +15693,6 @@ PrefabInstance:
     - target: {fileID: 8724534250260450181, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: m_fontSize
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: m_margin.x
-      value: 32.8302
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: m_margin.z
-      value: 33.557495
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8828314302645811254, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15830,6 +15748,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4812029692983306895, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
+      propertyPath: handler
+      value: 
+      objectReference: {fileID: 1953547995}
+    - target: {fileID: 4812029692983306895, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
+      propertyPath: meshTrail
+      value: 
+      objectReference: {fileID: 1953547994}
     - target: {fileID: 6554219729184342854, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.77252
@@ -15873,10 +15799,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4742364060064815278, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 244045896}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
 --- !u!1 &1478027738
 GameObject:
@@ -19442,34 +19365,6 @@ PrefabInstance:
       propertyPath: letterboxUI
       value: 
       objectReference: {fileID: 420661650}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: materials.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 011e35138c076134eaae1a1506520dc4, type: 2}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 49a5a80375d8e494ea3bfef6ead4f3de, type: 2}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'materials.Array.data[2]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 487099de5cb3b5840b8c3fe297ca0bad, type: 2}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'materials.Array.data[3]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f00239206ce6cf943acfa9b9f598bb3d, type: 2}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'materials.Array.data[4]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 234142d0a3f6343478aed2a1b5f50340, type: 2}
-    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
-      propertyPath: 'materials.Array.data[5]'
-      value: 
-      objectReference: {fileID: 2100000, guid: a97104aded915c64f899043eb90f905d, type: 2}
     - target: {fileID: 7209598748099297257, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: aimCamera
       value: 
@@ -19618,6 +19513,28 @@ MonoBehaviour:
   persistAcrossScenes: 1
   respawnAtSpawnPoints: 1
   playerTransform: {fileID: 1953547969}
+--- !u!114 &1953547994 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+  m_PrefabInstance: {fileID: 1953547965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248885886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1515fc50657c8141afe1172f4543346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeshTrail
+--- !u!114 &1953547995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2062997631589936748, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+  m_PrefabInstance: {fileID: 1953547965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248885886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16ac80218e122ae48af297b0524eb61a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeHandler
 --- !u!1001 &1955309277
 PrefabInstance:
   m_ObjectHideFlags: 0
