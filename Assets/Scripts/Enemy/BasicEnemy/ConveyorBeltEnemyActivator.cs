@@ -43,7 +43,6 @@ public class ConveyorBeltEnemyActivator : MonoBehaviour
 
         if (debugMode)
         {
-            Debug.Log($"ConveyorBeltEnemyActivator: {gameObject.name} collided with {collision.gameObject.name} (Layer: {collision.gameObject.layer}). IsGround: {isGroundLayer}, Velocity: {collision.relativeVelocity.magnitude:F2}");
         }
 
         if (!isGroundLayer)

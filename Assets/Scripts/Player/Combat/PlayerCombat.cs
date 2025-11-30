@@ -227,7 +227,9 @@ public class PlayerCombat : MonoBehaviour
     void HandleAiming()
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
-        if (isDialogueActive)
+        bool isLoadingActive = WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying;
+        
+        if (isDialogueActive || isLoadingActive)
         {
             if (isAiming) StopAiming();
             return;
@@ -708,7 +710,9 @@ public class PlayerCombat : MonoBehaviour
     private void OnAttackPerformed(InputAction.CallbackContext ctx)
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
-        if (isDialogueActive) return;
+        bool isLoadingActive = WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying;
+        
+        if (isDialogueActive || isLoadingActive) return;
 
         if (isAiming) { inputManager.shootInput = true; return; }
 
@@ -774,7 +778,9 @@ public class PlayerCombat : MonoBehaviour
     void ProcessQueuedAttack()
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
-        if (isDialogueActive)
+        bool isLoadingActive = WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying;
+        
+        if (isDialogueActive || isLoadingActive)
         {
             attackQueued = false;
             return;

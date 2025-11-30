@@ -85,6 +85,12 @@ public class DashAbility : MonoBehaviour
             return;
         }
         
+        if (WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying)
+        {
+            if (debugLogs) Debug.Log("[DashAbility] TryDash ignored. Loading screen is active.", this);
+            return;
+        }
+        
         if (requireGrounded && playerLocomotion != null && !playerLocomotion.isGrounded)
         {
             if (debugLogs) Debug.Log("[DashAbility] TryDash ignored. Player is not grounded.", this);

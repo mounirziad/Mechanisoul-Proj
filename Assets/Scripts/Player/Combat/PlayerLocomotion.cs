@@ -209,6 +209,9 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleAllMovement()
     {
         if (cameraObject == null) RefreshReferences();
+        
+        if (WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying)
+            return;
 
         HandleFallingAndLanding();
         HandleDodgeCooldown();
@@ -1010,6 +1013,9 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleDodge()
     {
         if (DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying)
+            return;
+            
+        if (WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying)
             return;
             
         if (isDodging || !canDodge || !isGrounded || playerManager.isInteracting)
