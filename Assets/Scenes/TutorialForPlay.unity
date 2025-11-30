@@ -2370,14 +2370,39 @@ MonoBehaviour:
     loopSequence: 0
   useCustomLines: 1
   customDialogueLines:
-  - text: The computer terminal on the wall there will let you choose which emotions
-      you want to apply to your dash, ranged, and melee attacks.
+  - text: See that computer terminal on your right? Use that to upgrade your programming
+      and strengthen the effects of your emotions.
     displayDuration: 4
     speakerName: 
     voiceClip: {fileID: 0}
     autoAdvance: 0
     waitForInput: 1
     useItalics: 0
+  - text: You'll come across upgrade chips throughout the floors of HAVOC's building.
+    displayDuration: 4
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+    useItalics: 0
+  - text: 'Press {SKILLTREE} to bring up your skill tree.
+
+      You can access it
+      at any point out of combat but upgrades can only be purchased at a computer
+      terminal.'
+    displayDuration: 4
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+    useItalics: 1
+  - text: Press {INTERACT} to interact with the computer terminal.
+    displayDuration: 4
+    speakerName: 
+    voiceClip: {fileID: 0}
+    autoAdvance: 0
+    waitForInput: 1
+    useItalics: 1
   triggerOnce: 1
   requiresTag: 1
   requiredTag: Player
@@ -13434,7 +13459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8920615273029483256, guid: 11cdc2e7d5bb3734eb7e9b772ed1e3b8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14490,6 +14515,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1137871715542617537, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_text
+      value: Upgrade
+      objectReference: {fileID: 0}
     - target: {fileID: 1370978267330543038, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -14529,6 +14558,10 @@ PrefabInstance:
     - target: {fileID: 1448914544264004101, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566047211859223934, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.description
+      value: Increase the size of the area. by
       objectReference: {fileID: 0}
     - target: {fileID: 1764979727187696719, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14649,6 +14682,14 @@ PrefabInstance:
     - target: {fileID: 3251884054132413139, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3378732139023999434, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.description
+      value: Increase chance to crit enemies to 60%.
+      objectReference: {fileID: 0}
+    - target: {fileID: 3378732139023999434, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.upgradeName
+      value: JOY++
       objectReference: {fileID: 0}
     - target: {fileID: 3584269402526911145, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14810,6 +14851,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6620599756454313602, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.description
+      value: Deal damage to enemies
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620599756454313602, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.upgradeName
+      value: ANGER++
+      objectReference: {fileID: 0}
     - target: {fileID: 6933004629850783673, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -14825,6 +14874,14 @@ PrefabInstance:
     - target: {fileID: 6933004629850783673, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7022842239192959819, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.description
+      value: Knock back enemies in an area.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7022842239192959819, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.upgradeName
+      value: ANGER
       objectReference: {fileID: 0}
     - target: {fileID: 7023699435560440162, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14873,6 +14930,19 @@ PrefabInstance:
     - target: {fileID: 7207312765587026333, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7459008608375222958, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.description
+      value: Creates crit zone at dash start for 2 seconds. Enemies within the zone
+        have a 40% chance to take critical damage.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472421059965818000, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.description
+      value: Knock enemies back farther.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472421059965818000, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: upgradeData.upgradeName
+      value: ANGER+
       objectReference: {fileID: 0}
     - target: {fileID: 7753597069907556038, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14969,6 +15039,26 @@ PrefabInstance:
     - target: {fileID: 8724534250260450181, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_fontSize
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_margin.x
+      value: 32.8302
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_margin.z
+      value: 33.557495
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788718354953632935, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8828314302645811254, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
