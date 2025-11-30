@@ -41,7 +41,6 @@ public class DashVFXBehavior : MonoBehaviour
 
             // Apply the new color
             mainModule.startColor = newColor;
-            Debug.Log("Update");
             yield return null;
         }
 

@@ -2466,6 +2466,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3423670821347665231, guid: 4212e6ddd4075cd4382b6d046266ea05, type: 3}
   m_PrefabInstance: {fileID: 424830034}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &244045890 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4742364060064815278, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
+  m_PrefabInstance: {fileID: 1473670298}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &244045896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244045890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a949469ce6e971544989c399e9776fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PersistentUpgradeHolder
 --- !u!1 &248885886 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8311327224774184089, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
@@ -15486,6 +15503,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662939561688985443, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4811509208239971775, guid: ff52a5d36844cee43a6ca0109989dbfa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15840,7 +15873,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4742364060064815278, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 244045896}
   m_SourcePrefab: {fileID: 100100000, guid: cdbe49ee64cbfbf43824b8b1a81dda16, type: 3}
 --- !u!1 &1478027738
 GameObject:
@@ -19406,6 +19442,34 @@ PrefabInstance:
       propertyPath: letterboxUI
       value: 
       objectReference: {fileID: 420661650}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: materials.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 011e35138c076134eaae1a1506520dc4, type: 2}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 49a5a80375d8e494ea3bfef6ead4f3de, type: 2}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 487099de5cb3b5840b8c3fe297ca0bad, type: 2}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f00239206ce6cf943acfa9b9f598bb3d, type: 2}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'materials.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 234142d0a3f6343478aed2a1b5f50340, type: 2}
+    - target: {fileID: 5604204711558512972, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
+      propertyPath: 'materials.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a97104aded915c64f899043eb90f905d, type: 2}
     - target: {fileID: 7209598748099297257, guid: 959ab59d29af554439c12ea0855c1f81, type: 3}
       propertyPath: aimCamera
       value: 

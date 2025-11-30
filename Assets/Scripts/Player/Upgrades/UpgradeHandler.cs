@@ -205,51 +205,57 @@ public class UpgradeHandler : MonoBehaviour
     void ApplyDashSelection()
     {
         EnsureDashRefs();
-        
+
         if (joyDash)
         {
             joyDash.enabled = dashJoyLvl > 0;
             joyDash.SetLevel(dashJoyLvl);
-            if (dashJoyLvl > 0)
-                meshTrail.SetMaterial("joy");
         }
-        
+
         if (angerDash)
         {
             angerDash.enabled = dashAngerLvl > 0;
             if (angerDash is DashUpgradeBase angerBase)
                 angerBase.SetLevel(dashAngerLvl);
-            if (dashAngerLvl > 0)
-                meshTrail.SetMaterial("anger");
         }
-        
+
         if (sadnessDash)
         {
             sadnessDash.enabled = dashSadnessLvl > 0;
             if (sadnessDash is DashUpgradeBase sadBase)
                 sadBase.SetLevel(dashSadnessLvl);
-            if (dashSadnessLvl > 0)
-                meshTrail.SetMaterial("sadness");
         }
-        
+
         if (loveDash)
         {
             loveDash.enabled = dashLoveLvl > 0;
             if (loveDash is DashUpgradeBase loveBase)
                 loveBase.SetLevel(dashLoveLvl);
-            if (dashLoveLvl > 0)
-                meshTrail.SetMaterial("love");
         }
-        
+
         if (fearDash)
         {
             fearDash.enabled = dashFearLvl > 0;
             if (fearDash is DashUpgradeBase fearBase)
                 fearBase.SetLevel(dashFearLvl);
-            if (dashFearLvl > 0)
-                meshTrail.SetMaterial("fear");
         }
-        
+
+        if (meshTrail != null)
+        {
+            if (dashJoyLvl > 0)
+                meshTrail.SetMaterial("joy");
+            else if (dashAngerLvl > 0)
+                meshTrail.SetMaterial("anger");
+            else if (dashSadnessLvl > 0)
+                meshTrail.SetMaterial("sadness");
+            else if (dashLoveLvl > 0)
+                meshTrail.SetMaterial("love");
+            else if (dashFearLvl > 0)
+                meshTrail.SetMaterial("fear");
+            else
+                meshTrail.SetMaterial("basic");
+        }
+
         RaiseLevelsChanged();
     }
 
