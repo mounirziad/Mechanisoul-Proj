@@ -175,7 +175,7 @@ public class Weapon : MonoBehaviour
             }
 
             basicEnemy.TakeDamage(finalDamage, direction);
-            basicEnemy.applyDOT(playerManager.GetDOTDmg(), playerManager.GetDOTMaxTicks());
+            basicEnemy.applyDOT(playerManager.GetDOTDmg(), playerManager.GetDOTMaxTicks(), playerManager.GetDOTMaxStacks());
             playerManager.PerformLifesteal(finalDamage);
             playerManager.ApplyMoveSpeedBuff();
             //Debug.Log($"Damage Dealt: {finalDamage}");

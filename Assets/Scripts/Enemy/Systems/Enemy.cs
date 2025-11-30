@@ -9,9 +9,9 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] public float currentHealth;
 
     float dotTickDmg; //dmg per tick
-    float dotMaxStacks; //max number of dmg stacks
+    int dotMaxStacks; //max number of dmg stacks
     float dotTickTimer; //time till next tick
-    float dotTickMaxTime; //time between ticks
+    float dotTickMaxTime = 0.25f; //time between ticks
     bool dotActive; //currently taking dmg over time
     List<int> dotStacks = new List<int>(); //list to store the dot stacks
 
@@ -24,6 +24,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if (dotActive)
         {
+            dotTickTimer -= Time.deltaTime;
             if (dotTickTimer < 0)
             {
                 TakeDOT();
@@ -32,9 +33,10 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    public void applyDOT(float dotTickDMG, int dotMaxTicks) //apply the dot effect if not at max stacks, set active, start timer
+    public void applyDOT(float dotTickDMG, int dotMaxTicks, int dotMaxStacks) //apply the dot effect if not at max stacks, set active, start timer
     {
         this.dotTickDmg = dotTickDMG;
+        this.dotMaxStacks = dotMaxStacks;
 
         if (dotStacks.Count < dotMaxStacks) dotStacks.Add(dotMaxTicks);
 
@@ -44,7 +46,7 @@ public abstract class Enemy : MonoBehaviour
 
     void TakeDOT() //take dot damage, reduce all stacks by 1, remove stacks that are now 0, set inactive if no stacks remaining, else reset timer
     {
-        for (int i = dotStacks.Count; i > 0; i--) //reverse iteration to prevent out of bounds errors
+        for (int i = dotStacks.Count - 1; i >= 0; i--) //reverse iteration to prevent out of bounds errors
         {
             currentHealth -= dotTickDmg;
             dotStacks[i]--;
@@ -59,5 +61,4 @@ public abstract class Enemy : MonoBehaviour
     void ResetTimer() => dotTickTimer = dotTickMaxTime;
 
     void Die() { } //override
-
 }

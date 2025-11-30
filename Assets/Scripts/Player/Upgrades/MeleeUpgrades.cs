@@ -4,7 +4,7 @@ public class MeleeUpgrades : Upgrade
 {
     float attackSpeedBuff, critChance, critMult; //joy upgrades
     int buffStackCap; float buffPercent; //anger upgrades
-    float dotTickDmg; int dotMaxTicks; //sadness upgrades
+    float dotTickDmg; int dotMaxTicks; int dotMaxStacks; //sadness upgrades
     float lsAmt; bool lsDoubleActive; //love upgrades
     float moveSpeedBuff, moveSpeedDuration; //fear upgrades
 
@@ -75,14 +75,17 @@ public class MeleeUpgrades : Upgrade
             case 0:
                 dotTickDmg = 0;
                 dotMaxTicks = 0;
+                dotMaxStacks = 0;
                 break;
             case 1:
                 dotTickDmg = 0.5f;
                 dotMaxTicks = 5;
+                dotMaxStacks = 4;
                 break;
             case 2:
                 dotTickDmg = 1;
                 dotMaxTicks = 5;
+                dotMaxStacks = 4;
                 break;
             case 3:
                 dotMaxTicks = 10;
@@ -144,7 +147,7 @@ public class MeleeUpgrades : Upgrade
 
     protected override void UpdatePlayer()
     {
-        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult, dotTickDmg, dotMaxTicks, lsAmt, lsDoubleActive, moveSpeedBuff, moveSpeedDuration);
+        playerManager.UpdateMeleeUpgrades(buffStackCap, buffPercent, attackSpeedBuff, critChance, critMult, dotTickDmg, dotMaxTicks, dotMaxStacks, lsAmt, lsDoubleActive, moveSpeedBuff, moveSpeedDuration);
         playerManager.SetMeleeEmotion(selectedEmotion);
     }
 }

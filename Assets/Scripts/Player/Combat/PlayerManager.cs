@@ -34,6 +34,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] int dotMaxTicks; //how many ticks per hit
     [SerializeField] float dotTickTimer; //time till next tick
     [SerializeField] float dotTickMaxTime; //time between ticks
+    [SerializeField] int dotMaxStacks; //max number of dmg stacks
 
     [Header("Melee Love Upgrade Values")]
     [SerializeField] float lsAmt;
@@ -155,7 +156,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, int dotMaxTicks, float lsAmt, bool lsDoubleActive, float moveSpeedBuff, float moveSpeedDuration)
+    public void UpdateMeleeUpgrades(int buffStackCap, float buffPercent, float attackSpeedBuff, float critChance, float critMult, float dotTickDmg, int dotMaxTicks, int dotMaxStacks, float lsAmt, bool lsDoubleActive, float moveSpeedBuff, float moveSpeedDuration)
     {
         this.buffStackCap = buffStackCap;
         this.buffPercent = buffPercent;
@@ -164,6 +165,7 @@ public class PlayerManager : MonoBehaviour
         this.critMult = critMult;
         this.dotTickDmg = dotTickDmg;
         this.dotMaxTicks = dotMaxTicks;
+        this.dotMaxStacks = dotMaxStacks;
         this.lsAmt = lsAmt;
         this.lsDoubleActive = lsDoubleActive;
         this.moveSpeedBuff = moveSpeedBuff;
@@ -241,6 +243,8 @@ public class PlayerManager : MonoBehaviour
         if (combo1Active && didCrit) return dotMaxTicks *= (int)critMult;
         return dotMaxTicks;
     }
+
+    public int GetDOTMaxStacks() => dotMaxStacks;
 
 
     #region Melee VFX Methods

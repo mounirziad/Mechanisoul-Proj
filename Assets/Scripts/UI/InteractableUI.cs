@@ -1,21 +1,32 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InteractableUI : MonoBehaviour
 {
     [SerializeField] UpgradeUIScript upgradeUIScript;
+    [SerializeField] PauseMenuUI pauseMenuUI;
     [SerializeField] InputManager playerInputManager;
 
     private bool pauseActive = false;
     private bool upgradeUIActive = false;
     private PlayerControls playerControls;
 
+    [Header("References for Controller Navigation")]
+    [SerializeField] private Button firstPauseButton;
+    [SerializeField] private Button firstUpgradeButton;
+
     void Awake()
     {
         if (upgradeUIScript == null)
         {
-            upgradeUIScript = GetComponent<UpgradeUIScript>();
+            upgradeUIScript = GetComponentInChildren<UpgradeUIScript>();
+        }
+
+        if (pauseMenuUI == null)
+        {
+            pauseMenuUI = GetComponentInChildren<PauseMenuUI>();
         }
 
         if (playerInputManager == null)
@@ -23,12 +34,18 @@ public class InteractableUI : MonoBehaviour
             playerInputManager = FindObjectOfType<InputManager>();
         }
 
-        if (upgradeUIScript != null && upgradeUIScript.pauseMenu != null)
+        if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
         {
-            upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+            pauseMenuUI.pauseMenu.SetActive(false);
+        }
+
+        if (upgradeUIScript != null && upgradeUIScript.skillMenu != null)
+        {
+            upgradeUIScript.skillMenu.SetActive(false);
         }
 
         pauseActive = false;
+        upgradeUIActive = false;
     }
 
     void OnEnable()
@@ -76,26 +93,33 @@ public class InteractableUI : MonoBehaviour
         {
             if (upgradeUIScript != null)
             {
-                upgradeUIScript.pauseMenu.style.display = DisplayStyle.Flex;
-                upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+                pauseMenuUI.pauseMenu.SetActive(true);
+                upgradeUIScript.skillMenu.SetActive(false);
                 pauseActive = true;
                 upgradeUIActive = false;
 
                 SetCursorState(true);
                 SetPlayerInputActive(false);
                 Time.timeScale = 0f;
+
+                if (firstPauseButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(firstPauseButton.gameObject);
+                }
             }
         }
         else
         {
             if (upgradeUIScript != null)
             {
-                upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+                pauseMenuUI.pauseMenu.SetActive(false);
                 pauseActive = false;
 
                 SetCursorState(false);
                 SetPlayerInputActive(true);
                 Time.timeScale = 1f;
+
+                EventSystem.current.SetSelectedGameObject(null);
             }
         }
     }
@@ -106,24 +130,31 @@ public class InteractableUI : MonoBehaviour
         {
             if (upgradeUIScript != null)
             {
-                upgradeUIScript.skillMenu.style.display = DisplayStyle.Flex;
-                upgradeUIScript.pauseMenu.style.display = DisplayStyle.None;
+                upgradeUIScript.skillMenu.SetActive(true);
+                pauseMenuUI.pauseMenu.SetActive(false);
                 upgradeUIActive = true;
                 pauseActive = false;
 
                 SetCursorState(true);
                 SetPlayerInputActive(false);
+
+                if (firstUpgradeButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(firstUpgradeButton.gameObject);
+                }
             }
         }
         else
         {
             if (upgradeUIScript != null)
             {
-                upgradeUIScript.skillMenu.style.display = DisplayStyle.None;
+                upgradeUIScript.skillMenu.SetActive(false);
                 upgradeUIActive = false;
 
                 SetCursorState(false);
                 SetPlayerInputActive(true);
+
+                EventSystem.current.SetSelectedGameObject(null);
             }
         }
     }
@@ -141,4 +172,5 @@ public class InteractableUI : MonoBehaviour
             playerInputManager.SetMovementInputActive(isActive);
         }
     }
+
 }

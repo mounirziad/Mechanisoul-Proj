@@ -1,98 +1,183 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using TMPro;
 
 public class CombosMenuUI : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private UpgradeHandler handler;
-    [SerializeField] private UIDocument uiDoc;
+    
+    [Header("UI References")]
+    [SerializeField] private Transform comboCardsContainer;
+    [SerializeField] private GameObject comboCardPrefab;
 
-    [Header("UXML element names")]
-    [SerializeField] private string combosRootName = "CombosEL"; // container already in your UI
-    [SerializeField] private string titleName = "ComboTitle";
-    [SerializeField] private string bodyName = "ComboBody";
-    [SerializeField] private string chipLeftName = "ChipLeft";   // optional squares
-    [SerializeField] private string chipRightName = "ChipRight";
+    [Header("Combo Card Elements (if using single card)")]
+    [SerializeField] private GameObject singleComboCard;
+    [SerializeField] private TextMeshProUGUI comboTitle;
+    [SerializeField] private TextMeshProUGUI comboBody;
+    [SerializeField] private Image chipLeft;
+    [SerializeField] private Image chipRight;
 
     [Header("Locked view")]
     [SerializeField] private string lockedTitle = "Combo Locked";
     [SerializeField, TextArea]
-    private string lockedBody =
-        "Discover by upgrading Melee: Anger and Ranged: Joy (any level).";
+    private string lockedBody = "Discover by upgrading Melee: Anger and Ranged: Joy (any level).";
 
     [Header("Unlocked view (after first discovery)")]
     [SerializeField] private string unlockedTitle = "Rage + Joy: Pop Shot";
     [SerializeField, TextArea]
-    private string unlockedBodyTemplate =
-        "Unlocked! Ranged hits spawn a JOY burst.\nCurrent: Anger L{0}, Joy L{1}.";
+    private string unlockedBodyTemplate = "Unlocked! Ranged hits spawn a JOY burst.\nCurrent: Anger L{0}, Joy L{1}.";
 
     [Header("Chip colors")]
     [SerializeField] private Color angerColor = new Color(0.85f, 0.15f, 0.15f, 1f);
     [SerializeField] private Color joyColor = new Color(1.00f, 0.90f, 0.15f, 1f);
     [SerializeField] private Color lockedColor = new Color(0.4f, 0.4f, 0.4f, 1f);
 
-    // internal
-    const string PrefKey = "Combo_Discovered_AngerMelee_JoyRanged";
-    bool discovered;
+    private const string PREF_KEY = "Combo_Discovered_AngerMelee_JoyRanged";
+    private bool discovered;
 
-    // cached UI
-    VisualElement root, combosRoot, chipLeft, chipRight;
-    Label title, body;
-
-    void OnEnable()
+    private void Awake()
     {
-        if (!uiDoc) uiDoc = GetComponent<UIDocument>();
-        if (!handler) handler = FindObjectOfType<UpgradeHandler>();
-
-        if (!uiDoc || !handler)
+        if (!handler)
         {
-            Debug.LogWarning("[CombosMenuUI] Missing UIDocument or UpgradeHandler.");
+            handler = FindObjectOfType<UpgradeHandler>();
+        }
+
+        discovered = PlayerPrefs.GetInt(PREF_KEY, 0) == 1;
+        
+        AutoAssignReferencesIfNeeded();
+    }
+
+    private void AutoAssignReferencesIfNeeded()
+    {
+        if (singleComboCard == null && comboCardsContainer != null && comboCardsContainer.childCount > 0)
+        {
+            singleComboCard = comboCardsContainer.GetChild(0).gameObject;
+        }
+
+        if (singleComboCard != null)
+        {
+            if (comboTitle == null)
+            {
+                comboTitle = FindTextInChildren(singleComboCard.transform, "Title");
+                if (comboTitle == null)
+                    comboTitle = singleComboCard.GetComponentInChildren<TextMeshProUGUI>();
+            }
+
+            if (comboBody == null)
+            {
+                comboBody = FindTextInChildren(singleComboCard.transform, "Body");
+                if (comboBody == null && comboTitle != null)
+                {
+                    TextMeshProUGUI[] texts = singleComboCard.GetComponentsInChildren<TextMeshProUGUI>();
+                    if (texts.Length > 1)
+                        comboBody = texts[1];
+                }
+            }
+
+            if (chipLeft == null)
+            {
+                chipLeft = FindImageInChildren(singleComboCard.transform, "ChipLeft");
+            }
+
+            if (chipRight == null)
+            {
+                chipRight = FindImageInChildren(singleComboCard.transform, "ChipRight");
+            }
+        }
+    }
+
+    private TextMeshProUGUI FindTextInChildren(Transform parent, string partialName)
+    {
+        foreach (TextMeshProUGUI text in parent.GetComponentsInChildren<TextMeshProUGUI>(true))
+        {
+            if (text.name.Contains(partialName))
+                return text;
+        }
+        return null;
+    }
+
+    private Image FindImageInChildren(Transform parent, string partialName)
+    {
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name.Contains(partialName))
+            {
+                Image img = child.GetComponent<Image>();
+                if (img != null)
+                    return img;
+            }
+        }
+        return null;
+    }
+
+    private void OnEnable()
+    {
+        if (handler == null)
+        {
+            Debug.LogWarning("[CombosMenuUI] Missing UpgradeHandler.");
             return;
         }
 
-        root = uiDoc.rootVisualElement;
-        combosRoot = root.Q<VisualElement>(combosRootName);
-        title = root.Q<Label>(titleName);
-        body = root.Q<Label>(bodyName);
-        chipLeft = root.Q<VisualElement>(chipLeftName);
-        chipRight = root.Q<VisualElement>(chipRightName);
-
-        discovered = PlayerPrefs.GetInt(PrefKey, 0) == 1;
-
         handler.LevelsChanged += Refresh;
-        Refresh(); // initial
+        Refresh();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        if (handler != null) handler.LevelsChanged -= Refresh;
+        if (handler != null)
+        {
+            handler.LevelsChanged -= Refresh;
+        }
     }
 
     public void Refresh()
     {
-        if (root == null || handler == null) return;
+        if (handler == null) return;
 
-        // If combo conditions are met now, mark as discovered permanently
         if (!discovered && handler.HasCombo_AngerMelee_JoyRanged)
         {
             discovered = true;
-            PlayerPrefs.SetInt(PrefKey, 1);
+            PlayerPrefs.SetInt(PREF_KEY, 1);
             PlayerPrefs.Save();
         }
 
         bool showUnlocked = discovered;
 
-        if (title != null) title.text = showUnlocked ? unlockedTitle : lockedTitle;
+        UpdateComboCard(showUnlocked);
+    }
 
-        if (body != null)
+    private void UpdateComboCard(bool showUnlocked)
+    {
+        if (comboTitle != null)
         {
-            if (showUnlocked)
-                body.text = string.Format(unlockedBodyTemplate, handler.MeleeAngerLevel, handler.RangedJoyLevel);
-            else
-                body.text = lockedBody;
+            comboTitle.text = showUnlocked ? unlockedTitle : lockedTitle;
         }
 
-        if (chipLeft != null) chipLeft.style.backgroundColor = new StyleColor(showUnlocked ? angerColor : lockedColor);
-        if (chipRight != null) chipRight.style.backgroundColor = new StyleColor(showUnlocked ? joyColor : lockedColor);
+        if (comboBody != null)
+        {
+            if (showUnlocked)
+            {
+                comboBody.text = string.Format(
+                    unlockedBodyTemplate, 
+                    handler.MeleeAngerLevel, 
+                    handler.RangedJoyLevel
+                );
+            }
+            else
+            {
+                comboBody.text = lockedBody;
+            }
+        }
+
+        if (chipLeft != null)
+        {
+            chipLeft.color = showUnlocked ? angerColor : lockedColor;
+        }
+
+        if (chipRight != null)
+        {
+            chipRight.color = showUnlocked ? joyColor : lockedColor;
+        }
     }
 }
