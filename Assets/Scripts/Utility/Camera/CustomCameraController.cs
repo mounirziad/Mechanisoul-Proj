@@ -138,10 +138,24 @@ public class CustomCameraController : MonoBehaviour
             return;
         }
 
-        // Check new Z-Targeting system first, fallback to old system
         bool lockActive = (zTargetingSystem != null && zTargetingSystem.IsLocked) ||
                          (lockOnSystem != null && lockOnSystem.IsLockedOn());
         bool shouldAim = inputManager.aimInput;
+
+        if (shouldAim && lockActive)
+        {
+            if (zTargetingSystem != null && zTargetingSystem.IsLocked)
+            {
+                zTargetingSystem.ClearTarget();
+            }
+            
+            if (lockOnSystem != null && lockOnSystem.IsLockedOn())
+            {
+                lockOnSystem.ClearLock();
+            }
+            
+            lockActive = false;
+        }
 
         if (lockActive)
         {
