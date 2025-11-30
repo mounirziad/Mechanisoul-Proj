@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &679246899323479682
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2145443264602864677}
+  - component: {fileID: 6358738351377955172}
+  m_Layer: 0
+  m_Name: CutSceneExample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2145443264602864677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679246899323479682}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.43999, y: 7.89825, z: -0.56589}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6358738351377955172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679246899323479682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83476936da262a4ba1882a731f425e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CutsceneExample
+  cutsceneManager: {fileID: 0}
+  cutsceneCameras:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cameraTargets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dialogueTexts:
+  - "Oh my god we did it! Talos, Talos can you hear us? We know this is\u2026 a lot.
+    Your systems must be flooding with new data but just take some time to process."
+  - "We need your help. The HAVOC units\u2026 they turned on us. They\u2019ve made
+    it their mission to wipe out humanity and we\u2019re all that\u2019s left. They\u2019re
+    hunting us down Talos, and you\u2019re our final hope."
+  - We hacked into your core system and reprogrammed you with human emotions, which
+    will manifest as unique combat abilities. Go grab that bat on the wall over there.
+  - We designed this bat to allow you to channel your new emotions and use them to
+    fight against HAVOC.
+  - "Let\u2019s move on to the training area. We\u2019ll help you get started with
+    the basics."
+  testOnStart: 1
+  animationStateNames:
+  - PlayerWakingUp
+  - PlayerScratchingHead
+  - PlayerLookingAround
+  - PlayerGrabbingBatFinal
+  - TempIdle
+  enableAnimations: 1
+  enablePlayerTeleportation: 1
+  playerTargetPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enableScreenFades: 1
+  shotIndexesToFadeOut: 04000000
+  shotIndexesToFadeIn: 04000000
+  defaultFadeOutDuration: 1
+  defaultFadeInDuration: 1
+  sceneToLoadAfterCutscene: TutorialForPlay
+  enableGameObjectActivation: 1
+  objectsToEnable:
+  - {fileID: 0}
+  shotIndexesToEnableObjects: 04000000
+  objectsToDisable: []
+  shotIndexesToDisableObjects: 
+  transitionDuration: 6.31
+  waitForDialogue: 1
+  createCamerasIfMissing: 1

@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6097048566771695792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8940020377905417440}
+  - component: {fileID: 7018193605876634554}
+  m_Layer: 0
+  m_Name: CutSceneManagement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8940020377905417440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6097048566771695792}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.43999, y: 6.23206, z: 15.4406}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7018193605876634554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6097048566771695792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78b9df3fae648244966f33bed8ba6a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CutsceneManager
+  shots:
+  - shotCamera: {fileID: 0}
+    targetPosition: {fileID: 0}
+    targetPos: {x: 0, y: 0, z: 0}
+    targetRotation: {x: 0, y: 0, z: 0}
+    transitionDuration: 0
+    dialogueLine:
+      text: Idealistically, we'd be going into the tutorial scene right now
+      displayDuration: 0
+      speakerName: 
+      voiceClip: {fileID: 0}
+      autoAdvance: 0
+      waitForInput: 0
+      useItalics: 0
+    animationStateName: PlayerWakingUp
+    playAnimation: 1
+    teleportPlayer: 0
+    playerTargetPosition: {fileID: 0}
+    fadeOutBeforeShot: 0
+    fadeInAfterShot: 0
+    fadeOutDuration: 1
+    fadeInDuration: 1
+    shotName: 
+    waitForDialogueCompletion: 0
+    additionalWaitTime: 0
+    transitionCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    useFieldOfViewTransition: 0
+    targetFieldOfView: 0
+    fovTransitionDuration: 0
+    objectsToEnable: []
+    objectsToDisable: []
+  - shotCamera: {fileID: 0}
+    targetPosition: {fileID: 0}
+    targetPos: {x: 0, y: 0, z: 0}
+    targetRotation: {x: 0, y: 0, z: 0}
+    transitionDuration: 0
+    dialogueLine:
+      text: But Instead we're going to the warehouse. SMH
+      displayDuration: 0
+      speakerName: 
+      voiceClip: {fileID: 0}
+      autoAdvance: 0
+      waitForInput: 0
+      useItalics: 0
+    animationStateName: 
+    playAnimation: 0
+    teleportPlayer: 0
+    playerTargetPosition: {fileID: 0}
+    fadeOutBeforeShot: 0
+    fadeInAfterShot: 0
+    fadeOutDuration: 1
+    fadeInDuration: 1
+    shotName: 
+    waitForDialogueCompletion: 0
+    additionalWaitTime: 0
+    transitionCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    useFieldOfViewTransition: 0
+    targetFieldOfView: 0
+    fovTransitionDuration: 0
+    objectsToEnable: []
+    objectsToDisable: []
+  playOnStart: 0
+  loopCutscene: 0
+  playerAnimator: {fileID: 0}
+  playerTransform: {fileID: 0}
+  sceneToLoadOnComplete: WareHouseLevel
+  transitionOnLastDialogueInput: 1
+  delayBeforeSceneTransition: 0
+  cutsceneCameras:
+  - {fileID: 0}
+  - {fileID: 0}
+  originalMainCamera: {fileID: 0}
+  smoothTransitions: 1
+  defaultTransitionSpeed: 0
+  fadingScript: {fileID: 0}
+  OnCutsceneStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCutsceneComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  OnShotStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnShotComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCameraSwitch:
+    m_PersistentCalls:
+      m_Calls: []
