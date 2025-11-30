@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class InteractableUI : MonoBehaviour
 {
@@ -29,11 +30,6 @@ public class InteractableUI : MonoBehaviour
             pauseMenuUI = GetComponentInChildren<PauseMenuUI>();
         }
 
-        if (playerInputManager == null)
-        {
-            playerInputManager = FindObjectOfType<InputManager>();
-        }
-
         if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
         {
             pauseMenuUI.pauseMenu.SetActive(false);
@@ -46,6 +42,58 @@ public class InteractableUI : MonoBehaviour
 
         pauseActive = false;
         upgradeUIActive = false;
+    }
+
+    void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        FindPlayerInputManager();
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log($"InteractableUI: Scene loaded - {scene.name}");
+        FindPlayerInputManager();
+        
+        if (upgradeUIActive)
+        {
+            upgradeUIActive = false;
+            if (upgradeUIScript != null && upgradeUIScript.skillMenu != null)
+            {
+                upgradeUIScript.skillMenu.SetActive(false);
+            }
+        }
+        
+        if (pauseActive)
+        {
+            pauseActive = false;
+            if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
+            {
+                pauseMenuUI.pauseMenu.SetActive(false);
+            }
+            Time.timeScale = 1f;
+        }
+    }
+
+    private void FindPlayerInputManager()
+    {
+        if (playerInputManager == null)
+        {
+            playerInputManager = FindObjectOfType<InputManager>();
+            if (playerInputManager != null)
+            {
+                Debug.Log($"InteractableUI: Found InputManager on {playerInputManager.gameObject.name}");
+            }
+            else
+            {
+                Debug.LogWarning("InteractableUI: Could not find InputManager in scene");
+            }
+        }
     }
 
     void OnEnable()
@@ -113,6 +161,7 @@ public class InteractableUI : MonoBehaviour
             if (upgradeUIScript != null)
             {
                 pauseMenuUI.pauseMenu.SetActive(false);
+                pauseMenuUI.settingsMenu.SetActive(false);
                 pauseActive = false;
 
                 SetCursorState(false);
@@ -171,6 +220,13 @@ public class InteractableUI : MonoBehaviour
         {
             playerInputManager.SetMovementInputActive(isActive);
         }
+        else if (isActive)
+        {
+            FindPlayerInputManager();
+            if (playerInputManager != null && playerInputManager.playerControls != null)
+            {
+                playerInputManager.SetMovementInputActive(isActive);
+            }
+        }
     }
-
 }

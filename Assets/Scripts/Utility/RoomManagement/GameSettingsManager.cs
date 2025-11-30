@@ -22,7 +22,7 @@ public class GameSettingsManager : MonoBehaviour
     [Header("Settings Values")]
     [Range(0f, 1f)]
     public float masterVolume = 1f;
-    [Range(0.1f, 5f)]
+    [Range(0.5f, 1.5f)]
     public float Sensitivity = 1f;
 
     private const string VOLUME_KEY = "MasterVolume";
@@ -74,7 +74,7 @@ public class GameSettingsManager : MonoBehaviour
 
     public void SetSensitivity(float sensitivity)
     {
-        Sensitivity = Mathf.Clamp(sensitivity, 0.1f, 5f);
+        Sensitivity = Mathf.Clamp(sensitivity, 0.5f, 1.5f);
         ApplySensitivityToAllCameras();
         SaveSettings();
     }

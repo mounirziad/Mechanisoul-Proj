@@ -6,7 +6,7 @@ public class PauseMenuUI : MonoBehaviour
 {
     [Header("Menu References")]
     public GameObject pauseMenu;
-    [SerializeField] private GameObject settingsMenu;
+    public GameObject settingsMenu;
 
     [Header("Pause Menu Buttons")]
     [SerializeField] private Button resumeButton;
@@ -24,26 +24,28 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Awake()
     {
-        if (resumeButton != null) 
+        if (resumeButton != null)
             resumeButton.onClick.AddListener(OnResumeClicked);
-        if (optionsButton != null) 
+        if (optionsButton != null)
             optionsButton.onClick.AddListener(OnOptionsClicked);
-        if (quitButton != null) 
+        if (quitButton != null)
             quitButton.onClick.AddListener(OnQuitClicked);
-        if (closeSettingsButton != null) 
+        if (closeSettingsButton != null)
             closeSettingsButton.onClick.AddListener(OnCloseSettingsClicked);
-    }
 
-    private void OnDestroy()
-    {
-        if (resumeButton != null) 
-            resumeButton.onClick.RemoveListener(OnResumeClicked);
-        if (optionsButton != null) 
-            optionsButton.onClick.RemoveListener(OnOptionsClicked);
-        if (quitButton != null) 
-            quitButton.onClick.RemoveListener(OnQuitClicked);
-        if (closeSettingsButton != null) 
-            closeSettingsButton.onClick.RemoveListener(OnCloseSettingsClicked);
+        if (volumeSlider != null)
+        {
+            volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+            volumeSlider.minValue = 0f;
+            volumeSlider.maxValue = 1f;
+        }
+
+        if (sensitivitySlider != null)
+        {
+            sensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
+            sensitivitySlider.minValue = 0.1f;
+            sensitivitySlider.maxValue = 5f;
+        }
     }
 
     private void OnEnable()
@@ -52,6 +54,58 @@ public class PauseMenuUI : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(firstSelectedPauseButton.gameObject);
         }
+
+        InitializeSliders();
+    }
+
+    private void InitializeSliders()
+    {
+        if (GameSettingsManager.Instance != null)
+        {
+            if (volumeSlider != null)
+            {
+                volumeSlider.value = GameSettingsManager.Instance.masterVolume;
+            }
+
+            if (sensitivitySlider != null)
+            {
+                sensitivitySlider.value = GameSettingsManager.Instance.Sensitivity;
+            }
+        }
+    }
+
+    private void OnVolumeChanged(float value)
+    {
+        if (GameSettingsManager.Instance != null)
+        {
+            GameSettingsManager.Instance.SetVolume(value);
+        }
+    }
+
+    private void OnSensitivityChanged(float value)
+    {
+        if (GameSettingsManager.Instance != null)
+        {
+            GameSettingsManager.Instance.SetSensitivity(value);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (resumeButton != null)
+            resumeButton.onClick.RemoveListener(OnResumeClicked);
+        if (optionsButton != null)
+            optionsButton.onClick.RemoveListener(OnOptionsClicked);
+        if (quitButton != null)
+            quitButton.onClick.RemoveListener(OnQuitClicked);
+        if (closeSettingsButton != null)
+            closeSettingsButton.onClick.RemoveListener(OnCloseSettingsClicked);
+
+        if (volumeSlider != null)
+            volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
+
+        if (sensitivitySlider != null)
+            sensitivitySlider.onValueChanged.RemoveListener(OnSensitivityChanged);
     }
 
     private void OnResumeClicked()
@@ -68,7 +122,7 @@ public class PauseMenuUI : MonoBehaviour
         if (settingsMenu != null)
         {
             settingsMenu.SetActive(true);
-            
+
             if (firstSelectedSettingsSlider != null)
             {
                 EventSystem.current.SetSelectedGameObject(firstSelectedSettingsSlider.gameObject);
@@ -88,7 +142,7 @@ public class PauseMenuUI : MonoBehaviour
         if (settingsMenu != null)
         {
             settingsMenu.SetActive(false);
-            
+
             if (pauseMenu != null && pauseMenu.activeSelf && optionsButton != null)
             {
                 EventSystem.current.SetSelectedGameObject(optionsButton.gameObject);
