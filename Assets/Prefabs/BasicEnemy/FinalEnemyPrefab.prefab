@@ -701,12 +701,12 @@ Transform:
   m_GameObject: {fileID: 6525178421203913818}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.1566603, y: -0.01, z: -8.26222}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.1571317, y: -0.010060362, z: -8.263126}
+  m_LocalScale: {x: 1.0030091, y: 1.0060362, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5715782425126478374}
-  m_Father: {fileID: 3724294778828085603}
+  m_Father: {fileID: 5892164416727378623}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7340553938883802708
 MonoBehaviour:
@@ -1376,7 +1376,7 @@ PrefabInstance:
     - {fileID: 5866666021909216657, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
+    - targetCorrespondingSourceObject: {fileID: -1882276554274909129, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4415979807496828995}
     m_AddedComponents:
@@ -2240,6 +2240,11 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!4 &5892164416727378623 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1882276554274909129, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
+  m_PrefabInstance: {fileID: 3757659207807975048}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7447044630863098991 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6015916853938719463, guid: 9c8ed133da4b036458719e15be7e7b38, type: 3}
