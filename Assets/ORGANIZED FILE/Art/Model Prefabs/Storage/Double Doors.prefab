@@ -10,43 +10,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.7409556
+      value: 2.4981174
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.7409556
+      value: 2.5605702
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.7409556
+      value: 2.4981174
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.064266
+      value: 7.16181
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.6972697
+      value: -13.76314
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7951201
+      value: 28.316452
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.5
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.5
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c88405ee85b80424ca6a2b294ab9740c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -139,7 +139,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1d9d4cf1f9b6c4aa0ad995a41de7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorOutline
-  outlineMaterial: {fileID: 2100000, guid: 3257eeed272f35548a614ff4a6b861de, type: 2}
+  outlineMaterial: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
+  outlineColor: {r: 0, g: 1, b: 0, a: 1}
+  outlineThickness: 0.02
   doorRenderers:
   - {fileID: 5515470341294449603}
   - {fileID: 2594798088704853006}

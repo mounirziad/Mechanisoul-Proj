@@ -12,7 +12,7 @@ public class AimCamera : MonoBehaviour
     [SerializeField] private InputManager playerInputManager;
     [SerializeField] private bool useMouseDelta = true;
     [SerializeField] private float mouseSensitivity = 0.1f;
-    [SerializeField] private float gamepadSensitivity = 2500f;
+    [SerializeField] private float gamepadSensitivity = 100f;
 
     [Header("Camera Position")]
     [SerializeField] private Vector3 shoulderOffset = new Vector3(0.6f, 0f, 0f);
@@ -42,9 +42,9 @@ public class AimCamera : MonoBehaviour
 
     private float horizontalAngle;
     private float verticalAngle;
-
+    
     private Vector2 lookInput;
-
+    
     private Vector3 desiredPosition;
     private Quaternion desiredRotation;
     private Vector3 currentAimPoint;
@@ -74,7 +74,7 @@ public class AimCamera : MonoBehaviour
     private void Start()
     {
         FindPlayerIfNeeded();
-
+        
         if (target != null)
         {
             Vector3 angles = transform.eulerAngles;
@@ -102,13 +102,13 @@ public class AimCamera : MonoBehaviour
                 aimLayers &= ~(1 << playerLayer);
             }
         }
-
+        
         if (collisionHandler != null)
         {
             collisionHandler.InitializeDistance(cameraDistance);
         }
     }
-
+    
     private void FindPlayerIfNeeded()
     {
         if (target == null)
@@ -132,7 +132,7 @@ public class AimCamera : MonoBehaviour
         if (useMouseDelta)
         {
             lookInput = playerInputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
-
+            
             if (Gamepad.current != null && playerInputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
             {
                 lookInput *= gamepadSensitivity * Time.deltaTime;
@@ -165,13 +165,13 @@ public class AimCamera : MonoBehaviour
         float vSensitivity = useMouseDelta ? mouseSensitivity : verticalSensitivity;
 
         horizontalAngle += lookInput.x * hSensitivity;
-
+        
         float verticalChange = lookInput.y * vSensitivity;
         if (invertY)
         {
             verticalChange = -verticalChange;
         }
-
+        
         verticalAngle -= verticalChange;
         verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
 
@@ -181,15 +181,15 @@ public class AimCamera : MonoBehaviour
     private void CalculateDesiredPosition()
     {
         Vector3 targetPoint = target.position + targetOffset;
-
+        
         Vector3 localOffset = desiredRotation * shoulderOffset;
         float targetOffsetScale = CheckShoulderOffsetScale(targetPoint, localOffset);
-
+        
         currentShoulderOffsetScale = Mathf.Lerp(currentShoulderOffsetScale, targetOffsetScale, 10f * Time.deltaTime);
-
+        
         localOffset *= currentShoulderOffsetScale;
         Vector3 offsetTargetPoint = targetPoint + localOffset;
-
+        
         Vector3 direction = desiredRotation * Vector3.back;
         desiredPosition = offsetTargetPoint + direction * cameraDistance;
     }
@@ -201,7 +201,7 @@ public class AimCamera : MonoBehaviour
             Vector3 targetPoint = target.position + targetOffset;
             Vector3 localOffset = desiredRotation * shoulderOffset * currentShoulderOffsetScale;
             Vector3 offsetTargetPoint = targetPoint + localOffset;
-
+            
             float adjustedDistance = Mathf.Max(cameraDistance, minDistance);
             desiredPosition = collisionHandler.HandleCollision(offsetTargetPoint, desiredPosition, adjustedDistance);
         }
@@ -216,19 +216,19 @@ public class AimCamera : MonoBehaviour
         }
 
         Vector3 offsetDirection = localOffset.normalized;
-
+        
         if (collisionHandler != null)
         {
             LayerMask layers = collisionHandler.GetCollisionLayers();
             float checkRadius = 0.15f;
-
+            
             if (Physics.SphereCast(targetPoint, checkRadius, offsetDirection, out RaycastHit hit, offsetDistance, layers, QueryTriggerInteraction.Ignore))
             {
                 float safeDistance = Mathf.Max(0f, hit.distance - 0.1f);
                 return Mathf.Clamp01(safeDistance / offsetDistance);
             }
         }
-
+        
         return 1f;
     }
 
@@ -263,12 +263,12 @@ public class AimCamera : MonoBehaviour
     private void ApplySmoothing()
     {
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, positionSmoothing * Time.deltaTime);
-
+        
         if (enableFinalSafetyCheck)
         {
             smoothedPosition = FinalPositionCheck(smoothedPosition);
         }
-
+        
         transform.position = smoothedPosition;
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotationSmoothing * Time.deltaTime);
     }
@@ -282,21 +282,21 @@ public class AimCamera : MonoBehaviour
 
         LayerMask layers = collisionHandler.GetCollisionLayers();
         float radius = collisionHandler.GetCameraRadius() * 0.5f;
-
+        
         if (Physics.CheckSphere(position, radius, layers, QueryTriggerInteraction.Ignore))
         {
             Vector3 targetPoint = target.position + targetOffset;
             Vector3 directionToTarget = (targetPoint - position).normalized;
             position = position + directionToTarget * 0.1f;
         }
-
+        
         return position;
     }
 
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
-
+        
         if (playerInputManager == null && target != null)
         {
             playerInputManager = target.GetComponent<InputManager>();
@@ -323,13 +323,6 @@ public class AimCamera : MonoBehaviour
         return aimTarget;
     }
 
-    public void SetSensitivity(float multiplier)
-    {
-        mouseSensitivity = 0.1f * multiplier;
-        gamepadSensitivity = 2500f * multiplier;
-    }
-
-
     private void OnDrawGizmosSelected()
     {
         if (target == null)
@@ -340,20 +333,20 @@ public class AimCamera : MonoBehaviour
         Gizmos.color = Color.yellow;
         Vector3 targetPoint = target.position + targetOffset;
         Gizmos.DrawWireSphere(targetPoint, 0.2f);
-
+        
         if (Application.isPlaying && desiredRotation != Quaternion.identity)
         {
             Vector3 localOffset = desiredRotation * shoulderOffset;
             Vector3 offsetTargetPoint = targetPoint + localOffset;
-
+            
             Gizmos.color = Color.magenta;
             Gizmos.DrawLine(targetPoint, offsetTargetPoint);
             Gizmos.DrawWireSphere(offsetTargetPoint, 0.15f);
         }
-
+        
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(targetPoint, transform.position);
-
+        
         Gizmos.color = Color.red;
         Gizmos.DrawLine(targetPoint, currentAimPoint);
         Gizmos.DrawWireSphere(currentAimPoint, 0.3f);

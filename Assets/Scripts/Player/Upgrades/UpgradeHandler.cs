@@ -210,8 +210,6 @@ public class UpgradeHandler : MonoBehaviour
         {
             joyDash.enabled = dashJoyLvl > 0;
             joyDash.SetLevel(dashJoyLvl);
-            if (dashJoyLvl > 0)
-                meshTrail.SetMaterial("joy");
         }
         
         if (angerDash)
@@ -219,8 +217,6 @@ public class UpgradeHandler : MonoBehaviour
             angerDash.enabled = dashAngerLvl > 0;
             if (angerDash is DashUpgradeBase angerBase)
                 angerBase.SetLevel(dashAngerLvl);
-            if (dashAngerLvl > 0)
-                meshTrail.SetMaterial("anger");
         }
         
         if (sadnessDash)
@@ -228,8 +224,6 @@ public class UpgradeHandler : MonoBehaviour
             sadnessDash.enabled = dashSadnessLvl > 0;
             if (sadnessDash is DashUpgradeBase sadBase)
                 sadBase.SetLevel(dashSadnessLvl);
-            if (dashSadnessLvl > 0)
-                meshTrail.SetMaterial("sadness");
         }
         
         if (loveDash)
@@ -237,8 +231,6 @@ public class UpgradeHandler : MonoBehaviour
             loveDash.enabled = dashLoveLvl > 0;
             if (loveDash is DashUpgradeBase loveBase)
                 loveBase.SetLevel(dashLoveLvl);
-            if (dashLoveLvl > 0)
-                meshTrail.SetMaterial("love");
         }
         
         if (fearDash)
@@ -246,8 +238,6 @@ public class UpgradeHandler : MonoBehaviour
             fearDash.enabled = dashFearLvl > 0;
             if (fearDash is DashUpgradeBase fearBase)
                 fearBase.SetLevel(dashFearLvl);
-            if (dashFearLvl > 0)
-                meshTrail.SetMaterial("fear");
         }
         
         RaiseLevelsChanged();

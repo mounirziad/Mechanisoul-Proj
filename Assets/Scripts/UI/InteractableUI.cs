@@ -113,7 +113,6 @@ public class InteractableUI : MonoBehaviour
             if (upgradeUIScript != null)
             {
                 pauseMenuUI.pauseMenu.SetActive(false);
-                pauseMenuUI.settingsMenu.SetActive(false);
                 pauseActive = false;
 
                 SetCursorState(false);

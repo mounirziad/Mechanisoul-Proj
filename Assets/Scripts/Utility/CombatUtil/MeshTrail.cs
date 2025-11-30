@@ -10,8 +10,7 @@ public class MeshTrail : MonoBehaviour
     private bool isTrailActive;
     public float meshRefreshRate = 0.02f;
     public Transform positionToSpawn;
-    public Material emotionMat;
-    [SerializeField] private Material[] materials;
+    public Material mat;
     public float meshDestroyDelay = 0.1f;
 
     [Header("Input References")]
@@ -48,42 +47,18 @@ public class MeshTrail : MonoBehaviour
         {
             return;
         }
-
+        
         if (requireGrounded && playerLocomotion != null && !playerLocomotion.isGrounded)
         {
             return;
         }
-
+        
         if (!isTrailActive)
         {
             isTrailActive = true;
             StartCoroutine(ActivateTrail(activeTime));
         }
     }
-
-    public void SetMaterial(string emotion)
-    {
-        if (materials == null || materials.Length == 0)
-        {
-            Debug.LogWarning("MeshTrail: No materials assigned in the array!");
-            return;
-        }
-
-        foreach (var mat in materials)
-        {
-            if (mat == null) continue;
-
-            if (mat.name.ToLower().Contains(emotion.ToLower()))
-            {
-                emotionMat = mat;
-                Debug.Log($"MeshTrail: Material set to {mat.name} for emotion '{emotion}'");
-                return;
-            }
-        }
-
-        Debug.LogWarning($"MeshTrail: No material found matching emotion '{emotion}'");
-    }
-
 
     IEnumerator ActivateTrail(float timeActive)
     {
@@ -108,7 +83,7 @@ public class MeshTrail : MonoBehaviour
                 skinnedMeshRenderers[i].BakeMesh(mesh);
 
                 meshFilter.mesh = mesh;
-                meshRenderer.material = emotionMat; ;
+                meshRenderer.material = mat;
 
                 Destroy(gObject, meshDestroyDelay);
             }
