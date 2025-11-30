@@ -6,8 +6,6 @@ using Unity.Properties;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Mech.AI
-{
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
         name: "Weighted Selector",
@@ -16,7 +14,7 @@ namespace Mech.AI
         id: "weighted-selector")]
     public partial class WeightedSelector : Composite
     {
-        [SerializeReference]
+        /*[SerializeReference]
         public BlackboardVariable<GameObject> Agent;
 
         private int currentIndex = -1;
@@ -135,11 +133,11 @@ namespace Mech.AI
 
             return Vector3.Distance(Agent.Value.transform.position, player.transform.position);
         }
-    }
+    */}
 
+/*
     public interface IWeightedAttack
     {
         float GetWeight(float distance);
-    }
-}
+    }*/
 

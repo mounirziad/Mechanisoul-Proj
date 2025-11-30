@@ -1665,8 +1665,6 @@ MonoBehaviour:
         - rid: 7722564649734898134
         - rid: 7722564649734898135
         - rid: 7722564649734898136
-        Agent:
-          rid: -2
     - rid: 7722564649734898129
       type: {class: ParallelAllComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -4288,7 +4286,7 @@ MonoBehaviour:
           rid: 8773057353799958722
         m_EndedNodes:
           rid: 8773057353799958723
-        m_VersionTimestamp: 639001028779502770
+        m_VersionTimestamp: 639001037173916625
     - rid: 8773057353799958720
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -4499,8 +4497,8 @@ MonoBehaviour:
   - rid: 7722564547030549175
   - rid: 7722564637468393866
   - rid: 7722564637468394367
-  - rid: 7722564638666130014
-  m_VersionTimestamp: 639001028779502770
+  - rid: 7722564649734898328
+  m_VersionTimestamp: 639001037173916625
   m_SerializedVersion: 1
   m_DebugInfo: {fileID: -7901831932416212709}
   m_RuntimeGraph: {fileID: -4384124896444259075}
@@ -4759,13 +4757,13 @@ MonoBehaviour:
     Variables: []
     NamedChildren: []
     IsPlaceholder: 0
-  - Name: Weighted Selector
-    Story: Selects attack based on distance and weighted random choice
-    RuntimeTypeString: WeightedSelector, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+  - Name: Weighted Sequence
+    Story: Select attacks based off of distance and random weights
+    RuntimeTypeString: WeightedSequence, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     RuntimeTypeID:
-      m_Value0: 66674389084536846
-      m_Value1: 0
+      m_Value0: 8462297571989007816
+      m_Value1: 17489600420991582543
     Variables:
     - Name: Agent
       Type:
@@ -5731,8 +5729,7 @@ MonoBehaviour:
         m_IsFloating: 0
         m_NodeModel:
           rid: 7722564365399360041
-        m_Connections:
-        - rid: 7722564638666130016
+        m_Connections: []
     - rid: 7722564365399360043
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -7506,8 +7503,7 @@ MonoBehaviour:
         m_IsFloating: 0
         m_NodeModel:
           rid: 7722564365868073069
-        m_Connections:
-        - rid: 7722564638666130016
+        m_Connections: []
     - rid: 7722564365868073071
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -7824,8 +7820,7 @@ MonoBehaviour:
         m_IsFloating: 0
         m_NodeModel:
           rid: 7722564365887210489
-        m_Connections:
-        - rid: 7722564638666130016
+        m_Connections: []
     - rid: 7722564365887210491
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -8095,8 +8090,7 @@ MonoBehaviour:
         m_IsFloating: 0
         m_NodeModel:
           rid: 7722564365959299730
-        m_Connections:
-        - rid: 7722564638666130016
+        m_Connections: []
     - rid: 7722564365959299732
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -8876,7 +8870,6 @@ MonoBehaviour:
           rid: 7722564411850752026
         m_Connections:
         - rid: 8773057399974003134
-        - rid: 7722564638666130015
     - rid: 7722564411879064146
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
@@ -16531,47 +16524,42 @@ MonoBehaviour:
         m_NodeModel:
           rid: 7722564637468394367
         m_Connections: []
-    - rid: 7722564638666130014
+    - rid: 7722564649734898328
       type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -2372.4224, y: 651.28156}
+        Position: {x: -2503.03, y: 669.66516}
         ID:
-          m_Value0: 7509462972932051638
-          m_Value1: 3082724713250980854
+          m_Value0: 952776941191372580
+          m_Value1: 5759029912056062838
         Parents: []
         PortModels:
-        - rid: 7722564638666130015
-        - rid: 7722564638666130016
+        - rid: 7722564649734898329
+        - rid: 7722564649734898330
         NodeType:
-          m_SerializableType: WeightedSelector, Assembly-CSharp, Version=0.0.0.0,
+          m_SerializableType: WeightedSequence, Assembly-CSharp, Version=0.0.0.0,
             Culture=neutral, PublicKeyToken=null
         NodeTypeID:
-          m_Value0: 66674389084536846
-          m_Value1: 0
+          m_Value0: 8462297571989007816
+          m_Value1: 17489600420991582543
         m_FieldValues: []
-    - rid: 7722564638666130015
+    - rid: 7722564649734898329
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
         m_Name: InputPort
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 7722564638666130014
-        m_Connections:
-        - rid: 7722564411850752028
-    - rid: 7722564638666130016
+          rid: 7722564649734898328
+        m_Connections: []
+    - rid: 7722564649734898330
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
         m_Name: OutputPort
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 7722564638666130014
-        m_Connections:
-        - rid: 7722564365868073070
-        - rid: 7722564365399360042
-        - rid: 7722564365887210490
-        - rid: 7722564365959299731
+          rid: 7722564649734898328
+        m_Connections: []
     - rid: 8773057353799958726
       type: {class: StartNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
