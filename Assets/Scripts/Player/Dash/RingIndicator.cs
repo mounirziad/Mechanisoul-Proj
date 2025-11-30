@@ -1,9 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Draws and fades a flat ring on the XZ plane using a LineRenderer.
-/// Spawn with Spawn(radius, color, lifetime).
-/// </summary>
 [RequireComponent(typeof(LineRenderer))]
 public class RingIndicator : MonoBehaviour
 {

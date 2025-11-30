@@ -40,7 +40,20 @@ public class AiAfterMeleeAttackState : AiState
         if (agent.isDead)
             return;
 
-        Transform target = agent.GetCurrentTarget();
+        // pick target: charmed enemy or player
+        Transform target = null;
+        EnemyCharm charm = agent.GetComponent<EnemyCharm>();
+
+        if (charm != null && charm.ShouldIgnorePlayerAndFightEnemies())
+        {
+            target = charm.GetCharmAttackTarget(agent.transform);
+            // if charmed but no enemy, just fall through to patrol after delay
+        }
+        else
+        {
+            target = agent.playertransform;
+        }
+
         if (target != null)
         {
             float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
@@ -60,12 +73,10 @@ public class AiAfterMeleeAttackState : AiState
 
         if (Time.time >= stateEnterTime + stateDuration)
         {
-            agent.stateMachine.ChangeState(AiStateId.Idle);
-            return;
+            Patrol(agent);
         }
-
-        Patrol(agent);
     }
+
 
 
     public void Exit(AiAgent agent)

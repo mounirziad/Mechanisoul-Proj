@@ -26,21 +26,30 @@ public class AiChasePlayerState : AiState
         if (agent.isDead)
             return;
 
-        if (!agent.enabled)
-            return;
-
         if (PlayerHealth.IsPlayerDead)
             return;
 
-        Transform target = agent.GetCurrentTarget();
-        if (target == null)
-        {
-            agent.stateMachine.ChangeState(AiStateId.Idle);
-            return;
-        }
-
         BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
         if (health != null && health.IsStunned())
+            return;
+
+        // pick chase target: charmed enemy or player
+        Transform target = null;
+        EnemyCharm charm = agent.GetComponent<EnemyCharm>();
+
+        if (charm != null && charm.ShouldIgnorePlayerAndFightEnemies())
+        {
+            target = charm.GetCharmAttackTarget(agent.transform);
+            // if charmed but no enemy found, just idle instead of chasing the player
+            if (target == null)
+                return;
+        }
+        else
+        {
+            target = agent.playertransform;
+        }
+
+        if (target == null)
             return;
 
         if (agent.navMeshAgent != null && agent.navMeshAgent.enabled)
@@ -57,9 +66,10 @@ public class AiChasePlayerState : AiState
             }
         }
 
+        float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+
         if (agent.weapons.HasWeapon())
         {
-            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
             if (distanceToTarget < 15f)
             {
                 agent.stateMachine.ChangeState(AiStateId.Attack);
@@ -68,7 +78,6 @@ public class AiChasePlayerState : AiState
         }
         else
         {
-            float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
             if (distanceToTarget < agent.config.meleeAttackRange)
             {
                 agent.stateMachine.ChangeState(AiStateId.MeleeAttack);
@@ -76,6 +85,7 @@ public class AiChasePlayerState : AiState
             }
         }
     }
+
 
 
     public void Exit(AiAgent agent)

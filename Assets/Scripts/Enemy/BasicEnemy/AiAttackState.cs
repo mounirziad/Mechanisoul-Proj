@@ -62,9 +62,26 @@ public class AiAttackState : AiState
             return;
         }
 
-        Transform target = agent.GetCurrentTarget();
+        // pick target: charmed enemy or player
+        Transform target = null;
+        EnemyCharm charm = agent.GetComponent<EnemyCharm>();
+
+        if (charm != null && charm.ShouldIgnorePlayerAndFightEnemies())
+        {
+            target = charm.GetCharmAttackTarget(agent.transform);
+            if (target == null)
+                return; // charmed but no enemy to shoot
+        }
+        else
+        {
+            target = agent.playertransform;
+        }
+
         if (target == null)
+        {
+            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
             return;
+        }
 
         float distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
         if (distanceToTarget > 15f)
@@ -100,5 +117,6 @@ public class AiAttackState : AiState
                 weapon.Fire();
             }
         }
+
     }
 }
