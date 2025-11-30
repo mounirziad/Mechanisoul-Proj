@@ -608,7 +608,7 @@ Transform:
   m_GameObject: {fileID: 8180310223454860488}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalPosition: {x: 0, y: -0.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3408,6 +3408,7 @@ MonoBehaviour:
   dotMaxTicks: 0
   dotTickTimer: 0
   dotTickMaxTime: 0
+  dotMaxStacks: 0
   lsAmt: 0
   lsDoubleActive: 0
   moveSpeedBuff: 0
@@ -3467,6 +3468,7 @@ MonoBehaviour:
   isSprinting: 0
   isGrounded: 1
   isStrictlyGrounded: 0
+  isLanding: 0
   walkingSpeed: 1.5
   runningSpeed: 5
   sprintingSpeed: 15
@@ -3914,7 +3916,13 @@ MonoBehaviour:
   activeTime: 0.28
   meshRefreshRate: 0.02
   positionToSpawn: {fileID: 2610306212501639305}
-  mat: {fileID: 2100000, guid: 49a5a80375d8e494ea3bfef6ead4f3de, type: 2}
+  emotionMat: {fileID: 2100000, guid: 49a5a80375d8e494ea3bfef6ead4f3de, type: 2}
+  materials:
+  - {fileID: 2100000, guid: 011e35138c076134eaae1a1506520dc4, type: 2}
+  - {fileID: 2100000, guid: 487099de5cb3b5840b8c3fe297ca0bad, type: 2}
+  - {fileID: 2100000, guid: f00239206ce6cf943acfa9b9f598bb3d, type: 2}
+  - {fileID: 2100000, guid: 234142d0a3f6343478aed2a1b5f50340, type: 2}
+  - {fileID: 2100000, guid: a97104aded915c64f899043eb90f905d, type: 2}
   meshDestroyDelay: 0.1
   requireGrounded: 1
 --- !u!114 &3368849391516351207

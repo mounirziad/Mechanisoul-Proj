@@ -35,7 +35,7 @@ public class FreeLookCamera : MonoBehaviour
     private float currentDistance;
     private float horizontalAngle;
     private float verticalAngle;
-    
+
     private Vector2 lookInput;
     private float zoomInput;
 
@@ -58,9 +58,9 @@ public class FreeLookCamera : MonoBehaviour
     private void Start()
     {
         currentDistance = defaultDistance;
-        
+
         FindPlayerIfNeeded();
-        
+
         if (target != null)
         {
             Vector3 angles = transform.eulerAngles;
@@ -76,13 +76,13 @@ public class FreeLookCamera : MonoBehaviour
                 playerInputManager = player.GetComponent<InputManager>();
             }
         }
-        
+
         if (collisionHandler != null)
         {
             collisionHandler.InitializeDistance(currentDistance);
         }
     }
-    
+
     private void FindPlayerIfNeeded()
     {
         if (target == null)
@@ -116,7 +116,7 @@ public class FreeLookCamera : MonoBehaviour
         if (useMouseDelta)
         {
             lookInput = playerInputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
-            
+
             if (Gamepad.current != null && playerInputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
             {
                 lookInput *= gamepadSensitivity * Time.deltaTime;
@@ -144,15 +144,15 @@ public class FreeLookCamera : MonoBehaviour
     private void UpdateAngles()
     {
         float sensitivity = useMouseDelta ? mouseSensitivity : orbitSensitivity;
-        
+
         horizontalAngle += lookInput.x * sensitivity;
-        
+
         float verticalChange = lookInput.y * sensitivity;
         if (invertY)
         {
             verticalChange = -verticalChange;
         }
-        
+
         verticalAngle -= verticalChange;
         verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
     }
@@ -166,10 +166,10 @@ public class FreeLookCamera : MonoBehaviour
     private void CalculateDesiredPosition()
     {
         desiredRotation = Quaternion.Euler(verticalAngle, horizontalAngle, 0f);
-        
+
         Vector3 targetPoint = target.position + targetOffset;
         Vector3 direction = desiredRotation * Vector3.back;
-        
+
         desiredPosition = targetPoint + direction * currentDistance;
     }
 
@@ -191,7 +191,7 @@ public class FreeLookCamera : MonoBehaviour
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
-        
+
         if (target != null && playerInputManager == null)
         {
             playerInputManager = target.GetComponent<InputManager>();
@@ -213,8 +213,15 @@ public class FreeLookCamera : MonoBehaviour
         Gizmos.color = Color.yellow;
         Vector3 targetPoint = target.position + targetOffset;
         Gizmos.DrawWireSphere(targetPoint, 0.2f);
-        
+
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(targetPoint, transform.position);
     }
+
+    public void SetSensitivity(float multiplier)
+    {
+        mouseSensitivity = 0.1f * multiplier;
+        gamepadSensitivity = 2500f * multiplier;
+    }
+
 }

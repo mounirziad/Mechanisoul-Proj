@@ -7,20 +7,20 @@ public class ZTargetingCamera : MonoBehaviour
     [SerializeField] private Transform playerTarget;
     [SerializeField] private ZTargetingSystem zTargeting;
     [SerializeField] private Vector3 playerOffset = new Vector3(0f, 1.5f, 0f);
-    
+
     [Header("Camera Position")]
     [SerializeField] private Vector3 shoulderOffset = new Vector3(0.6f, 0.3f, 0f);
     [SerializeField] private float defaultDistance = 5f;
     [SerializeField] private float minDistance = 2f;
     [SerializeField] private float maxDistance = 10f;
-    
+
     [Header("Locked Mode Settings")]
     [SerializeField] private float lockedDistance = 6f;
     [SerializeField] private float targetVerticalOffset = 1f;
     [SerializeField] private float targetFramingOffset = 0.25f;
     [SerializeField] private bool adjustDistanceByTargetDistance = true;
     [SerializeField] private float distanceAdjustmentFactor = 0.4f;
-    
+
     [Header("Dynamic Framing")]
     [SerializeField] private bool keepTargetInView = true;
     [SerializeField] private Vector2 viewportSafeZone = new Vector2(0.2f, 0.15f);
@@ -29,33 +29,33 @@ public class ZTargetingCamera : MonoBehaviour
     [SerializeField] private float framingAdjustmentSpeed = 3f;
     [SerializeField] private float rotationCorrectionStrength = 0.7f;
     [SerializeField] private float maxManualRotationAngle = 45f;
-    
+
     [Header("Rotation Settings")]
     [SerializeField] private float freeRotationSpeed = 8f;
     [SerializeField] private float lockedRotationSpeed = 12f;
     [SerializeField] private float manualRotationSensitivity = 2f;
     [SerializeField] private bool allowManualRotation = true;
-    
+
     [Header("Smoothing")]
     [SerializeField] private float positionSmoothing = 10f;
     [SerializeField] private float rotationSmoothing = 8f;
     [SerializeField] private float lockTransitionSmoothing = 6f;
     [SerializeField] private float distanceSmoothing = 5f;
-    
+
     [Header("Input")]
     [SerializeField] private InputManager inputManager;
     [SerializeField] private bool useMouseInput = true;
-    [SerializeField] private float mouseSensitivity = 0.15f;
-    [SerializeField] private float gamepadSensitivity = 100f;
-    
+    [SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private float gamepadSensitivity = 2500f;
+
     [Header("Collision")]
     [SerializeField] private CameraCollisionHandler collisionHandler;
     [SerializeField] private bool enableCollisionHandling = true;
-    
+
     [Header("Debug")]
     [SerializeField] private bool showDebugInfo = false;
     [SerializeField] private bool showGizmos = true;
-    
+
     private Vector3 currentPosition;
     private Quaternion currentRotation;
     private float currentDistance;
@@ -69,28 +69,28 @@ public class ZTargetingCamera : MonoBehaviour
     private float smoothedYaw = 0f;
     private bool isFirstFrame = true;
     private bool hasInitializedYaw = false;
-    
+
     private void Awake()
     {
         FindPlayerIfNeeded();
-        
+
         if (zTargeting == null && playerTarget != null)
         {
             zTargeting = playerTarget.GetComponent<ZTargetingSystem>();
         }
-        
+
         if (inputManager == null && playerTarget != null)
         {
             inputManager = playerTarget.GetComponent<InputManager>();
         }
-        
+
         cachedCamera = GetComponent<Camera>();
-        
+
         currentDistance = defaultDistance;
         currentPosition = transform.position;
         currentRotation = transform.rotation;
     }
-    
+
     private void FindPlayerIfNeeded()
     {
         if (playerTarget == null)
@@ -103,22 +103,22 @@ public class ZTargetingCamera : MonoBehaviour
             }
         }
     }
-    
+
     public void SetTarget(Transform newTarget)
     {
         playerTarget = newTarget;
-        
+
         if (playerTarget != null && zTargeting == null)
         {
             zTargeting = playerTarget.GetComponent<ZTargetingSystem>();
         }
-        
+
         if (playerTarget != null && inputManager == null)
         {
             inputManager = playerTarget.GetComponent<InputManager>();
         }
     }
-    
+
     private void Start()
     {
         if (collisionHandler != null)
@@ -126,19 +126,19 @@ public class ZTargetingCamera : MonoBehaviour
             collisionHandler.InitializeDistance(currentDistance);
         }
     }
-    
+
     private void LateUpdate()
     {
         if (playerTarget == null)
             return;
-        
+
         ReadInput();
-        
+
         UpdateCameraDistance();
-        
+
         Vector3 desiredPosition;
         Quaternion desiredRotation;
-        
+
         if (zTargeting != null && zTargeting.IsLocked)
         {
             CalculateLockedCamera(out desiredPosition, out desiredRotation);
@@ -147,28 +147,28 @@ public class ZTargetingCamera : MonoBehaviour
         {
             CalculateFreeCamera(out desiredPosition, out desiredRotation);
         }
-        
+
         if (enableCollisionHandling && collisionHandler != null)
         {
             desiredPosition = HandleCollision(desiredPosition);
         }
-        
+
         ApplySmoothing(desiredPosition, desiredRotation);
-        
+
         wasLocked = zTargeting != null && zTargeting.IsLocked;
     }
-    
+
     private void ReadInput()
     {
         lookInput = Vector2.zero;
-        
+
         if (!allowManualRotation || inputManager == null || inputManager.playerControls == null)
             return;
-        
+
         if (useMouseInput)
         {
             lookInput = inputManager.playerControls.PlayerMovement.Look.ReadValue<Vector2>();
-            
+
             if (Gamepad.current != null && inputManager.playerControls.PlayerMovement.Look.activeControl?.device is Gamepad)
             {
                 lookInput *= gamepadSensitivity * Time.deltaTime;
@@ -179,52 +179,52 @@ public class ZTargetingCamera : MonoBehaviour
             lookInput = inputManager.cameraInput;
         }
     }
-    
+
     private void UpdateCameraDistance()
     {
         float targetDistance = defaultDistance;
-        
+
         if (zTargeting != null && zTargeting.IsLocked)
         {
             targetDistance = lockedDistance;
-            
+
             if (adjustDistanceByTargetDistance && zTargeting.CurrentTarget != null)
             {
                 float distanceToTarget = Vector3.Distance(
                     playerTarget.position,
                     zTargeting.CurrentTarget.position
                 );
-                
+
                 targetDistance += distanceToTarget * distanceAdjustmentFactor;
                 targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
             }
         }
-        
+
         currentDistance = Mathf.Lerp(
             currentDistance,
             targetDistance,
             distanceSmoothing * Time.deltaTime
         );
     }
-    
+
     private void CalculateFreeCamera(out Vector3 position, out Quaternion rotation)
     {
         Vector3 targetPoint = playerTarget.position + playerOffset;
-        
+
         if (lookInput.sqrMagnitude > 0.01f)
         {
             float sensitivity = useMouseInput ? mouseSensitivity : manualRotationSensitivity;
             float yawInput = lookInput.x * sensitivity;
-            
+
             Quaternion yawRotation = Quaternion.Euler(0f, yawInput, 0f);
             manualRotationOffset = yawRotation * manualRotationOffset;
         }
-        
+
         rotation = manualRotationOffset;
-        
+
         Vector3 localOffset = rotation * shoulderOffset;
         Vector3 offsetPoint = targetPoint + localOffset;
-        
+
         Vector3 backDirection = rotation * Vector3.back;
         position = offsetPoint + backDirection * currentDistance;
     }
@@ -325,7 +325,7 @@ public class ZTargetingCamera : MonoBehaviour
         Vector3 backDirection = cameraRotation * Vector3.back;
         return offsetPoint + backDirection * distance;
     }
-    
+
     private Vector3 CalculateCameraPositionFromYaw(Vector3 playerPoint, float yawAngle, float distance)
     {
         Quaternion yawRotation = Quaternion.Euler(0f, yawAngle, 0f);
@@ -334,39 +334,39 @@ public class ZTargetingCamera : MonoBehaviour
         Vector3 backDirection = yawRotation * Vector3.back;
         return offsetPoint + backDirection * distance;
     }
-    
+
     private Quaternion ApplyRotationCorrection(Quaternion currentRot, Quaternion idealRot, Vector3 playerPoint, Vector3 targetPoint, Vector3 cameraPos)
     {
         if (cachedCamera == null)
             return currentRot;
-        
+
         Matrix4x4 testViewMatrix = Matrix4x4.TRS(cameraPos, currentRot, Vector3.one).inverse;
         Matrix4x4 projectionMatrix = cachedCamera.projectionMatrix;
         Matrix4x4 vpMatrix = projectionMatrix * testViewMatrix;
-        
+
         Vector3 playerViewport = WorldToViewportPoint(playerPoint, vpMatrix);
         Vector3 targetViewport = WorldToViewportPoint(targetPoint, vpMatrix);
-        
+
         float minX = viewportSafeZone.x;
         float maxX = 1f - viewportSafeZone.x;
         float minY = viewportSafeZone.y;
         float maxY = 1f - viewportSafeZone.y;
-        
-        bool playerOutOfBounds = playerViewport.z > 0 && 
-            (playerViewport.x < minX || playerViewport.x > maxX || 
+
+        bool playerOutOfBounds = playerViewport.z > 0 &&
+            (playerViewport.x < minX || playerViewport.x > maxX ||
              playerViewport.y < minY || playerViewport.y > maxY);
-             
-        bool targetOutOfBounds = targetViewport.z > 0 && 
-            (targetViewport.x < minX || targetViewport.x > maxX || 
+
+        bool targetOutOfBounds = targetViewport.z > 0 &&
+            (targetViewport.x < minX || targetViewport.x > maxX ||
              targetViewport.y < minY || targetViewport.y > maxY);
-        
+
         bool targetBehindCamera = targetViewport.z <= 0;
         bool playerBehindCamera = playerViewport.z <= 0;
-        
+
         if (targetBehindCamera || playerBehindCamera || targetOutOfBounds || playerOutOfBounds)
         {
             float correctionAmount = rotationCorrectionStrength;
-            
+
             if (targetBehindCamera || playerBehindCamera)
             {
                 correctionAmount = 1f;
@@ -374,7 +374,7 @@ public class ZTargetingCamera : MonoBehaviour
             else if (targetOutOfBounds || playerOutOfBounds)
             {
                 float distanceFromEdge = 0f;
-                
+
                 if (targetOutOfBounds)
                 {
                     if (targetViewport.x < minX) distanceFromEdge = Mathf.Max(distanceFromEdge, minX - targetViewport.x);
@@ -382,7 +382,7 @@ public class ZTargetingCamera : MonoBehaviour
                     if (targetViewport.y < minY) distanceFromEdge = Mathf.Max(distanceFromEdge, minY - targetViewport.y);
                     if (targetViewport.y > maxY) distanceFromEdge = Mathf.Max(distanceFromEdge, targetViewport.y - maxY);
                 }
-                
+
                 if (playerOutOfBounds)
                 {
                     if (playerViewport.x < minX) distanceFromEdge = Mathf.Max(distanceFromEdge, minX - playerViewport.x);
@@ -390,53 +390,53 @@ public class ZTargetingCamera : MonoBehaviour
                     if (playerViewport.y < minY) distanceFromEdge = Mathf.Max(distanceFromEdge, minY - playerViewport.y);
                     if (playerViewport.y > maxY) distanceFromEdge = Mathf.Max(distanceFromEdge, playerViewport.y - maxY);
                 }
-                
+
                 correctionAmount = Mathf.Clamp01(rotationCorrectionStrength + distanceFromEdge * 2f);
             }
-            
+
             float yawDifference = Quaternion.Angle(currentRot, idealRot);
             float decayMultiplier = (targetBehindCamera || playerBehindCamera) ? 10f : 5f;
             float decayRate = Mathf.Clamp01(yawDifference / maxManualRotationAngle) * decayMultiplier;
-            
+
             float idealYaw = idealRot.eulerAngles.y;
             desiredWorldYaw = Mathf.LerpAngle(desiredWorldYaw, idealYaw, decayRate * Time.deltaTime);
-            
+
             return Quaternion.Slerp(currentRot, idealRot, correctionAmount);
         }
-        
+
         return currentRot;
     }
-    
+
     private void UpdateFramingDistance(Vector3 cameraPos, Quaternion cameraRot, Vector3 playerPoint, Vector3 targetPoint)
     {
         if (cachedCamera == null)
             return;
-        
+
         Matrix4x4 viewMatrix = Matrix4x4.TRS(cameraPos, cameraRot, Vector3.one).inverse;
         Matrix4x4 projectionMatrix = cachedCamera.projectionMatrix;
         Matrix4x4 vpMatrix = projectionMatrix * viewMatrix;
-        
+
         Vector3 playerViewport = WorldToViewportPoint(playerPoint, vpMatrix);
         Vector3 targetViewport = WorldToViewportPoint(targetPoint, vpMatrix);
-        
+
         float minX = viewportSafeZone.x;
         float maxX = 1f - viewportSafeZone.x;
         float minY = viewportSafeZone.y;
         float maxY = 1f - viewportSafeZone.y;
-        
+
         bool targetBehindCamera = targetViewport.z <= 0;
         bool playerBehindCamera = playerViewport.z <= 0;
-        
-        bool playerOutOfBounds = playerViewport.z > 0 && 
-            (playerViewport.x < minX || playerViewport.x > maxX || 
+
+        bool playerOutOfBounds = playerViewport.z > 0 &&
+            (playerViewport.x < minX || playerViewport.x > maxX ||
              playerViewport.y < minY || playerViewport.y > maxY);
-             
-        bool targetOutOfBounds = targetViewport.z > 0 && 
-            (targetViewport.x < minX || targetViewport.x > maxX || 
+
+        bool targetOutOfBounds = targetViewport.z > 0 &&
+            (targetViewport.x < minX || targetViewport.x > maxX ||
              targetViewport.y < minY || targetViewport.y > maxY);
-        
+
         float desiredOffset = 0f;
-        
+
         if (targetBehindCamera || playerBehindCamera)
         {
             float distanceBetween = Vector3.Distance(playerPoint, targetPoint);
@@ -445,7 +445,7 @@ public class ZTargetingCamera : MonoBehaviour
         else if (playerOutOfBounds || targetOutOfBounds)
         {
             float distanceBetween = Vector3.Distance(playerPoint, targetPoint);
-            
+
             float outOfBoundsAmount = 0f;
             if (targetOutOfBounds)
             {
@@ -461,7 +461,7 @@ public class ZTargetingCamera : MonoBehaviour
                     Mathf.Max(minY - playerViewport.y, playerViewport.y - maxY)
                 ));
             }
-            
+
             outOfBoundsAmount = Mathf.Clamp01(outOfBoundsAmount);
             float baseOffset = distanceBetween * 0.4f;
             desiredOffset = baseOffset + (outOfBoundsAmount * 3f);
@@ -471,7 +471,7 @@ public class ZTargetingCamera : MonoBehaviour
         {
             float spreadX = Mathf.Abs(playerViewport.x - targetViewport.x);
             float spreadY = Mathf.Abs(playerViewport.y - targetViewport.y);
-            
+
             if (spreadX > 0.6f || spreadY > 0.5f)
             {
                 float excessSpread = Mathf.Max(spreadX - 0.6f, spreadY - 0.5f);
@@ -482,77 +482,77 @@ public class ZTargetingCamera : MonoBehaviour
                 desiredOffset = -0.5f;
             }
         }
-        
-        desiredOffset = Mathf.Clamp(desiredOffset, 
-            framingDistanceMin - currentDistance, 
+
+        desiredOffset = Mathf.Clamp(desiredOffset,
+            framingDistanceMin - currentDistance,
             framingDistanceMax - currentDistance);
-        
-        float adjustmentSpeed = (targetBehindCamera || playerBehindCamera || targetOutOfBounds || playerOutOfBounds) 
-            ? framingAdjustmentSpeed * 2f 
+
+        float adjustmentSpeed = (targetBehindCamera || playerBehindCamera || targetOutOfBounds || playerOutOfBounds)
+            ? framingAdjustmentSpeed * 2f
             : framingAdjustmentSpeed;
-        
+
         framingDistanceOffset = Mathf.Lerp(
-            framingDistanceOffset, 
-            desiredOffset, 
+            framingDistanceOffset,
+            desiredOffset,
             adjustmentSpeed * Time.deltaTime
         );
     }
-    
+
     private Vector3 WorldToViewportPoint(Vector3 worldPos, Matrix4x4 vpMatrix)
     {
         Vector4 clipPos = vpMatrix * new Vector4(worldPos.x, worldPos.y, worldPos.z, 1f);
-        
+
         if (Mathf.Approximately(clipPos.w, 0f))
             return new Vector3(0.5f, 0.5f, -1f);
-        
+
         Vector3 ndcPos = new Vector3(clipPos.x / clipPos.w, clipPos.y / clipPos.w, clipPos.z / clipPos.w);
-        
+
         return new Vector3(
             ndcPos.x * 0.5f + 0.5f,
             ndcPos.y * 0.5f + 0.5f,
             clipPos.w
         );
     }
-    
+
     private Vector3 HandleCollision(Vector3 desiredPosition)
     {
         Vector3 targetPoint = playerTarget.position + playerOffset;
         float checkDistance = Vector3.Distance(targetPoint, desiredPosition);
-        
+
         return collisionHandler.HandleCollision(targetPoint, desiredPosition, checkDistance);
     }
-    
+
     private void ApplySmoothing(Vector3 desiredPosition, Quaternion desiredRotation)
     {
         bool isLocked = zTargeting != null && zTargeting.IsLocked;
-        
+
         if (!isLocked && wasLocked)
         {
             framingDistanceOffset = 0f;
             hasInitializedYaw = false;
             isFirstFrame = true;
         }
-        
+
         desiredRotation = SmoothYawTransition(desiredRotation, isLocked);
-        
+
         float posSmooth = isLocked ? lockTransitionSmoothing : positionSmoothing;
         float rotSmooth = isLocked ? lockTransitionSmoothing : rotationSmoothing;
-        
+
         currentPosition = Vector3.Lerp(currentPosition, desiredPosition, posSmooth * Time.deltaTime);
         currentRotation = Quaternion.Slerp(currentRotation, desiredRotation, rotSmooth * Time.deltaTime);
-        
+
         transform.position = currentPosition;
         transform.rotation = currentRotation;
-        
+
         if (showDebugInfo)
         {
-            float yawOffset = isLocked && zTargeting.CurrentTarget != null 
-                ? Mathf.DeltaAngle(desiredWorldYaw, lockedCameraIdealRotation.eulerAngles.y) 
+            float yawOffset = isLocked && zTargeting.CurrentTarget != null
+                ? Mathf.DeltaAngle(desiredWorldYaw, lockedCameraIdealRotation.eulerAngles.y)
                 : 0f;
             Debug.Log($"Camera - Locked: {isLocked} | Distance: {currentDistance:F2} | Framing Offset: {framingDistanceOffset:F2} | Yaw Offset: {yawOffset:F1}° | World Yaw: {desiredWorldYaw:F1}° | Pos: {currentPosition}");
         }
     }
-    
+
     private Quaternion SmoothYawTransition(Quaternion desiredRotation, bool isLocked)
     {
         if (!isLocked)
@@ -561,83 +561,90 @@ public class ZTargetingCamera : MonoBehaviour
             isFirstFrame = true;
             return desiredRotation;
         }
-        
+
         float desiredYaw = desiredRotation.eulerAngles.y;
-        
+
         if (isFirstFrame)
         {
             smoothedYaw = desiredYaw;
             isFirstFrame = false;
             return desiredRotation;
         }
-        
+
         float yawDelta = Mathf.DeltaAngle(smoothedYaw, desiredYaw);
         float maxYawChangePerFrame = 180f * Time.deltaTime;
         yawDelta = Mathf.Clamp(yawDelta, -maxYawChangePerFrame, maxYawChangePerFrame);
-        
+
         smoothedYaw = Mathf.Repeat(smoothedYaw + yawDelta, 360f);
-        
+
         Vector3 eulerAngles = desiredRotation.eulerAngles;
         eulerAngles.y = smoothedYaw;
         return Quaternion.Euler(eulerAngles);
     }
-    
+
     public bool IsLocked()
     {
         return zTargeting != null && zTargeting.IsLocked;
     }
-    
+
     public Vector3 GetCameraForward()
     {
         return transform.forward;
     }
-    
+
     public Transform GetCurrentTarget()
     {
         return zTargeting != null ? zTargeting.CurrentTarget : null;
     }
-    
+
+    public void SetSensitivity(float multiplier)
+    {
+        mouseSensitivity = 0.1f * multiplier;
+        gamepadSensitivity = 2500f * multiplier;
+    }
+
+
     private void OnDrawGizmos()
     {
         if (!showGizmos || !Application.isPlaying || playerTarget == null)
             return;
-        
+
         Gizmos.color = Color.cyan;
         Vector3 playerPoint = playerTarget.position + playerOffset;
         Gizmos.DrawWireSphere(playerPoint, 0.2f);
-        
+
         if (zTargeting != null && zTargeting.IsLocked && zTargeting.CurrentTarget != null)
         {
             Gizmos.color = Color.red;
             Vector3 targetPoint = zTargeting.CurrentTarget.position + Vector3.up * targetVerticalOffset;
             Gizmos.DrawWireSphere(targetPoint, 0.3f);
-            
+
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, targetPoint);
-            
+
             Gizmos.color = Color.green;
             Gizmos.DrawLine(playerPoint, targetPoint);
         }
-        
+
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, transform.forward * 3f);
     }
-    
+
     private void OnGUI()
     {
         if (!showDebugInfo || !Application.isPlaying)
             return;
-        
+
         if (zTargeting != null && zTargeting.IsLocked && keepTargetInView && cachedCamera != null)
         {
             float minX = viewportSafeZone.x * Screen.width;
             float maxX = (1f - viewportSafeZone.x) * Screen.width;
             float minY = viewportSafeZone.y * Screen.height;
             float maxY = (1f - viewportSafeZone.y) * Screen.height;
-            
+
             Color safeZoneColor = new Color(0f, 1f, 0f, 0.3f);
             DrawScreenRect(new Rect(minX, Screen.height - maxY, maxX - minX, maxY - minY), safeZoneColor);
-            
+
             if (playerTarget != null)
             {
                 Vector3 playerScreenPos = cachedCamera.WorldToScreenPoint(playerTarget.position + playerOffset);
@@ -646,7 +653,7 @@ public class ZTargetingCamera : MonoBehaviour
                     DrawScreenCircle(new Vector2(playerScreenPos.x, Screen.height - playerScreenPos.y), 10f, Color.cyan);
                 }
             }
-            
+
             if (zTargeting.CurrentTarget != null)
             {
                 Vector3 targetScreenPos = cachedCamera.WorldToScreenPoint(
@@ -658,14 +665,14 @@ public class ZTargetingCamera : MonoBehaviour
             }
         }
     }
-    
+
     private void DrawScreenRect(Rect rect, Color color)
     {
         GUI.color = color;
         GUI.DrawTexture(rect, Texture2D.whiteTexture);
         GUI.color = Color.white;
     }
-    
+
     private void DrawScreenCircle(Vector2 center, float radius, Color color)
     {
         GUI.color = color;
