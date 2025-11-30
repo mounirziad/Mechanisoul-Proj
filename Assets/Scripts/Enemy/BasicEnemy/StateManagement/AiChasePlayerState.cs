@@ -31,6 +31,12 @@ public class AiChasePlayerState : AiState
         if (PlayerHealth.IsPlayerDead)
             return;
 
+        if (agent.playertransform == null)
+        {
+            agent.stateMachine.ChangeState(AiStateId.Idle);
+            return;
+        }
+
         BasicEnemyHealth health = agent.GetComponent<BasicEnemyHealth>();
         if (health != null)
         {

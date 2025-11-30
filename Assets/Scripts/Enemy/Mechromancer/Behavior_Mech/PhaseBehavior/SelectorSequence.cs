@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;
@@ -10,6 +11,8 @@ public partial class SelectorSequence : Composite
 {
     private int currentChild = -1;
     private bool childStarted = false;
+
+    private static readonly MethodInfo updateMethod = typeof(Node).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
 
     protected override Status OnUpdate()
     {
@@ -27,8 +30,24 @@ public partial class SelectorSequence : Composite
             childStarted = true;
         }
 
+        if (currentChild == 0 || currentChild >= Children.Count)
+        {
+            return Status.Failure;
+        }
+
         var child = Children[currentChild];
-        var result = child.CurrentStatus;
+
+        if (child == null)
+        {
+            Debug.LogError($"Child node is null at index {currentChild}");
+            currentChild = -1;
+            childStarted = false;
+            return Status.Failure;
+        }
+
+        updateMethod.Invoke(child, null);
+
+        Status result = child.CurrentStatus;
 
         if (result == Status.Running)
         {
@@ -40,16 +59,11 @@ public partial class SelectorSequence : Composite
         currentChild = -1;
         childStarted = false;
 
-        return Status.Running;
+        return result;
     }
 
     protected override void OnEnd()
     {
-        if (currentChild != -1 && childStarted)
-        {
-            EndNode(Children[currentChild]);
-        }
-
         currentChild = -1;
         childStarted = false;
     }
@@ -67,11 +81,11 @@ public partial class SelectorSequence : Composite
                 {
                     return i;
                 }
-                else
-                {
-                    //if no condition interface then it is always allowed
-                    return i;
-                }
+            }
+            else
+            {
+                //if no condition interface then it is always allowed
+                return i;
             }
         }
 

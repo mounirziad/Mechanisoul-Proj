@@ -130,12 +130,30 @@ public partial class TriggerResurrectionAction : Action, IAttackCondition
 
     protected override Status OnStart()
     {
+        if (Agent?.Value == null)
+        {
+            Debug.LogError("Agent or Agent.Value is null");
+            return Status.Failure;
+        }
+
+        resurrection = Agent.Value.GetComponent<Resurrection>();
+        if (resurrection == null)
+        {
+            Debug.LogError("Resurrection component not found on Agent");
+            return Status.Failure;
+        }
+
         resurrection.StartResurrection();
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
+        if (resurrection == null)
+        {
+            Debug.LogError("Resurrection component not found");
+            return Status.Failure;
+        }
         return resurrection.IsResurrectionActive ? Status.Running : Status.Success;
     }
 }
