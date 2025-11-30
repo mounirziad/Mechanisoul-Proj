@@ -347,6 +347,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1666175717912358182, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_text
+      value: Upgrade
+      objectReference: {fileID: 0}
     - target: {fileID: 1740329231654151505, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1383,6 +1387,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6999215527157210176, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_fontSize
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6999215527157210176, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_margin.x
+      value: 32.8302
+      objectReference: {fileID: 0}
+    - target: {fileID: 6999215527157210176, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_margin.z
+      value: 33.557495
+      objectReference: {fileID: 0}
+    - target: {fileID: 6999215527157210176, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6999215527157210176, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7084585123409680593, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1857,8 +1881,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: LOVE
+    description: 'Create a weakness zone. Enemies within the zone deal 15% less damage
+      for 4 seconds. '
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -1881,8 +1906,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: LOVE++
+    description: Increase duration of weakness to 7 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -1973,8 +1998,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: SADNESS++
+    description: Increase the size of the slowness area
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2056,8 +2081,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: ANGER++
+    description: Deal damage to enemies
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2196,8 +2221,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: ANGER+
+    description: Knock enemies back farther.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2398,7 +2423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
     upgradeName: JOY+
-    description: 
+    description: Increase the size of the area. by
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2648,8 +2673,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: SADNESS
+    description: Create a slowing area that slows enemy movement by 25%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2731,8 +2756,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: SADNESS+
+    description: Increase slow effectiveness to 35%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2766,8 +2791,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: JOY++
+    description: Increase chance to crit enemies to 60%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2790,8 +2815,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: ANGER
+    description: Knock back enemies in an area.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2898,8 +2923,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: LOVE+
+    description: Increase weakness effect to 30%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -2933,7 +2958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: JOY++
+    upgradeName: JOY+
     description: Critical hit change increased to 30%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -3027,8 +3052,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: FEAR++
+    description: Increase fear duration to 7 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -3109,8 +3134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: FEAR+
+    description: Increase the size of the fear zone.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -3238,8 +3263,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   upgradeData:
-    upgradeName: 
-    description: 
+    upgradeName: FEAR
+    description: Create a fear zone that fears enemies for 4 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
