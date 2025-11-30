@@ -7,14 +7,10 @@ public class JoyDashUpgrade : MonoBehaviour
     public JoyCritZone joyCritPrefab;
 
     [Header("Per-Level Tuning (index 0 = off)")]
-    [Tooltip("Extra crit chance granted while inside the aura (0..1). Lev1/Lev2 defaults 0.4, 0.6")]
-    public float[] chance = new float[3] { 0f, 0.40f, 0.60f };
+    public float[] chance = { 0f, 0.40f, 0.40f, 0.60f };
+    public float[] radius = { 0f, 2.5f, 3.5f, 3.5f }; // lvl2+ bigger AOE
+    public float[] duration = { 0f, 2.0f, 2.0f, 2.0f }; // same lifetime at all active levels
 
-    [Tooltip("Aura radius per level")]
-    public float[] radius = new float[3] { 0f, 3.0f, 3.0f };
-
-    [Tooltip("Aura lifetime per level (seconds)")]
-    public float[] duration = new float[3] { 0f, 2.0f, 2.0f };
 
     [Header("Spawn Options")]
     [Tooltip("If true, spawn at dash end point; otherwise at current player position.")]
@@ -25,11 +21,9 @@ public class JoyDashUpgrade : MonoBehaviour
     int _level = 0;
     DashAbility _dash;
 
-    // called by UpgradeHandler
     public void SetLevel(int level)
     {
-        _level = Mathf.Clamp(level, 0, 2);
-        // enable only if active (UpgradeHandler already toggles component.enabled but used as backup)
+        _level = Mathf.Clamp(level, 0, 3); // allow 3
         enabled = _level > 0;
     }
 

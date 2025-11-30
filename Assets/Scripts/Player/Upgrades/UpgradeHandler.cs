@@ -10,9 +10,14 @@ public class UpgradeHandler : MonoBehaviour
     [Header("melee levels")]
     public int meleeAngerLvl, meleeSadnessLvl, meleeLoveLvl, meleeFearLvl, meleeJoyLvl;
 
-    // dash levels 0..2
-    [Header("dash levels (0..2)")]
-    public int dashAngerLvl, dashSadnessLvl, dashJoyLvl, dashLoveLvl, dashFearLvl;
+    // dash levels 0..3 (0 = off, 1 = base, 2 = upgrade 1, 3 = upgrade 2)
+    [Header("dash levels (0..3; 0 = off,1 = base,2 = up1,3 = up2)")]
+    [Range(0, 3)] public int dashAngerLvl;
+    [Range(0, 3)] public int dashSadnessLvl;
+    [Range(0, 3)] public int dashJoyLvl;
+    [Range(0, 3)] public int dashLoveLvl;
+    [Range(0, 3)] public int dashFearLvl;
+
 
     // ranged levels
     [Header("ranged levels")]
@@ -28,7 +33,7 @@ public class UpgradeHandler : MonoBehaviour
     public MonoBehaviour angerDash, sadnessDash, loveDash, fearDash;
 
     [Header("tables")]
-    public int maxLvl = 5;
+    public int maxLvl = 3;
     float[] joyFireRateMult, joyDamageMult, angerAOEPercent;
     int[] sadMaxStacks;
     float[] sadSlowPerStack, loveCharmChance, loveCharmDur, fearStunDur, fearStunAoe;
@@ -126,17 +131,70 @@ public class UpgradeHandler : MonoBehaviour
     public void MeleeJoyDown() { meleeJoyLvl = ClampDown(meleeJoyLvl); RaiseLevelsChanged(); }
 
     // dash up/down + mutual exclusivity
-    public void DashAngerUp() { dashAngerLvl = Mathf.Clamp(dashAngerLvl + 1, 0, 2); dashSadnessLvl = dashJoyLvl = dashLoveLvl = dashFearLvl = 0; ApplyDashSelection(); }
-    public void DashSadnessUp() { dashSadnessLvl = Mathf.Clamp(dashSadnessLvl + 1, 0, 2); dashAngerLvl = dashJoyLvl = dashLoveLvl = dashFearLvl = 0; ApplyDashSelection(); }
-    public void DashJoyUp() { dashJoyLvl = Mathf.Clamp(dashJoyLvl + 1, 0, 2); dashAngerLvl = dashSadnessLvl = dashLoveLvl = dashFearLvl = 0; ApplyDashSelection(); }
-    public void DashLoveUp() { dashLoveLvl = Mathf.Clamp(dashLoveLvl + 1, 0, 2); dashAngerLvl = dashSadnessLvl = dashJoyLvl = dashFearLvl = 0; ApplyDashSelection(); }
-    public void DashFearUp() { dashFearLvl = Mathf.Clamp(dashFearLvl + 1, 0, 2); dashAngerLvl = dashSadnessLvl = dashJoyLvl = dashLoveLvl = 0; ApplyDashSelection(); }
+    public void DashAngerUp()
+    {
+        dashAngerLvl = Mathf.Clamp(dashAngerLvl + 1, 0, 3);
+        dashSadnessLvl = dashJoyLvl = dashLoveLvl = dashFearLvl = 0;
+        ApplyDashSelection();
+    }
 
-    public void DashAngerDown() { dashAngerLvl = Mathf.Clamp(dashAngerLvl - 1, 0, 2); ApplyDashSelection(); }
-    public void DashSadnessDown() { dashSadnessLvl = Mathf.Clamp(dashSadnessLvl - 1, 0, 2); ApplyDashSelection(); }
-    public void DashJoyDown() { dashJoyLvl = Mathf.Clamp(dashJoyLvl - 1, 0, 2); ApplyDashSelection(); }
-    public void DashLoveDown() { dashLoveLvl = Mathf.Clamp(dashLoveLvl - 1, 0, 2); ApplyDashSelection(); }
-    public void DashFearDown() { dashFearLvl = Mathf.Clamp(dashFearLvl - 1, 0, 2); ApplyDashSelection(); }
+    public void DashSadnessUp()
+    {
+        dashSadnessLvl = Mathf.Clamp(dashSadnessLvl + 1, 0, 3);
+        dashAngerLvl = dashJoyLvl = dashLoveLvl = dashFearLvl = 0;
+        ApplyDashSelection();
+    }
+
+    public void DashJoyUp()
+    {
+        dashJoyLvl = Mathf.Clamp(dashJoyLvl + 1, 0, 3);
+        dashAngerLvl = dashSadnessLvl = dashLoveLvl = dashFearLvl = 0;
+        ApplyDashSelection();
+    }
+
+    public void DashLoveUp()
+    {
+        dashLoveLvl = Mathf.Clamp(dashLoveLvl + 1, 0, 3);
+        dashAngerLvl = dashSadnessLvl = dashJoyLvl = dashFearLvl = 0;
+        ApplyDashSelection();
+    }
+
+    public void DashFearUp()
+    {
+        dashFearLvl = Mathf.Clamp(dashFearLvl + 1, 0, 3);
+        dashAngerLvl = dashSadnessLvl = dashJoyLvl = dashLoveLvl = 0;
+        ApplyDashSelection();
+    }
+    public void DashAngerDown()
+    {
+        dashAngerLvl = Mathf.Clamp(dashAngerLvl - 1, 0, 3);
+        ApplyDashSelection();
+    }
+
+    public void DashSadnessDown()
+    {
+        dashSadnessLvl = Mathf.Clamp(dashSadnessLvl - 1, 0, 3);
+        ApplyDashSelection();
+    }
+
+    public void DashJoyDown()
+    {
+        dashJoyLvl = Mathf.Clamp(dashJoyLvl - 1, 0, 3);
+        ApplyDashSelection();
+    }
+
+    public void DashLoveDown()
+    {
+        dashLoveLvl = Mathf.Clamp(dashLoveLvl - 1, 0, 3);
+        ApplyDashSelection();
+    }
+
+    public void DashFearDown()
+    {
+        dashFearLvl = Mathf.Clamp(dashFearLvl - 1, 0, 3);
+        ApplyDashSelection();
+    }
+
     public void ClearDash() { dashAngerLvl = dashSadnessLvl = dashJoyLvl = dashLoveLvl = dashFearLvl = 0; ApplyDashSelection(); }
 
     void EnsureDashRefs()

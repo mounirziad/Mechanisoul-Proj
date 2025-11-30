@@ -4,7 +4,7 @@ public class AngerDashUpgrade : DashUpgradeBase
 {
     [Header("Anger Burst")]
     [Tooltip("Extra % damage applied to the burst (index by upgrade level). 0.25 = +25%.")]
-    public float[] aoePercent = { 0f, 0.10f, 0.25f };
+    public float[] aoePercent = { 0f, 0f, 0f, 0.25f }; // 0=off, 1=base, 2=KB+only, 3=extra dmg
 
     [Header("Burst Prefab")]
     public AngerBurstZone fireBurstPrefab;

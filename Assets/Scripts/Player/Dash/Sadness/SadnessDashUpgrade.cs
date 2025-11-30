@@ -4,12 +4,8 @@ public class SadnessDashUpgrade : DashUpgradeBase
 {
     [Header("Sadness (single zone @ START if legacy toggle is ON)")]
     [SerializeField] private SlowZone slowZonePrefab;
-
-    [Tooltip("Per-level slow percent (0.35 = 35%). Index by upgradeLevel.")]
-    public float[] slowPercent = { 0f, 0.25f, 0.35f, 0.45f };
-
-    [Tooltip("Per-level slow seconds. Index by upgradeLevel.")]
-    public float[] slowSeconds = { 1.5f, 2.0f, 2.5f, 3.0f };
+    public float[] slowPercent = { 0f, 0.25f, 0.35f, 0.35f }; // lvl3 same strength as lvl2
+    public float[] slowSeconds = { 1.5f, 2.0f, 2.0f, 2.0f };
 
     [Header("Debug")]
     public bool debugLogs = true;
