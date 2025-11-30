@@ -55,6 +55,14 @@ public class BasicEnemyHealth : Enemy
             hitBox.health = this;
         }
     }
+    public float HealthFraction
+    {
+        get
+        {
+            if (maxHealth <= 0f) return 0f;
+            return currentHealth / maxHealth;
+        }
+    }
 
     public void ApplyModifiers(float slowAmount, float slowLength, float stunLength)
     {
