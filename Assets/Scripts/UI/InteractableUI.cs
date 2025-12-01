@@ -59,7 +59,7 @@ public class InteractableUI : MonoBehaviour
     {
         Debug.Log($"InteractableUI: Scene loaded - {scene.name}");
         FindPlayerInputManager();
-        
+
         if (upgradeUIActive)
         {
             upgradeUIActive = false;
@@ -68,7 +68,7 @@ public class InteractableUI : MonoBehaviour
                 upgradeUIScript.skillMenu.SetActive(false);
             }
         }
-        
+
         if (pauseActive)
         {
             pauseActive = false;
@@ -87,11 +87,11 @@ public class InteractableUI : MonoBehaviour
             playerInputManager = FindObjectOfType<InputManager>();
             if (playerInputManager != null)
             {
-                Debug.Log($"InteractableUI: Found InputManager on {playerInputManager.gameObject.name}");
+                Debug.Log("InteractableUI: Found InputManager");
             }
             else
             {
-                Debug.LogWarning("InteractableUI: Could not find InputManager in scene");
+                Debug.LogWarning("InteractableUI: Could not find InputManager");
             }
         }
     }
@@ -139,48 +139,60 @@ public class InteractableUI : MonoBehaviour
     {
         if (!pauseActive)
         {
-            if (upgradeUIScript != null)
+            if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
             {
                 pauseMenuUI.pauseMenu.SetActive(true);
-                upgradeUIScript.skillMenu.SetActive(false);
+
+                if (upgradeUIScript != null && upgradeUIScript.skillMenu != null)
+                {
+                    upgradeUIScript.skillMenu.SetActive(false);
+                }
+
                 pauseActive = true;
                 upgradeUIActive = false;
 
                 SetCursorState(true);
                 SetPlayerInputActive(false);
-                Time.timeScale = 0f;
 
                 if (firstPauseButton != null)
                 {
                     EventSystem.current.SetSelectedGameObject(firstPauseButton.gameObject);
                 }
             }
+            else
+            {
+                Debug.LogWarning("InteractableUI: pauseMenuUI or pauseMenu is null");
+            }
         }
         else
         {
-            if (upgradeUIScript != null)
+            if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
             {
                 pauseMenuUI.pauseMenu.SetActive(false);
-                pauseMenuUI.settingsMenu.SetActive(false);
                 pauseActive = false;
 
                 SetCursorState(false);
                 SetPlayerInputActive(true);
-                Time.timeScale = 1f;
 
                 EventSystem.current.SetSelectedGameObject(null);
             }
         }
     }
 
+
     public void ToggleUpgradeUI()
     {
         if (!upgradeUIActive)
         {
-            if (upgradeUIScript != null)
+            if (upgradeUIScript != null && upgradeUIScript.skillMenu != null)
             {
                 upgradeUIScript.skillMenu.SetActive(true);
-                pauseMenuUI.pauseMenu.SetActive(false);
+
+                if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
+                {
+                    pauseMenuUI.pauseMenu.SetActive(false);
+                }
+
                 upgradeUIActive = true;
                 pauseActive = false;
 
@@ -192,10 +204,14 @@ public class InteractableUI : MonoBehaviour
                     EventSystem.current.SetSelectedGameObject(firstUpgradeButton.gameObject);
                 }
             }
+            else
+            {
+                Debug.LogWarning("InteractableUI: upgradeUIScript or skillMenu is null");
+            }
         }
         else
         {
-            if (upgradeUIScript != null)
+            if (upgradeUIScript != null && upgradeUIScript.skillMenu != null)
             {
                 upgradeUIScript.skillMenu.SetActive(false);
                 upgradeUIActive = false;
@@ -207,6 +223,7 @@ public class InteractableUI : MonoBehaviour
             }
         }
     }
+
 
     private void SetCursorState(bool visible)
     {

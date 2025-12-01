@@ -160,7 +160,6 @@ public class ComboUpgrades : MonoBehaviour
         switch (upgradeType)
         {
             case Upgrades.Melee:
-                Debug.Log("Ronaldo");
                 return meleeUpgrades;
             case Upgrades.Range:
                 return rangedUpgrades;
