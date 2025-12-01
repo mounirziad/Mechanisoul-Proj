@@ -51,9 +51,26 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float hitscanRange = 100f;
     [SerializeField] private LayerMask hitscanLayerMask = -1;
     [SerializeField] private GameObject impactEffectPrefab;
-    [SerializeField] private GameObject muzzleFlashPrefab;
-    [SerializeField] private LineRenderer tracerLinePrefab;
     [SerializeField] private float tracerDuration = 0.1f;
+
+    [Header("Ranged VFX References")]
+    [SerializeField] private GameObject baseMuzzleFlashPrefab;
+    [SerializeField] private GameObject angerMuzzleFlashPrefab;
+    [SerializeField] private GameObject joyMuzzleFlashPrefab;
+    [SerializeField] private GameObject fearMuzzleFlashPrefab;
+    [SerializeField] private GameObject sadnessMuzzleFlashPrefab;
+    [SerializeField] private GameObject loveMuzzleFlashPrefab;
+
+    [SerializeField] private LineRenderer baseTracerLinePrefab;
+    [SerializeField] private LineRenderer angerTracerLinePrefab;
+    [SerializeField] private LineRenderer joyTracerLinePrefab;
+    [SerializeField] private LineRenderer fearTracerLinePrefab;
+    [SerializeField] private LineRenderer sadnessTracerLinePrefab;
+    [SerializeField] private LineRenderer loveTracerLinePrefab;
+
+    [SerializeField] private GameObject currentMuzzleFlashPrefab;
+    [SerializeField] private LineRenderer currentTracerLinePrefab;
+    private Emotions currentRangedEmotion = Emotions.None;
 
     [Header("Ammo Settings")]
     [SerializeField] int clipSize = 6;
@@ -160,6 +177,9 @@ public class PlayerCombat : MonoBehaviour
         }
 
         InitRangedGun();
+
+        currentMuzzleFlashPrefab = baseMuzzleFlashPrefab;
+        currentTracerLinePrefab = baseTracerLinePrefab;
     }
 
     void OnDisable()
@@ -267,6 +287,38 @@ public class PlayerCombat : MonoBehaviour
         LogGun($"SetRangedUpgrades applied: ammo={ammoInClip}/{clipSize}");
     }
 
+    public void SetRangedEmotion(Emotions emotion)
+    {
+        switch (emotion)
+        {
+            case Emotions.Joy:
+                currentMuzzleFlashPrefab = joyMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
+                currentTracerLinePrefab = joyTracerLinePrefab ?? baseTracerLinePrefab;
+                break;
+            case Emotions.Anger:
+                currentMuzzleFlashPrefab = angerMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
+                currentTracerLinePrefab = angerTracerLinePrefab ?? baseTracerLinePrefab;
+                break;
+            case Emotions.Sadness:
+                currentMuzzleFlashPrefab = sadnessMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
+                currentTracerLinePrefab = sadnessTracerLinePrefab ?? baseTracerLinePrefab;
+                break;
+            case Emotions.Love:
+                currentMuzzleFlashPrefab = loveMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
+                currentTracerLinePrefab = loveTracerLinePrefab ?? baseTracerLinePrefab;
+                break;
+            case Emotions.Fear:
+                currentMuzzleFlashPrefab = fearMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
+                currentTracerLinePrefab = fearTracerLinePrefab ?? baseTracerLinePrefab;
+                break;
+            case Emotions.None:
+            default:
+                currentMuzzleFlashPrefab = baseMuzzleFlashPrefab;
+                currentTracerLinePrefab = baseTracerLinePrefab;
+                break;
+        }
+    }
+
     public void ToggleRanged(bool on)
     {
         rangedEnabled = on;
@@ -355,9 +407,9 @@ public class PlayerCombat : MonoBehaviour
 
         float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
 
-        if (muzzleFlashPrefab != null)
+        if (currentMuzzleFlashPrefab != null)
         {
-            var muzzle = Instantiate(muzzleFlashPrefab, shootOrigin, Quaternion.LookRotation(shootDirection));
+            var muzzle = Instantiate(currentMuzzleFlashPrefab, shootOrigin, Quaternion.LookRotation(shootDirection));
             Destroy(muzzle, 0.1f);
         }
 
@@ -416,7 +468,7 @@ public class PlayerCombat : MonoBehaviour
             Debug.Log($"[Hitscan] No hit detected within range {effectiveRange:F2}m");
         }
 
-        if (tracerLinePrefab != null)
+        if (currentTracerLinePrefab != null)
         {
             DrawTracerLine(shootOrigin, hitPosition);
         }
@@ -458,7 +510,7 @@ public class PlayerCombat : MonoBehaviour
 
     void DrawTracerLine(Vector3 start, Vector3 end)
     {
-        var tracerObj = Instantiate(tracerLinePrefab, start, Quaternion.identity);
+        var tracerObj = Instantiate(currentTracerLinePrefab, start, Quaternion.identity);
         tracerObj.SetPosition(0, start);
         tracerObj.SetPosition(1, end);
         Destroy(tracerObj.gameObject, tracerDuration);

@@ -309,8 +309,21 @@ public class UpgradeHandler : MonoBehaviour
         };
 
         playerCombat.SetRangedUpgrades(mods);
+        Emotions activeEmotion = GetActiveRangedEmotion();
+        playerCombat.SetRangedEmotion(activeEmotion);
         RaiseLevelsChanged();
     }
+
+    public Emotions GetActiveRangedEmotion()
+    {
+        if (rangedJoyLvl > 0) return Emotions.Joy;
+        if (rangedAngerLvl > 0) return Emotions.Anger;
+        if (rangedSadnessLvl > 0) return Emotions.Sadness;
+        if (rangedLoveLvl > 0) return Emotions.Love;
+        if (rangedFearLvl > 0) return Emotions.Fear;
+        return Emotions.None;
+    }
+
 
     // injection from UpgradeRouter
     public void InjectDashComponents(JoyDashUpgrade j, MonoBehaviour a, MonoBehaviour s, MonoBehaviour l, MonoBehaviour f)
