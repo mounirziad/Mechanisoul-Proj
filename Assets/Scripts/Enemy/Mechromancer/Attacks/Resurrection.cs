@@ -10,8 +10,7 @@ public class Resurrection : MonoBehaviour
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float resurrectionTime = 5f;
 
-    private bool hasStarted = false;
-    private bool isMovingToHiding = false;
+    //private bool hasStarted = false;
 
     private Mechromancer mech;
     private NavMeshAgent agent;

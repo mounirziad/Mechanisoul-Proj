@@ -648,10 +648,10 @@ PrefabInstance:
       addedObject: {fileID: 484312872}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 484312871}
+      addedObject: {fileID: 484312875}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 484312870}
+      addedObject: {fileID: 484312871}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 484312869}
@@ -5439,6 +5439,9 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   range: 5
   force: 10
+  maxDistance: 3
+  lungeDamage: 8
+  pauseDuration: 1
 --- !u!114 &484312865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5454,6 +5457,7 @@ MonoBehaviour:
   lightningPrefab: {fileID: 4957132021656827656, guid: 4036a77eba853b04e8b1df5208d76f28, type: 3}
   lightningDuration: 1.5
   lightningOrigin: {fileID: 484312863}
+  cooldown: 5
   blackboard:
     m_Blackboard:
       rid: 7722564640421184094
@@ -5557,18 +5561,6 @@ MonoBehaviour:
           m_Value1: 9587200281160481982
         Name: SelfTransform
         m_Value: {fileID: 484312863}
---- !u!114 &484312870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484312861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3da1b5d7394f1584286f3427927faa14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ComboWeightedAttack
 --- !u!195 &484312871
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5626,6 +5618,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967d863be52185347b38eabce4b49c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MechAnimationController
+--- !u!54 &484312875
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484312861}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!1001 &494556510
 PrefabInstance:
   m_ObjectHideFlags: 0

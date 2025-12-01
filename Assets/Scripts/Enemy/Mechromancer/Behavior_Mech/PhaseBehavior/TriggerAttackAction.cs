@@ -14,6 +14,10 @@ public partial class TriggerAttackAction : Action
     [SerializeField]
     public BlackboardVariable<string> AttackTrigger;
 
+    [SerializeField]
+    [CreateProperty]
+    public string AttackId;
+
     private Mechromancer mech;
 
     protected override Status OnStart()
@@ -57,6 +61,10 @@ public partial class TriggerLightningAction : Action, IAttackCondition
 
     [SerializeField] public float AoERadius = 3f;
     [SerializeField] public float Damage = 15f;
+
+    [SerializeField]
+    [CreateProperty]
+    public string AttackId;
 
     private LightningController controller;
     private BehaviorGraphAgent bgAgent;
@@ -117,6 +125,10 @@ public partial class TriggerResurrectionAction : Action, IAttackCondition
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
     private Resurrection resurrection;
+
+    [SerializeField]
+    [CreateProperty]
+    public string AttackId;
 
     public bool CanRun()
     {
@@ -199,7 +211,7 @@ public partial class TriggerLungeAction : Action, IAttackCondition
         lunge = Agent.Value.GetComponent<MechLunge>();
         if (lunge == null) return Status.Failure;
 
-        lunge.LungeAttack();
+        lunge.StartLunge();
 
         return Status.Running;
     }
