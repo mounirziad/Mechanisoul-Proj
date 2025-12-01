@@ -9,7 +9,6 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] public float currentHealth;
 
     float dotTickDmg; //dmg per tick
-    int dotMaxStacks; //max number of dmg stacks
     float dotTickTimer; //time till next tick
     float dotTickMaxTime = 0.25f; //time between ticks
     bool dotActive; //currently taking dmg over time
@@ -36,7 +35,6 @@ public abstract class Enemy : MonoBehaviour
     public void applyDOT(float dotTickDMG, int dotMaxTicks, int dotMaxStacks) //apply the dot effect if not at max stacks, set active, start timer
     {
         this.dotTickDmg = dotTickDMG;
-        this.dotMaxStacks = dotMaxStacks;
 
         if (dotStacks.Count < dotMaxStacks) dotStacks.Add(dotMaxTicks);
 
