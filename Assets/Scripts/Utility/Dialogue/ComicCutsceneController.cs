@@ -16,7 +16,7 @@ public class ComicCutsceneController : MonoBehaviour
         public bool waitForInput = false;
         public float displayDuration = 3f;
         public float dialogueFadeDuration = 0.5f;
-        public bool fadeInAtStart = false; // NEW: Control whether to fade in
+        public bool fadeInAtStart = false;
         public bool fadeOutAtEnd = false;
         public float screenFadeDuration = 1.5f;
     }
@@ -70,7 +70,7 @@ public class ComicCutsceneController : MonoBehaviour
             shot.camera.enabled = true;
         }
 
-        // FIXED: Only fade in if explicitly requested
+        // Fade in from black at the start if specified
         if (shot.fadeInAtStart && fadeCanvasGroup.alpha > 0.5f)
         {
             yield return StartCoroutine(FadeScreen(1f, 0f, shot.screenFadeDuration));
