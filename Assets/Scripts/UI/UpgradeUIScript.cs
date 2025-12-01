@@ -1167,7 +1167,7 @@ public class UpgradeUIScript : MonoBehaviour
                 if (borderImage != null)
                 {
                     borderImage.enabled = true;
-                    borderImage.color = new Color(0f, 1f, 0f, 0.5f); // semi-transparent green
+                    borderImage.color = new Color(0f, 1f, 0f, 0.25f); // semi-transparent green
                 }
             }
         }
@@ -1184,7 +1184,7 @@ public class UpgradeUIScript : MonoBehaviour
                 if (borderImage != null)
                 {
                     borderImage.enabled = true;
-                    borderImage.color = new Color(1f, 1f, 0f, 0.5f); // semi-transparent yellow
+                    borderImage.color = new Color(1f, 1f, 0f, 0.25f); // semi-transparent yellow
                 }
             }
         }
