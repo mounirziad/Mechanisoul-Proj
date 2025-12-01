@@ -47807,6 +47807,7 @@ GameObject:
   - component: {fileID: 573254417}
   - component: {fileID: 573254416}
   - component: {fileID: 573254415}
+  - component: {fileID: 573254418}
   m_Layer: 0
   m_Name: Room3Trigger
   m_TagString: Untagged
@@ -47835,6 +47836,8 @@ MonoBehaviour:
   totalEnemies: 0
   remainingEnemies: 0
   roomCleared: 0
+  xpRewardOnClear: 150
+  xpManager: {fileID: 0}
 --- !u!65 &573254416
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47871,6 +47874,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &573254418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573254414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d4323dbf79dc04697e57b8a36cf3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomCollider
+  roomName: Room 3
 --- !u!1001 &573756535
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105736,6 +105752,7 @@ GameObject:
   - component: {fileID: 1023636423}
   - component: {fileID: 1023636422}
   - component: {fileID: 1023636424}
+  - component: {fileID: 1023636425}
   m_Layer: 0
   m_Name: Room1Trigger
   m_TagString: Untagged
@@ -105800,6 +105817,21 @@ MonoBehaviour:
   totalEnemies: 0
   remainingEnemies: 0
   roomCleared: 0
+  xpRewardOnClear: 150
+  xpManager: {fileID: 0}
+--- !u!114 &1023636425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023636421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d4323dbf79dc04697e57b8a36cf3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomCollider
+  roomName: Room 1
 --- !u!1001 &1028083988
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134638,6 +134670,7 @@ GameObject:
   - component: {fileID: 1325351317}
   - component: {fileID: 1325351316}
   - component: {fileID: 1325351315}
+  - component: {fileID: 1325351318}
   m_Layer: 0
   m_Name: Room2Trigger
   m_TagString: Untagged
@@ -134666,6 +134699,8 @@ MonoBehaviour:
   totalEnemies: 0
   remainingEnemies: 0
   roomCleared: 0
+  xpRewardOnClear: 150
+  xpManager: {fileID: 0}
 --- !u!65 &1325351316
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -134702,6 +134737,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1325351318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325351314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d4323dbf79dc04697e57b8a36cf3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomCollider
+  roomName: Room 2
 --- !u!1001 &1336696042
 PrefabInstance:
   m_ObjectHideFlags: 0
