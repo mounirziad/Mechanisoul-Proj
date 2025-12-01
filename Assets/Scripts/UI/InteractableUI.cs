@@ -154,6 +154,11 @@ public class InteractableUI : MonoBehaviour
                 SetCursorState(true);
                 SetPlayerInputActive(false);
 
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PauseMusic();
+                }
+
                 if (firstPauseButton != null)
                 {
                     EventSystem.current.SetSelectedGameObject(firstPauseButton.gameObject);
@@ -174,10 +179,16 @@ public class InteractableUI : MonoBehaviour
                 SetCursorState(false);
                 SetPlayerInputActive(true);
 
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.ResumeMusic();
+                }
+
                 EventSystem.current.SetSelectedGameObject(null);
             }
         }
     }
+
 
 
     public void ToggleUpgradeUI()

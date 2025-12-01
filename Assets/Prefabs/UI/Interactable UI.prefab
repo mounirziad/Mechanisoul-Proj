@@ -423,6 +423,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2198609931564572644, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2221861075449981219, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_Navigation.m_Mode
       value: 4
@@ -483,6 +487,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 4385525758826278155}
+    - target: {fileID: 2483555623359211577, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2596744949702036972, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_Navigation.m_Mode
       value: 4
@@ -639,6 +647,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2930834466608123114, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2983665261351463502, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -741,6 +753,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3259108185989117380, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3378247694050522622, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3620914746675926585, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -959,6 +975,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4746015308610710015, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5078945177488871167, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1091,6 +1111,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 2354397389010349307}
+    - target: {fileID: 5766569698514092265, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5917495408436399088, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1861,8 +1885,8 @@ MonoBehaviour:
     description: Fire a spread of 2 bullets with lower range.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &137061062797049901 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1815806036655972554, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -1886,8 +1910,8 @@ MonoBehaviour:
       for 4 seconds. '
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &156588384854353385 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1943771602514593038, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -1910,8 +1934,8 @@ MonoBehaviour:
     description: Increase duration of weakness to 7 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &432445995412572612 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2221861075449981219, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -1956,8 +1980,8 @@ MonoBehaviour:
     description: Applies slow stacks on hit up to 4 stacks. 6% slow per stack.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &811078234545033691 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1410892136902455612, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2002,8 +2026,8 @@ MonoBehaviour:
     description: Increase the size of the slowness area
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &1213625113878332793 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 577111849218860446, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2037,8 +2061,8 @@ MonoBehaviour:
     description: Increases max slow stacks to 6. 8% slow per stack.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &1500459052130548958 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 866743065609460793, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2061,8 +2085,8 @@ MonoBehaviour:
     description: Increase charm chance to 35% and duration to 4 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &1711884598906051734 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1086542124648512625, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2085,8 +2109,8 @@ MonoBehaviour:
     description: Deal damage to enemies
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &1712467957605447441 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1087075326449833974, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2109,8 +2133,8 @@ MonoBehaviour:
     description: Increase max stacks to 20.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &1838748667339162586 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 94986382184063805, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2133,8 +2157,8 @@ MonoBehaviour:
     description: Bullets stun enemies for 1.5 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &1861515037103328235 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 72224339599715084, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2157,8 +2181,8 @@ MonoBehaviour:
     description: 'Increased stun duration to 2 seconds. '
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &1905549248486940174 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 190320262393003753, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2225,8 +2249,8 @@ MonoBehaviour:
     description: Knock enemies back farther.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &2327482872870062766 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4078318289411123785, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2249,8 +2273,8 @@ MonoBehaviour:
     description: Increases max slow stacks to 5. 7% slow per stack.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &2354397389010349307 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4069431368067337244, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2284,8 +2308,8 @@ MonoBehaviour:
     description: Gain 10% attack speed and 15% critical hit chance (1.5x damage).
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &2652119695439782105 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4331268190067523646, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2308,8 +2332,8 @@ MonoBehaviour:
     description: Critical now deals 2x damage instead of 1.5x
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &2714941058299384300 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4429449891099652363, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2343,8 +2367,8 @@ MonoBehaviour:
     description: Gain 1% damage stacks on hit. Max of 10 stacks.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &2824975480715391693 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4603151112035848746, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2367,8 +2391,8 @@ MonoBehaviour:
     description: Increases duration of each stack to 2.5 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &3094896615540962520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3613771069792277567, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2391,8 +2415,8 @@ MonoBehaviour:
     description: Increase charm chance to 32% and duration to 3.5 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &3189553031982467445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3789330633276795282, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2426,8 +2450,8 @@ MonoBehaviour:
     description: Increase the size of the area. by
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &3231564251231318421 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3750701513925955954, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2461,8 +2485,8 @@ MonoBehaviour:
     description: Increases damage to 5 per stack.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &3548512798359987852 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3020543304950433387, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2497,8 +2521,8 @@ MonoBehaviour:
       over 1.25 seconds..
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &4087416933213681222 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2336406942633940641, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2521,8 +2545,8 @@ MonoBehaviour:
     description: Increase fire rate by 10%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &4127121114157840944 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2419422003242572503, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2545,8 +2569,8 @@ MonoBehaviour:
     description: Gain 15% fire rate and 10% damage.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &4136849990565991062 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2431084604458693233, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2591,8 +2615,8 @@ MonoBehaviour:
     description: Stuns in a 3 meter radius around the hit enemy.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &4372306221734659109 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2627978891764196546, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2653,8 +2677,8 @@ MonoBehaviour:
     description: 10% lifesteal on melee damage.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &5148501099297622423 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6892442364019353968, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2677,8 +2701,8 @@ MonoBehaviour:
     description: Create a slowing area that slows enemy movement by 25%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &5318748452729817031 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5843988133316880160, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2701,8 +2725,8 @@ MonoBehaviour:
     description: Increase damage per stack to 2%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &5379134675079666849 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5941232845576076358, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2736,8 +2760,8 @@ MonoBehaviour:
     description: Projectiles have 10% chance to crit (1.5x damage)
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &5866070225549530082 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5313559804735517445, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2760,8 +2784,8 @@ MonoBehaviour:
     description: Increase slow effectiveness to 35%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &6126262552181956973 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5607301365328544138, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2795,8 +2819,8 @@ MonoBehaviour:
     description: Increase chance to crit enemies to 60%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &6479300238957869068 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4701441945057237227, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2819,8 +2843,8 @@ MonoBehaviour:
     description: Knock back enemies in an area.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &6541868048937406510 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4763853908114780361, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2844,8 +2868,8 @@ MonoBehaviour:
       attack other enemies.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &6544824317227333428 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4757519456937285587, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2879,8 +2903,8 @@ MonoBehaviour:
     description: Increase bullet damage to 30%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &6662653976816138982 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4945930728133483009, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2903,8 +2927,8 @@ MonoBehaviour:
     description: Increase number of pellest fired to 5.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &6776405370195130032 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5106898905462363735, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2927,8 +2951,8 @@ MonoBehaviour:
     description: Increase weakness effect to 30%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &6810205755313735144 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5068607567381800207, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2962,8 +2986,8 @@ MonoBehaviour:
     description: Critical hit change increased to 30%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &6838203256759455146 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5058619999812119885, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -2986,8 +3010,8 @@ MonoBehaviour:
     description: Gain 15% movement speed on melee hit for 3 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &6855671076596872181 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5184141465862017810, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3021,8 +3045,8 @@ MonoBehaviour:
     description: Increase movement speed gain to 30%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &6900153481648463538 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5122770630927269461, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3056,8 +3080,8 @@ MonoBehaviour:
     description: Increase fear duration to 7 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &7680364705679793528 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8233665022473026975, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3081,8 +3105,8 @@ MonoBehaviour:
       zone have a 40% chance to take critical damage.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &7770392540820484224 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8286627091846189159, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3138,8 +3162,8 @@ MonoBehaviour:
     description: Increase the size of the fear zone.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &8344943636670351935 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7717704872875354840, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3162,8 +3186,8 @@ MonoBehaviour:
     description: Increase movement speed duration to 5 seconds
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &8412229281019004012 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7812553762780406923, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3186,8 +3210,8 @@ MonoBehaviour:
     description: 5% lifesteal on melee damage.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!114 &8550074457591687224 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7958439829648787679, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3243,8 +3267,8 @@ MonoBehaviour:
     description: When below 30% health, double life steal to 20%.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1 &9177145513972064602 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7461968221087859133, guid: 332903c9f4b29ff4f925aaa64636b756, type: 3}
@@ -3267,8 +3291,8 @@ MonoBehaviour:
     description: Create a fear zone that fears enemies for 4 seconds.
   iconImage: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  hoverColor: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  selectedColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
 --- !u!1001 &7967525801548986277
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -96,10 +96,32 @@ public class UpgradeUIScript : MonoBehaviour
     [SerializeField] private Button upgradeTab;
     [SerializeField] private Button synergyTab;
 
+    [Header("Pending Selections")]
+    private Emotions pendingMeleeEmotion = Emotions.None;
+    private int pendingMeleeLevel = 0;
+
+    private Emotions pendingRangedEmotion = Emotions.None;
+    private int pendingRangedLevel = 0;
+
+    private Emotions pendingDashEmotion = Emotions.None;
+    private int pendingDashLevel = 0;
+
+    [Header("Current Purchases")]
+    private Emotions purchasedMeleeEmotion = Emotions.None;
+    private int purchasedMeleeLevel = 0;
+
+    private Emotions purchasedRangedEmotion = Emotions.None;
+    private int purchasedRangedLevel = 0;
+
+    private Emotions purchasedDashEmotion = Emotions.None;
+    private int purchasedDashLevel = 0;
+
+
 
     void Awake()
     {
         meleeUpgrades = GameObject.Find("UpgradeHolder").GetComponent<MeleeUpgrades>();
+        CreateBordersForAllButtons();
     }
 
     void OnEnable()
@@ -272,6 +294,9 @@ public class UpgradeUIScript : MonoBehaviour
         {
             upgradeHandler.RangedJoyDown();
             upgradeHandler.RangedAngerDown();
+            upgradeHandler.RangedSadnessDown();
+            upgradeHandler.RangedFearDown();
+            upgradeHandler.RangedLoveDown();
         }
     }
     void SetRangeJoyLevel(int level)
@@ -307,6 +332,9 @@ public class UpgradeUIScript : MonoBehaviour
         {
             upgradeHandler.DashSadnessDown();
             upgradeHandler.DashAngerDown();
+            upgradeHandler.DashFearDown();
+            upgradeHandler.DashLoveDown();
+            upgradeHandler.DashJoyDown();
         }
     }
     void SetDashSadLevel(int level)
@@ -374,261 +402,792 @@ public class UpgradeUIScript : MonoBehaviour
     // MELEE (JOY)
     private void OnJoyMelee1Clicked()
     {
-        meleeUpgrades.SelectEmotion(Emotions.Joy);
+        SetPendingMeleeEmotion(Emotions.Joy, 1);
         Debug.Log("Joy Melee Upgrade 1 Clicked!");
     }
     private void OnJoyMelee2Clicked()
     {
+        SetPendingMeleeEmotion(Emotions.Joy, 2);
         Debug.Log("Joy Melee Upgrade 2 Clicked!");
-        meleeUpgrades.UpgradeEmotion();
     }
     private void OnJoyMelee3Clicked()
     {
+        SetPendingMeleeEmotion(Emotions.Joy, 3);
         Debug.Log("Joy Melee Upgrade 3 Clicked!");
-        meleeUpgrades.UpgradeEmotion();
     }
 
     // MELEE (ANGER)
     private void OnAngerMelee1Clicked()
     {
-        meleeUpgrades.SelectEmotion(Emotions.Anger);
+        SetPendingMeleeEmotion(Emotions.Anger, 1);
         Debug.Log("Anger Melee Upgrade 1 Clicked!");
     }
     private void OnAngerMelee2Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Anger, 2);
         Debug.Log("Anger Melee Upgrade 2 Clicked!");
     }
     private void OnAngerMelee3Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Anger, 3);
         Debug.Log("Anger Melee Upgrade 3 Clicked!");
     }
 
     // MELEE (SADNESS)
     private void OnSadnessMelee1Clicked()
     {
-        meleeUpgrades.SelectEmotion(Emotions.Sadness);
+        SetPendingMeleeEmotion(Emotions.Sadness, 1);
         Debug.Log("Sadness Melee Upgrade 1 Clicked!");
     }
     private void OnSadnessMelee2Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Sadness, 2);
         Debug.Log("Sadness Melee Upgrade 2 Clicked!");
     }
     private void OnSadnessMelee3Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Sadness, 3);
         Debug.Log("Sadness Melee Upgrade 3 Clicked!");
     }
 
     // MELEE (LOVE)
     private void OnLoveMelee1Clicked()
     {
-        meleeUpgrades.SelectEmotion(Emotions.Love);
+        SetPendingMeleeEmotion(Emotions.Love, 1);
         Debug.Log("Love Melee Upgrade 1 Clicked!");
     }
     private void OnLoveMelee2Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Love, 2);
         Debug.Log("Love Melee Upgrade 2 Clicked!");
     }
     private void OnLoveMelee3Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Love, 3);
         Debug.Log("Love Melee Upgrade 3 Clicked!");
     }
 
     // MELEE (FEAR)
     private void OnFearMelee1Clicked()
     {
-        meleeUpgrades.SelectEmotion(Emotions.Fear);
+        SetPendingMeleeEmotion(Emotions.Fear, 1);
         Debug.Log("Fear Melee Upgrade 1 Clicked!");
     }
     private void OnFearMelee2Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Fear, 2);
         Debug.Log("Fear Melee Upgrade 2 Clicked!");
     }
     private void OnFearMelee3Clicked()
     {
-        meleeUpgrades.UpgradeEmotion();
+        SetPendingMeleeEmotion(Emotions.Fear, 3);
         Debug.Log("Fear Melee Upgrade 3 Clicked!");
     }
 
     // RANGE (JOY)
     private void OnJoyRange1Clicked()
     {
-        SetRangeJoyLevel(1);
+        SetPendingRangedEmotion(Emotions.Joy, 1);
         Debug.Log("Joy Range Upgrade 1 Clicked!");
     }
     private void OnJoyRange2Clicked()
     {
-        SetRangeJoyLevel(2);
+        SetPendingRangedEmotion(Emotions.Joy, 2);
         Debug.Log("Joy Range Upgrade 2 Clicked!");
     }
     private void OnJoyRange3Clicked()
     {
-        SetRangeJoyLevel(3);
+        SetPendingRangedEmotion(Emotions.Joy, 3);
         Debug.Log("Joy Range Upgrade 3 Clicked!");
     }
 
     // RANGE (ANGER)
     private void OnAngerRange1Clicked()
     {
-        SetRangeAngerLevel(1);
+        SetPendingRangedEmotion(Emotions.Anger, 1);
         Debug.Log("Anger Range Upgrade 1 Clicked!");
     }
     private void OnAngerRange2Clicked()
     {
-        SetRangeAngerLevel(2);
+        SetPendingRangedEmotion(Emotions.Anger, 2);
         Debug.Log("Anger Range Upgrade 2 Clicked!");
     }
     private void OnAngerRange3Clicked()
     {
-        SetRangeAngerLevel(3);
+        SetPendingRangedEmotion(Emotions.Anger, 3);
         Debug.Log("Anger Range Upgrade 3 Clicked!");
     }
 
     // RANGE (SADNESS)
     private void OnSadnessRange1Clicked()
     {
-        SetRangeSadnessLevel(1);
+        SetPendingRangedEmotion(Emotions.Sadness, 1);
         Debug.Log("Sadness Range Upgrade 1 Clicked!");
     }
     private void OnSadnessRange2Clicked()
     {
-        SetRangeSadnessLevel(2);
+        SetPendingRangedEmotion(Emotions.Sadness, 2);
         Debug.Log("Sadness Range Upgrade 2 Clicked!");
     }
     private void OnSadnessRange3Clicked()
     {
-        SetRangeSadnessLevel(3);
+        SetPendingRangedEmotion(Emotions.Sadness, 3);
         Debug.Log("Sadness Range Upgrade 3 Clicked!");
     }
 
     // RANGE (LOVE)
     private void OnLoveRange1Clicked()
     {
-        SetRangeLoveLevel(1);
+        SetPendingRangedEmotion(Emotions.Love, 1);
         Debug.Log("Love Range Upgrade 1 Clicked!");
     }
     private void OnLoveRange2Clicked()
     {
-        SetRangeLoveLevel(2);
+        SetPendingRangedEmotion(Emotions.Love, 2);
         Debug.Log("Love Range Upgrade 2 Clicked!");
     }
     private void OnLoveRange3Clicked()
     {
-        SetRangeLoveLevel(3);
+        SetPendingRangedEmotion(Emotions.Love, 3);
         Debug.Log("Love Range Upgrade 3 Clicked!");
     }
 
     // RANGE (FEAR)
     private void OnFearRange1Clicked()
     {
-        SetRangeFearLevel(1);
+        SetPendingRangedEmotion(Emotions.Fear, 1);
         Debug.Log("Fear Range Upgrade 1 Clicked!");
     }
     private void OnFearRange2Clicked()
     {
-        SetRangeFearLevel(2);
+        SetPendingRangedEmotion(Emotions.Fear, 2);
         Debug.Log("Fear Range Upgrade 2 Clicked!");
     }
     private void OnFearRange3Clicked()
     {
-        SetRangeFearLevel(3);
+        SetPendingRangedEmotion(Emotions.Fear, 3);
         Debug.Log("Fear Range Upgrade 3 Clicked!");
     }
 
     // DASH (JOY)
     private void OnJoyDash1Clicked()
     {
-        SetDashJoyLevel(1);
+        SetPendingDashEmotion(Emotions.Joy, 1);
         Debug.Log("Joy Dash Upgrade 1 Clicked!");
     }
     private void OnJoyDash2Clicked()
     {
-        SetDashJoyLevel(2);
+        SetPendingDashEmotion(Emotions.Joy, 2);
         Debug.Log("Joy Dash Upgrade 2 Clicked!");
     }
     private void OnJoyDash3Clicked()
     {
-        SetDashJoyLevel(3);
+        SetPendingDashEmotion(Emotions.Joy, 3);
         Debug.Log("Joy Dash Upgrade 3 Clicked!");
     }
 
     // DASH (ANGER)
     private void OnAngerDash1Clicked()
     {
-        SetDashAngerLevel(1);
+        SetPendingDashEmotion(Emotions.Anger, 1);
         Debug.Log("Anger Dash Upgrade 1 Clicked!");
     }
     private void OnAngerDash2Clicked()
     {
-        SetDashAngerLevel(2);
+        SetPendingDashEmotion(Emotions.Anger, 2);
         Debug.Log("Anger Dash Upgrade 2 Clicked!");
     }
     private void OnAngerDash3Clicked()
     {
-        SetDashAngerLevel(3);
+        SetPendingDashEmotion(Emotions.Anger, 3);
         Debug.Log("Anger Dash Upgrade 3 Clicked!");
     }
 
     // DASH (SADNESS)
     private void OnSadnessDash1Clicked()
     {
-        SetDashSadLevel(1);
+        SetPendingDashEmotion(Emotions.Sadness, 1);
         Debug.Log("Sad Dash Upgrade 1 Clicked!");
     }
     private void OnSadnessDash2Clicked()
     {
-        SetDashSadLevel(2);
+        SetPendingDashEmotion(Emotions.Sadness, 2);
         Debug.Log("Sad Dash Upgrade 2 Clicked!");
     }
     private void OnSadnessDash3Clicked()
     {
-        SetDashSadLevel(3);
+        SetPendingDashEmotion(Emotions.Sadness, 3);
         Debug.Log("Sad Dash Upgrade 3 Clicked!");
     }
 
     // DASH (LOVE)
     private void OnLoveDash1Clicked()
     {
-        SetDashLoveLevel(1);
+        SetPendingDashEmotion(Emotions.Love, 1);
         Debug.Log("Love Dash Upgrade 1 Clicked!");
     }
     private void OnLoveDash2Clicked()
     {
-        SetDashLoveLevel(2);
+        SetPendingDashEmotion(Emotions.Love, 2);
         Debug.Log("Love Dash Upgrade 2 Clicked!");
     }
     private void OnLoveDash3Clicked()
     {
-        SetDashLoveLevel(3);
+        SetPendingDashEmotion(Emotions.Love, 3);
         Debug.Log("Love Dash Upgrade 3 Clicked!");
     }
 
     // DASH (FEAR)
     private void OnFearDash1Clicked()
     {
-        SetDashFearLevel(1);
+        SetPendingDashEmotion(Emotions.Fear, 1);
         Debug.Log("Fear Dash Upgrade 1 Clicked!");
     }
     private void OnFearDash2Clicked()
     {
-        SetDashFearLevel(2);
+        SetPendingDashEmotion(Emotions.Fear, 2);
         Debug.Log("Fear Dash Upgrade 2 Clicked!");
     }
     private void OnFearDash3Clicked()
     {
-        SetDashFearLevel(3);
+        SetPendingDashEmotion(Emotions.Fear, 3);
         Debug.Log("Fear Dash Upgrade 3 Clicked!");
     }
 
+    #region PURCHASING UPGRADES
     private void OnPurchaseClicked()
     {
-        Debug.Log("Purchase Button Clicked!");
+        bool purchaseMade = false;
+
+        // Check if there's a pending melee selection
+        if (pendingMeleeEmotion != Emotions.None &&
+            (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
+        {
+            if (CanPurchase(pendingMeleeLevel))
+            {
+                ApplyMeleePurchase();
+                purchaseMade = true;
+            }
+            else
+            {
+                Debug.Log("Not enough points for this upgrade!");
+                return;
+            }
+        }
+
+        // Check if there's a pending ranged selection
+        if (pendingRangedEmotion != Emotions.None &&
+            (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
+        {
+            if (CanPurchase(pendingRangedLevel))
+            {
+                ApplyRangedPurchase();
+                purchaseMade = true;
+            }
+            else
+            {
+                Debug.Log("Not enough points for this upgrade!");
+                return;
+            }
+        }
+
+        // Check if there's a pending dash selection
+        if (pendingDashEmotion != Emotions.None &&
+            (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
+        {
+            if (CanPurchase(pendingDashLevel))
+            {
+                ApplyDashPurchase();
+                purchaseMade = true;
+            }
+            else
+            {
+                Debug.Log("Not enough points for this upgrade!");
+                return;
+            }
+        }
+
+        if (purchaseMade)
+        {
+            Debug.Log("Purchase successful!");
+            UpdateButtonVisuals();
+        }
+        else
+        {
+            Debug.Log("No new upgrades selected to purchase.");
+        }
+    }
+
+    private bool CanPurchase(int level)
+    {
+        // Framework for points system - for now, always return true
+        // Later: return availablePoints >= (level * pointsPerUpgrade);
+        return true;
+    }
+
+    private void ApplyMeleePurchase()
+    {
+        // Clear previous melee emotion if switching
+        if (purchasedMeleeEmotion != Emotions.None && purchasedMeleeEmotion != pendingMeleeEmotion)
+        {
+            meleeUpgrades.Respec();
+        }
+
+        // Apply the new selection
+        meleeUpgrades.SelectEmotion(pendingMeleeEmotion);
+        meleeUpgrades.SetLevel(pendingMeleeLevel);
+
+        // Update purchased state
+        purchasedMeleeEmotion = pendingMeleeEmotion;
+        purchasedMeleeLevel = pendingMeleeLevel;
+
+        // Clear pending selection after purchase
+        pendingMeleeEmotion = Emotions.None;
+        pendingMeleeLevel = 0;
+
+        // Deduct points (add later)
+        // availablePoints -= (pendingMeleeLevel * pointsPerUpgrade);
+    }
+
+    private void ApplyRangedPurchase()
+    {
+        // Clear previous ranged upgrades if switching emotions
+        if (purchasedRangedEmotion != Emotions.None && purchasedRangedEmotion != pendingRangedEmotion)
+        {
+            ZeroRange();
+        }
+
+        // Apply the new selection
+        switch (pendingRangedEmotion)
+        {
+            case Emotions.Joy:
+                SetRangeJoyLevel(pendingRangedLevel);
+                break;
+            case Emotions.Anger:
+                SetRangeAngerLevel(pendingRangedLevel);
+                break;
+            case Emotions.Sadness:
+                SetRangeSadnessLevel(pendingRangedLevel);
+                break;
+            case Emotions.Love:
+                SetRangeLoveLevel(pendingRangedLevel);
+                break;
+            case Emotions.Fear:
+                SetRangeFearLevel(pendingRangedLevel);
+                break;
+        }
+
+        // Update purchased state
+        purchasedRangedEmotion = pendingRangedEmotion;
+        purchasedRangedLevel = pendingRangedLevel;
+
+        // Clear pending selection after purchase
+        pendingRangedEmotion = Emotions.None;
+        pendingRangedLevel = 0;
+    }
+
+    private void ApplyDashPurchase()
+    {
+        // Clear previous dash if switching emotions
+        if (purchasedDashEmotion != Emotions.None && purchasedDashEmotion != pendingDashEmotion)
+        {
+            ZeroDash();
+        }
+
+        // Apply the new selection
+        switch (pendingDashEmotion)
+        {
+            case Emotions.Joy:
+                SetDashJoyLevel(pendingDashLevel);
+                break;
+            case Emotions.Anger:
+                SetDashAngerLevel(pendingDashLevel);
+                break;
+            case Emotions.Sadness:
+                SetDashSadLevel(pendingDashLevel);
+                break;
+            case Emotions.Love:
+                SetDashLoveLevel(pendingDashLevel);
+                break;
+            case Emotions.Fear:
+                SetDashFearLevel(pendingDashLevel);
+                break;
+        }
+
+        // Update purchased state
+        purchasedDashEmotion = pendingDashEmotion;
+        purchasedDashLevel = pendingDashLevel;
+
+        // Clear pending selection after purchase
+        pendingDashEmotion = Emotions.None;
+        pendingDashLevel = 0;
+    }
+    #endregion
+
+    #region HELPER METHODS FOR PENDING SELECTIONS
+    private void SetPendingMeleeEmotion(Emotions emotion, int level)
+    {
+        pendingMeleeEmotion = emotion;
+        pendingMeleeLevel = level;
+        UpdateButtonVisuals();
+    }
+
+    private void SetPendingRangedEmotion(Emotions emotion, int level)
+    {
+        pendingRangedEmotion = emotion;
+        pendingRangedLevel = level;
+        UpdateButtonVisuals();
+    }
+
+    private void SetPendingDashEmotion(Emotions emotion, int level)
+    {
+        pendingDashEmotion = emotion;
+        pendingDashLevel = level;
+        UpdateButtonVisuals();
+    }
+    #endregion
+
+    #region UPDATE BUTTON VISUAL HELPERS
+    private void UpdateButtonVisuals()
+    {
+        UpdateMeleeButtonVisuals();
+        UpdateRangedButtonVisuals();
+        UpdateDashButtonVisuals();
+    }
+
+    private void UpdateMeleeButtonVisuals()
+    {
+        // Reset all melee buttons first
+        ResetButtonState(joyMelee1);
+        ResetButtonState(joyMelee2);
+        ResetButtonState(joyMelee3);
+        ResetButtonState(angerMelee1);
+        ResetButtonState(angerMelee2);
+        ResetButtonState(angerMelee3);
+        ResetButtonState(sadnessMelee1);
+        ResetButtonState(sadnessMelee2);
+        ResetButtonState(sadnessMelee3);
+        ResetButtonState(loveMelee1);
+        ResetButtonState(loveMelee2);
+        ResetButtonState(loveMelee3);
+        ResetButtonState(fearMelee1);
+        ResetButtonState(fearMelee2);
+        ResetButtonState(fearMelee3);
+
+
+        // Highlight purchased upgrades
+        switch (purchasedMeleeEmotion)
+        {
+            case Emotions.Joy:
+                if (purchasedMeleeLevel >= 1) SetButtonPurchased(joyMelee1);
+                if (purchasedMeleeLevel >= 2) SetButtonPurchased(joyMelee2);
+                if (purchasedMeleeLevel >= 3) SetButtonPurchased(joyMelee3);
+                break;
+            case Emotions.Anger:
+                if (purchasedMeleeLevel >= 1) SetButtonPurchased(angerMelee1);
+                if (purchasedMeleeLevel >= 2) SetButtonPurchased(angerMelee2);
+                if (purchasedMeleeLevel >= 3) SetButtonPurchased(angerMelee3);
+                break;
+            case Emotions.Sadness:
+                if (purchasedMeleeLevel >= 1) SetButtonPurchased(sadnessMelee1);
+                if (purchasedMeleeLevel >= 2) SetButtonPurchased(sadnessMelee2);
+                if (purchasedMeleeLevel >= 3) SetButtonPurchased(sadnessMelee3);
+                break;
+            case Emotions.Love:
+                if (purchasedMeleeLevel >= 1) SetButtonPurchased(loveMelee1);
+                if (purchasedMeleeLevel >= 2) SetButtonPurchased(loveMelee2);
+                if (purchasedMeleeLevel >= 3) SetButtonPurchased(loveMelee3);
+                break;
+            case Emotions.Fear:
+                if (purchasedMeleeLevel >= 1) SetButtonPurchased(fearMelee1);
+                if (purchasedMeleeLevel >= 2) SetButtonPurchased(fearMelee2);
+                if (purchasedMeleeLevel >= 3) SetButtonPurchased(fearMelee3);
+                break;
+        }
+
+        // Highlight pending selection (different color)
+        switch (pendingMeleeEmotion)
+        {
+            case Emotions.Joy:
+                if (pendingMeleeLevel >= 1) SetButtonPending(joyMelee1);
+                if (pendingMeleeLevel >= 2) SetButtonPending(joyMelee2);
+                if (pendingMeleeLevel >= 3) SetButtonPending(joyMelee3);
+                break;
+            case Emotions.Anger:
+                if (pendingMeleeLevel >= 1) SetButtonPending(angerMelee1);
+                if (pendingMeleeLevel >= 2) SetButtonPending(angerMelee2);
+                if (pendingMeleeLevel >= 3) SetButtonPending(angerMelee3);
+                break;
+            case Emotions.Sadness:
+                if (pendingMeleeLevel >= 1) SetButtonPending(sadnessMelee1);
+                if (pendingMeleeLevel >= 2) SetButtonPending(sadnessMelee2);
+                if (pendingMeleeLevel >= 3) SetButtonPending(sadnessMelee3);
+                break;
+            case Emotions.Love:
+                if (pendingMeleeLevel >= 1) SetButtonPending(loveMelee1);
+                if (pendingMeleeLevel >= 2) SetButtonPending(loveMelee2);
+                if (pendingMeleeLevel >= 3) SetButtonPending(loveMelee3);
+                break;
+            case Emotions.Fear:
+                if (pendingMeleeLevel >= 1) SetButtonPending(fearMelee1);
+                if (pendingMeleeLevel >= 2) SetButtonPending(fearMelee2);
+                if (pendingMeleeLevel >= 3) SetButtonPending(fearMelee3);
+                break;
+        }
+    }
+
+    private void UpdateRangedButtonVisuals()
+    {
+        ResetButtonState(joyRange1);
+        ResetButtonState(joyRange2);
+        ResetButtonState(joyRange3);
+        ResetButtonState(angerRange1);
+        ResetButtonState(angerRange2);
+        ResetButtonState(angerRange3);
+        ResetButtonState(sadnessRange1);
+        ResetButtonState(sadnessRange2);
+        ResetButtonState(sadnessRange3);
+        ResetButtonState(loveRange1);
+        ResetButtonState(loveRange2);
+        ResetButtonState(loveRange3);
+        ResetButtonState(fearRange1);
+        ResetButtonState(fearRange2);
+        ResetButtonState(fearRange3);
+
+        switch (purchasedRangedEmotion)
+        {
+            case Emotions.Joy:
+                if (purchasedRangedLevel >= 1) SetButtonPurchased(joyRange1);
+                if (purchasedRangedLevel >= 2) SetButtonPurchased(joyRange2);
+                if (purchasedRangedLevel >= 3) SetButtonPurchased(joyRange3);
+                break;
+            case Emotions.Anger:
+                if (purchasedRangedLevel >= 1) SetButtonPurchased(angerRange1);
+                if (purchasedRangedLevel >= 2) SetButtonPurchased(angerRange2);
+                if (purchasedRangedLevel >= 3) SetButtonPurchased(angerRange3);
+                break;
+            case Emotions.Sadness:
+                if (purchasedRangedLevel >= 1) SetButtonPurchased(sadnessRange1);
+                if (purchasedRangedLevel >= 2) SetButtonPurchased(sadnessRange2);
+                if (purchasedRangedLevel >= 3) SetButtonPurchased(sadnessRange3);
+                break;
+            case Emotions.Love:
+                if (purchasedRangedLevel >= 1) SetButtonPurchased(loveRange1);
+                if (purchasedRangedLevel >= 2) SetButtonPurchased(loveRange2);
+                if (purchasedRangedLevel >= 3) SetButtonPurchased(loveRange3);
+                break;
+            case Emotions.Fear:
+                if (purchasedRangedLevel >= 1) SetButtonPurchased(fearRange1);
+                if (purchasedRangedLevel >= 2) SetButtonPurchased(fearRange2);
+                if (purchasedRangedLevel >= 3) SetButtonPurchased(fearRange3);
+                break;
+        }
+
+        switch (pendingRangedEmotion)
+        {
+            case Emotions.Joy:
+                if (pendingRangedLevel >= 1) SetButtonPending(joyRange1);
+                if (pendingRangedLevel >= 2) SetButtonPending(joyRange2);
+                if (pendingRangedLevel >= 3) SetButtonPending(joyRange3);
+                break;
+            case Emotions.Anger:
+                if (pendingRangedLevel >= 1) SetButtonPending(angerRange1);
+                if (pendingRangedLevel >= 2) SetButtonPending(angerRange2);
+                if (pendingRangedLevel >= 3) SetButtonPending(angerRange3);
+                break;
+            case Emotions.Sadness:
+                if (pendingRangedLevel >= 1) SetButtonPending(sadnessRange1);
+                if (pendingRangedLevel >= 2) SetButtonPending(sadnessRange2);
+                if (pendingRangedLevel >= 3) SetButtonPending(sadnessRange3);
+                break;
+            case Emotions.Love:
+                if (pendingRangedLevel >= 1) SetButtonPending(loveRange1);
+                if (pendingRangedLevel >= 2) SetButtonPending(loveRange2);
+                if (pendingRangedLevel >= 3) SetButtonPending(loveRange3);
+                break;
+            case Emotions.Fear:
+                if (pendingRangedLevel >= 1) SetButtonPending(fearRange1);
+                if (pendingRangedLevel >= 2) SetButtonPending(fearRange2);
+                if (pendingRangedLevel >= 3) SetButtonPending(fearRange3);
+                break;
+        }
+    }
+
+    private void UpdateDashButtonVisuals()
+    {
+        ResetButtonState(joyDash1);
+        ResetButtonState(joyDash2);
+        ResetButtonState(joyDash3);
+        ResetButtonState(angerDash1);
+        ResetButtonState(angerDash2);
+        ResetButtonState(angerDash3);
+        ResetButtonState(sadnessDash1);
+        ResetButtonState(sadnessDash2);
+        ResetButtonState(sadnessDash3);
+        ResetButtonState(loveDash1);
+        ResetButtonState(loveDash2);
+        ResetButtonState(loveDash3);
+        ResetButtonState(fearDash1);
+        ResetButtonState(fearDash2);
+        ResetButtonState(fearDash3);
+
+        switch (purchasedDashEmotion)
+        {
+            case Emotions.Joy:
+                if (purchasedDashLevel >= 1) SetButtonPurchased(joyDash1);
+                if (purchasedDashLevel >= 2) SetButtonPurchased(joyDash2);
+                if (purchasedDashLevel >= 3) SetButtonPurchased(joyDash3);
+                break;
+            case Emotions.Anger:
+                if (purchasedDashLevel >= 1) SetButtonPurchased(angerDash1);
+                if (purchasedDashLevel >= 2) SetButtonPurchased(angerDash2);
+                if (purchasedDashLevel >= 3) SetButtonPurchased(angerDash3);
+                break;
+            case Emotions.Sadness:
+                if (purchasedDashLevel >= 1) SetButtonPurchased(sadnessDash1);
+                if (purchasedDashLevel >= 2) SetButtonPurchased(sadnessDash2);
+                if (purchasedDashLevel >= 3) SetButtonPurchased(sadnessDash3);
+                break;
+            case Emotions.Love:
+                if (purchasedDashLevel >= 1) SetButtonPurchased(loveDash1);
+                if (purchasedDashLevel >= 2) SetButtonPurchased(loveDash2);
+                if (purchasedDashLevel >= 3) SetButtonPurchased(loveDash3);
+                break;
+            case Emotions.Fear:
+                if (purchasedDashLevel >= 1) SetButtonPurchased(fearDash1);
+                if (purchasedDashLevel >= 2) SetButtonPurchased(fearDash2);
+                if (purchasedDashLevel >= 3) SetButtonPurchased(fearDash3);
+                break;
+        }
+
+        switch (pendingDashEmotion)
+        {
+            case Emotions.Joy:
+                if (pendingDashLevel >= 1) SetButtonPending(joyDash1);
+                if (pendingDashLevel >= 2) SetButtonPending(joyDash2);
+                if (pendingDashLevel >= 3) SetButtonPending(joyDash3);
+                break;
+            case Emotions.Anger:
+                if (pendingDashLevel >= 1) SetButtonPending(angerDash1);
+                if (pendingDashLevel >= 2) SetButtonPending(angerDash2);
+                if (pendingDashLevel >= 3) SetButtonPending(angerDash3);
+                break;
+            case Emotions.Sadness:
+                if (pendingDashLevel >= 1) SetButtonPending(sadnessDash1);
+                if (pendingDashLevel >= 2) SetButtonPending(sadnessDash2);
+                if (pendingDashLevel >= 3) SetButtonPending(sadnessDash3);
+                break;
+            case Emotions.Love:
+                if (pendingDashLevel >= 1) SetButtonPending(loveDash1);
+                if (pendingDashLevel >= 2) SetButtonPending(loveDash2);
+                if (pendingDashLevel >= 3) SetButtonPending(loveDash3);
+                break;
+            case Emotions.Fear:
+                if (pendingDashLevel >= 1) SetButtonPending(fearDash1);
+                if (pendingDashLevel >= 2) SetButtonPending(fearDash2);
+                if (pendingDashLevel >= 3) SetButtonPending(fearDash3);
+                break;
+        }
+    }
+    #endregion
+    private void CreateBordersForAllButtons()
+    {
+        Button[] allButtons = new Button[]
+        {
+        joyMelee1, joyMelee2, joyMelee3,
+        angerMelee1, angerMelee2, angerMelee3,
+        sadnessMelee1, sadnessMelee2, sadnessMelee3,
+        loveMelee1, loveMelee2, loveMelee3,
+        fearMelee1, fearMelee2, fearMelee3,
+        joyRange1, joyRange2, joyRange3,
+        angerRange1, angerRange2, angerRange3,
+        sadnessRange1, sadnessRange2, sadnessRange3,
+        loveRange1, loveRange2, loveRange3,
+        fearRange1, fearRange2, fearRange3,
+        joyDash1, joyDash2, joyDash3,
+        angerDash1, angerDash2, angerDash3,
+        sadnessDash1, sadnessDash2, sadnessDash3,
+        loveDash1, loveDash2, loveDash3,
+        fearDash1, fearDash2, fearDash3
+        };
+
+        foreach (Button button in allButtons)
+        {
+            if (button != null)
+            {
+                CreateBorderForButton(button);
+            }
+        }
+    }
+
+    private void CreateBorderForButton(Button button)
+    {
+        Transform existingBorder = button.transform.Find("Border");
+        if (existingBorder != null) return;
+
+        GameObject borderObj = new GameObject("Border");
+        borderObj.transform.SetParent(button.transform, false);
+        borderObj.transform.SetAsFirstSibling();
+
+        RectTransform borderRect = borderObj.AddComponent<RectTransform>();
+        borderRect.anchorMin = Vector2.zero;
+        borderRect.anchorMax = Vector2.one;
+        borderRect.sizeDelta = new Vector2(10f, 10f);
+        borderRect.anchoredPosition = Vector2.zero;
+
+        Image borderImage = borderObj.AddComponent<Image>();
+        borderImage.color = Color.white;
+        borderImage.enabled = false;
+    }
+
+    private void ResetButtonState(Button button)
+    {
+        if (button != null)
+        {
+            Transform border = button.transform.Find("Border");
+            if (border != null)
+            {
+                Image borderImage = border.GetComponent<Image>();
+                if (borderImage != null)
+                {
+                    borderImage.enabled = false;
+                }
+            }
+        }
+    }
+
+    private void SetButtonPurchased(Button button)
+    {
+        if (button != null)
+        {
+            Transform border = button.transform.Find("Border");
+            if (border != null)
+            {
+                Image borderImage = border.GetComponent<Image>();
+                if (borderImage != null)
+                {
+                    borderImage.enabled = true;
+                    borderImage.color = new Color(0f, 1f, 0f, 0.5f); // semi-transparent green
+                }
+            }
+        }
+    }
+
+    private void SetButtonPending(Button button)
+    {
+        if (button != null)
+        {
+            Transform border = button.transform.Find("Border");
+            if (border != null)
+            {
+                Image borderImage = border.GetComponent<Image>();
+                if (borderImage != null)
+                {
+                    borderImage.enabled = true;
+                    borderImage.color = new Color(1f, 1f, 0f, 0.5f); // semi-transparent yellow
+                }
+            }
+        }
     }
 
     private void UpdateTabButtonNavigation(Button targetButton)
