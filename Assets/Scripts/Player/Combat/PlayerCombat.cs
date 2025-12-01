@@ -228,7 +228,7 @@ public class PlayerCombat : MonoBehaviour
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
         bool isLoadingActive = WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying;
-        
+
         if (isDialogueActive || isLoadingActive)
         {
             if (isAiming) StopAiming();
@@ -311,7 +311,7 @@ public class PlayerCombat : MonoBehaviour
         {
             float finalDamage = weaponDamage * rangedMods.joyDamageMultiplier;
             Vector3 correctedDirection = GetCorrectedAimDirection();
-            
+
             float targetDistance = 0f;
             if (cameraAdapter != null)
             {
@@ -321,7 +321,7 @@ public class PlayerCombat : MonoBehaviour
                     targetDistance = Vector3.Distance(spawnPosition, aimTarget);
                 }
             }
-            
+
             proj.Initialize(correctedDirection, finalDamage, rangedMods, this, targetDistance);
         }
 
@@ -342,7 +342,7 @@ public class PlayerCombat : MonoBehaviour
         Vector3 aimTarget = GetCameraCenterAimPoint();
         Vector3 shootOrigin = shootPoint.position;
         Vector3 shootDirection = (aimTarget - shootOrigin).normalized;
-        
+
         float distanceToTarget = Vector3.Distance(shootOrigin, aimTarget);
         float effectiveRange = Mathf.Max(hitscanRange, distanceToTarget + 10f);
 
@@ -374,7 +374,7 @@ public class PlayerCombat : MonoBehaviour
         {
             hitPosition = hit.point;
             float hitDistance = Vector3.Distance(shootOrigin, hitPosition);
-            
+
             Debug.Log($"[Hitscan] Hit '{hit.collider.gameObject.name}' on layer '{LayerMask.LayerToName(hit.collider.gameObject.layer)}' at distance {hitDistance:F2}m (Target was {distanceToTarget:F2}m away)");
 
             if (hit.collider.CompareTag("Player"))
@@ -706,12 +706,27 @@ public class PlayerCombat : MonoBehaviour
         LogGun($"Reload complete -> ammo={ammoInClip}/{clipSize}");
     }
 
+    public int GetAmmoInClip()
+    {
+        return ammoInClip;
+    }
+
+    public int GetClipSize()
+    {
+        return clipSize;
+    }
+
+    public bool IsReloading()
+    {
+        return isReloading;
+    }
+
     // Melee (improved)
     private void OnAttackPerformed(InputAction.CallbackContext ctx)
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
         bool isLoadingActive = WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying;
-        
+
         if (isDialogueActive || isLoadingActive) return;
 
         if (isAiming) { inputManager.shootInput = true; return; }
@@ -779,7 +794,7 @@ public class PlayerCombat : MonoBehaviour
     {
         bool isDialogueActive = DialogueSystem.Instance != null && DialogueSystem.Instance.IsDisplaying;
         bool isLoadingActive = WarehouseLoadingScreen.Instance != null && WarehouseLoadingScreen.Instance.IsDisplaying;
-        
+
         if (isDialogueActive || isLoadingActive)
         {
             attackQueued = false;
@@ -1023,14 +1038,14 @@ public class PlayerCombat : MonoBehaviour
         }
 
         var playerLoco = GetComponent<PlayerLocomotion>();
-        
+
         // Block lunge during landing
         if (playerLoco != null && playerLoco.isLanding)
         {
             Debug.LogWarning($"<color=orange>[AnimEvent] StartAttackLunge blocked - player is landing.</color>");
             return;
         }
-        
+
         // Block lunge during landing transition
         if (playerLoco != null && playerLoco.isGrounded && !wasGroundedLastFrame)
         {

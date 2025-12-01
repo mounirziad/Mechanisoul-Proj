@@ -146,6 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1441066961167903705}
   - component: {fileID: 2264921553395146107}
+  - component: {fileID: 316865033141885331}
   m_Layer: 0
   m_Name: GameUI
   m_TagString: Untagged
@@ -184,6 +185,21 @@ MonoBehaviour:
   playerHealthScript: {fileID: 0}
   barRect: {fileID: 7028132408132710820}
   mask: {fileID: 1883429569418716612}
+--- !u!114 &316865033141885331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584632863017116700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dd1de563d650f5499b5af80eb604019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  playerCombatScript: {fileID: 0}
+  ammoCountText: {fileID: 5283893053146347242}
+  reloadingText: {fileID: 328819269925168805}
 --- !u!1 &1745513711221435320
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +922,10 @@ PrefabInstance:
     - target: {fileID: 6755559150628715815, guid: a1f1761caa502d04db219f0782994595, type: 3}
       propertyPath: m_Name
       value: map
+      objectReference: {fileID: 0}
+    - target: {fileID: 6755559150628715815, guid: a1f1761caa502d04db219f0782994595, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

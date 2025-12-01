@@ -6900,6 +6900,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 617409097813262784, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 1227510958}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1227510960 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1227510958}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1261649324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7885,6 +7890,89 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1423517545}
   m_Mesh: {fileID: 7405963946975378994, guid: e7684f37e34636247bbc9f39783ae401, type: 3}
+--- !u!1001 &1458010595
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1692942781325715660, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: sceneName
+      value: Boss Room
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454147844358884805, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_Name
+      value: LevelTransfer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.6846534
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6454147844358884805, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1458010597}
+  m_SourcePrefab: {fileID: 100100000, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+--- !u!1 &1458010596 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6454147844358884805, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+  m_PrefabInstance: {fileID: 1458010595}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1458010597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458010596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88ec283b8cf46b646bc0b301c3c7d6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakRoomDoor
+  doorToOpen: {fileID: 1227510960}
+  showDebugLogs: 1
 --- !u!1001 &1466304567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22232,3 +22320,4 @@ SceneRoots:
   - {fileID: 985075305}
   - {fileID: 1261649324}
   - {fileID: 703286850}
+  - {fileID: 1458010595}

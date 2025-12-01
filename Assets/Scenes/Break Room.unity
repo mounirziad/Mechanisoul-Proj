@@ -1177,6 +1177,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 919132149155446097, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
       propertyPath: m_Name
       value: hanginglight1400_low (3)
@@ -1201,6 +1209,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6138,6 +6154,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 617409097813262784, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 1385802218}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1385802220 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 1385802218}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1404019545
 GameObject:
   m_ObjectHideFlags: 0
@@ -7907,15 +7928,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5728756670319923752, guid: 255a17a379ae40b4584c2a992660b198, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.98566985
+      value: 0.99
       objectReference: {fileID: 0}
     - target: {fileID: 5728756670319923752, guid: 255a17a379ae40b4584c2a992660b198, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.325
+      value: 1.52
       objectReference: {fileID: 0}
     - target: {fileID: 5728756670319923752, guid: 255a17a379ae40b4584c2a992660b198, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.486649
+      value: -23.26
       objectReference: {fileID: 0}
     - target: {fileID: 5728756670319923752, guid: 255a17a379ae40b4584c2a992660b198, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8239,6 +8260,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 919132149155446097, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
       propertyPath: m_Name
       value: hanginglight1400_low (4)
@@ -8263,6 +8292,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8541,6 +8578,89 @@ Transform:
   - {fileID: 2043959990}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1873916777
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1692942781325715660, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: sceneName
+      value: WareHouseLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454147844358884805, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_Name
+      value: LevelTransfer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.58238935
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305474368671038349, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6454147844358884805, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1873916779}
+  m_SourcePrefab: {fileID: 100100000, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+--- !u!1 &1873916778 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6454147844358884805, guid: ac0c4a2eba4d2aa48b9b6ebe16c341fd, type: 3}
+  m_PrefabInstance: {fileID: 1873916777}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1873916779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873916778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88ec283b8cf46b646bc0b301c3c7d6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakRoomDoor
+  doorToOpen: {fileID: 1385802220}
+  showDebugLogs: 1
 --- !u!1 &1904203015
 GameObject:
   m_ObjectHideFlags: 0
@@ -8827,6 +8947,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 919132149155446097, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
       propertyPath: m_Name
       value: hanginglight1400_low (1)
@@ -8851,6 +8979,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21539,6 +21675,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 919132149155446097, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
       propertyPath: m_Name
       value: hanginglight1400_low
@@ -21563,6 +21707,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21831,6 +21983,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7857937026353469365, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     - target: {fileID: 919132149155446097, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
       propertyPath: m_Name
       value: hanginglight1400_low (2)
@@ -21855,6 +22015,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7352000354600275584, guid: 56fe892a9a8da16498ad8bc092dffd17, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 00ef3adcabf254d468bd092554c9ee79, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22095,3 +22263,4 @@ SceneRoots:
   - {fileID: 1849169888}
   - {fileID: 1034631520}
   - {fileID: 709594390}
+  - {fileID: 1873916777}
