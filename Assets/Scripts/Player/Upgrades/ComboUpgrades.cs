@@ -170,6 +170,14 @@ public class ComboUpgrades : MonoBehaviour
                 return null;
         }
     }
+
+
+    //temp scripts for checking for one combo, change to a method that works for all combos later:tm:
+    public bool HasCombo() => comboUpgrades[0].hasCombo;
+
+    public int GetMeleeAngerLevel() => comboUpgrades[0].emotion1Level;
+
+    public int GetRangedJoyLevel() => comboUpgrades[0].emotion2Level;
 }
 
 

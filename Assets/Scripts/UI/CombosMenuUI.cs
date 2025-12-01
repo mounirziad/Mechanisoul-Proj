@@ -5,7 +5,7 @@ using TMPro;
 public class CombosMenuUI : MonoBehaviour
 {
     [Header("Refs")]
-    [SerializeField] private UpgradeHandler handler;
+    [SerializeField] private ComboUpgrades comboUpgrades;
     
     [Header("UI References")]
     [SerializeField] private Transform comboCardsContainer;
@@ -38,9 +38,9 @@ public class CombosMenuUI : MonoBehaviour
 
     private void Awake()
     {
-        if (!handler)
+        if (!comboUpgrades)
         {
-            handler = FindObjectOfType<UpgradeHandler>();
+            comboUpgrades = FindObjectOfType<ComboUpgrades>();
         }
 
         discovered = PlayerPrefs.GetInt(PREF_KEY, 0) == 1;
@@ -113,29 +113,29 @@ public class CombosMenuUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (handler == null)
+        if (comboUpgrades == null)
         {
             Debug.LogWarning("[CombosMenuUI] Missing UpgradeHandler.");
             return;
         }
 
-        handler.LevelsChanged += Refresh;
+        comboUpgrades.LevelsChanged += Refresh;
         Refresh();
     }
 
     private void OnDisable()
     {
-        if (handler != null)
+        if (comboUpgrades != null)
         {
-            handler.LevelsChanged -= Refresh;
+            comboUpgrades.LevelsChanged -= Refresh;
         }
     }
 
     public void Refresh()
     {
-        if (handler == null) return;
+        if (comboUpgrades == null) return;
 
-        if (!discovered && handler.HasCombo_AngerMelee_JoyRanged)
+        if (!discovered && comboUpgrades.HasCombo())
         {
             discovered = true;
             PlayerPrefs.SetInt(PREF_KEY, 1);
@@ -160,8 +160,8 @@ public class CombosMenuUI : MonoBehaviour
             {
                 comboBody.text = string.Format(
                     unlockedBodyTemplate, 
-                    handler.MeleeAngerLevel, 
-                    handler.RangedJoyLevel
+                    comboUpgrades.GetMeleeAngerLevel(), 
+                    comboUpgrades.GetRangedJoyLevel()
                 );
             }
             else
