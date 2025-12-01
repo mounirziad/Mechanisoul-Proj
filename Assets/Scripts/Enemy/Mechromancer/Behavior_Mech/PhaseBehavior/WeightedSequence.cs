@@ -10,125 +10,40 @@ using Composite = Unity.Behavior.Composite;
 [NodeDescription(name: "Weighted Sequence", story: "Select attacks based off of distance and random weights", category: "Flow", id: "c82d0e7ace1e70754fc1b944eb8ab7f2")]
 public class WeightedSequence : Composite
 {
-    [SerializeReference]
-    public BlackboardVariable<GameObject> Agent;
+    /*[SerializeField]
+    [Tooltip("Blackboard GameObject variable that contains boss information")]
+    public BlackboardVariable<GameObject> Owner;
 
-    private int currentIndex = -1;
+    private List<MethodInfo> childMethods;
+    private bool isInitialized;
 
-    private static readonly MethodInfo updateMethod = typeof(Node).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
-
-    protected override Status OnStart()
+    protected override void OnStart()
     {
-        currentIndex = -1;
-        return Status.Running;
+        if (!isInitialized)
+        {
+            InitalizeReflection();
+        }
+
+        base.OnStart();
     }
 
-    protected override Status OnUpdate()
+    private void InitalizeReflection()
     {
-        if (currentIndex == -1)
-        {
-            currentIndex = ChooseAttack();
+        childMethods = new List<MethodInfo>();
 
-            if (currentIndex == -1)
-            {
-                return Status.Failure; //No valid attacks
-            }
+        if (Owner == null || Owner.Value == null)
+        {
+            Debug.LogError("WeightedSequence: No Owner GameObject assigned in Blackboard");
+            return;
         }
 
-        var child = Children[currentIndex];
+        var components = Owner.Value.GetComponent<MonoBehaviour>();
 
-        if (child == null)
+        foreach (var comp in components)
         {
-            return Status.Failure;
+            var methods = comp.GetType().GetMethods
         }
-
-        updateMethod.Invoke(child, null);
-        var result = child.CurrentStatus;
-
-        switch (result)
-        {
-            case Status.Running:
-                return Status.Running;
-
-            case Status.Success:
-                currentIndex = -1;
-                return Status.Success;
-
-            case Status.Failure:
-                currentIndex = -1;
-                return Status.Failure;
-        }
-
-        return Status.Running;
-    }
-
-    protected override void OnEnd()
-    {
-        currentIndex = -1;
-    }
-
-    private int ChooseAttack()
-    {
-        float distance = GetDistanceToPlayer();
-
-        List<(int index, float weight)> valid = new();
-
-        for (int i = 0; i < Children.Count; i++)
-        {
-            if (Children[i] is IWeightedAttack attack)
-            {
-                float weight = attack.GetWeight(distance);
-
-                if (weight > 0)
-                {
-                    valid.Add((i, weight));
-                }
-            }
-        }
-
-        if (valid.Count == 0)
-        {
-            return -1;
-        }
-
-        float total = 0;
-        foreach (var v in valid)
-        {
-            total += v.weight;
-        }
-
-        float roll = UnityEngine.Random.value * total;
-
-        foreach (var v in valid)
-        {
-            if (roll < v.weight)
-            {
-                return v.index;
-            }
-
-            roll -= v.weight;
-        }
-
-        return valid[valid.Count - 1].index;
-    }
-
-    private float GetDistanceToPlayer()
-    {
-        if (Agent == null || Agent.Value == null)
-        {
-            Debug.LogError("Agent is not assigned in the blackboard");
-            return float.MaxValue;
-        }
-
-        var player = GameObject.FindWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("Player gameobject not found");
-            return float.MaxValue;
-        }
-
-        return Vector3.Distance(Agent.Value.transform.position, player.transform.position);
-    }
+    }*/
 }
 
 public interface IWeightedAttack

@@ -25,26 +25,48 @@ public class Mechromancer : Enemy, IDamage
     protected override void Awake()
     {
         base.Awake();
+
+        var agent = GetComponent<BehaviorGraphAgent>();
+        if (agent == null)
+        {
+            Debug.LogError("Mechromancer: BehaviorGraphAgent not found");
+            return;
+        }
+
+        var blackboard = agent.BlackboardReference;
+        if (blackboard == null)
+        {
+            Debug.LogError("Mechromancer: BlackboardReference is null on BehaviorGraphAgent");
+            return;
+        }
+
+        blackboard.SetVariableValue("Self", this.gameObject);
+
+        /*if (Self != null)
+        {
+            Debug.Log($"Mechromancer: Self assigned correctly in Blackboard: {selfCheck.name}");
+        }
+        else
+        {
+            Debug.LogError("Mechromancer: Self variable failed to assign in Blackboard");
+        }*/
+
+        var player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            blackboard.SetVariableValue("Player", player);
+            blackboard.SetVariableValue("PlayerTransform", player.transform);
+
+            Debug.Log($"Mechromancer: Player assigned in Blackboard: {player.name}");
+        }
+        else
+        {
+            Debug.LogError("Player not found in scene");
+        }
     }
 
     private void Start()
     {
-        var player = GameObject.FindWithTag("Player");
-
-        if (player == null)
-        {
-            Debug.LogError("Player not found in scene");
-            return;
-        }
-
-        var agent = GetComponent<BehaviorGraphAgent>();
-        var blackboard = agent.BlackboardReference;
-
-        blackboard.SetVariableValue("Player", player);
-        blackboard.SetVariableValue("PlayerTransform", player.transform);
-
-        Debug.Log("Blackboard has set player to: " + player.name);
-
         controller = GetComponent<MechBehaviorController>();
         animationController = GetComponent<MechAnimationController>();
 
@@ -52,6 +74,15 @@ public class Mechromancer : Enemy, IDamage
         if (lightningController != null)
         {
             lightningController.blackboard = GetComponent<BehaviorGraphAgent>().BlackboardReference;
+        }
+
+        if (controller != null)
+        {
+            Debug.Log("Mechromancer: MechBehaviorController found on Mechromancer");
+        }
+        else
+        {
+            Debug.LogError("Mechromancer: MechBehaviorController not found on Mechromancer");
         }
 
         //Hitboxes start disabled
