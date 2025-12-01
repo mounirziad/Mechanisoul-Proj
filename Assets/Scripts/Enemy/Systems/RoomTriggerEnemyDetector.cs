@@ -31,6 +31,11 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
     [SerializeField] private int remainingEnemies;
     [SerializeField] private bool roomCleared = false;
 
+    [Header("XP Reward")]
+    [SerializeField] private int xpRewardOnClear = 150;
+    [SerializeField] private XPManager xpManager;
+
+
     private HashSet<BasicEnemyHealth> trackedEnemies = new HashSet<BasicEnemyHealth>();
     private Collider roomTrigger;
     private bool playerInRoom = false;
@@ -41,6 +46,11 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
         if (roomTrigger != null)
         {
             roomTrigger.isTrigger = true;
+        }
+
+        if (xpManager == null && XPManager.Instance != null)
+        {
+            xpManager = XPManager.Instance;
         }
     }
 
@@ -144,13 +154,18 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
 
     private void DisableDoors()
     {
+        // mark room as cleared for XP / camera logic
+        if (!roomCleared)
+        {
+            roomCleared = true;
+        }
+
         if (doorToDisable != null)
         {
             DoorNavMeshControl doorControl = doorToDisable.GetComponent<DoorNavMeshControl>();
             if (doorControl != null)
             {
                 doorControl.OpenDoor();
-                roomCleared = true;
                 Debug.Log($"Room {gameObject.name} cleared! Door {doorToDisable.name} opened via DoorNavMeshControl.");
             }
             else
@@ -159,7 +174,6 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
                 if (doorAnimator != null)
                 {
                     doorAnimator.SetBool("IsDoorOpen", true);
-                    roomCleared = true;
                     Debug.Log($"Room {gameObject.name} cleared! Door {doorToDisable.name} animation triggered.");
                 }
                 else
@@ -168,6 +182,13 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            Debug.Log($"Room {gameObject.name} cleared with no door assigned.");
+        }
+
+        // give XP exactly once per clear
+        AwardRoomClearXP();
 
         if (combatCameraController != null && playerInRoom)
         {
@@ -182,6 +203,25 @@ public class RoomTriggerEnemyDetector : MonoBehaviour
                 doorOutline.EnableOutline();
             }
         }
+    }
+
+    private void AwardRoomClearXP()
+    {
+        if (xpRewardOnClear <= 0) return;
+
+        if (xpManager == null)
+        {
+            xpManager = FindObjectOfType<XPManager>();
+        }
+
+        if (xpManager == null)
+        {
+            Debug.LogWarning($"Room {gameObject.name} cleared, but no XPManager found. No XP awarded.");
+            return;
+        }
+
+        xpManager.AddXP(xpRewardOnClear);
+        Debug.Log($"Room {gameObject.name}: awarded {xpRewardOnClear} XP for clearing the room.");
     }
 
     private void OnTriggerEnter(Collider other)

@@ -13,6 +13,10 @@ public class RoomEnemyManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private int remainingEnemies;
 
+    [Header("XP Reward")]
+    [SerializeField] private int xpRewardOnClear = 25;
+    [SerializeField] private XPManager xpManager;
+
     private HashSet<BasicEnemyHealth> trackedEnemies = new HashSet<BasicEnemyHealth>();
     private bool doorsDisabled = false;
 
@@ -71,16 +75,40 @@ public class RoomEnemyManager : MonoBehaviour
 
     private void DisableDoors()
     {
+        doorsDisabled = true;
+
         if (doorToDisable != null)
         {
             doorToDisable.SetActive(false);
-            doorsDisabled = true;
             Debug.Log($"Room cleared! Doors {doorToDisable.name} have been disabled.");
         }
         else
         {
             Debug.LogWarning("Door to disable is not assigned in RoomEnemyManager!", this);
         }
+
+        // award XP once when the room is considered cleared
+        AwardRoomClearXP();
+    }
+
+
+    private void AwardRoomClearXP()
+    {
+        if (xpRewardOnClear <= 0) return;
+
+        if (xpManager == null)
+        {
+            xpManager = FindObjectOfType<XPManager>();
+        }
+
+        if (xpManager == null)
+        {
+            Debug.LogWarning($"RoomEnemyManager on {gameObject.name}: no XPManager found, cannot award XP.");
+            return;
+        }
+
+        xpManager.AddXP(xpRewardOnClear);
+        Debug.Log($"RoomEnemyManager: awarded {xpRewardOnClear} XP for clearing room {gameObject.name}.");
     }
 
     private void OnDestroy()

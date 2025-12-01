@@ -31204,6 +31204,52 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &410879655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 410879656}
+  - component: {fileID: 410879657}
+  m_Layer: 0
+  m_Name: GameSystems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &410879656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410879655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.14045, y: -0.4842, z: 30.46184}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &410879657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410879655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8d995cc27b32249bfab0e2bdc65b87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XPManager
+  startingXPThreshold: 100
+  xpScalingFactor: 0
 --- !u!1 &412798913
 GameObject:
   m_ObjectHideFlags: 0
@@ -84301,6 +84347,8 @@ MonoBehaviour:
   totalEnemies: 0
   remainingEnemies: 0
   roomCleared: 0
+  xpRewardOnClear: 150
+  xpManager: {fileID: 410879657}
 --- !u!114 &1117172708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102302,6 +102350,8 @@ MonoBehaviour:
   totalEnemies: 0
   remainingEnemies: 0
   roomCleared: 0
+  xpRewardOnClear: 150
+  xpManager: {fileID: 410879657}
 --- !u!114 &1338268228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129459,14 +129509,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 139457244}
     m_Modifications:
-    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.56
-      objectReference: {fileID: 0}
     - target: {fileID: 2600768064997901748, guid: fc65da8bbbbd9b549add8c4d38a46a20, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.64
@@ -129538,6 +129580,14 @@ PrefabInstance:
     - target: {fileID: 3974615403890720388, guid: fc65da8bbbbd9b549add8c4d38a46a20, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647898422681595148, guid: 2c5f08040bca98040ad5c69c3a73223e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.56
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -139779,6 +139829,8 @@ MonoBehaviour:
   totalEnemies: 0
   remainingEnemies: 0
   roomCleared: 0
+  xpRewardOnClear: 150
+  xpManager: {fileID: 410879657}
 --- !u!65 &1867053005
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -149621,3 +149673,4 @@ SceneRoots:
   - {fileID: 7067426331944101484}
   - {fileID: 776999281}
   - {fileID: 3639607462777529280}
+  - {fileID: 410879656}

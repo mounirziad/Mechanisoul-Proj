@@ -116,13 +116,65 @@ public class UpgradeUIScript : MonoBehaviour
     private Emotions purchasedDashEmotion = Emotions.None;
     private int purchasedDashLevel = 0;
 
+    [Header("Upgrade Points")]
+    [SerializeField] private XPManager xpManager;
+    [SerializeField] private TextMeshProUGUI pointsText;
 
+    // cost per tier: 1, 2, 3 by requirement
+    [SerializeField] private int level1Cost = 1;
+    [SerializeField] private int level2Cost = 2;
+    [SerializeField] private int level3Cost = 3;
+
+    // track last known for cheap UI refresh
+    int lastKnownPoints = -1;
+
+    // snapshot struct for whole tree state
+    [System.Serializable]
+    public struct UpgradeTreeState
+    {
+        public Emotions meleeEmotion;
+        public int meleeLevel;
+
+        public Emotions rangedEmotion;
+        public int rangedLevel;
+
+        public Emotions dashEmotion;
+        public int dashLevel;
+    }
 
     void Awake()
     {
         meleeUpgrades = GameObject.Find("UpgradeHolder").GetComponent<MeleeUpgrades>();
         CreateBordersForAllButtons();
+
+        // find XPManager if not wired in inspector
+        if (xpManager == null && XPManager.Instance != null)
+        {
+            xpManager = XPManager.Instance;
+        }
+
+        UpdatePointsUI();
     }
+
+    void Update()
+    {
+        if (xpManager == null || pointsText == null) return;
+
+        int currentPoints = xpManager.CurrentSkillPoints;
+        if (currentPoints != lastKnownPoints)
+        {
+            UpdatePointsUI();
+        }
+    }
+
+    void UpdatePointsUI()
+    {
+        if (xpManager == null || pointsText == null) return;
+
+        lastKnownPoints = xpManager.CurrentSkillPoints;
+        pointsText.text = "Points: " + lastKnownPoints;
+    }
+
 
     void OnEnable()
     {
@@ -287,7 +339,106 @@ public class UpgradeUIScript : MonoBehaviour
         if (closeButton != null) closeButton.onClick.RemoveListener(OnCloseButtonClicked);
     }
 
-    // ====== HELPERS: drive levels via handler Up/Down (no direct setters needed) ======
+    // HELPERS - drive levels via handler Up/Down
+
+    // expose purchased state to other systems (snapshot manager)
+    public UpgradeTreeState GetPurchasedState()
+    {
+        UpgradeTreeState state;
+        state.meleeEmotion = purchasedMeleeEmotion;
+        state.meleeLevel = purchasedMeleeLevel;
+        state.rangedEmotion = purchasedRangedEmotion;
+        state.rangedLevel = purchasedRangedLevel;
+        state.dashEmotion = purchasedDashEmotion;
+        state.dashLevel = purchasedDashLevel;
+        return state;
+    }
+
+    // allow snapshot restore to re-apply upgrades
+    public void ApplyPurchasedState(UpgradeTreeState state)
+    {
+        purchasedMeleeEmotion = state.meleeEmotion;
+        purchasedMeleeLevel = state.meleeLevel;
+
+        purchasedRangedEmotion = state.rangedEmotion;
+        purchasedRangedLevel = state.rangedLevel;
+
+        purchasedDashEmotion = state.dashEmotion;
+        purchasedDashLevel = state.dashLevel;
+
+        // clear runtime state and re-apply levels
+        if (meleeUpgrades != null)
+        {
+            meleeUpgrades.Respec();
+
+            if (purchasedMeleeEmotion != Emotions.None && purchasedMeleeLevel > 0)
+            {
+                meleeUpgrades.SelectEmotion(purchasedMeleeEmotion);
+                meleeUpgrades.SetLevel(purchasedMeleeLevel);
+            }
+        }
+
+        ZeroRange();
+        if (purchasedRangedEmotion != Emotions.None && purchasedRangedLevel > 0)
+        {
+            switch (purchasedRangedEmotion)
+            {
+                case Emotions.Joy: SetRangeJoyLevel(purchasedRangedLevel); break;
+                case Emotions.Anger: SetRangeAngerLevel(purchasedRangedLevel); break;
+                case Emotions.Sadness: SetRangeSadnessLevel(purchasedRangedLevel); break;
+                case Emotions.Love: SetRangeLoveLevel(purchasedRangedLevel); break;
+                case Emotions.Fear: SetRangeFearLevel(purchasedRangedLevel); break;
+            }
+        }
+
+        ZeroDash();
+        if (purchasedDashEmotion != Emotions.None && purchasedDashLevel > 0)
+        {
+            switch (purchasedDashEmotion)
+            {
+                case Emotions.Joy: SetDashJoyLevel(purchasedDashLevel); break;
+                case Emotions.Anger: SetDashAngerLevel(purchasedDashLevel); break;
+                case Emotions.Sadness: SetDashSadLevel(purchasedDashLevel); break;
+                case Emotions.Love: SetDashLoveLevel(purchasedDashLevel); break;
+                case Emotions.Fear: SetDashFearLevel(purchasedDashLevel); break;
+            }
+        }
+
+        // clear pending
+        pendingMeleeEmotion = Emotions.None;
+        pendingMeleeLevel = 0;
+        pendingRangedEmotion = Emotions.None;
+        pendingRangedLevel = 0;
+        pendingDashEmotion = Emotions.None;
+        pendingDashLevel = 0;
+
+        UpdateButtonVisuals();
+    }
+
+    int GetTierCost(int level)
+    {
+        switch (level)
+        {
+            case 1: return level1Cost; // default 1
+            case 2: return level2Cost; // default 2
+            case 3: return level3Cost; // default 3
+            default: return 0;
+        }
+    }
+
+    // total extra cost to go from currentLevel -> targetLevel
+    int GetTotalCostForTargetLevel(int currentLevel, int targetLevel)
+    {
+        if (targetLevel <= currentLevel) return 0;
+
+        int cost = 0;
+        for (int i = currentLevel + 1; i <= targetLevel; i++)
+        {
+            cost += GetTierCost(i);
+        }
+        return cost;
+    }
+
     void ZeroRange()
     {
         for (int i = 0; i < 10; i++)
@@ -299,6 +450,7 @@ public class UpgradeUIScript : MonoBehaviour
             upgradeHandler.RangedLoveDown();
         }
     }
+
     void SetRangeJoyLevel(int level)
     {
         ZeroRange();
@@ -655,75 +807,119 @@ public class UpgradeUIScript : MonoBehaviour
     }
 
     #region PURCHASING UPGRADES
+    
     private void OnPurchaseClicked()
     {
-        bool purchaseMade = false;
+        // if you somehow open this without an XPManager, just behave like “free upgrades”
+        if (xpManager == null)
+        {
+            Debug.LogWarning("[UpgradeUI] No XPManager set. Applying upgrades without cost.");
+            ApplyPurchasesWithoutCost();
+            return;
+        }
 
-        // Check if there's a pending melee selection
+        int totalCost = 0;
+
+        // melee pending?
         if (pendingMeleeEmotion != Emotions.None &&
             (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
         {
-            if (CanPurchase(pendingMeleeLevel))
-            {
-                ApplyMeleePurchase();
-                purchaseMade = true;
-            }
-            else
-            {
-                Debug.Log("Not enough points for this upgrade!");
-                return;
-            }
+            totalCost += GetTotalCostForTargetLevel(purchasedMeleeLevel, pendingMeleeLevel);
         }
 
-        // Check if there's a pending ranged selection
+        // ranged pending?
         if (pendingRangedEmotion != Emotions.None &&
             (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
         {
-            if (CanPurchase(pendingRangedLevel))
-            {
-                ApplyRangedPurchase();
-                purchaseMade = true;
-            }
-            else
-            {
-                Debug.Log("Not enough points for this upgrade!");
-                return;
-            }
+            totalCost += GetTotalCostForTargetLevel(purchasedRangedLevel, pendingRangedLevel);
         }
 
-        // Check if there's a pending dash selection
+        // dash pending?
         if (pendingDashEmotion != Emotions.None &&
             (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
         {
-            if (CanPurchase(pendingDashLevel))
-            {
-                ApplyDashPurchase();
-                purchaseMade = true;
-            }
-            else
-            {
-                Debug.Log("Not enough points for this upgrade!");
-                return;
-            }
+            totalCost += GetTotalCostForTargetLevel(purchasedDashLevel, pendingDashLevel);
+        }
+
+        if (totalCost <= 0)
+        {
+            Debug.Log("No new upgrades selected to purchase.");
+            return;
+        }
+
+        // check and spend points once
+        if (!xpManager.TrySpendPoints(totalCost))
+        {
+            Debug.Log("Not enough points for these upgrades. Need " + totalCost +
+                      ", have " + xpManager.CurrentSkillPoints);
+            return;
+        }
+
+        bool purchaseMade = false;
+
+        // apply melee
+        if (pendingMeleeEmotion != Emotions.None &&
+            (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
+        {
+            ApplyMeleePurchase();
+            purchaseMade = true;
+        }
+
+        // apply ranged
+        if (pendingRangedEmotion != Emotions.None &&
+            (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
+        {
+            ApplyRangedPurchase();
+            purchaseMade = true;
+        }
+
+        // apply dash
+        if (pendingDashEmotion != Emotions.None &&
+            (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
+        {
+            ApplyDashPurchase();
+            purchaseMade = true;
         }
 
         if (purchaseMade)
         {
-            Debug.Log("Purchase successful!");
+            Debug.Log("Purchase successful. Spent " + totalCost + " points.");
             UpdateButtonVisuals();
-        }
-        else
-        {
-            Debug.Log("No new upgrades selected to purchase.");
+            UpdatePointsUI();
         }
     }
 
-    private bool CanPurchase(int level)
+    void ApplyPurchasesWithoutCost()
     {
-        // Framework for points system - for now, always return true
-        // Later: return availablePoints >= (level * pointsPerUpgrade);
-        return true;
+        bool purchaseMade = false;
+
+        if (pendingMeleeEmotion != Emotions.None &&
+            (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
+        {
+            ApplyMeleePurchase();
+            purchaseMade = true;
+        }
+
+        if (pendingRangedEmotion != Emotions.None &&
+            (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
+        {
+            ApplyRangedPurchase();
+            purchaseMade = true;
+        }
+
+        if (pendingDashEmotion != Emotions.None &&
+            (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
+        {
+            ApplyDashPurchase();
+            purchaseMade = true;
+        }
+
+        if (purchaseMade)
+        {
+            UpdateButtonVisuals();
+        }
     }
+
 
     private void ApplyMeleePurchase()
     {
