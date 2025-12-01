@@ -9,7 +9,7 @@ public class LightningController : MonoBehaviour
     [SerializeField] private GameObject lightningPrefab;
     [SerializeField] private float lightningDuration = 1.5f;
     [SerializeField] private Transform lightningOrigin;
-    [SerializeField] private float cooldown = 5f;
+    [SerializeField] private float cooldown = 15f;
 
     private GameObject activeLightning;
     private bool isAttacking;
