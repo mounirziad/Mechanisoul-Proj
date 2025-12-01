@@ -42,7 +42,7 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnPlay()
     {
-        SceneManager.LoadScene("TutorialCutscene");
+        SceneManager.LoadScene("ComicBookIntro");
     }
 
     void OnCreditsPerformed(InputAction.CallbackContext context)
