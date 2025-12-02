@@ -11,24 +11,28 @@ public class BreakRoomExitTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (UpgradeSnapshotManager.Instance != null)
+            {
+                UpgradeSnapshotManager.Instance.CaptureFloorEntryState();
+            }
             if (isInitialBreakRoom && GameProgressionManager.Instance != null)
             {
                 if (!GameProgressionManager.Instance.HasExitedInitialBreakRoom())
                 {
                     GameProgressionManager.Instance.SetExitedInitialBreakRoom(true);
-                    string sceneToLoad = string.IsNullOrEmpty(targetSceneName) 
-                        ? GameProgressionManager.Instance.GetBreakRoomExitScene() 
+                    string sceneToLoad = string.IsNullOrEmpty(targetSceneName)
+                        ? GameProgressionManager.Instance.GetBreakRoomExitScene()
                         : targetSceneName;
-                    
+
                     Debug.Log($"BreakRoomExitTrigger: Loading first level scene: {sceneToLoad}");
                     SceneManager.LoadScene(sceneToLoad);
                 }
                 else
                 {
-                    string sceneToLoad = string.IsNullOrEmpty(targetSceneName) 
-                        ? GameProgressionManager.Instance.GetBreakRoomExitScene() 
+                    string sceneToLoad = string.IsNullOrEmpty(targetSceneName)
+                        ? GameProgressionManager.Instance.GetBreakRoomExitScene()
                         : targetSceneName;
-                    
+
                     Debug.Log($"BreakRoomExitTrigger: Loading scene: {sceneToLoad}");
                     SceneManager.LoadScene(sceneToLoad);
                 }
