@@ -46,7 +46,12 @@ public class BreakRoomInitializer : MonoBehaviour
 
             if (UpgradeSnapshotManager.Instance != null)
             {
+                Debug.Log("BreakRoomInitializer: Calling RestoreFloorEntryState");
                 UpgradeSnapshotManager.Instance.RestoreFloorEntryState();
+            }
+            else
+            {
+                Debug.LogError("BreakRoomInitializer: UpgradeSnapshotManager.Instance is null!");
             }
 
             Rigidbody rb = player.GetComponent<Rigidbody>();
