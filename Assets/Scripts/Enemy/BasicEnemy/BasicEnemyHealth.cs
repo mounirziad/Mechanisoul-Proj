@@ -91,6 +91,8 @@ public class BasicEnemyHealth : Enemy
     // Update is called once per frame
     protected override void Update()
     {
+        base.Update();
+
         if (currentHealth <= 0 && !agent.isDead)
         {
             agent.stateMachine.ChangeState(AiStateId.Death);

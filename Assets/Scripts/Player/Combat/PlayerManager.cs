@@ -222,6 +222,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         playerHealth.Heal(lifeSteal);
+        Debug.Log($"Lifesteal for {lifeSteal}");
     }
 
     public void ApplyMoveSpeedBuff()
