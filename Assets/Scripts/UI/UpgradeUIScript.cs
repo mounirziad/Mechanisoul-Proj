@@ -1,6 +1,8 @@
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using System.Collections;
+
 
 public class UpgradeUIScript : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class UpgradeUIScript : MonoBehaviour
 
     public UpgradeHandler upgradeHandler;
     public MeleeUpgrades meleeUpgrades;
+    private bool isSynergyActive = false;
+    [SerializeField] Button firstSynergyButton;
 
     [Header("Menus")]
     public GameObject skillMenu;
@@ -17,6 +21,7 @@ public class UpgradeUIScript : MonoBehaviour
     [Header("Description Panel")]
     [SerializeField] private TextMeshProUGUI upgradeNameText;
     [SerializeField] private TextMeshProUGUI upgradeDescriptionText;
+    [SerializeField] private TextMeshProUGUI upgradeCostText;
     private UpgradeButton currentlySelectedButton;
 
     //UPGRADE TREES
@@ -259,17 +264,17 @@ public class UpgradeUIScript : MonoBehaviour
         {
             skillTree.SetActive(true);
             synergies.SetActive(false);
+            isSynergyActive = false;
         });
         if (synergyTab != null) synergyTab.onClick.AddListener(() =>
         {
             skillTree.SetActive(false);
             synergies.SetActive(true);
+            isSynergyActive = true;
 
             // NEW: refresh the combos card when the tab opens
             if (combosMenuUI != null) combosMenuUI.Refresh();
         });
-
-
     }
 
     void OnDisable()
@@ -339,7 +344,14 @@ public class UpgradeUIScript : MonoBehaviour
         if (closeButton != null) closeButton.onClick.RemoveListener(OnCloseButtonClicked);
     }
 
-    // HELPERS - drive levels via handler Up/Down
+    public Button GetFirstButtonForCurrentTab()
+    {
+        if (isSynergyActive && firstSynergyButton != null)
+        {
+            return firstSynergyButton;
+        }
+        return null;
+    }
 
     // expose purchased state to other systems (snapshot manager)
     public UpgradeTreeState GetPurchasedState()
@@ -807,10 +819,9 @@ public class UpgradeUIScript : MonoBehaviour
     }
 
     #region PURCHASING UPGRADES
-    
+
     private void OnPurchaseClicked()
     {
-        // if you somehow open this without an XPManager, just behave like “free upgrades”
         if (xpManager == null)
         {
             Debug.LogWarning("[UpgradeUI] No XPManager set. Applying upgrades without cost.");
@@ -820,21 +831,18 @@ public class UpgradeUIScript : MonoBehaviour
 
         int totalCost = 0;
 
-        // melee pending?
         if (pendingMeleeEmotion != Emotions.None &&
             (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
         {
             totalCost += GetTotalCostForTargetLevel(purchasedMeleeLevel, pendingMeleeLevel);
         }
 
-        // ranged pending?
         if (pendingRangedEmotion != Emotions.None &&
             (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
         {
             totalCost += GetTotalCostForTargetLevel(purchasedRangedLevel, pendingRangedLevel);
         }
 
-        // dash pending?
         if (pendingDashEmotion != Emotions.None &&
             (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
         {
@@ -847,17 +855,23 @@ public class UpgradeUIScript : MonoBehaviour
             return;
         }
 
-        // check and spend points once
         if (!xpManager.TrySpendPoints(totalCost))
         {
             Debug.Log("Not enough points for these upgrades. Need " + totalCost +
                       ", have " + xpManager.CurrentSkillPoints);
+
+            if (flashCoroutine != null)
+            {
+                StopCoroutine(flashCoroutine);
+            }
+            flashCoroutine = StartCoroutine(FlashButtonRed(purchaseButton));
+
             return;
         }
 
+
         bool purchaseMade = false;
 
-        // apply melee
         if (pendingMeleeEmotion != Emotions.None &&
             (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
         {
@@ -865,7 +879,6 @@ public class UpgradeUIScript : MonoBehaviour
             purchaseMade = true;
         }
 
-        // apply ranged
         if (pendingRangedEmotion != Emotions.None &&
             (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
         {
@@ -873,7 +886,6 @@ public class UpgradeUIScript : MonoBehaviour
             purchaseMade = true;
         }
 
-        // apply dash
         if (pendingDashEmotion != Emotions.None &&
             (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
         {
@@ -888,6 +900,8 @@ public class UpgradeUIScript : MonoBehaviour
             UpdatePointsUI();
         }
     }
+
+
 
     void ApplyPurchasesWithoutCost()
     {
@@ -1312,6 +1326,7 @@ public class UpgradeUIScript : MonoBehaviour
             if (button != null)
             {
                 CreateBorderForButton(button);
+                CreateOutlineForButton(button);
             }
         }
     }
@@ -1321,6 +1336,9 @@ public class UpgradeUIScript : MonoBehaviour
         Transform existingBorder = button.transform.Find("Border");
         if (existingBorder != null) return;
 
+        Image buttonImage = button.GetComponent<Image>();
+        if (buttonImage == null || buttonImage.sprite == null) return;
+
         GameObject borderObj = new GameObject("Border");
         borderObj.transform.SetParent(button.transform, false);
         borderObj.transform.SetAsFirstSibling();
@@ -1328,12 +1346,31 @@ public class UpgradeUIScript : MonoBehaviour
         RectTransform borderRect = borderObj.AddComponent<RectTransform>();
         borderRect.anchorMin = Vector2.zero;
         borderRect.anchorMax = Vector2.one;
-        borderRect.sizeDelta = new Vector2(10f, 10f);
         borderRect.anchoredPosition = Vector2.zero;
 
+        float borderSize = 10f;
+        borderRect.offsetMin = new Vector2(-borderSize, -borderSize);
+        borderRect.offsetMax = new Vector2(borderSize, borderSize);
+
         Image borderImage = borderObj.AddComponent<Image>();
+        borderImage.sprite = buttonImage.sprite;
+        borderImage.type = buttonImage.type;
         borderImage.color = Color.white;
         borderImage.enabled = false;
+        borderImage.raycastTarget = false;
+    }
+
+
+    private void CreateOutlineForButton(Button button)
+    {
+        Outline outline = button.GetComponent<Outline>();
+        if (outline == null)
+        {
+            outline = button.gameObject.AddComponent<Outline>();
+        }
+        outline.effectColor = Color.black;
+        outline.effectDistance = new Vector2(10, 10);
+        outline.enabled = false;
     }
 
     private void ResetButtonState(Button button)
@@ -1349,6 +1386,12 @@ public class UpgradeUIScript : MonoBehaviour
                     borderImage.enabled = false;
                 }
             }
+
+            Outline outline = button.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.enabled = false;
+            }
         }
     }
 
@@ -1362,9 +1405,14 @@ public class UpgradeUIScript : MonoBehaviour
                 Image borderImage = border.GetComponent<Image>();
                 if (borderImage != null)
                 {
-                    borderImage.enabled = true;
-                    borderImage.color = new Color(0f, 1f, 0f, 0.25f); // semi-transparent green
+                    borderImage.enabled = false;
                 }
+            }
+
+            Outline outline = button.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.enabled = true;
             }
         }
     }
@@ -1373,6 +1421,12 @@ public class UpgradeUIScript : MonoBehaviour
     {
         if (button != null)
         {
+            Outline outline = button.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.enabled = false;
+            }
+
             Transform border = button.transform.Find("Border");
             if (border != null)
             {
@@ -1380,11 +1434,11 @@ public class UpgradeUIScript : MonoBehaviour
                 if (borderImage != null)
                 {
                     borderImage.enabled = true;
-                    borderImage.color = new Color(1f, 1f, 0f, 0.25f); // semi-transparent yellow
                 }
             }
         }
     }
+
 
     private void UpdateTabButtonNavigation(Button targetButton)
     {
@@ -1410,7 +1464,7 @@ public class UpgradeUIScript : MonoBehaviour
         }
     }
 
-    public void UpdateDescriptionPanel(string upgradeName, string description)
+    public void UpdateDescriptionPanel(string upgradeName, string description, string cost)
     {
         if (upgradeNameText != null)
         {
@@ -1420,6 +1474,11 @@ public class UpgradeUIScript : MonoBehaviour
         if (upgradeDescriptionText != null)
         {
             upgradeDescriptionText.text = description;
+        }
+
+        if (upgradeCostText != null)
+        {
+            upgradeCostText.text = cost;
         }
     }
 
@@ -1439,4 +1498,23 @@ public class UpgradeUIScript : MonoBehaviour
         GetComponentInParent<InteractableUI>().ToggleUpgradeUI();
     }
 
+    private Coroutine flashCoroutine;
+    private IEnumerator FlashButtonRed(Button button)
+    {
+        if (button == null) yield break;
+
+        Image buttonImage = button.GetComponent<Image>();
+        if (buttonImage == null) yield break;
+
+        Color greenColor = Color.green;
+        Color redColor = Color.red;
+        float flashDuration = 0.2f;
+
+        buttonImage.color = redColor;
+        yield return new WaitForSeconds(flashDuration);
+
+        buttonImage.color = greenColor;
+
+        flashCoroutine = null;
+    }
 }

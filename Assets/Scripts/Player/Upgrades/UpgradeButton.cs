@@ -87,7 +87,7 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, ISelectHandler
     {
         if (upgradeUIScript != null && upgradeData != null)
         {
-            upgradeUIScript.UpdateDescriptionPanel(upgradeData.upgradeName, upgradeData.description);
+            upgradeUIScript.UpdateDescriptionPanel(upgradeData.upgradeName, upgradeData.description, upgradeData.cost.ToString());
         }
     }
     
