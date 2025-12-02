@@ -59460,7 +59460,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -60167,7 +60167,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 0.5, y: 0.5, z: 0.5}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
@@ -62037,7 +62037,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -65290,7 +65290,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -69593,7 +69593,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -117186,7 +117186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4731254154942279815, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 89.9
+      value: 88.58
       objectReference: {fileID: 0}
     - target: {fileID: 4731254154942279815, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_LocalRotation.w
@@ -121489,7 +121489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4731254154942279815, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 89.9
+      value: 87.45
       objectReference: {fileID: 0}
     - target: {fileID: 4731254154942279815, guid: 11ab7ff2112d21f43b06040e94698f90, type: 3}
       propertyPath: m_LocalRotation.w
@@ -122924,7 +122924,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -141893,7 +141893,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -143190,6 +143190,76 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e7684f37e34636247bbc9f39783ae401, type: 3}
   m_PrefabInstance: {fileID: 1963510943}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1963750572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1963750573}
+  - component: {fileID: 1963750574}
+  - component: {fileID: 1963750575}
+  m_Layer: 11
+  m_Name: PreventEnemiesFromOil
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1963750573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963750572}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.66326, y: 2.11196, z: 90.48184}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1963750574
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963750572}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 44.11583, y: 3.455439, z: 1}
+  m_Center: {x: -6.8052807, y: 1.2277195, z: 0}
+--- !u!208 &1963750575
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963750572}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 22.057915, y: 1.7277195, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -6.805281, y: 1.22772, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1965857353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -149699,3 +149769,4 @@ SceneRoots:
   - {fileID: 776999281}
   - {fileID: 3639607462777529280}
   - {fileID: 410879656}
+  - {fileID: 1963750573}
