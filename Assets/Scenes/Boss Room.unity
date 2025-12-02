@@ -683,9 +683,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 484312877}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 484312879}
   m_SourcePrefab: {fileID: 100100000, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
 --- !u!1001 &66047377
 PrefabInstance:
@@ -2498,7 +2495,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 5a77e2ea7d410a847ba71d16dc0f4ca0, type: 2}
     - target: {fileID: 919132149155446097, guid: 318dd26f684bb0d48943159d9ea47b7f, type: 3}
       propertyPath: m_Name
-      value: Tesla Coil (2)
+      value: MAIN Tesla Coil
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3087,6 +3084,7 @@ GameObject:
   m_Component:
   - component: {fileID: 311448860}
   - component: {fileID: 311448861}
+  - component: {fileID: 311448862}
   m_Layer: 0
   m_Name: HB_2
   m_TagString: Untagged
@@ -3130,6 +3128,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.58, y: 1.03, z: 0.07}
   m_Center: {x: 0, y: -0.2, z: 0}
+--- !u!114 &311448862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311448859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dad5f0986bf5e6f4d9b0a4ef64da8b0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitboxGizmo
+  gizmoColor: {r: 1, g: 0, b: 0, a: 0.25}
 --- !u!1001 &320171496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5559,6 +5570,9 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 1938267014}
   - {fileID: 467091496}
+  teslaTarget: {fileID: 221443217}
+  lightningOrigin: {fileID: 0}
+  lightningPrefab: {fileID: 6887558257818188625, guid: 99770836542a8ab49a5e2a883fd6ecdb, type: 3}
   resurrectionTime: 5
 --- !u!114 &484312867
 MonoBehaviour:
@@ -5738,19 +5752,6 @@ MonoBehaviour:
   runStepInterval: 0.35
   sprintStepInterval: 0.25
   minimumMovementSpeed: 0.5
---- !u!114 &484312879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484312861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dad5f0986bf5e6f4d9b0a4ef64da8b0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HitboxGizmo
-  gizmoColor: {r: 1, g: 0, b: 0, a: 0.25}
 --- !u!1001 &494556510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19529,6 +19530,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1075778297}
   - component: {fileID: 1075778298}
+  - component: {fileID: 1075778299}
   m_Layer: 0
   m_Name: HB_1
   m_TagString: Untagged
@@ -19572,6 +19574,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.58, y: 0.64, z: 0.07}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1075778299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075778296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dad5f0986bf5e6f4d9b0a4ef64da8b0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitboxGizmo
+  gizmoColor: {r: 1, g: 0, b: 0, a: 0.25}
 --- !u!1001 &1079500771
 PrefabInstance:
   m_ObjectHideFlags: 0
