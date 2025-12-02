@@ -25,30 +25,24 @@ public class MechLunge : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (isLunging || lungeCooldownTimer > 0f) return;
-
-        var player = GameObject.FindWithTag("Player");
-        playerTransform = player.transform;
-
-        if (player == null)
-        {
-            Debug.LogError("Player not found in scene");
-            return;
-        }
-
-        float distance = Vector3.Distance(transform.position, playerTransform.position);
-
-        if (distance < range && !isLunging)
-        {
-            StartLunge();
-        }
-    }
-
     public void StartLunge()
     {
         if (isLunging) return;
+
+        if (playerTransform == null)
+        {
+            var bgAgent = GetComponent<BehaviorGraphAgent>();
+            if (bgAgent != null)
+            {
+                bgAgent.BlackboardReference.GetVariableValue("PlayerTransform", out playerTransform);
+            }
+        }
+
+        if (playerTransform == null)
+        {
+            Debug.LogError("No playerTransform assigned for lunge");
+            return;
+        }
 
         isLunging = true;
         hasHitPlayer = false;
