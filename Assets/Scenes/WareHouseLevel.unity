@@ -18132,7 +18132,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 52857988}
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 52857989}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &52857986 stripped
 Transform:
@@ -18144,6 +18150,35 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 52857985}
   m_PrefabAsset: {fileID: 0}
+--- !u!208 &52857988
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52857987}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.2490585, y: 1.280285, z: 0.35}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &52857989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52857987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1001 &53284914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20442,13 +20477,53 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 93808940}
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 93808939}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &93808937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 617409097813262784, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 93808936}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &93808938 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+  m_PrefabInstance: {fileID: 93808936}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &93808939
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93808938}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.2489115, y: 1.2801346, z: 0.405}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &93808940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93808938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1001 &94559004
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60768,7 +60843,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 745861590}
+    - targetCorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 745861589}
   m_SourcePrefab: {fileID: 100100000, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
 --- !u!4 &745861587 stripped
 Transform:
@@ -60780,6 +60861,35 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 277722211437075322, guid: f84d6d2b0a58143468ea62736fab6c99, type: 3}
   m_PrefabInstance: {fileID: 745861586}
   m_PrefabAsset: {fileID: 0}
+--- !u!208 &745861589
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745861588}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.381584, y: 1.4161235, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &745861590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745861588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea603a656ae641888aaaedb32d44d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorNavMeshControl
+  startClosed: 1
 --- !u!1001 &747220090
 PrefabInstance:
   m_ObjectHideFlags: 0

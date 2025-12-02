@@ -141,6 +141,11 @@ public class PlayerCombat : MonoBehaviour
     [HideInInspector] public Transform currentTarget;
     private AttackSO currentAttackData;
 
+    int defaultClipSize;
+    float defaultWeaponDamage;
+    float defaultBaseFireRate;
+    float emotionFireRateMultiplier = 1f;
+
     void Awake()
     {
         anim = GetComponent<Animator>();
@@ -178,6 +183,10 @@ public class PlayerCombat : MonoBehaviour
         {
             anim.applyRootMotion = false;
         }
+
+        defaultClipSize = clipSize;
+        defaultWeaponDamage = weaponDamage;
+        defaultBaseFireRate = baseFireRate;
 
         InitRangedGun();
 
@@ -292,35 +301,95 @@ public class PlayerCombat : MonoBehaviour
 
     public void SetRangedEmotion(Emotions emotion)
     {
+        currentRangedEmotion = emotion;
+
         switch (emotion)
         {
             case Emotions.Joy:
-                currentMuzzleFlashPrefab = joyMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
-                currentTracerLinePrefab = joyTracerLinePrefab ?? baseTracerLinePrefab;
+                currentMuzzleFlashPrefab =
+                    joyMuzzleFlashPrefab != null ? joyMuzzleFlashPrefab : baseMuzzleFlashPrefab;
+
+                currentTracerLinePrefab =
+                    joyTracerLinePrefab != null ? joyTracerLinePrefab : baseTracerLinePrefab;
                 break;
+
             case Emotions.Anger:
-                currentMuzzleFlashPrefab = angerMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
-                currentTracerLinePrefab = angerTracerLinePrefab ?? baseTracerLinePrefab;
+                currentMuzzleFlashPrefab =
+                    angerMuzzleFlashPrefab != null ? angerMuzzleFlashPrefab : baseMuzzleFlashPrefab;
+
+                currentTracerLinePrefab =
+                    angerTracerLinePrefab != null ? angerTracerLinePrefab : baseTracerLinePrefab;
                 break;
+
             case Emotions.Sadness:
-                currentMuzzleFlashPrefab = sadnessMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
-                currentTracerLinePrefab = sadnessTracerLinePrefab ?? baseTracerLinePrefab;
+                currentMuzzleFlashPrefab =
+                    sadnessMuzzleFlashPrefab != null ? sadnessMuzzleFlashPrefab : baseMuzzleFlashPrefab;
+
+                currentTracerLinePrefab =
+                    sadnessTracerLinePrefab != null ? sadnessTracerLinePrefab : baseTracerLinePrefab;
                 break;
+
             case Emotions.Love:
-                currentMuzzleFlashPrefab = loveMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
-                currentTracerLinePrefab = loveTracerLinePrefab ?? baseTracerLinePrefab;
+                currentMuzzleFlashPrefab =
+                    loveMuzzleFlashPrefab != null ? loveMuzzleFlashPrefab : baseMuzzleFlashPrefab;
+
+                currentTracerLinePrefab =
+                    loveTracerLinePrefab != null ? loveTracerLinePrefab : baseTracerLinePrefab;
                 break;
+
             case Emotions.Fear:
-                currentMuzzleFlashPrefab = fearMuzzleFlashPrefab ?? baseMuzzleFlashPrefab;
-                currentTracerLinePrefab = fearTracerLinePrefab ?? baseTracerLinePrefab;
+                currentMuzzleFlashPrefab =
+                    fearMuzzleFlashPrefab != null ? fearMuzzleFlashPrefab : baseMuzzleFlashPrefab;
+
+                currentTracerLinePrefab =
+                    fearTracerLinePrefab != null ? fearTracerLinePrefab : baseTracerLinePrefab;
                 break;
-            case Emotions.None:
+
             default:
                 currentMuzzleFlashPrefab = baseMuzzleFlashPrefab;
                 currentTracerLinePrefab = baseTracerLinePrefab;
                 break;
         }
+
+        ApplyRangedEmotionStats();
     }
+
+
+    void ApplyRangedEmotionStats()
+    {
+        // ensure defaults are valid
+        if (defaultClipSize <= 0) defaultClipSize = clipSize;
+        if (defaultWeaponDamage <= 0f) defaultWeaponDamage = weaponDamage;
+        if (defaultBaseFireRate <= 0f) defaultBaseFireRate = baseFireRate;
+
+        // reset to base
+        clipSize = defaultClipSize;
+        weaponDamage = defaultWeaponDamage;
+        baseFireRate = defaultBaseFireRate;
+        emotionFireRateMultiplier = 1f;
+
+        // apply anger preset
+        if (currentRangedEmotion == Emotions.Anger)
+        {
+            clipSize = 3;                               // 3 round clip
+            weaponDamage = defaultWeaponDamage * 1.5f;  // 150 percent damage
+            emotionFireRateMultiplier = 0.6f;           // 40 percent slower fire rate
+        }
+
+        // clamp current ammo to new clip size
+        if (ammoInClip > clipSize)
+        {
+            ammoInClip = clipSize;
+        }
+
+        // update internal cooldown with new emotion multiplier
+        float joyFR = rangedMods.joyFireRateMultiplier;
+        if (joyFR <= 0f) joyFR = 1f;
+        RecalcFireCooldown(joyFR);
+
+        LogGun($"Emotion stats applied: emotion={currentRangedEmotion}, clip={clipSize}, dmg={weaponDamage}, emotionFRx={emotionFireRateMultiplier:0.00}");
+    }
+
 
     public void ToggleRanged(bool on)
     {
@@ -332,7 +401,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!rangedEnabled) { inputManager.shootInput = false; return; }
 
-        float effectiveRate = baseFireRate * rangedMods.joyFireRateMultiplier;
+        float effectiveRate = baseFireRate * rangedMods.joyFireRateMultiplier * emotionFireRateMultiplier;
         float cooldown = 1f / Mathf.Max(0.0001f, effectiveRate);
         if (Time.time - lastShotTime < cooldown) { inputManager.shootInput = false; return; }
 
@@ -672,8 +741,11 @@ public class PlayerCombat : MonoBehaviour
     void RecalcFireCooldown(float joyFireRateMultiplier)
     {
         float prev = fireCooldown;
-        fireCooldown = Mathf.Max(0.05f, baseFireCooldown / Mathf.Max(0.01f, joyFireRateMultiplier));
-        LogGun($"RecalcFireCooldown: joyFRx={joyFireRateMultiplier:0.00} -> cooldown {prev:0.00}s => {fireCooldown:0.00}s");
+
+        float totalMult = Mathf.Max(0.01f, joyFireRateMultiplier * emotionFireRateMultiplier);
+        fireCooldown = Mathf.Max(0.05f, baseFireCooldown / totalMult);
+
+        LogGun($"RecalcFireCooldown: joyFRx={joyFireRateMultiplier:0.00}, emotionFRx={emotionFireRateMultiplier:0.00} -> cooldown {prev:0.00}s => {fireCooldown:0.00}s");
     }
 
     public void TryFireRanged()
