@@ -9,6 +9,7 @@ public class InteractableUI : MonoBehaviour
     [SerializeField] UpgradeUIScript upgradeUIScript;
     [SerializeField] PauseMenuUI pauseMenuUI;
     [SerializeField] InputManager playerInputManager;
+    private bool canPurchase = false;
 
     private bool pauseActive = false;
     private bool upgradeUIActive = false;
@@ -189,9 +190,12 @@ public class InteractableUI : MonoBehaviour
         }
     }
 
-
-
     public void ToggleUpgradeUI()
+    {
+        ToggleUpgradeUI(false);
+    }
+
+    public void ToggleUpgradeUI(bool enablePurchaseMode)
     {
         if (!upgradeUIActive)
         {
@@ -206,9 +210,16 @@ public class InteractableUI : MonoBehaviour
 
                 upgradeUIActive = true;
                 pauseActive = false;
+                canPurchase = enablePurchaseMode;
 
                 SetCursorState(true);
                 SetPlayerInputActive(false);
+
+                // Set purchase mode in UpgradeUIScript
+                if (upgradeUIScript != null)
+                {
+                    upgradeUIScript.SetPurchaseMode(canPurchase);
+                }
 
                 Button buttonToSelect = firstUpgradeButton;
 
@@ -225,7 +236,6 @@ public class InteractableUI : MonoBehaviour
                 {
                     EventSystem.current.SetSelectedGameObject(buttonToSelect.gameObject);
                 }
-
             }
             else
             {
@@ -238,6 +248,7 @@ public class InteractableUI : MonoBehaviour
             {
                 upgradeUIScript.skillMenu.SetActive(false);
                 upgradeUIActive = false;
+                canPurchase = false;
 
                 SetCursorState(false);
                 SetPlayerInputActive(true);
@@ -246,6 +257,7 @@ public class InteractableUI : MonoBehaviour
             }
         }
     }
+
 
 
     private void SetCursorState(bool visible)

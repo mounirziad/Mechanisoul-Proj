@@ -45,8 +45,7 @@ public class Terminal : MonoBehaviour
     {
         if (inRange && interactableUI != null)
         {
-            
-            interactableUI.ToggleUpgradeUI();
+            interactableUI.ToggleUpgradeUI(true);
         }
     }
     private void OnTriggerEnter(Collider other) => inRange = other.CompareTag("Player") ? true : false;

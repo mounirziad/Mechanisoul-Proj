@@ -12,6 +12,7 @@ public class UpgradeUIScript : MonoBehaviour
     public MeleeUpgrades meleeUpgrades;
     private bool isSynergyActive = false;
     [SerializeField] Button firstSynergyButton;
+    private bool canPurchaseUpgrades = true;
 
     [Header("Menus")]
     public GameObject skillMenu;
@@ -819,9 +820,23 @@ public class UpgradeUIScript : MonoBehaviour
     }
 
     #region PURCHASING UPGRADES
+    public void SetPurchaseMode(bool canPurchase)
+    {
+        canPurchaseUpgrades = canPurchase;
 
+        if (purchaseButton != null)
+        {
+            purchaseButton.gameObject.SetActive(canPurchase);
+        }
+    }
     private void OnPurchaseClicked()
     {
+        if (!canPurchaseUpgrades)
+        {
+            Debug.Log("Cannot purchase upgrades in view-only mode.");
+            return;
+        }
+
         if (xpManager == null)
         {
             Debug.LogWarning("[UpgradeUI] No XPManager set. Applying upgrades without cost.");
