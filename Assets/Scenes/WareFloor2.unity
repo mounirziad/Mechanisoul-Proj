@@ -187,6 +187,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4295037884534156340, guid: def0c18811791e04db283aec32353ad3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1837242}
     - targetCorrespondingSourceObject: {fileID: 5262536188985282470, guid: def0c18811791e04db283aec32353ad3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1837240}
@@ -216,6 +219,27 @@ NavMeshObstacle:
   m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!1 &1837241 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4295037884534156340, guid: def0c18811791e04db283aec32353ad3, type: 3}
+  m_PrefabInstance: {fileID: 1837237}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1837242
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837241}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.009073652, y: -0.01121767, z: 0.05242601}
   m_TimeToStationary: 0.5
 --- !u!1001 &3284914
 PrefabInstance:
@@ -109966,11 +109990,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.009073652, y: -0.01121767, z: 0.05242601}
   m_TimeToStationary: 0.5
 --- !u!1001 &1161348931
 PrefabInstance:
@@ -178542,11 +178566,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1.040715, y: 1.076061, z: 2.7523875}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.009073652, y: -0.01121767, z: 0.05242601}
   m_TimeToStationary: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
