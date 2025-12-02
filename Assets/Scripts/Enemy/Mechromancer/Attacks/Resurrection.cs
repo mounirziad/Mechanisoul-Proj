@@ -23,6 +23,14 @@ public class Resurrection : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    private void Start()
+    {
+        var graph = GetComponent<BehaviorGraphAgent>().BlackboardReference;
+        graph.SetVariableValue("alreadyResurrected", false);
+
+        HasResurrected = false;
+    }
+
     public bool HasResurrected
     {
         get

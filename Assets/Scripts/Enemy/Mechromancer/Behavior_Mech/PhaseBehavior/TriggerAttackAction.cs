@@ -126,10 +126,6 @@ public partial class TriggerResurrectionAction : Action, IAttackCondition
 
     private Resurrection resurrection;
 
-    [SerializeField]
-    [CreateProperty]
-    public string AttackId;
-
     public bool CanRun()
     {
         if (Agent?.Value == null) return false;
