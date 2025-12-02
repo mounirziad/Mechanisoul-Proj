@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using Unity.Behavior;
+using UnityEngine.Events;
 
 public class Mechromancer : Enemy, IDamage
 {
@@ -17,6 +18,7 @@ public class Mechromancer : Enemy, IDamage
     [SerializeField] private float deathDelay = 2f;
 
     public bool isDead = false;
+    public UnityEvent<float, float> onHealthChanged = new UnityEvent<float, float>();
 
     [Header("References")]
     private LightningController lightningController;
@@ -50,6 +52,8 @@ public class Mechromancer : Enemy, IDamage
         {
             Debug.LogError("Player not found");
         }
+
+        onHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     private void Start()
@@ -192,6 +196,7 @@ public class Mechromancer : Enemy, IDamage
         if (isDead) return;
 
         currentHealth -= damage;
+        onHealthChanged?.Invoke(currentHealth, maxHealth);
         Debug.Log($"Mechromancer took {damage} damage. Remaining HP {currentHealth}");
 
         if (currentHealth <= 0)

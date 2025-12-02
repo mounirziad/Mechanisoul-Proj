@@ -847,21 +847,24 @@ public class UpgradeUIScript : MonoBehaviour
         int totalCost = 0;
 
         if (pendingMeleeEmotion != Emotions.None &&
-            (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
+    (pendingMeleeEmotion != purchasedMeleeEmotion || pendingMeleeLevel != purchasedMeleeLevel))
         {
-            totalCost += GetTotalCostForTargetLevel(purchasedMeleeLevel, pendingMeleeLevel);
+            int baseLevelForCost = (pendingMeleeEmotion != purchasedMeleeEmotion) ? 0 : purchasedMeleeLevel;
+            totalCost += GetTotalCostForTargetLevel(baseLevelForCost, pendingMeleeLevel);
         }
 
         if (pendingRangedEmotion != Emotions.None &&
-            (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
+    (pendingRangedEmotion != purchasedRangedEmotion || pendingRangedLevel != purchasedRangedLevel))
         {
-            totalCost += GetTotalCostForTargetLevel(purchasedRangedLevel, pendingRangedLevel);
+            int baseLevelForCost = (pendingRangedEmotion != purchasedRangedEmotion) ? 0 : purchasedRangedLevel;
+            totalCost += GetTotalCostForTargetLevel(baseLevelForCost, pendingRangedLevel);
         }
 
         if (pendingDashEmotion != Emotions.None &&
             (pendingDashEmotion != purchasedDashEmotion || pendingDashLevel != purchasedDashLevel))
         {
-            totalCost += GetTotalCostForTargetLevel(purchasedDashLevel, pendingDashLevel);
+            int baseLevelForCost = (pendingDashEmotion != purchasedDashEmotion) ? 0 : purchasedDashLevel;
+            totalCost += GetTotalCostForTargetLevel(baseLevelForCost, pendingDashLevel);
         }
 
         if (totalCost <= 0)

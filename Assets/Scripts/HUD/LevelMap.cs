@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Room
@@ -100,6 +101,8 @@ public class LevelMap : MonoBehaviour
                 Rooms[i, j].SetSprites(hiddenSprite, inRoomSprite, clearedSprite);
             }
         }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public void EnterRoom(string name)
@@ -119,6 +122,23 @@ public class LevelMap : MonoBehaviour
                 room.UpdateSprite();
                 break;
             }
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Scene changed to: " + scene.name);
+        ResetMap();
+    }
+
+    void ResetMap()
+    {
+        foreach (Room room in Rooms)
+        {
+            if (room.Empty) continue;
+            
+            room.currentSprite = room.hiddenSprite;
+            room.UpdateSprite();
         }
     }
 }
