@@ -522,15 +522,26 @@ public class PlayerCombat : MonoBehaviour
                     );
 
                     SpawnHitscanVFX(hitPosition, hit.normal);
-                }
-
-                else if (hit.collider.CompareTag("Enemy") || (hit.transform.root != null && hit.transform.root.CompareTag("Enemy")))
-                {
-                    SpawnHitscanVFX(hitPosition, hit.normal);
+                    Debug.Log($"[Hitscan] Dealt damage to {hit.collider.gameObject.name} via BasicEnemyHealth");
                 }
                 else
                 {
-                    SpawnImpactEffect(hitPosition, hit.normal);
+                    var damageable = hit.collider.GetComponentInParent<IDamage>();
+                    if (damageable != null)
+                    {
+                        damageable.TakeDamage(finalDamage);
+                        SpawnHitscanVFX(hitPosition, hit.normal);
+                        Debug.Log($"[Hitscan] Dealt {finalDamage} damage to {hit.collider.gameObject.name} via IDamage");
+                    }
+                    else if (hit.collider.CompareTag("Enemy") || (hit.transform.root != null && hit.transform.root.CompareTag("Enemy")))
+                    {
+                        SpawnHitscanVFX(hitPosition, hit.normal);
+                        Debug.LogWarning($"[Hitscan] Hit enemy {hit.collider.gameObject.name} but no damage component found!");
+                    }
+                    else
+                    {
+                        SpawnImpactEffect(hitPosition, hit.normal);
+                    }
                 }
             }
         }

@@ -88,13 +88,23 @@ public class PlayerProjectile : MonoBehaviour
             hitPos = other.ClosestPoint(transform.position);
             enemyHealth.TakeDamage(damage, direction);
             hitEnemy = true;
+            Debug.Log($"[PlayerProjectile] Dealt {damage} damage to {other.gameObject.name} via BasicEnemyHealth");
         }
         else
         {
-            if (other.CompareTag("Enemy") || (other.transform.root != null && other.transform.root.CompareTag("Enemy")))
+            var damageable = other.GetComponentInParent<IDamage>();
+            if (damageable != null)
+            {
+                hitPos = other.ClosestPoint(transform.position);
+                damageable.TakeDamage(damage);
+                hitEnemy = true;
+                Debug.Log($"[PlayerProjectile] Dealt {damage} damage to {other.gameObject.name} via IDamage");
+            }
+            else if (other.CompareTag("Enemy") || (other.transform.root != null && other.transform.root.CompareTag("Enemy")))
             {
                 hitPos = other.ClosestPoint(transform.position);
                 hitEnemy = true;
+                Debug.LogWarning($"[PlayerProjectile] Hit enemy {other.gameObject.name} but no damage component found!");
             }
         }
 
