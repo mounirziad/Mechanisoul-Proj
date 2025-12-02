@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AppUI.UI;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -84,6 +85,8 @@ public class PlayerCombat : MonoBehaviour
     float lastFireInputTime;  // to detect "gun not in use"
     private float lastShotTime = -999f;
     Coroutine autoReloadCR;
+    Coroutine reloadCR; // track active reload
+
 
     [Header("VFX Prefabs")]
     public GameObject angerExplosionPrefab;
@@ -677,10 +680,19 @@ public class PlayerCombat : MonoBehaviour
     {
         lastFireInputTime = Time.time;
 
+        // Allow canceling reload if there are still bullets left
         if (isReloading)
         {
-            LogGun($"TryFireRanged blocked: reloading (ammo={ammoInClip}/{clipSize})");
-            return;
+            if (ammoInClip > 0)
+            {
+                LogGun($"TryFireRanged: canceling reload to fire (ammo={ammoInClip}/{clipSize})");
+                CancelReload();
+            }
+            else
+            {
+                LogGun($"TryFireRanged blocked: reloading from empty (ammo={ammoInClip}/{clipSize})");
+                return;
+            }
         }
 
         float sinceLast = Time.time - lastShotTime;
@@ -693,7 +705,7 @@ public class PlayerCombat : MonoBehaviour
         if (ammoInClip <= 0)
         {
             LogGun("Empty clip -> starting reload");
-            if (autoReloadCR == null) autoReloadCR = StartCoroutine(ReloadCR());
+            StartReload();
             return;
         }
 
@@ -714,6 +726,31 @@ public class PlayerCombat : MonoBehaviour
         RestartIdleAutoReload();
     }
 
+    void StartReload()
+    {
+        if (reloadCR != null)
+        {
+            LogGun("StartReload ignored: already reloading");
+            return;
+        }
+
+        reloadCR = StartCoroutine(ReloadCR());
+    }
+
+    void CancelReload()
+    {
+        if (!isReloading) return;
+
+        if (reloadCR != null)
+        {
+            StopCoroutine(reloadCR);
+            reloadCR = null;
+        }
+
+        isReloading = false;
+        LogGun($"Reload canceled (ammo={ammoInClip}/{clipSize})");
+    }
+
     void RestartIdleAutoReload()
     {
         if (autoReloadCR != null) { StopCoroutine(autoReloadCR); autoReloadCR = null; }
@@ -730,13 +767,14 @@ public class PlayerCombat : MonoBehaviour
         if (!isReloading && ammoInClip < clipSize)
         {
             LogGun($"Idle auto-reload triggered after {waited:0.00}s idle (ammo={ammoInClip}/{clipSize})");
-            yield return ReloadCR();
+            StartReload(); // instead of yield return ReloadCR();
         }
         else
         {
             LogGun($"Idle auto-reload canceled (reloading={isReloading}, ammo={ammoInClip}/{clipSize})");
         }
         autoReloadCR = null;
+
     }
 
     public void ManualReload()
@@ -745,8 +783,9 @@ public class PlayerCombat : MonoBehaviour
         if (ammoInClip >= clipSize) { LogGun("ManualReload ignored: clip full"); return; }
         if (autoReloadCR != null) { StopCoroutine(autoReloadCR); autoReloadCR = null; }
         LogGun($"ManualReload started (ammo={ammoInClip}/{clipSize})");
-        StartCoroutine(ReloadCR());
+        StartReload(); // instead of StartCoroutine(ReloadCR());
     }
+
 
     IEnumerator ReloadCR()
     {
@@ -755,8 +794,10 @@ public class PlayerCombat : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
         ammoInClip = clipSize;
         isReloading = false;
+        reloadCR = null;
         LogGun($"Reload complete -> ammo={ammoInClip}/{clipSize}");
     }
+
 
     public int GetAmmoInClip()
     {
