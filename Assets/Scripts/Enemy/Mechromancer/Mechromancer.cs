@@ -7,7 +7,6 @@ public class Mechromancer : Enemy, IDamage
     [Header("Damage")]
     [SerializeField] private float combo1Damage = 8f;
     [SerializeField] private float combo2Damage = 9f;
-    [SerializeField] private float combo3Damage = 13f;
 
     [Header("Hitboxes")]
     [SerializeField] private Collider[] comboHitboxes;
@@ -16,52 +15,36 @@ public class Mechromancer : Enemy, IDamage
     public bool isDead = false;
 
     [Header("References")]
-    private Resurrection resurrection;
     private LightningController lightningController;
     private MechBehaviorController controller;
     private MechAnimationController animationController;
     private MechLunge lunge;
 
+    private BehaviorGraphAgent bgAgent;
+
     protected override void Awake()
     {
         base.Awake();
 
-        var agent = GetComponent<BehaviorGraphAgent>();
-        if (agent == null)
+        bgAgent = GetComponent<BehaviorGraphAgent>();
+        if (bgAgent == null)
         {
             Debug.LogError("Mechromancer: BehaviorGraphAgent not found");
             return;
         }
 
-        var blackboard = agent.BlackboardReference;
-        if (blackboard == null)
-        {
-            Debug.LogError("Mechromancer: BlackboardReference is null on BehaviorGraphAgent");
-            return;
-        }
+        var blackboard = bgAgent.BlackboardReference;
+        blackboard.SetVariableValue("Self", gameObject);
 
-        blackboard.SetVariableValue("Self", this.gameObject);
-
-        /*if (Self != null)
+        var playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
         {
-            Debug.Log($"Mechromancer: Self assigned correctly in Blackboard: {selfCheck.name}");
+            blackboard.SetVariableValue("Player", playerObj);
+            blackboard.SetVariableValue("PlayerTransform", playerObj.transform);
         }
         else
         {
-            Debug.LogError("Mechromancer: Self variable failed to assign in Blackboard");
-        }*/
-
-        var player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            blackboard.SetVariableValue("Player", player);
-            blackboard.SetVariableValue("PlayerTransform", player.transform);
-
-            Debug.Log($"Mechromancer: Player assigned in Blackboard: {player.name}");
-        }
-        else
-        {
-            Debug.LogError("Player not found in scene");
+            Debug.LogError("Player not found");
         }
     }
 
@@ -69,49 +52,43 @@ public class Mechromancer : Enemy, IDamage
     {
         controller = GetComponent<MechBehaviorController>();
         animationController = GetComponent<MechAnimationController>();
-
         lightningController = GetComponent<LightningController>();
+
         if (lightningController != null)
         {
-            lightningController.blackboard = GetComponent<BehaviorGraphAgent>().BlackboardReference;
+            lightningController.blackboard = bgAgent.BlackboardReference;
         }
 
-        if (controller != null)
-        {
-            Debug.Log("Mechromancer: MechBehaviorController found on Mechromancer");
-        }
-        else
-        {
-            Debug.LogError("Mechromancer: MechBehaviorController not found on Mechromancer");
-        }
-
-        //Hitboxes start disabled
         foreach (var hitbox in comboHitboxes)
         {
-            hitbox.enabled = false;
+            if (hitbox != null)
+            {
+                hitbox.enabled = false;
+            }
         }
     }
 
     //Behavior graph to animator
     public void TriggerAttack(string triggerName)
     {
-        animationController.SetTrigger(triggerName);
+        animationController?.SetTrigger(triggerName);
     }
 
     //Animations to behavior graph
     public void OnComboHit()
     {
-        controller.SetBlackboardBool("comboLanded", true);
+        bgAgent.BlackboardReference.SetVariableValue("comboLanded", true);
     }
 
     public void OnAttackAnimationFinished()
     {
-        controller.SetBlackboardBool("attackFinished", true);
+        bgAgent.BlackboardReference.SetVariableValue("attackFinished", true);
+        Debug.Log("Mechromancer: attackFinished = true");
     }
 
     public void EnableHitbox(int index)
     {
-        if (index >= 0 && index < comboHitboxes.Length)
+        if (IsHitboxValid(index))
         {
             comboHitboxes[index].enabled = true;
         }
@@ -119,10 +96,15 @@ public class Mechromancer : Enemy, IDamage
 
     public void DisableHitbox(int index)
     {
-        if (index >= 0 && index < comboHitboxes.Length)
+        if (IsHitboxValid(index))
         {
             comboHitboxes[index].enabled = false;
         }
+    }
+
+    private bool IsHitboxValid(int index)
+    {
+        return index >= 0 && index < comboHitboxes.Length && comboHitboxes[index] != null;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -153,7 +135,6 @@ public class Mechromancer : Enemy, IDamage
         {
             0 => combo1Damage,
             1 => combo2Damage,
-            2 => combo3Damage,
             _ => 0f
         };
     }
