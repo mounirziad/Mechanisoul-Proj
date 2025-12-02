@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using Unity.Behavior;
 
 public class Mechromancer : Enemy, IDamage
@@ -10,7 +11,10 @@ public class Mechromancer : Enemy, IDamage
 
     [Header("Hitboxes")]
     [SerializeField] private Collider[] comboHitboxes;
-    //0 = combo1, 1 = combo2, 2 = combo3
+
+    [Header("Victory")]
+    [SerializeField] private string victorySceneName = "VictoryScene";
+    [SerializeField] private float deathDelay = 2f;
 
     public bool isDead = false;
 
@@ -99,6 +103,11 @@ public class Mechromancer : Enemy, IDamage
         if (IsHitboxValid(index))
         {
             comboHitboxes[index].enabled = true;
+            Debug.Log($"Mechromancer: Enabled hitbox {index}");
+        }
+        else
+        {
+            Debug.LogWarning($"Mechromancer: Invalid hitbox index {index}");
         }
     }
 
@@ -107,6 +116,11 @@ public class Mechromancer : Enemy, IDamage
         if (IsHitboxValid(index))
         {
             comboHitboxes[index].enabled = false;
+            Debug.Log($"Mechromancer: Disabled hitbox {index}");
+        }
+        else
+        {
+            Debug.LogWarning($"Mechromancer: Invalid hitbox index {index}");
         }
     }
 
@@ -115,12 +129,35 @@ public class Mechromancer : Enemy, IDamage
         return index >= 0 && index < comboHitboxes.Length && comboHitboxes[index] != null;
     }
 
+    public void OnHitboxCollision(int hitboxIndex, Collider playerCollider)
+    {
+        if (!playerCollider.CompareTag("Player"))
+        {
+            Debug.LogWarning($"Mechromancer: Hitbox {hitboxIndex} hit non-player object: {playerCollider.name}");
+            return;
+        }
+
+        float damage = GetDamageForCombo(hitboxIndex);
+        Debug.Log($"Mechromancer: Hitbox {hitboxIndex} hit player, dealing {damage} damage");
+        
+        PlayerHealth playerHealth = playerCollider.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.TakeDamage(damage);
+            OnComboHit();
+        }
+        else
+        {
+            Debug.LogError("Mechromancer: Player has no PlayerHealth component!");
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
         int hitboxIndex = GetHitboxIndex(other);
-        if (hitboxIndex == -1) return; //not a combo hitbox
+        if (hitboxIndex == -1) return;
 
         float damage = GetDamageForCombo(hitboxIndex);
         other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
@@ -166,7 +203,14 @@ public class Mechromancer : Enemy, IDamage
     void Die()
     {
         isDead = true;
-        Debug.Log("Mechromancer is dead");
-        Destroy(gameObject);
+        Debug.Log("Mechromancer is dead - transitioning to victory scene");
+        StartCoroutine(HandleDeath());
+    }
+
+    private IEnumerator HandleDeath()
+    {
+        yield return new WaitForSeconds(deathDelay);
+        
+        SceneFadeTransition.TransitionToScene(victorySceneName, 2f, 0.5f);
     }
 }

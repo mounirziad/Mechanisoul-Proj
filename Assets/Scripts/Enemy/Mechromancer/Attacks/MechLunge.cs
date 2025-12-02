@@ -18,6 +18,7 @@ public class MechLunge : MonoBehaviour
     private float currentLungeDistance;
     private bool isLunging;
     private bool hasHitPlayer;
+    private bool canDamage;
     private float lungeCooldownTimer;
 
     private void Start()
@@ -48,6 +49,7 @@ public class MechLunge : MonoBehaviour
 
         isLunging = true;
         hasHitPlayer = false;
+        canDamage = false;
         lungeCooldownTimer = pauseDuration;
 
         lastKnownLocation = playerTransform.position;
@@ -69,25 +71,19 @@ public class MechLunge : MonoBehaviour
         }
         
         animator.SetFloat("SpeedMultiplier", 2f);
+        Debug.Log("MechLunge: Started lunge attack");
     }
 
-    public void ApplyDamage()
+    public void EnableHitbox(int index)
     {
-        if (hasHitPlayer) return;
+        canDamage = true;
+        Debug.Log("MechLunge: Damage window enabled");
+    }
 
-        float distance = Vector3.Distance(transform.position, lastKnownLocation);
-
-        if (distance < range)
-        {
-            var playerHealth = playerTransform.GetComponent<PlayerHealth>();
-
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(lungeDamage);
-            }
-
-            hasHitPlayer = true;
-        }
+    public void DisableHitbox(int index)
+    {
+        canDamage = false;
+        Debug.Log("MechLunge: Damage window disabled");
     }
 
     private void FixedUpdate()
@@ -104,11 +100,37 @@ public class MechLunge : MonoBehaviour
 
         Vector3 direction = (lastKnownLocation - transform.position).normalized;
         transform.position += direction * force * Time.fixedDeltaTime;
+
+        if (canDamage && !hasHitPlayer)
+        {
+            CheckForPlayerHit();
+        }
+    }
+
+    private void CheckForPlayerHit()
+    {
+        if (playerTransform == null) return;
+
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distance < range)
+        {
+            var playerHealth = playerTransform.GetComponent<PlayerHealth>();
+
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(lungeDamage);
+                Debug.Log($"MechLunge: Hit player for {lungeDamage} damage");
+            }
+
+            hasHitPlayer = true;
+        }
     }
 
     public void StopLunge()
     {
         isLunging = false;
+        canDamage = false;
 
         animator.SetFloat("SpeedMultiplier", 1f);
 
@@ -125,5 +147,7 @@ public class MechLunge : MonoBehaviour
         {
             bgAgent.BlackboardReference.SetVariableValue("lungeFinished", true);
         }
+
+        Debug.Log("MechLunge: Stopped lunge attack");
     }
 }

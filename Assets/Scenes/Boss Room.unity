@@ -3085,6 +3085,7 @@ GameObject:
   - component: {fileID: 311448860}
   - component: {fileID: 311448861}
   - component: {fileID: 311448862}
+  - component: {fileID: 311448863}
   m_Layer: 0
   m_Name: HB_2
   m_TagString: Untagged
@@ -3126,8 +3127,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.58, y: 1.03, z: 0.07}
-  m_Center: {x: 0, y: -0.2, z: 0}
+  m_Size: {x: 0.58, y: 0.6744123, z: 0.2473525}
+  m_Center: {x: 0.0000010160547, y: -0.022205843, z: -0.017771121}
 --- !u!114 &311448862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3141,6 +3142,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitboxGizmo
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.25}
+--- !u!114 &311448863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311448859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593841cf1578e8743b326bebdfe751fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MechromancerHitbox
+  hitboxIndex: 1
 --- !u!1001 &320171496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5571,7 +5585,7 @@ MonoBehaviour:
   - {fileID: 1938267014}
   - {fileID: 467091496}
   teslaTarget: {fileID: 221443217}
-  lightningOrigin: {fileID: 0}
+  lightningOrigin: {fileID: 1141573798}
   lightningPrefab: {fileID: 6887558257818188625, guid: 99770836542a8ab49a5e2a883fd6ecdb, type: 3}
   resurrectionTime: 5
 --- !u!114 &484312867
@@ -5593,6 +5607,8 @@ MonoBehaviour:
   comboHitboxes:
   - {fileID: 1075778298}
   - {fileID: 311448861}
+  victorySceneName: Victory
+  deathDelay: 2
   isDead: 0
 --- !u!114 &484312868
 MonoBehaviour:
@@ -18755,8 +18771,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8920615273029483256, guid: 11cdc2e7d5bb3734eb7e9b772ed1e3b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 984674440}
   m_SourcePrefab: {fileID: 100100000, guid: 11cdc2e7d5bb3734eb7e9b772ed1e3b8, type: 3}
+--- !u!1 &984674438 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8920615273029483256, guid: 11cdc2e7d5bb3734eb7e9b772ed1e3b8, type: 3}
+  m_PrefabInstance: {fileID: 984674437}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &984674439 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4607977709678668949, guid: 11cdc2e7d5bb3734eb7e9b772ed1e3b8, type: 3}
+  m_PrefabInstance: {fileID: 984674437}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984674438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84af23ddafd719943a349b065100426c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadingScript
+--- !u!114 &984674440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984674438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be7a216340438749a91fd3b6a269bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneFadeTransition
+  fadingScript: {fileID: 984674439}
+  fadeOutDuration: 2
+  delayBeforeLoad: 0.5
 --- !u!1 &993066401 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4375667071513010968, guid: 2beea56604747164c9c4a8ee5454df30, type: 3}
@@ -19531,6 +19581,7 @@ GameObject:
   - component: {fileID: 1075778297}
   - component: {fileID: 1075778298}
   - component: {fileID: 1075778299}
+  - component: {fileID: 1075778300}
   m_Layer: 0
   m_Name: HB_1
   m_TagString: Untagged
@@ -19572,8 +19623,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.58, y: 0.64, z: 0.07}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.58, y: 0.64, z: 0.18680371}
+  m_Center: {x: 1.4930862e-15, y: -1.8984538e-14, z: -0.0018151966}
 --- !u!114 &1075778299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19587,6 +19638,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitboxGizmo
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.25}
+--- !u!114 &1075778300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075778296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593841cf1578e8743b326bebdfe751fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MechromancerHitbox
+  hitboxIndex: 0
 --- !u!1001 &1079500771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20358,6 +20422,11 @@ Transform:
   - {fileID: 61386857}
   m_Father: {fileID: 1711530593}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1141573798 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1027762384553997277, guid: 622908171dc5fb94db95c8add4b35dbd, type: 3}
+  m_PrefabInstance: {fileID: 65152722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1146448227
 PrefabInstance:
   m_ObjectHideFlags: 0

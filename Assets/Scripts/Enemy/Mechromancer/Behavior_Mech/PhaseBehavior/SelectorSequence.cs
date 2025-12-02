@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;
@@ -9,6 +10,8 @@ using Composite = Unity.Behavior.Composite;
 public partial class SelectorSequence : Composite
 {
     private int current = -1;
+    private float lastAttackTime = -999f;
+    private const float ATTACK_COOLDOWN = 1.5f;
 
     protected override Status OnStart()
     {
@@ -18,16 +21,47 @@ public partial class SelectorSequence : Composite
 
     protected override Status OnUpdate()
     {
+        Node child;
+        Status result;
+
+        if (current != -1)
+        {
+            child = Children[current];
+            result = child.Tick();
+
+            if (result == Status.Running)
+            {
+                return Status.Running;
+            }
+
+            if (result == Status.Success)
+            {
+                lastAttackTime = Time.time;
+                current = -1;
+                Debug.Log("SelectorSequence: Attack completed, starting cooldown");
+                return Status.Success;
+            }
+
+            current = -1;
+            return Status.Running;
+        }
+
+        if (Time.time - lastAttackTime < ATTACK_COOLDOWN)
+        {
+            return Status.Running;
+        }
+
         current = PickNextAttack();
 
         if (current == -1)
         {
+            Debug.LogWarning("SelectorSequence: No valid attacks found");
             return Status.Failure;
         }
 
-        Node child = Children[current];
-
-        Status result = child.Tick();
+        Debug.Log($"SelectorSequence: Selected attack index {current}");
+        child = Children[current];
+        result = child.Tick();
 
         if (result == Status.Running)
         {
@@ -36,9 +70,13 @@ public partial class SelectorSequence : Composite
 
         if (result == Status.Success)
         {
+            lastAttackTime = Time.time;
+            current = -1;
+            Debug.Log("SelectorSequence: Attack completed immediately, starting cooldown");
             return Status.Success;
         }
 
+        current = -1;
         return Status.Running;
     }
 
@@ -49,6 +87,8 @@ public partial class SelectorSequence : Composite
 
     private int PickNextAttack()
     {
+        List<int> validAttacks = new List<int>();
+
         for (int i = 0; i < Children.Count; i++)
         {
             Node node = Children[i];
@@ -57,16 +97,22 @@ public partial class SelectorSequence : Composite
             {
                 if (cond.CanRun())
                 {
-                    return i;
+                    validAttacks.Add(i);
                 }
             }
             else
             {
-                return i;
+                validAttacks.Add(i);
             }
         }
 
-        return -1;
+        if (validAttacks.Count == 0)
+        {
+            return -1;
+        }
+
+        int randomIndex = UnityEngine.Random.Range(0, validAttacks.Count);
+        return validAttacks[randomIndex];
     }
 }
 

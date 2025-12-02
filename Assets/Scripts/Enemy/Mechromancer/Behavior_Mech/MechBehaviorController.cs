@@ -30,6 +30,9 @@ public class MechBehaviorController : MonoBehaviour
 
         graphAgent.BlackboardReference.SetVariableValue("isActive", false);
         graphAgent.BlackboardReference.SetVariableValue("isPlayerInRange", false);
+        graphAgent.BlackboardReference.SetVariableValue("attackFinished", true);
+        graphAgent.BlackboardReference.SetVariableValue("LightningFinished", true);
+        graphAgent.BlackboardReference.SetVariableValue("lungeFinished", true);
 
         if (colliderTrigger != null)
         {
