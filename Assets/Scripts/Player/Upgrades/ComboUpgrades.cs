@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public class ComboUpgrade
 {   
@@ -44,6 +45,8 @@ public class ComboUpgrades : MonoBehaviour
     DashUpgrades dashUpgrades;
     RangedUpgrades rangedUpgrades;
     PlayerManager playerManager;
+
+    public event Action ComboAdded;
 
     public Dictionary<string, ComboUpgrade> comboList { get; private set; }
 
@@ -118,6 +121,7 @@ public class ComboUpgrades : MonoBehaviour
 
             combo.hasCombo = true;
             Debug.Log($"activated {combo.name} combo");
+            ComboAdded?.Invoke();
             //break; uncomment if we are sure one upgrade is tied to only 1 combo
 
             //update playermanager with new combo status --- update names once combo names are finalized

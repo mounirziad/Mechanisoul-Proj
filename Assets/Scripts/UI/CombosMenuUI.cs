@@ -115,11 +115,11 @@ public class CombosMenuUI : MonoBehaviour
     {
         if (comboUpgrades == null)
         {
-            Debug.LogWarning("[CombosMenuUI] Missing UpgradeHandler.");
+            Debug.LogWarning("[CombosMenuUI] Missing ComboUpgades.");
             return;
         }
 
-        comboUpgrades.LevelsChanged += Refresh;
+        comboUpgrades.ComboAdded += Refresh;
         Refresh();
     }
 
@@ -127,7 +127,7 @@ public class CombosMenuUI : MonoBehaviour
     {
         if (comboUpgrades != null)
         {
-            comboUpgrades.LevelsChanged -= Refresh;
+            comboUpgrades.ComboAdded -= Refresh;
         }
     }
 
