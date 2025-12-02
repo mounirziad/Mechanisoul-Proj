@@ -110,6 +110,7 @@ public partial class TriggerLightningAction : Action, IAttackCondition
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
     [SerializeField] public float AoERadius = 3f;
+    [SerializeField] public float Damage = 15f;
 
     private LightningController controller;
     private BehaviorGraphAgent bgAgent;
