@@ -5,21 +5,55 @@ public class XPManager : MonoBehaviour
     public static XPManager Instance { get; private set; }
 
     [Header("XP Settings")]
-    [SerializeField] private int startingXPThreshold = 100;
-    [SerializeField] private float xpScalingFactor = 0.05f;
+    [SerializeField] int startingXPThreshold = 100;
+    [SerializeField] float xpScalingFactor = 0.05f;
 
     int currentXP;
     int lvlUpXP;
     int skillPoints;
 
-    // expose XP and points to other systems
-    public int CurrentXP { get { return currentXP; } }
-    public int CurrentSkillPoints { get { return skillPoints; } }
-    public int CurrentLevelXPThreshold { get { return lvlUpXP; } }
+    // track the XP at the start of the current level for the bar
+    int currentLevelStartXP;
+
+    // public read-only accessors
+    public int CurrentXP
+    {
+        get { return currentXP; }
+    }
+
+    public int CurrentSkillPoints
+    {
+        get { return skillPoints; }
+    }
+
+    public int CurrentLevelStartXP
+    {
+        get { return currentLevelStartXP; }
+    }
+
+    public int CurrentXPInLevel
+    {
+        get { return currentXP - currentLevelStartXP; }
+    }
+
+    public int CurrentLevelXPSpan
+    {
+        get { return lvlUpXP - currentLevelStartXP; }
+    }
+
+    public float CurrentXPPercent
+    {
+        get
+        {
+            int span = CurrentLevelXPSpan;
+            if (span <= 0) return 1f;
+            return (float)CurrentXPInLevel / span;
+        }
+    }
 
     void Awake()
     {
-        // singleton and persist across scenes
+        // singleton + persist
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -29,11 +63,12 @@ public class XPManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // initialize threshold once
         if (lvlUpXP <= 0)
         {
             lvlUpXP = startingXPThreshold;
         }
+
+        currentLevelStartXP = 0;
     }
 
     public void AddXP(int amount)
@@ -46,7 +81,7 @@ public class XPManager : MonoBehaviour
 
     void CheckLevelUp()
     {
-        // handle big XP gains that might level multiple times
+        // handle large XP gains that cross multiple levels
         while (currentXP >= lvlUpXP)
         {
             LevelUp();
@@ -55,17 +90,19 @@ public class XPManager : MonoBehaviour
 
     void LevelUp()
     {
+        int previousThreshold = lvlUpXP;
+
         // 1 upgrade point per level
         skillPoints += 1;
 
-        // increase next threshold
+        // compute new threshold
         lvlUpXP += (int)(startingXPThreshold * (1f + xpScalingFactor));
 
-        // optional: clamp currentXP if you want, or leave overflow as is
-        // currentXP -= lvlUpXP;  // only if you want "progress within level" style
+        // new level starts at the old threshold
+        currentLevelStartXP = previousThreshold;
     }
 
-    // General spending function used by Upgrade UI
+    // used by Upgrade UI for spending arbitrary amounts
     public bool TrySpendPoints(int amount)
     {
         if (amount <= 0) return true;
@@ -80,13 +117,13 @@ public class XPManager : MonoBehaviour
         return false;
     }
 
-    // Used by the snapshot system to restore available points when respawning on a floor
+    // used by the snapshot manager to restore available points on floor respawn
     public void SetSkillPoints(int amount)
     {
         skillPoints = Mathf.Max(0, amount);
     }
 
-    // Kept for backwards compatibility with any old calls
+    // LEGACY CALL ONLY - DO NOT USE
     public bool UseSkillPoint()
     {
         return TrySpendPoints(1);
