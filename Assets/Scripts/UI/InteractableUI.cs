@@ -210,10 +210,22 @@ public class InteractableUI : MonoBehaviour
                 SetCursorState(true);
                 SetPlayerInputActive(false);
 
-                if (firstUpgradeButton != null)
+                Button buttonToSelect = firstUpgradeButton;
+
+                if (upgradeUIScript != null)
                 {
-                    EventSystem.current.SetSelectedGameObject(firstUpgradeButton.gameObject);
+                    Button tabButton = upgradeUIScript.GetFirstButtonForCurrentTab();
+                    if (tabButton != null)
+                    {
+                        buttonToSelect = tabButton;
+                    }
                 }
+
+                if (buttonToSelect != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(buttonToSelect.gameObject);
+                }
+
             }
             else
             {

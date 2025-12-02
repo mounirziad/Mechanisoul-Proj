@@ -45,6 +45,7 @@ public class Terminal : MonoBehaviour
     {
         if (inRange && interactableUI != null)
         {
+            
             interactableUI.ToggleUpgradeUI();
         }
     }
