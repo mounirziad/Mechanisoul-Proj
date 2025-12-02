@@ -143,7 +143,7 @@ public class InteractableUI : MonoBehaviour
             if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
             {
                 pauseMenuUI.pauseMenu.SetActive(true);
-
+                Time.timeScale = 0f;
                 if (upgradeUIScript != null && upgradeUIScript.skillMenu != null)
                 {
                     upgradeUIScript.skillMenu.SetActive(false);
@@ -176,7 +176,7 @@ public class InteractableUI : MonoBehaviour
             {
                 pauseMenuUI.pauseMenu.SetActive(false);
                 pauseActive = false;
-
+                Time.timeScale = 1f;
                 SetCursorState(false);
                 SetPlayerInputActive(true);
 
