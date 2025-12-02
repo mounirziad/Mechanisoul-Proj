@@ -53,13 +53,13 @@ public class ComboUpgrades : MonoBehaviour
     //all temp names - in future initialize with all info
     public readonly ComboUpgrade[] comboUpgrades =
     {
-        new ComboUpgrade("meleeS3dashJ3", Upgrades.Melee, Emotions.Sadness, 3, Upgrades.Dash, Emotions.Joy, 3),
-        new ComboUpgrade("meleeJ3rangeA3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
-        new ComboUpgrade("meleeF3dashA3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
-        new ComboUpgrade("meleeL3rangeF3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
-        new ComboUpgrade("dashS3rangeJ3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
-        new ComboUpgrade("dashF3rangeL3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
-        new ComboUpgrade("dashF3rangeS3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0)
+        new ComboUpgrade("meleeS3dashJ3", Upgrades.Melee, Emotions.Sadness, 3, Upgrades.Dash, Emotions.Joy, 3)
+        //new ComboUpgrade("meleeJ3rangeA3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        //new ComboUpgrade("meleeF3dashA3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        //new ComboUpgrade("meleeL3rangeF3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        //new ComboUpgrade("dashS3rangeJ3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        //new ComboUpgrade("dashF3rangeL3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0),
+        //new ComboUpgrade("dashF3rangeS3", Upgrades.None, Emotions.None, 0, Upgrades.None, Emotions.None, 0)
     };
 
     private void Awake()
