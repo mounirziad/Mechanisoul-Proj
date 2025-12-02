@@ -176,6 +176,7 @@ public class InteractableUI : MonoBehaviour
             if (pauseMenuUI != null && pauseMenuUI.pauseMenu != null)
             {
                 pauseMenuUI.pauseMenu.SetActive(false);
+                pauseMenuUI.settingsMenu.SetActive(false);
                 pauseActive = false;
                 Time.timeScale = 1f;
                 SetCursorState(false);
