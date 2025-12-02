@@ -211,6 +211,10 @@ public partial class TriggerLungeAction : Action, IAttackCondition
         lunge = Agent.Value.GetComponent<MechLunge>();
         if (lunge == null) return Status.Failure;
 
+        GameObject mech = Agent.Value;
+        var bgAgent = mech.GetComponent<BehaviorGraphAgent>();
+        bgAgent.BlackboardReference.SetVariableValue("lungeFinished", false);
+
         lunge.StartLunge();
 
         return Status.Running;
