@@ -9,6 +9,7 @@ public class InteractableUI : MonoBehaviour
     [SerializeField] UpgradeUIScript upgradeUIScript;
     [SerializeField] PauseMenuUI pauseMenuUI;
     [SerializeField] InputManager playerInputManager;
+    [SerializeField] GameObject BGOverlay;
     private bool canPurchase = false;
 
     private bool pauseActive = false;
