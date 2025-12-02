@@ -141,8 +141,6 @@ public partial class TriggerLightningAction : Action, IAttackCondition
         }
 
         bgAgent.BlackboardReference.SetVariableValue("LightningFinished", false);
-
-<<<<<<< Updated upstream
         if (animationController != null)
         {
             animationController.TriggerCastLightning();
@@ -152,9 +150,9 @@ public partial class TriggerLightningAction : Action, IAttackCondition
         if (player == null) return Status.Failure;
 
         controller.CastLightningAtGround(player.transform.position, AoERadius, Damage);
-=======
+
         controller.CastLightning();
->>>>>>> Stashed changes
+
 
         return Status.Running;
     }
