@@ -17,7 +17,7 @@ public class BreakRoomInitializer : MonoBehaviour
         yield return new WaitForSeconds(initializationDelay);
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        
+
         if (player != null)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
@@ -42,6 +42,11 @@ public class BreakRoomInitializer : MonoBehaviour
             if (PersistentDeathUI.Instance != null)
             {
                 PersistentDeathUI.Instance.gameObject.SetActive(false);
+            }
+
+            if (UpgradeSnapshotManager.Instance != null)
+            {
+                UpgradeSnapshotManager.Instance.RestoreFloorEntryState();
             }
 
             Rigidbody rb = player.GetComponent<Rigidbody>();
