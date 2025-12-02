@@ -65,5 +65,5 @@ public abstract class Enemy : MonoBehaviour
 
     void ResetTimer() => dotTickTimer = dotTickMaxTime;
 
-    void Die() { } //override
+    protected virtual void Die() { } //override
 }

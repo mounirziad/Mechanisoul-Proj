@@ -250,6 +250,11 @@ public class BasicEnemyHealth : Enemy
         }
     }
 
+    protected override void Die()
+    {
+        Die(Vector3.zero);
+    }
+
     private void DisableHitBoxes()
     {
         // Disable all HitBox components
