@@ -14,10 +14,6 @@ public partial class TriggerAttackAction : Action, IAttackCondition
     [SerializeField]
     public BlackboardVariable<string> AttackTrigger;
 
-    [SerializeField]
-    [CreateProperty]
-    public string AttackId;
-
     private Mechromancer mech;
     private MechAnimationController animationController;
     private BehaviorGraphAgent bgAgent;
@@ -114,11 +110,6 @@ public partial class TriggerLightningAction : Action, IAttackCondition
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
     [SerializeField] public float AoERadius = 3f;
-    [SerializeField] public float Damage = 15f;
-
-    [SerializeField]
-    [CreateProperty]
-    public string AttackId;
 
     private LightningController controller;
     private BehaviorGraphAgent bgAgent;
@@ -130,10 +121,10 @@ public partial class TriggerLightningAction : Action, IAttackCondition
 
         bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
 
-        bool finished = true;
-        bgAgent.BlackboardReference.GetVariableValue("LightningFinished", out finished);
+        bool lightningFinished = true;
+        bgAgent.BlackboardReference.GetVariableValue("LightningFinished", out lightningFinished);
 
-        return finished;
+        return lightningFinished;
     }
 
     protected override Status OnStart()
@@ -144,8 +135,14 @@ public partial class TriggerLightningAction : Action, IAttackCondition
         bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
         animationController = Agent.Value.GetComponent<MechAnimationController>();
 
+        if (controller == null)
+        {
+            return Status.Failure;
+        }
+
         bgAgent.BlackboardReference.SetVariableValue("LightningFinished", false);
 
+<<<<<<< Updated upstream
         if (animationController != null)
         {
             animationController.TriggerCastLightning();
@@ -155,6 +152,9 @@ public partial class TriggerLightningAction : Action, IAttackCondition
         if (player == null) return Status.Failure;
 
         controller.CastLightningAtGround(player.transform.position, AoERadius, Damage);
+=======
+        controller.CastLightning();
+>>>>>>> Stashed changes
 
         return Status.Running;
     }
@@ -165,7 +165,12 @@ public partial class TriggerLightningAction : Action, IAttackCondition
         bool finished = false;
         bgAgent.BlackboardReference.GetVariableValue("LightningFinished", out finished);
 
-        return finished ? Status.Success : Status.Running;
+        if (finished)
+        {
+            return Status.Success;
+        }
+
+        return Status.Running;
     }
 
     protected override void OnEnd()
@@ -206,11 +211,15 @@ public partial class TriggerResurrectionAction : Action, IAttackCondition
         }
 
         resurrection = Agent.Value.GetComponent<Resurrection>();
-        if (resurrection == null)
+        var animator = Agent.Value.GetComponent<Animator>();
+
+        if (animator == null || resurrection == null)
         {
-            Debug.LogError("Resurrection component not found on Agent");
+            Debug.LogError("Resurrection or animator component not found on Agent");
             return Status.Failure;
         }
+
+        animator.SetTrigger("Resurrect");
 
         resurrection.StartResurrection();
         return Status.Running;

@@ -8,6 +8,9 @@ public class Resurrection : MonoBehaviour
     [Header("Resurrection Settings")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private Transform teslaTarget;
+    [SerializeField] private Transform lightningOrigin;
+    [SerializeField] private GameObject lightningPrefab;
     [SerializeField] private float resurrectionTime = 5f;
 
     //private bool hasStarted = false;
@@ -57,10 +60,32 @@ public class Resurrection : MonoBehaviour
         Debug.Log("StartResurrection() called");
     }
 
+    public void SpawnResurrectionLightning()
+    {
+        if (lightningPrefab == null || lightningOrigin == null || teslaTarget == null)
+        {
+            return;
+        }
+
+        GameObject lightningObj = Instantiate(lightningPrefab, lightningOrigin.position, Quaternion.identity);
+
+        lightningObj.transform.LookAt(teslaTarget.position);
+
+        var rb = lightningObj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 direction = (teslaTarget.position - lightningOrigin.position).normalized;
+            rb.linearVelocity = direction * 50f;
+        }
+
+        Debug.Log("Resurrection lightning spawned");
+    }
+
     private IEnumerator ResurrectionRoutine()
     {
         IsResurrectionActive = true;
 
+<<<<<<< Updated upstream
         if (animationController != null)
         {
             Debug.Log("Setting IsResurrecting to TRUE");
@@ -72,6 +97,11 @@ public class Resurrection : MonoBehaviour
         }
 
         Debug.Log($"Starting resurrection timer for {resurrectionTime} seconds");
+=======
+        yield return new WaitForSeconds(1.0f);
+
+        //Move to hiding, timer, spawn minions
+>>>>>>> Stashed changes
         float timer = 0f;
         while (timer < resurrectionTime)
         {
