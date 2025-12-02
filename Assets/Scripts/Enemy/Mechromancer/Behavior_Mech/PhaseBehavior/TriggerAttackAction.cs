@@ -224,7 +224,13 @@ public partial class TriggerLungeAction : Action, IAttackCondition
     {
         timer += Time.deltaTime;
 
-        if (timer >= LungeDuration)
+        GameObject mech =Agent.Value;
+        var bgAgent = mech.GetComponent<BehaviorGraphAgent>();
+
+        bool finished = false;
+        bgAgent.BlackboardReference.GetVariableValue("lungeFinished", out finished);
+
+        if (timer >= LungeDuration && finished)
         {
             return Status.Success;
         }
