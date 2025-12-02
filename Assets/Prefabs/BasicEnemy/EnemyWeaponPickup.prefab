@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7363099399328120673}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4946298673733166528}
   - component: {fileID: 7704505389329300198}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RaycastEnemyWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,6 +135,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7617104160654910773, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -7477598005717013401, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: -6429037950163264736, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -147,13 +155,29 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2070215758205507688, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
       propertyPath: m_Name
       value: EnemyWeaponPickup
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1486661543501798017, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3691033373093827370, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7598419493678936200, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8815969825379450349, guid: 376070f23c0d50b46bdd220fbbd685f6, type: 3}
       propertyPath: m_Enabled

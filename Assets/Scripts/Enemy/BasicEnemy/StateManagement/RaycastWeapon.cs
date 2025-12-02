@@ -4,9 +4,9 @@ using UnityEngine.ProBuilder;
 public class RaycastWeapon : MonoBehaviour
 {
     [Header("Weapon Settings")]
-    public float fireRate = 0.25f;       // shots per second
-    public float damage = 10f;           // damage per hit
-    public float range = 100f;           // raycast range
+    public float fireRate = 0.25f;
+    public float damage = 10f;
+    public float range = 100f;
 
     [Header("Projectile")]
     public GameObject projectilePrefab;
@@ -20,21 +20,23 @@ public class RaycastWeapon : MonoBehaviour
 
     public Transform firePoint;
 
-   
+    private int raycastLayerMask;
+
     private void Awake()
     {
-        
+        int enemyLayer = LayerMask.NameToLayer("Enemy");
+        int characterLayer = LayerMask.NameToLayer("Character");
+        int pickUpLayer = LayerMask.NameToLayer("PickUp");
+        raycastLayerMask = ~((1 << enemyLayer) | (1 << characterLayer) | (1 << pickUpLayer));
     }
 
     public void Fire()
     {
-        if (Time.time - lastFireTime < fireRate) return; // cooldown
+        if (Time.time - lastFireTime < fireRate) return;
         lastFireTime = Time.time;
 
-        // Play muzzle flash if set
         if (muzzleFlash != null) muzzleFlash.Play();
 
-        // Spawn projectile
         if (projectilePrefab != null && firePoint != null)
         {
             GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
@@ -46,10 +48,22 @@ public class RaycastWeapon : MonoBehaviour
             }
         }
 
-        // Still keep bullet line for optional visual
-        if (bulletLine != null)
+        if (bulletLine != null && firePoint != null)
         {
-            StartCoroutine(DrawBulletLine(firePoint.position, firePoint.position + firePoint.forward * range));
+            Vector3 startPos = firePoint.position;
+            Vector3 endPos;
+            
+            RaycastHit hit;
+            if (Physics.Raycast(startPos, firePoint.forward, out hit, range, raycastLayerMask))
+            {
+                endPos = hit.point;
+            }
+            else
+            {
+                endPos = startPos + firePoint.forward * range;
+            }
+            
+            StartCoroutine(DrawBulletLine(startPos, endPos));
         }
     }
 
