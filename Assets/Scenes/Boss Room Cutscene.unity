@@ -20295,6 +20295,7 @@ MonoBehaviour:
   lightningPrefab: {fileID: 4957132021656827656, guid: 4036a77eba853b04e8b1df5208d76f28, type: 3}
   lightningDuration: 1.5
   lightningOrigin: {fileID: 1170653330}
+  cooldown: 15
   blackboard:
     m_Blackboard:
       rid: 7722564546406383618
@@ -20495,6 +20496,9 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   range: 5
   force: 10
+  maxDistance: 4
+  lungeDamage: 8
+  pauseDuration: 2.5
 --- !u!114 &1170653344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22090,7 +22094,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1394692851}
   - component: {fileID: 1394692850}
-  - component: {fileID: 1394692849}
   - component: {fileID: 1394692848}
   m_Layer: 0
   m_Name: CutsceneCam2
@@ -22143,14 +22146,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &1394692849
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1394692847}
-  m_Enabled: 1
 --- !u!20 &1394692850
 Camera:
   m_ObjectHideFlags: 0
@@ -23505,7 +23500,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1540710093}
   - component: {fileID: 1540710092}
-  - component: {fileID: 1540710091}
   - component: {fileID: 1540710090}
   m_Layer: 0
   m_Name: CutsceneCam3
@@ -23558,14 +23552,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &1540710091
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540710089}
-  m_Enabled: 1
 --- !u!20 &1540710092
 Camera:
   m_ObjectHideFlags: 0
