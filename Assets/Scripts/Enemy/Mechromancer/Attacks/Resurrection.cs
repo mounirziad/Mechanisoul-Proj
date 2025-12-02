@@ -14,6 +14,7 @@ public class Resurrection : MonoBehaviour
 
     private Mechromancer mech;
     private NavMeshAgent agent;
+    private MechAnimationController animationController;
 
     public bool IsResurrectionActive { get; private set; }
 
@@ -21,6 +22,7 @@ public class Resurrection : MonoBehaviour
     {
         mech = GetComponent<Mechromancer>();
         agent = GetComponent<NavMeshAgent>();
+        animationController = GetComponent<MechAnimationController>();
     }
 
     private void Start()
@@ -59,7 +61,17 @@ public class Resurrection : MonoBehaviour
     {
         IsResurrectionActive = true;
 
-        //Move to hiding, timer, spawn minions
+        if (animationController != null)
+        {
+            Debug.Log("Setting IsResurrecting to TRUE");
+            animationController.SetIsResurrecting(true);
+        }
+        else
+        {
+            Debug.LogWarning("MechAnimationController is NULL! Cannot play resurrection animation.");
+        }
+
+        Debug.Log($"Starting resurrection timer for {resurrectionTime} seconds");
         float timer = 0f;
         while (timer < resurrectionTime)
         {
@@ -68,6 +80,12 @@ public class Resurrection : MonoBehaviour
         }
 
         SpawnMinions();
+
+        if (animationController != null)
+        {
+            Debug.Log("Setting IsResurrecting to FALSE");
+            animationController.SetIsResurrecting(false);
+        }
 
         HasResurrected = true;
         IsResurrectionActive = false;
@@ -96,5 +114,23 @@ public class Resurrection : MonoBehaviour
             Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
             Debug.Log("Spawned minions");
         }
+    }
+
+    public void OnResurrectionSpawn()
+    {
+        SpawnMinions();
+    }
+
+    public void OnResurrectionComplete()
+    {
+        if (animationController != null)
+        {
+            animationController.SetIsResurrecting(false);
+        }
+
+        HasResurrected = true;
+        IsResurrectionActive = false;
+
+        Debug.Log("Resurrection animation complete");
     }
 }

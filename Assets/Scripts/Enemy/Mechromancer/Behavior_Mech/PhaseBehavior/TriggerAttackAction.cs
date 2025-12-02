@@ -6,7 +6,7 @@ using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Trigger Attack", story: "[Agent] attacks with [AttackTrigger]", category: "Action", id: "7a6b38fc4553bd031472f1a7fbc608dd")]
-public partial class TriggerAttackAction : Action
+public partial class TriggerAttackAction : Action, IAttackCondition
 {
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
 
@@ -19,32 +19,86 @@ public partial class TriggerAttackAction : Action
     public string AttackId;
 
     private Mechromancer mech;
+    private MechAnimationController animationController;
+    private BehaviorGraphAgent bgAgent;
+
+    public bool CanRun()
+    {
+        if (Agent?.Value == null) return false;
+
+        bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
+        if (bgAgent == null) return true;
+
+        bool finished = true;
+        bgAgent.BlackboardReference.GetVariableValue("attackFinished", out finished);
+
+        Debug.Log($"TriggerAttackAction.CanRun() for '{AttackTrigger?.Value}': attackFinished={finished}");
+        return finished;
+    }
 
     protected override Status OnStart()
     {
+        Debug.Log($"TriggerAttackAction: OnStart called with trigger '{AttackTrigger?.Value}'");
+        
         if (Agent == null || Agent.Value == null)
         {
+            Debug.LogError("TriggerAttackAction: Agent is null!");
             return Status.Failure;
         }
 
         mech = Agent.Value.GetComponent<Mechromancer>();
+        animationController = Agent.Value.GetComponent<MechAnimationController>();
+        bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
+        
         if (mech == null)
         {
+            Debug.LogError("TriggerAttackAction: Mechromancer component not found!");
             return Status.Failure;
         }
 
+        if (bgAgent != null)
+        {
+            bgAgent.BlackboardReference.SetVariableValue("attackFinished", false);
+        }
+
+        Debug.Log($"TriggerAttackAction: Triggering attack '{AttackTrigger.Value}'");
         mech.TriggerAttack(AttackTrigger.Value);
 
-        return Status.Success;
+        if (animationController != null)
+        {
+            animationController.SetIsAttacking(true);
+            Debug.Log($"TriggerAttackAction: Set IsAttacking=true for {AttackTrigger.Value}");
+        }
+        else
+        {
+            Debug.LogWarning("TriggerAttackAction: MechAnimationController is null!");
+        }
+
+        return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        return Status.Success;
+        if (bgAgent == null) return Status.Success;
+
+        bool finished = false;
+        bgAgent.BlackboardReference.GetVariableValue("attackFinished", out finished);
+
+        return finished ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()
     {
+        if (animationController != null)
+        {
+            animationController.SetIsAttacking(false);
+            Debug.Log("TriggerAttackAction: Set IsAttacking=false");
+        }
+
+        if (bgAgent != null)
+        {
+            bgAgent.BlackboardReference.SetVariableValue("attackFinished", true);
+        }
     }
 }
 
@@ -68,6 +122,7 @@ public partial class TriggerLightningAction : Action, IAttackCondition
 
     private LightningController controller;
     private BehaviorGraphAgent bgAgent;
+    private MechAnimationController animationController;
 
     public bool CanRun()
     {
@@ -87,8 +142,14 @@ public partial class TriggerLightningAction : Action, IAttackCondition
 
         controller = Agent.Value.GetComponent<LightningController>();
         bgAgent = Agent.Value.GetComponent<BehaviorGraphAgent>();
+        animationController = Agent.Value.GetComponent<MechAnimationController>();
 
         bgAgent.BlackboardReference.SetVariableValue("LightningFinished", false);
+
+        if (animationController != null)
+        {
+            animationController.TriggerCastLightning();
+        }
 
         GameObject player = GameObject.FindWithTag("Player");
         if (player == null) return Status.Failure;
