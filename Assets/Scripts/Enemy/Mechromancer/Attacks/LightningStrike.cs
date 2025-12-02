@@ -4,19 +4,20 @@ public class LightningStrike : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float speed = 25f;
-    [SerializeField] private float maxLifetime = 3f;
-    [SerializeField] private float hitRadius = 1.5f;
+    [SerializeField] private float groundOffset = 8f;
 
     private Vector3 targetPosition;
     private bool hasTarget = false;
-    private float lifetime;
 
     private LightningController controller;
 
     public void Initialize(Vector3 target, LightningController controllerRef)
     {
-        targetPosition = target;
         controller = controllerRef;
+        targetPosition = target;
+
+        transform.position = target + Vector3.up * groundOffset;
+
         hasTarget = true;
     }
 
@@ -24,29 +25,12 @@ public class LightningStrike : MonoBehaviour
     {
         if (!hasTarget) return;
 
-        lifetime += Time.deltaTime;
-
-        if (lifetime > maxLifetime)
-        {
-            NotifyHit();
-            return;
-        }
-
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, targetPosition) < hitRadius)
+        if (Vector3.Distance(transform.position, targetPosition) < 0.25f)
         {
-            NotifyHit();
+            controller?.OnStrike(targetPosition);
+            Destroy(gameObject);
         }
-    }
-
-    private void NotifyHit()
-    {
-        if (controller != null)
-        {
-            controller.OnStrike(targetPosition);
-        }
-
-        Destroy(gameObject);
     }
 }

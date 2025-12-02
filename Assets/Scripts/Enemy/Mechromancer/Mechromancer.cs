@@ -71,7 +71,15 @@ public class Mechromancer : Enemy, IDamage
     //Behavior graph to animator
     public void TriggerAttack(string triggerName)
     {
-        animationController?.SetTrigger(triggerName);
+        Debug.Log($"Mechromancer.TriggerAttack called with trigger: {triggerName}");
+        if (animationController != null)
+        {
+            animationController.SetTrigger(triggerName);
+        }
+        else
+        {
+            Debug.LogWarning("Mechromancer.TriggerAttack: animationController is null!");
+        }
     }
 
     //Animations to behavior graph

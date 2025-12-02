@@ -48,7 +48,10 @@ public class LightningController : MonoBehaviour
         {
             animator.SetTrigger("CastLightning");
         }
+    }
 
+    public void SpawnLightning()
+    {
         Vector3 playerPos = GameObject.FindWithTag("Player").transform.position;
         CastLightningAtGround(playerPos, 3f, 15f);
     }

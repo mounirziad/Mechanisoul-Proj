@@ -12,6 +12,7 @@ public class MechLunge : MonoBehaviour
     
     private Rigidbody rb;
     private Animator animator;
+    private MechAnimationController animationController;
     private Vector3 startPosition;
     private Vector3 lastKnownLocation;
     private float currentLungeDistance;
@@ -23,6 +24,7 @@ public class MechLunge : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        animationController = GetComponent<MechAnimationController>();
     }
 
     public void StartLunge()
@@ -57,7 +59,15 @@ public class MechLunge : MonoBehaviour
         rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
 
-        animator.SetTrigger("Lunge");
+        if (animationController != null)
+        {
+            animationController.TriggerLunge();
+        }
+        else if (animator != null)
+        {
+            animator.SetTrigger("Lunge");
+        }
+        
         animator.SetFloat("SpeedMultiplier", 2f);
     }
 

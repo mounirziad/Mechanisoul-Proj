@@ -126,12 +126,13 @@ public class MoveStrategy : IActionStrategy
 
 public class AttackStrategy : IActionStrategy
 {
-    public bool CanPerform => true; //agent can always attack
+    public bool CanPerform => true;
     public bool Complete {  get; private set; }
 
     private readonly IDamage damageProvider;
     private readonly GoapAgent agent;
     private Mechromancer mechromancer;
+    private MechAnimationController animationController;
     private readonly NavMeshAgent navMesh;
     private readonly float attackDuration = 1.5f;
     private readonly CountdownTimer timer;
@@ -143,6 +144,7 @@ public class AttackStrategy : IActionStrategy
 
         this.damageProvider = agent.GetComponent<IDamage>();
         this.mechromancer = agent.GetComponent<Mechromancer>();
+        this.animationController = agent.GetComponent<MechAnimationController>();
 
         timer = new CountdownTimer(attackDuration);
         timer.OnTimerStart += () => Complete = false;
@@ -159,6 +161,11 @@ public class AttackStrategy : IActionStrategy
 
         navMesh.isStopped = true;
         navMesh.updateRotation = false;
+
+        if (animationController != null)
+        {
+            animationController.SetIsAttacking(true);
+        }
 
         timer.Start();
     }
@@ -199,6 +206,11 @@ public class AttackStrategy : IActionStrategy
 
     public void Stop()
     {
+        if (animationController != null)
+        {
+            animationController.SetIsAttacking(false);
+        }
+
         navMesh.isStopped = false;
         navMesh.updateRotation = true;
     }
@@ -207,6 +219,11 @@ public class AttackStrategy : IActionStrategy
     {
         timer.Stop();
         Complete = true;
+
+        if (animationController != null)
+        {
+            animationController.SetIsAttacking(false);
+        }
 
         navMesh.isStopped = false;
         navMesh.updateRotation = true;

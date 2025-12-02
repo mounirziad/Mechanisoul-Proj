@@ -21,12 +21,12 @@ public class CombosMenuUI : MonoBehaviour
     [Header("Locked view")]
     [SerializeField] private string lockedTitle = "Combo Locked";
     [SerializeField, TextArea]
-    private string lockedBody = "Discover by upgrading Melee: Anger and Ranged: Joy (any level).";
+    private string lockedBody = "Discover by upgrading Melee: Sadness and Ranged: Joy (level 3).";
 
     [Header("Unlocked view (after first discovery)")]
-    [SerializeField] private string unlockedTitle = "Rage + Joy: Pop Shot";
+    [SerializeField] private string unlockedTitle = "Sadness + Joy: Pop Shot";
     [SerializeField, TextArea]
-    private string unlockedBodyTemplate = "Unlocked! Ranged hits spawn a JOY burst.\nCurrent: Anger L{0}, Joy L{1}.";
+    private string unlockedBodyTemplate = "Unlocked! Ranged hits spawn a Sadness burst.\nCurrent: Sadness L{0}, Joy L{1}.";
 
     [Header("Chip colors")]
     [SerializeField] private Color angerColor = new Color(0.85f, 0.15f, 0.15f, 1f);
