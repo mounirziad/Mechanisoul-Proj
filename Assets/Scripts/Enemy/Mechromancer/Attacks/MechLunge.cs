@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+using Unity.Behavior;
 using UnityEngine;
 
 public class MechLunge : MonoBehaviour
@@ -55,60 +55,31 @@ public class MechLunge : MonoBehaviour
         lungeCooldownTimer = pauseDuration;
 
         lastKnownLocation = playerTransform.position;
-
         startPosition = transform.position;
         currentLungeDistance = 0f;
 
-        Vector3 lungeDirection = (lastKnownLocation - transform.position).normalized;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-            rb.linearVelocity = Vector3.zero;
-            rb.AddForce(lungeDirection * force, ForceMode.Impulse);
-        }
+        rb.isKinematic = true;
+        rb.linearVelocity = Vector3.zero;
 
-        if (animator != null)
-        {
-            animator.SetFloat("SpeedMultiplier", 2f);
-            animator.SetTrigger("Lunge");
-        }
-
-        Invoke(nameof(EnableLungeMovement), 0.5f); //delay
-    }
-
-    private void EnableLungeMovement()
-    {
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            Vector3 lungeDirection = (lastKnownLocation - transform.position).normalized;
-            rb.AddForce(lungeDirection * force, ForceMode.Impulse);
-        }
-
-        if (animator != null)
-        {
-            animator.SetFloat("SpeedMultiplier", 2f);
-        }
+        animator.SetTrigger("Lunge");
+        animator.SetFloat("SpeedMultiplier", 2f);
     }
 
     public void ApplyDamage()
     {
         if (hasHitPlayer) return;
 
-        if (animator != null)
-        {
-            animator.SetFloat("SpeedMultiplier", 2f);
-        }
-
         float distance = Vector3.Distance(transform.position, lastKnownLocation);
 
         if (distance < range)
         {
-            var player = playerTransform.GetComponent<PlayerHealth>();
-            if (player != null)
+            var playerHealth = playerTransform.GetComponent<PlayerHealth>();
+
+            if (playerHealth != null)
             {
-                player.TakeDamage(lungeDamage);
+                playerHealth.TakeDamage(lungeDamage);
             }
 
             hasHitPlayer = true;
@@ -117,44 +88,38 @@ public class MechLunge : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isLunging)
-        {
-            currentLungeDistance = Vector3.Distance(startPosition, transform.position);
+        if (!isLunging) return;
 
-            if (currentLungeDistance < maxDistance)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, lastKnownLocation, force * Time.fixedDeltaTime);
-            }
-            else
-            {
-                StopLunge();
-            }
+        currentLungeDistance = Vector3.Distance(startPosition, transform.position);
+
+        if (currentLungeDistance >= maxDistance)
+        {
+            StopLunge();
+            return;
         }
 
-        if (lungeCooldownTimer > 0f)
-        {
-            lungeCooldownTimer -= Time.deltaTime;
-        }
+        Vector3 direction = (lastKnownLocation - transform.position).normalized;
+        transform.position += direction * force * Time.fixedDeltaTime;
     }
 
     public void StopLunge()
     {
-        if (!isLunging) return;
-
         isLunging = false;
 
-        if (animator != null)
-        {
-            animator.SetFloat("SpeedMultiplier", 1f);
-            animator.SetBool("isLunging", false);
-        }
+        animator.SetFloat("SpeedMultiplier", 1f);
 
-        animator.ResetTrigger("Lunge");
+        rb.isKinematic = false;
+        rb.linearVelocity = Vector3.zero;
 
-        if (rb != null)
+        rb.constraints =
+            RigidbodyConstraints.FreezePositionY |
+            RigidbodyConstraints.FreezeRotationX |
+            RigidbodyConstraints.FreezeRotationZ;
+
+        var bgAgent = GetComponent<BehaviorGraphAgent>();
+        if (bgAgent != null)
         {
-            rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-            rb.linearVelocity = Vector3.zero;
+            bgAgent.BlackboardReference.SetVariableValue("lungeFinished", true);
         }
     }
 }
