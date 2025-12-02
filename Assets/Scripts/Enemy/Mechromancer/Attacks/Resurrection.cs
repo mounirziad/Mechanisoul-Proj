@@ -85,7 +85,6 @@ public class Resurrection : MonoBehaviour
     {
         IsResurrectionActive = true;
 
-<<<<<<< Updated upstream
         if (animationController != null)
         {
             Debug.Log("Setting IsResurrecting to TRUE");
@@ -97,11 +96,9 @@ public class Resurrection : MonoBehaviour
         }
 
         Debug.Log($"Starting resurrection timer for {resurrectionTime} seconds");
-=======
+
         yield return new WaitForSeconds(1.0f);
 
-        //Move to hiding, timer, spawn minions
->>>>>>> Stashed changes
         float timer = 0f;
         while (timer < resurrectionTime)
         {
