@@ -13,199 +13,119 @@ using Composite = Unity.Behavior.Composite;
     id: "c82d0e7ace1e70754fc1b944eb8ab7f2")]
 public class WeightedSequence : Composite
 {
-    //[SerializeReference] public BlackboardVariable<GameObject> Agent;
-    //[SerializeReference] public BlackboardVariable<Transform> PlayerTransform;
-
-    //[SerializeField] public List<string> AttackIds = new List<string>();
-
     private int currentIndex = -1;
+
+    private BehaviorGraphAgent agent;
+    private Transform playerTransform;
 
     protected override Status OnStart()
     {
         currentIndex = -1;
-        Debug.Log("WeightedSequence: OnStart called");
+
+        agent = this.agent as BehaviorGraphAgent;
+        if (agent == null )
+        {
+            Debug.LogError("WeightedSequence: this.Agent is not a behavior graph agent");
+            return Status.Failure;
+        }
+
+        agent.BlackboardReference.GetVariableValue("PlayerTransform", out playerTransform);
+        if (playerTransform == null)
+        {
+            Debug.LogError("WeightedSequence: Missing PlayerTransform in blackboard");
+            return Status.Failure;
+        }
+
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
         if (Children.Count == 0)
-        {
-            Debug.LogWarning("WeightedSequence: No children nodes found");
             return Status.Failure;
-        }
 
-        //if child is running, continue running
         if (currentIndex != -1)
         {
-            var child = Children[currentIndex];
-            Debug.Log($"WeightedSequence: Continuing running child {currentIndex}: {child}");
-            var result = StartNode(child);
+            var result = StartNode(Children[currentIndex]);
 
             if (result == Status.Running)
-            {
                 return Status.Running;
-            }
 
-            //once finished, reset and return success
             currentIndex = -1;
-            Debug.Log($"WeightedSequence: Child {child} finished with result {result}");
-            return result;
+            return Status.Success;
         }
 
-        currentIndex = UnityEngine.Random.Range(0, Children.Count);
-        var startResult = StartNode(Children[currentIndex]);
+        float distance = Vector3.Distance(agent.transform.position, playerTransform.position);
 
-        if (startResult == Status.Running)
-        {
-            return Status.Running;
-        }
-
-        currentIndex = -1;
-        return startResult;
-
-        //make sure blackboard values exist
-        /*if (Agent?.Value == null || PlayerTransform?.Value == null)
-        {
-            Debug.LogWarning("WeightedSequence: Agent or PlayerTransform is null");
-            return Status.Failure;
-        }
-
-        float distance = Vector3.Distance(Agent.Value.transform.position, PlayerTransform.Value.position);
-        Debug.Log($"WeightedSequence: Distance to player: {distance}");
-
-        //compute weights for attacks
-        var weights = new List<float>(Children.Count);
+        List<int> indices = new List<int>();
+        List<float> weights = new List<float>();
         float total = 0f;
 
         for (int i = 0; i < Children.Count; i++)
         {
-            var child = Children[i];
-            string attackId = null;
-
-            //read property "AttackId" string using API
-            //returns true if the property exists and outputs the value
-            if (!PropertyContainer.TryGetValue(child, "AttackId", out attackId) || string.IsNullOrEmpty(attackId))
+            float w = GetWeightForChild(Children[i], distance);
+            if (w > 0f)
             {
-                var bbVarField = child.GetType().GetField("AttackId");
-                if (bbVarField != null)
-                {
-                    var bbVar = bbVarField.GetValue(child) as BlackboardVariable<string>;
-                    if (bbVar != null)
-                    {
-                        attackId = bbVar.Value;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(attackId))
-                {
-                    Debug.Log($"WeightedSequence: Child {child} has no AttackId or empty. Weight = 0");
-                    weights.Add(0f);
-                    continue;
-                }
+                indices.Add(i);
+                weights.Add(w);
+                total += w;
             }
-
-            float w = GetWeightForAttack(attackId, distance);
-            weights.Add(w);
-            total += w;
-            Debug.Log($"WeightedSequence: Child {child} AttackId = {attackId}, Weight = {w}");
         }
 
-        if (total <= 0f)
+        if (indices.Count == 0)
         {
-            Debug.LogWarning("WeightedSequence: No child returns a positive weight");
-            return Status.Failure;
+            return Status.Running;
         }
 
-        //weighted random selection
-        float randomPick = UnityEngine.Random.value * total;
-        int chosenIndex = -1;
+        float r = UnityEngine.Random.value * total;
 
+        int chosenIndex = 0;
         for (int i = 0; i < weights.Count; i++)
         {
-            randomPick -= weights[i];
-            if (randomPick <= 0f)
+            r -= weights[i];
+            if (r <= 0f)
             {
-                chosenIndex = i;
+                chosenIndex = indices[i];
                 break;
             }
         }
 
-        if (chosenIndex == -1)
-        {
-            chosenIndex = weights.Count - 1;
-        }
-
         currentIndex = chosenIndex;
-        Debug.Log($"WeightedSequence: Selected child index {currentIndex} ({Children[currentIndex]} to run");
 
-        var startResult = StartNode(Children[chosenIndex]);
-        if (startResult == Status.Running)
+        var startResult = StartNode(Children[currentIndex]);
+        return startResult == Status.Running ? Status.Running : Status.Success;
+    }
+
+    private float GetWeightForChild(Node child, float distance)
+    {
+        string id = child.GetType().Name.ToLower();
+
+        if (id.Contains("combo"))
         {
-            Debug.Log($"WeightedSequence: Child {Children[chosenIndex]} is running...");
-            return Status.Running;
+            if (distance < 4f) return 0.7f;
+            if (distance < 12f) return 0.3f;
+            return 0f;
         }
 
-        Debug.Log($"WeightedSequence: Child {Children[chosenIndex]} finished with result {startResult}");
-        currentIndex = -1;
-        return startResult;*/
+        if (id.Contains("lunge"))
+        {
+            if (distance < 4f) return 0.3f;
+            if (distance < 12) return 0.7f;
+            return 0f;
+        }
+
+        if (id.Contains("lightning"))
+        {
+            return distance > 12f ? 1f : 0f;
+        }
+
+        return 0f;
     }
 
     protected override void OnEnd()
     {
         currentIndex = -1;
-        Debug.Log("WeightedSequence: OnEnd called");
     }
-
-    /*private float GetWeightForAttack(string id, float distance)
-    {
-        if (Agent?.Value == null)
-        {
-            Debug.LogWarning($"WeightedSequence: Agent is null in GetWeightForAttack for id: {id}");
-            return 0f;
-        }
-
-        var scripts = Agent.Value.GetComponents<IWeightedAttack>();
-        if (scripts == null || scripts.Length == 0)
-        {
-            Debug.LogWarning($"WeightedSequence: No IWeightAttack scripts found on Agent for id: {id}");
-            return 0f;
-        }
-
-        foreach (var s in scripts)
-        {
-            if (s == null)
-            {
-                continue;
-            }
-
-            var name = s.GetType().Name;
-            if (name.StartsWith(id, StringComparison.OrdinalIgnoreCase))
-            {
-                float weight = Mathf.Max(0f, s.GetWeight(distance));
-                Debug.Log($"WeightedSequence: Matched {name} (StartsWith) with weight {weight}");
-                return weight;
-            }
-        }
-
-        foreach (var s in scripts)
-        {
-            if (s == null)
-            {
-                continue;
-            }
-
-            if (string.Equals(s.GetType().Name, id, StringComparison.OrdinalIgnoreCase))
-            {
-                float weight = Mathf.Max(0f, s.GetWeight(distance));
-                Debug.Log($"WeightedSequence: Matched {s.GetType().Name} (Equals) with weight {weight}");
-                return weight;
-            }
-        }
-
-        Debug.LogWarning($"WeightedSequence: No matching IWeightedAttack found for id {id}");
-        return 0f;
-    }*/
 }
 
 public interface IWeightedAttack
